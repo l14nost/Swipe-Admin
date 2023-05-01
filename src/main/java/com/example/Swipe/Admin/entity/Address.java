@@ -16,9 +16,14 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idaddress")
     private int idAddress;
+
     private String city;
+
     private String area;
+
     private String street;
+
+    private int number;
 
 
 }

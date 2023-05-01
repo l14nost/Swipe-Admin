@@ -15,8 +15,11 @@ public class Documents {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iddocuments")
     private int idDocuments;
+
     private String name;
+
     private String fileName;
+
     @ManyToOne
     @JoinColumn(name = "id_builder")
     private Contractor contractor;

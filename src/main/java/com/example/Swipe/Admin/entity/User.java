@@ -17,18 +17,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iduser")
     private int idUser;
+
     private String name;
+
     private String surname;
+
     private String number;
+
     private String mail;
+
     private String password;
+
     @Column(name = "type_notification")
     private String typeNotification;
+
     @Column(name = "date_sub")
     private LocalDate dateSub;
+
     @Column(name = "call_sms")
     private boolean callSms;
-    @OneToOne
-    @JoinColumn(name = "id_agent")
+
+    @ManyToOne
     private Agent agent;
 }

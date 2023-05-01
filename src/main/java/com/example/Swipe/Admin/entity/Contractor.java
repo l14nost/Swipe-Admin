@@ -20,13 +20,20 @@ public class Contractor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_builder")
     private int idBuilder;
+
     private String name;
+
     private String surname;
+
     private String mail;
+
     @OneToMany(mappedBy = "contractor")
     private List<Documents> documents = new ArrayList<>();
+
     @OneToOne
     @JoinColumn(name = "id_lcd")
     private LCD lcd;
 
+    @ManyToOne
+    private SalesDepartment salesDepartment;
 }
