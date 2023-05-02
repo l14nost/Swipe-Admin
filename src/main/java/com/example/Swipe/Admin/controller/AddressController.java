@@ -1,14 +1,13 @@
 package com.example.Swipe.Admin.controller;
 
-import com.example.Swipe.Admin.service.AddressService;
-import com.example.Swipe.Admin.service.ApartmentService;
+import com.example.Swipe.Admin.service.impl.AddressServiceImpl;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class AddressController {
-    private final AddressService addressService;
+    private final AddressServiceImpl addressServiceImpl;
 
-    public AddressController(AddressService addressService) {
-        this.addressService = addressService;
+    public AddressController(AddressServiceImpl addressServiceImpl) {
+        this.addressServiceImpl = addressServiceImpl;
     }
 }

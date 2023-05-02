@@ -1,13 +1,13 @@
 package com.example.Swipe.Admin.controller;
 
-import com.example.Swipe.Admin.service.NotaryService;
+import com.example.Swipe.Admin.service.impl.NotaryServiceImpl;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class NotaryController {
-    private final NotaryService notaryService;
+    private final NotaryServiceImpl notaryServiceImpl;
 
-    public NotaryController(NotaryService notaryService) {
-        this.notaryService = notaryService;
+    public NotaryController(NotaryServiceImpl notaryServiceImpl) {
+        this.notaryServiceImpl = notaryServiceImpl;
     }
 }

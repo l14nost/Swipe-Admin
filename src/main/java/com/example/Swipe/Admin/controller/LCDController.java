@@ -1,14 +1,13 @@
 package com.example.Swipe.Admin.controller;
 
-import com.example.Swipe.Admin.service.LCDService;
-import com.example.Swipe.Admin.service.UserService;
+import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class LCDController {
-    private final LCDService lcdService;
+    private final LCDServiceImpl lcdServiceImpl;
 
-    public LCDController(LCDService lcdService) {
-        this.lcdService = lcdService;
+    public LCDController(LCDServiceImpl lcdServiceImpl) {
+        this.lcdServiceImpl = lcdServiceImpl;
     }
 }

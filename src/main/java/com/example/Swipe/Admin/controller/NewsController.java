@@ -1,14 +1,13 @@
 package com.example.Swipe.Admin.controller;
 
-import com.example.Swipe.Admin.service.NewsService;
-import com.example.Swipe.Admin.service.UserService;
+import com.example.Swipe.Admin.service.impl.NewsServiceImpl;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class NewsController {
-    private final NewsService newsService;
+    private final NewsServiceImpl newsServiceImpl;
 
-    public NewsController(NewsService newsService) {
-        this.newsService = newsService;
+    public NewsController(NewsServiceImpl newsServiceImpl) {
+        this.newsServiceImpl = newsServiceImpl;
     }
 }

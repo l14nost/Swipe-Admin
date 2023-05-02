@@ -1,14 +1,13 @@
 package com.example.Swipe.Admin.controller;
 
-import com.example.Swipe.Admin.service.PhotosService;
-import com.example.Swipe.Admin.service.UserService;
+import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PhotosController {
-    private final PhotosService photosService;
+    private final PhotosServiceImpl photosServiceImpl;
 
-    public PhotosController(PhotosService photosService) {
-        this.photosService = photosService;
+    public PhotosController(PhotosServiceImpl photosServiceImpl) {
+        this.photosServiceImpl = photosServiceImpl;
     }
 }
