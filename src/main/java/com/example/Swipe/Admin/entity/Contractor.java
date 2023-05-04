@@ -27,9 +27,7 @@ public class Contractor {
 
     private String mail;
 
-    @OneToMany(mappedBy = "contractor")
-    private List<Documents> documents = new ArrayList<>();
-
+    private String filename;
     @OneToOne
     @JoinColumn(name = "id_lcd")
     private LCD lcd;

@@ -68,4 +68,7 @@ public class LCD {
     @OneToMany(mappedBy = "lcd")
     private List<Apartment> apartmentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "lcd")
+    private List<Documents> documents = new ArrayList<>();
+
 }

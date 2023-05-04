@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
+import com.example.Swipe.Admin.entity.Agent;
 import com.example.Swipe.Admin.entity.Contractor;
 import com.example.Swipe.Admin.entity.Notary;
 import com.example.Swipe.Admin.repository.NotaryRepo;
@@ -50,6 +51,26 @@ public class NotaryServiceImpl implements NotaryService {
 
     @Override
     public void updateEntity(Notary notary, int id) {
-
+        Optional<Notary> notaryOptional = notaryRepo.findById(id);
+        if(notaryOptional.isPresent()){
+            Notary notaryUpdate = notaryOptional.get();
+            if(notary.getName()!=null){
+                notaryUpdate.setName(notary.getName());
+            }
+            if(notary.getMail()!=null){
+                notaryUpdate.setMail(notary.getMail());
+            }
+            if(notary.getNumber()!=null){
+                notaryUpdate.setNumber(notary.getNumber());
+            }
+            if(notary.getSurname()!=null){
+                notaryUpdate.setSurname(notary.getSurname());
+            }
+            notaryRepo.saveAndFlush(notaryUpdate);
+        }
+        else {
+            Notary notaryUpdate = Notary.builder().name("").surname("").mail("").number("").build();
+            notaryRepo.saveAndFlush(notaryUpdate);
+        }
     }
 }

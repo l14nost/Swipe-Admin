@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
+import com.example.Swipe.Admin.entity.Address;
 import com.example.Swipe.Admin.entity.Contractor;
 import com.example.Swipe.Admin.entity.Documents;
 import com.example.Swipe.Admin.repository.DocumentsRepo;
@@ -45,6 +46,16 @@ public class DocumentsServiceImpl implements DocumentsService {
 
     @Override
     public void updateEntity(Documents documents, int id) {
-
+        Optional<Documents> documentsOptional = documentsRepo.findById(id);
+        if(documentsOptional.isPresent()){
+            Documents documentsUpdate = documentsOptional.get();
+            if(documents.getName()!=null){
+                documentsUpdate.setName(documents.getName());
+            }
+            if(documents.getFileName()!=null){
+                documentsUpdate.setFileName(documents.getFileName());
+            }
+            documentsRepo.saveAndFlush(documentsUpdate);
+        }
     }
 }

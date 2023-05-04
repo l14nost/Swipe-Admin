@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
+import com.example.Swipe.Admin.entity.Agent;
 import com.example.Swipe.Admin.entity.Contractor;
 import com.example.Swipe.Admin.entity.SalesDepartment;
 import com.example.Swipe.Admin.repository.SalesDepartmentRepo;
@@ -48,6 +49,26 @@ public class SalesDepartmentServiceImpl implements SalesDepartmentService {
 
     @Override
     public void updateEntity(SalesDepartment salesDepartment, int id) {
-
+        Optional<SalesDepartment> salesDepartmentOptional = salesDepartmentRepo.findById(id);
+        if(salesDepartmentOptional.isPresent()){
+            SalesDepartment salesDepartmentUpdate = salesDepartmentOptional.get();
+            if(salesDepartment.getName()!=null){
+                salesDepartmentUpdate.setName(salesDepartment.getName());
+            }
+            if(salesDepartment.getMail()!=null){
+                salesDepartmentUpdate.setMail(salesDepartment.getMail());
+            }
+            if(salesDepartment.getNumber()!=null){
+                salesDepartmentUpdate.setNumber(salesDepartment.getNumber());
+            }
+            if(salesDepartment.getSurname()!=null){
+                salesDepartmentUpdate.setSurname(salesDepartment.getSurname());
+            }
+            salesDepartmentRepo.saveAndFlush(salesDepartment);
+        }
+        else {
+            SalesDepartment salesDepartmentUpdate = SalesDepartment.builder().name("").surname("").mail("").number("").build();
+            salesDepartmentRepo.saveAndFlush(salesDepartment);
+        }
     }
 }

@@ -21,7 +21,7 @@ public class Documents {
     private String fileName;
 
     @ManyToOne
-    @JoinColumn(name = "id_builder")
-    private Contractor contractor;
+    @JoinColumn(name = "id_lcd")
+    private LCD lcd;
 
 }

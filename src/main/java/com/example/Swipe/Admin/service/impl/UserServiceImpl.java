@@ -49,6 +49,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateEntity(User user, int id) {
-
+        Optional<User> userOptional = userRepo.findById(id);
+        if (userOptional.isPresent()){
+            User updateUser = userOptional.get();
+            if(user.getFilename()!=null){
+                updateUser.setFilename(user.getFilename());
+            }
+            if(user.getName()!=null){
+                updateUser.setName(user.getName());
+            }
+            if(user.getSurname()!=null){
+                updateUser.setSurname(user.getSurname());
+            }
+            if(user.getMail()!=null){
+                updateUser.setMail(user.getMail());
+            }
+            if(user.getDateSub()!=null){
+                updateUser.setDateSub(user.getDateSub());
+            }
+            if(user.getTypeNotification()!=null){
+                updateUser.setTypeNotification(user.getTypeNotification());
+            }
+            if(user.getFilename()!=null){
+                updateUser.setFilename(user.getFilename());
+            }
+            if(user.getNumber()!=null){
+                updateUser.setNumber(user.getNumber());
+            }
+            updateUser.setCallSms(user.isCallSms());
+            userRepo.saveAndFlush(updateUser);
+        }
     }
 }

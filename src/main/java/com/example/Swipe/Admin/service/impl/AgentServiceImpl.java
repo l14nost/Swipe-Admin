@@ -17,9 +17,6 @@ public class AgentServiceImpl implements AgentService {
     public AgentServiceImpl(AgentRepo agentRepo) {
         this.agentRepo = agentRepo;
     }
-    public List<Agent> agents(){
-        return agentRepo.findAll();
-    }
 
     @Override
     public List<Agent> findAll() {

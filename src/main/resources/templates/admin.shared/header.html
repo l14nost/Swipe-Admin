@@ -31,7 +31,11 @@
                 <a href="#" class="nav-link" style="
     padding-right: 10px;
 ">Мой кабинет</a>
-                <a href="/" class="nav-link d-sm-flex" style="align-items: center;"><i class="fa-solid fa-power-off fa-xl d-sm-flex d-j" style="align-items: center;"></i></a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">
+                    <i class="fa-solid fa-power-off fa-xl d-sm-flex d-j" style="align-items: center;"></i>
+                    </button>
+                </form>
                 </li>
         </div>
 <!--        <div>-->

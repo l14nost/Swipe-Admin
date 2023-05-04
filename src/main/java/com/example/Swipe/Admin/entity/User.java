@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.entity;
 
+import com.example.Swipe.Admin.enums.TypeNotification;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
@@ -28,8 +29,11 @@ public class User {
 
     private String password;
 
+    private String filename;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "type_notification")
-    private String typeNotification;
+    private TypeNotification typeNotification;
 
     @Column(name = "date_sub")
     private LocalDate dateSub;
