@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Security Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style th:replace="~{/admin.shared/style}"></style>
+
+<body>
+<div class="wrapper">
+    <div th:insert="admin.shared/header::header"></div>
+    <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
+
+    <div class="content-wrapper" style="padding-left: 50px">
+    </div>
+
+</div>
+<div th:insert="admin.shared/footer::footer"></div>
+<div th:replace="~{/admin.shared/script}"></div>
+
+
+</body>
+
+</html>

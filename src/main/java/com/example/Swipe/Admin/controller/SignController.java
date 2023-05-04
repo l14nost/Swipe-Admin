@@ -8,14 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Controller
-@RequestMapping("/api/v1/login")
+//@RequestMapping("/api/v1/demo")
+//@RequestMapping("/test")
 public class SignController {
-//    @GetMapping("/login")
-//    public String main(Model model){
-//        return "admin/login";
-//    }
-    @GetMapping
+    @GetMapping("/demo")
     public ResponseEntity<String> sayHello(){
-        return ResponseEntity.ok("admin/login");
+        return ResponseEntity.ok("hi bro");
     }
 }

@@ -10,6 +10,25 @@
   <style th:replace="~{/admin.shared/style}"></style></head>
 
 <body>
+<script>
+  var jwtToken = [[${jwtToken}]];
+  localStorage.setItem('jwtToken', jwtToken);
+
+  // отправляем токен в каждом запросе
+  $.ajax({
+    url: 'users',
+    type: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+    },
+    success: function(data) {
+      // обработка ответа от сервера
+    },
+    error: function(error) {
+      // обработка ошибки
+    }
+  });
+</script>
 <div class="wrapper">
   <div th:replace="~{/admin.shared/header}"></div>
   <div th:replace="~{/admin.shared/left_sidebar}"></div>

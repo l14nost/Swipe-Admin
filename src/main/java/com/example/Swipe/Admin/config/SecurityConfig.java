@@ -10,10 +10,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -22,18 +24,17 @@ public class SecurityConfig {
     private final AdminRepo adminRepo;
     private final JWTAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final LogoutHandler logoutHandler;
+//    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        http
                 .csrf()
                 .disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
+
                 .authorizeHttpRequests()
-                .requestMatchers("/login","/**")
+                .requestMatchers("/admin/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -43,13 +44,14 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout().permitAll();
-//                .formLogin((form) -> form
-//                        .loginPage("/login")
-//                        .permitAll()
-//                );
+                .logout()
+                .logoutUrl("/admin/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler(((request, response, authentication) ->
+                        SecurityContextHolder.clearContext()))
+        ;
 
-    return httpSecurity.build();
+    return http.build();
     }
 //    @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

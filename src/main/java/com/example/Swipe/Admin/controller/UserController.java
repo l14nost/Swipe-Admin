@@ -2,9 +2,11 @@ package com.example.Swipe.Admin.controller;
 
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.enums.TypeNotification;
+import com.example.Swipe.Admin.repository.AdminRepo;
 import com.example.Swipe.Admin.service.impl.ContractorServiceImpl;
 import com.example.Swipe.Admin.service.impl.NotaryServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
+import com.example.Swipe.Admin.token.TokenRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,19 +29,28 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final ContractorServiceImpl contractorServiceImpl;
     private final NotaryServiceImpl notaryServiceImpl;
+    private final TokenRepo tokenRepo;
+    private final AdminRepo adminRepo;
 
-    public UserController(UserServiceImpl userServiceImpl, ContractorServiceImpl contractorServiceImpl, NotaryServiceImpl notaryServiceImpl) {
+    public UserController(UserServiceImpl userServiceImpl, ContractorServiceImpl contractorServiceImpl, NotaryServiceImpl notaryServiceImpl, TokenRepo tokenRepo, AdminRepo adminRepo) {
         this.userServiceImpl = userServiceImpl;
         this.contractorServiceImpl = contractorServiceImpl;
 
         this.notaryServiceImpl = notaryServiceImpl;
+        this.tokenRepo = tokenRepo;
+        this.adminRepo = adminRepo;
     }
     @GetMapping("/users")
     public String usersMain(Model model) {
         model.addAttribute("users", userServiceImpl.users());
         model.addAttribute("contractors", contractorServiceImpl.findAll());
         model.addAttribute("notaries", notaryServiceImpl.findAll());
-
+        if(tokenRepo.findAllValidTokensByAdmin(18).size()>0) {
+            model.addAttribute("jwtToken", tokenRepo.findAllValidTokensByAdmin(18).get(0).getToken());
+        }
+        else {
+            model.addAttribute("jwtToken", tokenRepo.findById(tokenRepo.findAll().size()-1));
+        }
         return "admin/user_main";
     }
     @GetMapping("/add_user")
