@@ -46,5 +46,6 @@ public class LCDServiceImpl implements LCDService {
     @Override
     public void updateEntity(LCD lcd, int id) {
 
+
     }
 }

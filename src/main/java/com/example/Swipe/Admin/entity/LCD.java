@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,12 @@ public class LCD {
     @Column(name = "idlcd")
     private int idLcd;
 
+    @Column(name = "main_photo")
+    private String mainPhoto;
+
     private String name;
+
+    private String description;
 
     private String status;
 
@@ -70,5 +76,8 @@ public class LCD {
 
     @OneToMany(mappedBy = "lcd")
     private List<Documents> documents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "lcd")
+    private List<Frame> frames = new ArrayList<>();
 
 }

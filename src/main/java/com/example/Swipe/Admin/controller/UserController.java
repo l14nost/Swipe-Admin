@@ -40,22 +40,40 @@ public class UserController {
         this.tokenRepo = tokenRepo;
         this.adminRepo = adminRepo;
     }
-    @GetMapping("/users")
-    public String usersMain(Model model) {
-        model.addAttribute("users", userServiceImpl.users());
-        model.addAttribute("contractors", contractorServiceImpl.findAll());
-        model.addAttribute("notaries", notaryServiceImpl.findAll());
-        if(tokenRepo.findAllValidTokensByAdmin(18).size()>0) {
-            model.addAttribute("jwtToken", tokenRepo.findAllValidTokensByAdmin(18).get(0).getToken());
-        }
-        else {
-            model.addAttribute("jwtToken", tokenRepo.findById(tokenRepo.findAll().size()-1));
-        }
-        return "admin/user_main";
-    }
+//    @GetMapping("/users")
+//    public String usersMain(Model model) {
+//        model.addAttribute("users", userServiceImpl.users());
+//        model.addAttribute("contractors", contractorServiceImpl.findAll());
+//        model.addAttribute("notaries", notaryServiceImpl.findAll());
+//        if(tokenRepo.findAllValidTokensByAdmin(18).size()>0) {
+//            model.addAttribute("jwtToken", tokenRepo.findAllValidTokensByAdmin(18).get(0).getToken());
+//        }
+//        else {
+//            model.addAttribute("jwtToken", tokenRepo.findById(tokenRepo.findAll().size()-1));
+//        }
+//        return "admin/user_main";
+//    }
     @GetMapping("/add_user")
     public String addUser(Model model){
-        User user = User.builder().name("").surname("").typeNotification(TypeNotification.ME).callSms(true).dateSub(LocalDate.now()).filename("../admin/dist/img/default.jpg").mail("").number("").password("").build();
+//        User user = User.builder().name("").surname("").typeNotification(TypeNotification.ME).callSms(true).dateSub(LocalDate.now()).filename("../admin/dist/img/default.jpg").mail("").number("").password("").build();
+//        userServiceImpl.saveEntity(user);
+        return "admin/user_add";
+    }
+    @PostMapping("/user_add")
+    public String userAdd(@RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam String number, @RequestParam LocalDate dateSub, @RequestParam TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
+        System.out.println(callSms);
+        User user = User.builder().callSms(callSms).name(name).surname(surname).mail(mail).dateSub(dateSub).number(number).typeNotification(typeNotification).build();
+        if (!file.isEmpty()) {
+            File uploadDirGallery = new File(upload);
+            if (!uploadDirGallery.exists()) {
+                uploadDirGallery.mkdir();
+            }
+            String uuid = UUID.randomUUID().toString();
+            String fileNameGallery = uuid + "-" + file.getOriginalFilename();
+            String resultNameGallery = upload + "" + fileNameGallery;
+            file.transferTo(new File((resultNameGallery)));
+            user.setFilename("../uploads/" + fileNameGallery);
+        }
         userServiceImpl.saveEntity(user);
         return "redirect:/users";
     }
@@ -87,6 +105,18 @@ public class UserController {
             user.setFilename("../uploads/" + fileNameGallery);
         }
         userServiceImpl.updateEntity(user,id);
+        return "redirect:/users";
+    }
+
+    @PostMapping("/delete_user")
+    public String deleteUser(@RequestParam int id, Model model){
+        User user = userServiceImpl.findById(id);
+        if (!user.getFilename().equals("../admin/dist/img/default.jpg")) {
+            String fileNameDelete = user.getFilename().substring(11, user.getFilename().length());
+            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+            fileDelete.delete();
+        }
+        userServiceImpl.deleteById(id);
         return "redirect:/users";
     }
 }

@@ -68,6 +68,9 @@ public class ContractorServiceImpl implements ContractorService {
             if(contractor.getLcd()!=null){
                 updateContractor.setLcd(contractor.getLcd());
             }
+            if(contractor.getNumber()!=null){
+                updateContractor.setNumber(contractor.getNumber());
+            }
             if(contractor.getSalesDepartment()!=null){
                 updateContractor.setSalesDepartment(contractor.getSalesDepartment());
             }

@@ -2,6 +2,7 @@ package com.example.Swipe.Admin.service.impl;
 
 import com.example.Swipe.Admin.entity.Agent;
 import com.example.Swipe.Admin.entity.Apartment;
+import com.example.Swipe.Admin.entity.Documents;
 import com.example.Swipe.Admin.repository.ApartmentRepo;
 import com.example.Swipe.Admin.service.ApartmentService;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,71 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void updateEntity(Apartment apartment, int id) {
+        Optional<Apartment> apartmentOptional = apartmentRepo.findById(id);
+        if(apartmentOptional.isPresent()){
+            Apartment apartmentUpdate = apartmentOptional.get();
+            if(apartment.getPhotosList()!=null){
+                apartmentUpdate.setPhotosList(apartment.getPhotosList());
+            }
+            if(apartment.getMainPhoto()!=null){
+                apartmentUpdate.setMainPhoto(apartment.getMainPhoto());
+            }
+            if(apartment.getAddress()!=null){
+                apartmentUpdate.setAddress(apartment.getAddress());
+            }
+            if(apartment.getCommission()!=null){
+                apartmentUpdate.setCommission(apartment.getCommission());
+            }
+            if(apartment.getCalculation()!=null){
+                apartmentUpdate.setCalculation(apartment.getCalculation());
+            }
+            if(apartment.getBalconyType()!=null){
+                apartmentUpdate.setBalconyType(apartment.getBalconyType());
+            }
+            if(apartment.getLcd()!=null){
+                apartmentUpdate.setLcd(apartment.getLcd());
+            }
+            if(apartment.getDescription()!=null){
+                apartmentUpdate.setDescription(apartment.getDescription());
+            }
+            if(apartment.getFoundingDocument()!=null){
+                apartmentUpdate.setFoundingDocument(apartment.getFoundingDocument());
+            }
+            if(apartment.getCommunicationType()!=null){
+                apartmentUpdate.setCommunicationType(apartment.getCommunicationType());
+            }
+            if(apartment.getCountRoom()!=null){
+                apartmentUpdate.setCountRoom(apartment.getCountRoom());
+            }
+            if(apartment.getMainPhoto()!=null){
+                apartmentUpdate.setMainPhoto(apartment.getMainPhoto());
+            }
+            if(apartment.getTotalArea()!=0){
+                apartmentUpdate.setTotalArea(apartment.getTotalArea());
+            }
+            if(apartment.getKitchenArea()!=0){
+                apartmentUpdate.setKitchenArea(apartment.getKitchenArea());
+            }
+            if(apartment.getNumber()!=0){
+                apartmentUpdate.setNumber(apartment.getNumber());
+            }
+            if(apartment.getLayout()!=null){
+                apartmentUpdate.setLayout(apartment.getLayout());
+            }
+            if(apartment.getPrice()!=0){
+                apartmentUpdate.setPrice(apartment.getPrice());
+            }
+            if(apartment.getMainPhoto()!=null){
+                apartmentUpdate.setMainPhoto(apartment.getMainPhoto());
+            }
+            if(apartment.getState()!=null){
+                apartmentUpdate.setState(apartment.getState());
+            }
+            if(apartment.getType()!=null){
+                apartmentUpdate.setType(apartment.getType());
+            }
 
+            apartmentRepo.saveAndFlush(apartmentUpdate);
+        }
     }
 }

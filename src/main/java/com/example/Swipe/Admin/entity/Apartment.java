@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.entity;
 
+import com.example.Swipe.Admin.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
@@ -19,14 +20,16 @@ public class Apartment {
     @Column(name = "idapartment")
     private int idApartment;
 
-    private String type;
+    private int number;
+
+    private TypeApartment type;
 
     @Column(name = "count_room")
-    private int countRoom;
+    private CountRoom countRoom;
 
-    private String layout;
+    private LayoutType layout;
 
-    private String state;
+    private State state;
 
     @Column(name = "total_area")
     private int totalArea;
@@ -35,17 +38,23 @@ public class Apartment {
     private int kitchenArea;
 
     @Column(name = "balcony_type")
-    private String balconyType;
+    private BalconyType balconyType;
 
     @Column(name = "heating_type")
-    private String heatingType;
+    private HeatingType heatingType;
 
-    private String calculation;
+    private Calculation calculation;
 
-    private int commission;
+    @Column(name = "founding_document")
+    private FoundingDocument foundingDocument;
+
+    private Commission commission;
+
+    @Column(name = "main_photo")
+    private String mainPhoto;
 
     @Column(name = "communication_type")
-    private String communicationType;
+    private CommunicationType communicationType;
 
     private String description;
 
@@ -55,8 +64,16 @@ public class Apartment {
     @JoinColumn(name = "id_lcd")
     private LCD lcd;
 
+    @ManyToOne
+    @JoinColumn(name="id_address")
+    private Address address;
+
+
     @OneToMany(mappedBy = "apartment")
     private List<Photos> photosList = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "id_frame")
+    private Frame frame;
 
 }

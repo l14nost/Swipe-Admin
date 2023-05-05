@@ -32,8 +32,8 @@ public class ContractorController {
         return "admin/contractor_edit";
     }
     @PostMapping("/contractor_update/{id}")
-    public String contractorUpdate(@PathVariable int id, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam(name = "file") MultipartFile file, @RequestPart(name = "document") List<MultipartFile> documents, Model model) throws IOException {
-        Contractor contractor = Contractor.builder().name(name).surname(surname).mail(mail).build();
+    public String contractorUpdate(@PathVariable int id, @RequestParam String name, @RequestParam String surname, @RequestParam String mail,@RequestParam String number, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
+        Contractor contractor = Contractor.builder().name(name).surname(surname).mail(mail).number(number).build();
         Contractor preContractor = contractorServiceImpl.findById(id);
 //        contractor.setDocuments(preContractor.getDocuments());
         if (!file.isEmpty()) {

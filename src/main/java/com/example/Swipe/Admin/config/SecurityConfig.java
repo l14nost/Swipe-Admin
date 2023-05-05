@@ -34,11 +34,15 @@ public class SecurityConfig {
                 .disable()
 
                 .authorizeHttpRequests()
-                .requestMatchers("/admin/**")
+                .requestMatchers("/api/v1/admin/**","/admin/**","/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
+//                .formLogin()
+//                .loginPage("/admin/login").permitAll()
+//                .defaultSuccessUrl("/users")
+//                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -49,6 +53,7 @@ public class SecurityConfig {
                 .addLogoutHandler(logoutHandler)
                 .logoutSuccessHandler(((request, response, authentication) ->
                         SecurityContextHolder.clearContext()))
+
         ;
 
     return http.build();

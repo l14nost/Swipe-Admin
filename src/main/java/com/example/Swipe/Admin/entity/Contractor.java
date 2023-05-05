@@ -25,9 +25,12 @@ public class Contractor {
 
     private String surname;
 
+    private String number;
+
     private String mail;
 
     private String filename;
+
     @OneToOne
     @JoinColumn(name = "id_lcd")
     private LCD lcd;

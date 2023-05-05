@@ -8,6 +8,17 @@
     <style th:replace="~{/admin.shared/style}"></style>
 
 <body>
+<!--<script>-->
+
+<!--     fetch('http://localhost:8081/users', {-->
+<!--        method: 'GET',-->
+<!--        headers: new Headers({-->
+<!--            'Authorization': 'Bearer ' + [[${token}]],-->
+<!--            'Content-Type': 'application/json'-->
+<!--        }),-->
+<!--        body: { /* some data */ }-->
+<!--    });-->
+<!--</script>-->
 <div class="wrapper">
     <div th:insert="admin.shared/header::header"></div>
     <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>

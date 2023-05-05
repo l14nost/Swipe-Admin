@@ -1,10 +1,10 @@
 package com.example.Swipe.Admin.enums;
 
-public enum Role {
-    ADMIN("ADMIN");
+public enum FoundingDocument {
+    OWN("Собственость"),TREATY("Договор");
     private String value;
 
-    Role(String value) {
+    FoundingDocument(String value) {
         this.value = value;
     }
 

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Builder
 @Getter
@@ -25,5 +28,16 @@ public class Address {
 
     private int number;
 
+    @OneToMany(mappedBy = "address")
+    private List<Apartment> apartment = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", street='" + street + '\'' +
+                ", number=" + number +
+                '}';
+    }
 }

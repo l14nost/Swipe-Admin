@@ -1,6 +1,7 @@
 package com.example.Swipe.Admin.service.impl;
 
 import com.example.Swipe.Admin.entity.Contractor;
+import com.example.Swipe.Admin.entity.Documents;
 import com.example.Swipe.Admin.entity.Photos;
 import com.example.Swipe.Admin.repository.PhotosRepo;
 import com.example.Swipe.Admin.service.PhotosService;
@@ -45,6 +46,19 @@ public class PhotosServiceImpl implements PhotosService {
 
     @Override
     public void updateEntity(Photos photos, int id) {
-
+        Optional<Photos> photosOptional = photosRepo.findById(id);
+        if(photosOptional.isPresent()){
+            Photos photosUpdate = photosOptional.get();
+            if(photos.getApartment()!=null){
+                photosUpdate.setApartment(photos.getApartment());
+            }
+            if (photos.getLcd()!=null){
+                photosUpdate.setLcd(photos.getLcd());
+            }
+            if(photos.getFileName()!=null){
+                photosUpdate.setFileName(photos.getFileName());
+            }
+            photosRepo.saveAndFlush(photosUpdate);
+        }
     }
 }

@@ -29,16 +29,15 @@
   <div class="content-wrapper">
     <div>
     <div style="text-align: center">
-      <h3>Список клиентов</h3>
+      <h3>Список ЖК</h3>
     </div>
     <div>
       <table class="table table-striped" style="margin: 20px">
         <thead>
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">ФИО</th>
-          <th scope="col">Почта</th>
-          <th scope="col">Уведомление</th>
+          <th scope="col">Название</th>
+          <th scope="col">Адрес</th>
           <th scope="col">
             <form method="get" action="/add_user">
                 <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
@@ -49,21 +48,20 @@
         </tr>
         </thead>
         <tbody>
-          <tr th:each="user:${users}">
-            <th scope="row"><p th:text="${user.getIdUser()}"></p></th>
-            <td><p th:text="${user.getSurname()+' '+user.getName()}"></p></td>
-            <td><p th:text="${user.getMail()}"></p></td>
-            <td th:text="${user.isCallSms()}"></td>
+          <tr th:each="lcd:${lcds}">
+            <th scope="row"><p th:text="${lcd.getIdLcd()}"></p></th>
+            <td><p th:text="${lcd.getName()}"></p></td>
+            <td><p th:text="${lcd.getName()}"></p></td>
             <td>
               <div style="display: flex">
-              <form th:action="@{/user_edit/{id}(id=${user.getIdUser()})}"  method="get" >
+              <form th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}"  method="get" >
                 <button type="submit" class="btn btn-info btn-sm">
                   <i class="fas fa-pencil">
                   </i>
                 </button>
               </form>
               <form action="/delete_user"  method="post" >
-                <input type="hidden" name="id" th:value="${user.getIdUser()}" />
+                <input type="hidden" name="id" th:value="${lcd.getIdLcd()}" />
                 <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                   <i class="fas fa-trash">
                   </i>
@@ -83,15 +81,15 @@
   </div>
     <div>
       <div style="text-align: center">
-        <h3>Список застройщик</h3>
+        <h3>Список квартир не от застройщика</h3>
       </div>
       <div>
         <table class="table table-striped" style="margin: 20px">
           <thead>
           <tr>
             <th scope="col">ID</th>
-            <th scope="col">ФИО</th>
-            <th scope="col">Почта</th>
+            <th scope="col">ЖК</th>
+            <th scope="col">Номер</th>
             <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
               <i class="fas fa-plus">
               </i>
@@ -99,69 +97,20 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="contractor:${contractors}">
-            <th scope="row"><p th:text="${contractor.getIdBuilder()}"></p></th>
-            <td><p th:text="${contractor.getSurname()+' '+contractor.getName()}"></p></td>
-            <td><p th:text="${contractor.getMail()}"></p></td>
+          <tr th:each="apartment:${apartments}">
+            <th scope="row"><p th:text="${apartment.getIdApartment()}"></p></th>
+            <td><p th:text="${apartment.getLcd().getName()}"></p></td>
+            <td><p th:text="${apartment.getNumber()}"></p></td>
             <td>
               <div style="display: flex">
-                <form th:action="@{/contractor_edit/{id}(id=${contractor.getIdBuilder()})}"  method="get" >
+                <form th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}"  method="get" >
                   <button type="submit" class="btn btn-info btn-sm">
                     <i class="fas fa-pencil">
                     </i>
                   </button>
                 </form>
                 <form action="/delete_user"  method="post" >
-                  <input type="hidden" name="id" th:value="${contractor.getIdBuilder()}" />
-                  <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
-                    <i class="fas fa-trash">
-                    </i>
-                  </button>
-
-                </form>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-<!--        <div style="display: flex; justify-content: center">-->
-<!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
-<!--        </div>-->
-      </div>
-
-    </div>
-    <div>
-      <div style="text-align: center">
-        <h3>Список нотариусов</h3>
-      </div>
-      <div>
-        <table class="table table-striped" style="margin: 20px">
-          <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">ФИО</th>
-            <th scope="col">Почта</th>
-            <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
-              <i class="fas fa-plus">
-              </i>
-            </button></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="notary:${notaries}">
-            <th scope="row"><p th:text="${notary.getIdNotary()}"></p></th>
-            <td><p th:text="${notary.getSurname()+' '+notary.getName()}"></p></td>
-            <td><p th:text="${notary.getMail()}"></p></td>
-            <td>
-              <div style="display: flex">
-                <form th:action="@{/notary_edit/{id}(id=${notary.getIdNotary()})}"  method="get" >
-                  <button type="submit" class="btn btn-info btn-sm">
-                    <i class="fas fa-pencil">
-                    </i>
-                  </button>
-                </form>
-                <form action="/delete_user"  method="post" >
-                  <input type="hidden" name="id" th:value="${notary.getIdNotary()}" />
+                  <input type="hidden" name="id" th:value="${apartment.getIdApartment()}" />
                   <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                     <i class="fas fa-trash">
                     </i>
