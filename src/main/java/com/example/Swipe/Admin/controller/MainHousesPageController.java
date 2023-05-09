@@ -15,7 +15,7 @@ public class MainHousesPageController {
     @GetMapping("/houses")
     public String housesMain(Model model) {
         model.addAttribute("lcds",lcdService.findAll());
-        model.addAttribute("apartments", apartmentService.findAll());
+        model.addAttribute("apartments", apartmentService.findAllByFrame());
         return "admin/houses_main";
     }
 }

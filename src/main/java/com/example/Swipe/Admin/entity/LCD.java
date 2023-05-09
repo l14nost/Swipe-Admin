@@ -1,10 +1,10 @@
 package com.example.Swipe.Admin.entity;
 
+import com.example.Swipe.Admin.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,29 +27,32 @@ public class LCD {
 
     private String description;
 
-    private String status;
+    private StatusLCDType status;
 
-    private String type;
+    @Column(name = "class")
+    private ClassType lcdClass;
 
-    private String technology;
+    private LCDType type;
 
-    private String territory;
+    private TechnologyType technology;
+
+    private TerritoryType territory;
 
     @Column(name = "distance_sea")
     private int distanceSea;
 
-    private String communal;
+    private CommunalType communal;
 
     private int height;
 
-    private String gas;
+    private GasType gas;
 
-    private String heating;
+    private HeatingType heating;
 
-    private String sewerage;
+    private HeatingType sewerage;
 
     @Column(name = "water_supply")
-    private String waterSupply;
+    private HeatingType waterSupply;
 
     private String advantages;
 

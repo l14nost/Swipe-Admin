@@ -1,7 +1,7 @@
 package com.example.Swipe.Admin.enums;
 
 public enum HeatingType {
-    GAS("Газ"), BOILER("Бойлер");
+    AUTONOMOUS("Автономное"), INDIVIDUAL("Индивидуальное"),CENTRAL("Центральное");
     private String value;
 
     HeatingType(String value) {

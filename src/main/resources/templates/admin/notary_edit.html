@@ -35,7 +35,7 @@
           </div>
           <div class="col-sm-6">
             <label for="mail" class="form-label">Почта</label>
-            <input type="text" class="form-control" name = "mail" id="mail" placeholder="you@example.com" th:value="${notary.getMail()}" required="">
+            <input type="email" class="form-control" name = "mail" id="mail" placeholder="you@example.com" th:value="${notary.getMail()}" required="">
             <div class="invalid-feedback">
               Введите почту...
             </div>

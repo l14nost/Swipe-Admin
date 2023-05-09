@@ -29,7 +29,29 @@
 </div>
 <div th:insert="admin.shared/footer::footer"></div>
 <div th:replace="~{/admin.shared/script}"></div>
+<script>
+    // Получение токена из HTML-страницы
+    var token = "${token}";
 
+    // Получение текущего URL-адреса страницы
+    var url = window.location.pathname;
+
+    // AJAX-запрос с использованием токена и текущего URL-адреса
+    $.ajax({
+        url: '/admin/authenticate',
+        method: 'POST', // Используем метод POST
+        headers: {
+            'Authorization': 'Bearer ' + [[${token}]] // Передача токена в заголовке Authorization
+        },
+        data: { /* данные для запроса */ },
+        success: function(response) {
+            // Обработка успешного ответа
+        },
+        error: function(xhr, status, error) {
+            // Обработка ошибки
+        }
+    });
+</script>
 
 </body>
 

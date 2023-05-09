@@ -21,9 +21,9 @@ public class MainController {
         this.salesDepartmentServiceImpl = salesDepartmentServiceImpl;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/")
     public String main(Model model){
 
-        return "user_main";
+        return "admin/admin_main";
     }
 }

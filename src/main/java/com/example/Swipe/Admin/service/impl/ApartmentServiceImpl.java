@@ -23,6 +23,10 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepo.findAll();
     }
 
+    public List<Apartment> findAllByFrame(){
+        return apartmentRepo.findAllByFrameIsNull();
+    }
+
     @Override
     public Apartment findById(int id) {
         Optional<Apartment> apartment = apartmentRepo.findById(id);
