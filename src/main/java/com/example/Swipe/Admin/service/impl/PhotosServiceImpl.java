@@ -1,8 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
-import com.example.Swipe.Admin.entity.Contractor;
-import com.example.Swipe.Admin.entity.Documents;
-import com.example.Swipe.Admin.entity.Photos;
+import com.example.Swipe.Admin.entity.Photo;
 import com.example.Swipe.Admin.repository.PhotosRepo;
 import com.example.Swipe.Admin.service.PhotosService;
 import org.springframework.stereotype.Service;
@@ -19,24 +17,24 @@ public class PhotosServiceImpl implements PhotosService {
     }
 
     @Override
-    public List<Photos> findAll() {
+    public List<Photo> findAll() {
         return photosRepo.findAll();
     }
 
     @Override
-    public Photos findById(int id) {
-        Optional<Photos> photos = photosRepo.findById(id);
+    public Photo findById(int id) {
+        Optional<Photo> photos = photosRepo.findById(id);
         if(photos.isPresent()){
             return photos.get();
         }
         else {
-            return Photos.builder().build();
+            return Photo.builder().build();
         }
     }
 
     @Override
-    public void saveEntity(Photos photos) {
-        photosRepo.save(photos);
+    public void saveEntity(Photo photo) {
+        photosRepo.save(photo);
     }
 
     @Override
@@ -45,20 +43,20 @@ public class PhotosServiceImpl implements PhotosService {
     }
 
     @Override
-    public void updateEntity(Photos photos, int id) {
-        Optional<Photos> photosOptional = photosRepo.findById(id);
+    public void updateEntity(Photo photo, int id) {
+        Optional<Photo> photosOptional = photosRepo.findById(id);
         if(photosOptional.isPresent()){
-            Photos photosUpdate = photosOptional.get();
-            if(photos.getApartment()!=null){
-                photosUpdate.setApartment(photos.getApartment());
+            Photo photoUpdate = photosOptional.get();
+            if(photo.getApartment()!=null){
+                photoUpdate.setApartment(photo.getApartment());
             }
-            if (photos.getLcd()!=null){
-                photosUpdate.setLcd(photos.getLcd());
+            if (photo.getLcd()!=null){
+                photoUpdate.setLcd(photo.getLcd());
             }
-            if(photos.getFileName()!=null){
-                photosUpdate.setFileName(photos.getFileName());
+            if(photo.getFileName()!=null){
+                photoUpdate.setFileName(photo.getFileName());
             }
-            photosRepo.saveAndFlush(photosUpdate);
+            photosRepo.saveAndFlush(photoUpdate);
         }
     }
 }

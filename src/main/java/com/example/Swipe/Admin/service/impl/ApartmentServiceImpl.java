@@ -1,8 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
-import com.example.Swipe.Admin.entity.Agent;
 import com.example.Swipe.Admin.entity.Apartment;
-import com.example.Swipe.Admin.entity.Documents;
 import com.example.Swipe.Admin.repository.ApartmentRepo;
 import com.example.Swipe.Admin.service.ApartmentService;
 import org.springframework.stereotype.Service;
@@ -53,8 +51,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         Optional<Apartment> apartmentOptional = apartmentRepo.findById(id);
         if(apartmentOptional.isPresent()){
             Apartment apartmentUpdate = apartmentOptional.get();
-            if(apartment.getPhotosList()!=null){
-                apartmentUpdate.setPhotosList(apartment.getPhotosList());
+            if(apartment.getPhotoList()!=null){
+                apartmentUpdate.setPhotoList(apartment.getPhotoList());
             }
             if(apartment.getMainPhoto()!=null){
                 apartmentUpdate.setMainPhoto(apartment.getMainPhoto());
@@ -112,6 +110,9 @@ public class ApartmentServiceImpl implements ApartmentService {
             }
             if(apartment.getType()!=null){
                 apartmentUpdate.setType(apartment.getType());
+            }
+            if(apartment.getUser()!=null){
+                apartmentUpdate.setUser(apartment.getUser());
             }
 
             apartmentRepo.saveAndFlush(apartmentUpdate);

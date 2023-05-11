@@ -10,7 +10,8 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Photos {
+@Table(name = "photos")
+public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idphotos")

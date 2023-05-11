@@ -41,6 +41,7 @@
           <th scope="col">Уведомление</th>
           <th scope="col">
             <form method="get" action="/add_user">
+              <input type="hidden" name="type" value="client">
                 <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
                 <i class="fas fa-plus">
                 </i>
@@ -53,7 +54,7 @@
             <th scope="row"><p th:text="${user.getIdUser()}"></p></th>
             <td><p th:text="${user.getSurname()+' '+user.getName()}"></p></td>
             <td><p th:text="${user.getMail()}"></p></td>
-            <td th:text="${user.isCallSms()}"></td>
+            <td th:text="${user.getUserAddInfo().isCallSms()}"></td>
             <td>
               <div style="display: flex">
               <form th:action="@{/user_edit/{id}(id=${user.getIdUser()})}"  method="get" >
@@ -62,8 +63,7 @@
                   </i>
                 </button>
               </form>
-              <form action="/delete_user"  method="post" >
-                <input type="hidden" name="id" th:value="${user.getIdUser()}" />
+              <form th:action="@{/delete_user/{id}(id = ${user.getIdUser()})}"  method="post" >
                 <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                   <i class="fas fa-trash">
                   </i>
@@ -92,27 +92,32 @@
             <th scope="col">ID</th>
             <th scope="col">ФИО</th>
             <th scope="col">Почта</th>
-            <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
-              <i class="fas fa-plus">
-              </i>
-            </button></th>
+            <th scope="col">
+              <form method="get" action="/add_user">
+                <input type="hidden" name="type" value="contractor">
+                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
+                  <i class="fas fa-plus">
+                  </i>
+                </button>
+              </form>
+            </th>
           </tr>
           </thead>
           <tbody>
           <tr th:each="contractor:${contractors}">
-            <th scope="row"><p th:text="${contractor.getIdBuilder()}"></p></th>
+            <th scope="row"><p th:text="${contractor.getIdUser()}"></p></th>
             <td><p th:text="${contractor.getSurname()+' '+contractor.getName()}"></p></td>
             <td><p th:text="${contractor.getMail()}"></p></td>
             <td>
               <div style="display: flex">
-                <form th:action="@{/contractor_edit/{id}(id=${contractor.getIdBuilder()})}"  method="get" >
+                <form th:action="@{/user_edit/{id}(id=${contractor.getIdUser()})}"  method="get" >
                   <button type="submit" class="btn btn-info btn-sm">
                     <i class="fas fa-pencil">
                     </i>
                   </button>
                 </form>
                 <form action="/delete_user"  method="post" >
-                  <input type="hidden" name="id" th:value="${contractor.getIdBuilder()}" />
+                  <input type="hidden" name="id" th:value="${contractor.getIdUser()}" />
                   <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                     <i class="fas fa-trash">
                     </i>
@@ -141,27 +146,30 @@
             <th scope="col">ID</th>
             <th scope="col">ФИО</th>
             <th scope="col">Почта</th>
-            <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
-              <i class="fas fa-plus">
-              </i>
-            </button></th>
+            <th scope="col"><form method="get" action="/add_user">
+              <input type="hidden" name="type" value="notary">
+              <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
+                <i class="fas fa-plus">
+                </i>
+              </button>
+            </form></th>
           </tr>
           </thead>
           <tbody>
           <tr th:each="notary:${notaries}">
-            <th scope="row"><p th:text="${notary.getIdNotary()}"></p></th>
+            <th scope="row"><p th:text="${notary.getIdUser()}"></p></th>
             <td><p th:text="${notary.getSurname()+' '+notary.getName()}"></p></td>
             <td><p th:text="${notary.getMail()}"></p></td>
             <td>
               <div style="display: flex">
-                <form th:action="@{/notary_edit/{id}(id=${notary.getIdNotary()})}"  method="get" >
+                <form th:action="@{/user_edit/{id}(id=${notary.getIdUser()})}"  method="get" >
                   <button type="submit" class="btn btn-info btn-sm">
                     <i class="fas fa-pencil">
                     </i>
                   </button>
                 </form>
                 <form action="/delete_user"  method="post" >
-                  <input type="hidden" name="id" th:value="${notary.getIdNotary()}" />
+                  <input type="hidden" name="id" th:value="${notary.getIdUser()}" />
                   <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                     <i class="fas fa-trash">
                     </i>

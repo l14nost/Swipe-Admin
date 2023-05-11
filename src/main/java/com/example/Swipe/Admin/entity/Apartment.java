@@ -70,10 +70,14 @@ public class Apartment {
 
 
     @OneToMany(mappedBy = "apartment")
-    private List<Photos> photosList = new ArrayList<>();
+    private List<Photo> photoList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "id_frame")
     private Frame frame;
+
+    @ManyToOne
+    @JoinColumn(name = "id_client")
+    private User user;
 
 }

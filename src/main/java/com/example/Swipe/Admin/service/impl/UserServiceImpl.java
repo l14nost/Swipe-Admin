@@ -1,7 +1,8 @@
 package com.example.Swipe.Admin.service.impl;
 
-import com.example.Swipe.Admin.entity.Contractor;
+//import com.example.Swipe.Admin.entity.Contractor;
 import com.example.Swipe.Admin.entity.User;
+import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.repository.UserRepo;
 import com.example.Swipe.Admin.service.UserService;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ public class UserServiceImpl implements UserService {
         this.userRepo = userRepo;
     }
 
-    public List<User> users(){
-        return userRepo.findAll();
+    public List<User> findAllByType(TypeUser typeUser){
+        return userRepo.findAllByTypeUser(typeUser);
     }
 
     @Override
@@ -39,7 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveEntity(User user) {
+
         userRepo.save(user);
+
     }
 
     @Override
@@ -64,19 +67,14 @@ public class UserServiceImpl implements UserService {
             if(user.getMail()!=null){
                 updateUser.setMail(user.getMail());
             }
-            if(user.getDateSub()!=null){
-                updateUser.setDateSub(user.getDateSub());
-            }
-            if(user.getTypeNotification()!=null){
-                updateUser.setTypeNotification(user.getTypeNotification());
-            }
-            if(user.getFilename()!=null){
-                updateUser.setFilename(user.getFilename());
-            }
-            if(user.getNumber()!=null){
+            if (user.getNumber() != null) {
                 updateUser.setNumber(user.getNumber());
             }
-            updateUser.setCallSms(user.isCallSms());
+            if(user.getAgent()!=null){
+                updateUser.setAgent(user.getAgent());
+            }
+
+
             userRepo.saveAndFlush(updateUser);
         }
     }

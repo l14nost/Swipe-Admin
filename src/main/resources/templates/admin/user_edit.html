@@ -16,12 +16,12 @@
     <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/user_update/{id}(id=${id})}">
     <div style="display: flex; justify-content: space-between">
       <h4 class="mb-3">Пользователь</h4>
-      <div class="form-check form-switch" style="display: flex; margin-right: 50px" >
+      <div class="form-check form-switch" style="display: flex; margin-right: 50px" th:if="${user.getUserAddInfo()!=null}">
         <div>
           <h6 for="flexSwitchCheckDefault" style="margin-right: 5px">Уведомление</h6>
         </div>
         <div>
-          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="callSms" th:checked="${user.isCallSms()}" style="margin-left: 5px" >
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="callSms" th:checked="${user.getUserAddInfo().isCallSms()}" style="margin-left: 5px" >
         </div>
       </div>
     </div>
@@ -62,25 +62,27 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
-            <label for="username" class="form-label">Подписка</label>
-            <div class="input-group has-validation">
-              <input type="date" class="form-control" name ="dateSub" id="sub" placeholder="Введите номер..." th:value="${user.getDateSub()}" required="">
-              <div class="invalid-feedback">
-                Введите номер...
+          <div th:if="${user.getUserAddInfo()!=null}" style="display: flex">
+            <div class="col-sm-6">
+              <label for="username" class="form-label">Подписка</label>
+              <div class="input-group has-validation">
+                <input type="date" class="form-control" name ="dateSub" id="sub" placeholder="Введите номер..." th:value="${user.getUserAddInfo().getDateSub()}" required="">
+                <div class="invalid-feedback">
+                  Введите номер...
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-sm-6">
+            <div class="col-sm-6">
 
-            <div class="form-floating">
-              <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="typeNotification">
-                <option value="ME" th:selected="${user.getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).ME)}">Мне</option>
-                <option value="MEANDAGENT" th:selected="${user.getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}">Мне и агенту</option>
-                <option value="AGENT" th:selected="${user.getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).AGENT)}">Агенту</option>
-                <option value="OFF" th:selected="${user.getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).OFF)}">Отключить</option>
-              </select>
-              <label for="floatingSelect" class="form-label">Тип уведомления</label>
+              <div class="form-floating">
+                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="typeNotification">
+                  <option value="ME" th:selected="${user.getUserAddInfo().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).ME)}">Мне</option>
+                  <option value="MEANDAGENT" th:selected="${user.getUserAddInfo().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}">Мне и агенту</option>
+                  <option value="AGENT" th:selected="${user.getUserAddInfo().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).AGENT)}">Агенту</option>
+                  <option value="OFF" th:selected="${user.getUserAddInfo().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).OFF)}">Отключить</option>
+                </select>
+                <label for="floatingSelect" class="form-label">Тип уведомления</label>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -101,20 +103,29 @@
               }
             </script>
           </div>
-          <div th:if="${user.getAgent()!=null}">
-            <div> <h6>Агент</h6> </div>
+          <div th:if="!${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).NOTARY)}">
+            <div th:if="${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).CLIENT)}"> <h6>Агент</h6> </div>
+            <div th:if="${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).CONTRACTOR)}"> <h6>Отдел продаж</h6> </div>
             <div>
               <table class="table table-striped" style="margin: 20px">
                 <thead>
                 <tr>
-                  <th scope="col"><p th:text="${user.getAgent().getName()+' '+user.getAgent().getSurname()}"></p></th>
-                  <th scope="col"><p th:text="${user.getAgent().getMail()}"></p></th>
+                  <th scope="col"><p th:if="${user.getAgent()!=null}" th:text="${user.getAgent().getName()+' '+user.getAgent().getSurname()}"></p></th>
+                  <th scope="col"><p th:if="${user.getAgent()!=null}" th:text="${user.getAgent().getMail()}"></p></th>
                   <th scope="col">
 <!--                    th:href="@{/agent_edit/{id}(id = ${user.getAgent().getIdAgent()})/{idUser}(idUser = ${user.getIdUser()})}"-->
-                    <div style="display: flex">
+                    <div style="display: flex" th:if="${user.getAgent()!=null}">
                       <a th:href="@{/agent_edit/{id}(id = ${user.getAgent().getIdAgent()}+'_'+${user.getIdUser()})}">
                         <button type="button" name="idUser" th:value="${user.getIdUser()}" class="btn btn-info btn-sm">
                           <i class="fas fa-pencil">
+                          </i>
+                        </button>
+                      </a>
+                    </div>
+                    <div style="display: flex" th:if="${user.getAgent()==null}">
+                      <a th:href="@{/agent_add/{idUser}(idUser = ${user.getIdUser()})}">
+                        <button type="button" name="idUser" th:value="${user.getIdUser()}" class="btn btn-secondary btn-sm">
+                          <i class="fas fa-plus">
                           </i>
                         </button>
                       </a>
@@ -128,6 +139,7 @@
         <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
 
         </div>
+    </div>
       </form>
 
 

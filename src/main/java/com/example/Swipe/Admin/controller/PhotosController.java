@@ -1,25 +1,49 @@
 package com.example.Swipe.Admin.controller;
 
-import com.example.Swipe.Admin.entity.Photos;
+import com.example.Swipe.Admin.entity.Photo;
 import com.example.Swipe.Admin.service.impl.ApartmentServiceImpl;
+import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.Banner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
 
 @Controller
 @RequiredArgsConstructor
 public class PhotosController {
+    @Value("${upload.path}")
+    private String upload;
     private final PhotosServiceImpl photosServiceImpl;
     private final ApartmentServiceImpl apartmentService;
+    private final LCDServiceImpl lcdService;
     @GetMapping("/add_photo/{idApartment}")
     public String addPhoto(@PathVariable int idApartment, Model model){
-        Photos photos = Photos.builder().fileName("../admin/dist/img/default.jpg").apartment(apartmentService.findById(idApartment)).build();
-        photosServiceImpl.saveEntity(photos);
+        Photo photo = Photo.builder().fileName("../admin/dist/img/default.jpg").apartment(apartmentService.findById(idApartment)).build();
+        photosServiceImpl.saveEntity(photo);
         return "redirect:/apartment_edit/"+idApartment;
+    }
+    @GetMapping("/add_photo_lcd/{idLcd}")
+    public String addPhotoLcd(@PathVariable int idLcd, Model model){
+        Photo photo = Photo.builder().fileName("../admin/dist/img/default.jpg").lcd(lcdService.findById(idLcd)).build();
+        photosServiceImpl.saveEntity(photo);
+        return "redirect:/lcd_edit/"+idLcd;
+    }
+    @PostMapping("/delete_photo")
+    public String deletePhoto(@RequestParam(name = "idPhoto") int idPhoto,@RequestParam(name = "idApartment") int idApartment){
+        Photo photo = photosServiceImpl.findById(idPhoto);
+        if (!photo.getFileName().equals("../admin/dist/img/default.jpg")) {
+            String fileNameDelete = photo.getFileName().substring(11, photo.getFileName().length());
+            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+            fileDelete.delete();
+        }
+        photosServiceImpl.deleteById(idPhoto);
+
+        return "redirect:/apartment_edit/"+idApartment;
+//        return ResponseEntity.ok().body("{\"message\": \"Фото успешно удалено\"}");
     }
 
 }

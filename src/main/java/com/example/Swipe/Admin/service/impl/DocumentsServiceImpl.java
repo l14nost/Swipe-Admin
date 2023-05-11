@@ -1,7 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
 import com.example.Swipe.Admin.entity.Address;
-import com.example.Swipe.Admin.entity.Contractor;
 import com.example.Swipe.Admin.entity.Documents;
 import com.example.Swipe.Admin.repository.DocumentsRepo;
 import com.example.Swipe.Admin.service.DocumentsService;

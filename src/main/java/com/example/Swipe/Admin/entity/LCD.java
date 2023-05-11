@@ -65,14 +65,14 @@ public class LCD {
     private int sumContract;
 
     @OneToOne
-    @JoinColumn(name = "builder_id")
-    private Contractor contractor;
+    @JoinColumn(name = "id_contractor")
+    private User user;
 
     @OneToMany(mappedBy = "lcd")
     private List<News> newsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "lcd")
-    private List<Photos> photosList = new ArrayList<>();
+    private List<Photo> photoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "lcd")
     private List<Apartment> apartmentList = new ArrayList<>();

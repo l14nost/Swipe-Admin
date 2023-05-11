@@ -1,6 +1,6 @@
 package com.example.Swipe.Admin.token;
 
-import com.example.Swipe.Admin.entity.Admin;
+import com.example.Swipe.Admin.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +27,6 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
-    private Admin admin;
+    private User user;
 
 }

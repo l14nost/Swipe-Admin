@@ -1,7 +1,5 @@
 package com.example.Swipe.Admin.service.impl;
 
-import com.example.Swipe.Admin.entity.Apartment;
-import com.example.Swipe.Admin.entity.Contractor;
 import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.repository.LCDRepo;
 import com.example.Swipe.Admin.service.LCDService;
@@ -49,8 +47,8 @@ public class LCDServiceImpl implements LCDService {
         Optional<LCD> lcdOptional = lcdRepo.findById(id);
         if(lcdOptional.isPresent()){
             LCD lcdUpdate = lcdOptional.get();
-            if(lcd.getPhotosList()!=null){
-                lcdUpdate.setPhotosList(lcd.getPhotosList());
+            if(lcd.getPhotoList()!=null){
+                lcdUpdate.setPhotoList(lcd.getPhotoList());
             }
             if(lcd.getMainPhoto()!=null){
                 lcdUpdate.setMainPhoto(lcd.getMainPhoto());
@@ -111,6 +109,9 @@ public class LCDServiceImpl implements LCDService {
             }
             if(lcd.getLcdClass()!=null){
                 lcdUpdate.setLcdClass(lcd.getLcdClass());
+            }
+            if(lcd.getUser()!=null){
+                lcdUpdate.setUser(lcd.getUser());
             }
             lcdRepo.saveAndFlush(lcdUpdate);
         }

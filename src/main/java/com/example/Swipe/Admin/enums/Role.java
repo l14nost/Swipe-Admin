@@ -1,14 +1,11 @@
 package com.example.Swipe.Admin.enums;
 
-public enum Role {
-    ADMIN("ADMIN");
-    private String value;
+import org.springframework.security.core.GrantedAuthority;
 
-    Role(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
+public enum Role implements GrantedAuthority {
+    ADMIN,USER;
+    @Override
+    public String getAuthority() {
+        return name();
     }
 }

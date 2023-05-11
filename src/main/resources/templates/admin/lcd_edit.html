@@ -40,7 +40,15 @@
               Введите имя...
             </div>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="contractor">
+                <option th:each="contractor : ${contractors}" th:value="${contractor.getIdUser()}" th:text="${contractor.getName()+' '+contractor.getSurname()}"></option>
+              </select>
+              <label for="floatingSelect" class="form-label">Застройщик</label>
+            </div>
+          </div>
+          <div class="col-sm-12">
             <label  class="form-label" for="5">Преимущество</label>
             <div id="5">
               <input type="checkbox" id="1" name="advantages" checked>
@@ -87,7 +95,7 @@
               <label>Размер 1000х190</label>
               <div class="row" >
 
-                <div class="col-sm-3" th:each="photo:${lcd.getPhotosList()}">
+                <div class="col-sm-3" th:each="photo:${lcd.getPhotoList()}">
                   <img th:src="${photo.getFileName()}" id="" class="img-fluid mb-2" alt="white sample">
                   <button type="submit" style="
                 position: absolute;
@@ -107,7 +115,7 @@
                 </div>
                 <div class="col-sm-3" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
-                    <a th:href="@{/add_photo/{idLcd}(idLcd = ${lcd.getIdLcd()})}">
+                    <a th:href="@{/add_photo_lcd/{idLcd}(idLcd = ${lcd.getIdLcd()})}">
                       <img src="../admin/dist/img/addCinema.png" width="150px">
                     </a>
                   </div>
@@ -146,7 +154,7 @@
                 </div>
                 <div class="col-sm-3" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
-                    <a th:href="@{/add_photo/{idLcd}(idLcd = ${lcd.getIdLcd()})}">
+                    <a th:href="@{/add_photo_lcd/{idLcd}(idLcd = ${lcd.getIdLcd()})}">
                       <img src="../admin/dist/img/addCinema.png" width="150px">
                     </a>
                   </div>
@@ -260,10 +268,12 @@
               <tr>
                 <th scope="col">Корпус</th>
                 <th scope="col">Колв квартир</th>
-                <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
-                  <i class="fas fa-plus">
-                  </i>
-                </button></th>
+                <th scope="col">
+<!--                  <button th:attr="onclick='addFrame(' + ${lcd.getIdLcd()} + ')'" class="btn btn-secondary">-->
+                  <a th:href="@{/add_frame/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary">
+                    <i class="fas fa-plus">
+                    </i>
+                </a></th>
               </tr>
               </thead>
               <tbody>
@@ -272,12 +282,10 @@
                 <td><p th:text="${frame.getApartmentList().size()}"></p></td>
                 <td>
                   <div style="display: flex">
-                    <form th:action="@{/apartment_edit/{id}(id=${frame.getIdFrame()})}"  method="get" >
-                      <button type="submit" class="btn btn-info btn-sm">
+                      <button type="button" class="btn btn-info btn-sm" th:attr="onclick='editFrame('+${frame.getIdFrame()}+')'" >
                         <i class="fas fa-pencil">
                         </i>
                       </button>
-                    </form>
                     <form action="/delete_user"  method="post" >
                       <input type="hidden" name="id" th:value="${frame.getIdFrame()}" />
                       <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
@@ -346,7 +354,41 @@
 </div>
 <div th:insert="admin.shared/footer::footer"></div>
 <div th:replace="~{/admin.shared/script}"></div>
+<!--<script>-->
+<!--  function addFrame(idLcd) {-->
 
+<!--    $.ajax({-->
+<!--      url: "/add_lcd/" + idLcd,-->
+<!--      method: "GET",-->
+
+
+<!--      success: function (response) {-->
+<!--        window.location.href = "/lcd_edit/" + idLcd;-->
+<!--      },-->
+<!--      error: function (xhr, status, error) {-->
+<!--        console.log('Произошла ошибка:', error);-->
+<!--        alert('Произошла ошибка при выполнении запроса');-->
+<!--      }-->
+<!--    });-->
+<!--  }-->
+<!--</script>-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function editFrame(idFrame) {
+
+    $.ajax({
+      url: "/edit_frame/" + idFrame,
+      method: "GET",
+      success: function (response) {
+        window.location.href = "/edit_frame/" + idFrame;
+      },
+      error: function (xhr, status, error) {
+        console.log('Произошла ошибка:', error);
+        alert('Произошла ошибка при выполнении запроса');
+      }
+    });
+  }
+</script>
 
 </body>
 

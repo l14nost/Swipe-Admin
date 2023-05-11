@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.entity;
 
+import com.example.Swipe.Admin.enums.TypeAgent;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
@@ -26,6 +27,9 @@ public class Agent {
     private String number;
 
     private String mail;
+
+    @Enumerated(EnumType.STRING)
+    private TypeAgent type;
 
     @OneToMany(mappedBy = "agent")
     private List<User> users = new ArrayList<>();

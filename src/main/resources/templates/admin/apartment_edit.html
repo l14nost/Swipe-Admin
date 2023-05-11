@@ -6,6 +6,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
+<!--  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+
 
 <body>
 <div class="wrapper">
@@ -33,9 +35,11 @@
 
 
           </div>
+
+<!--            th:value="${apartment.getAddress().getCity()+' '+apartment.getAddress().getArea()+' '+apartment.getAddress().getStreet()+' '+apartment.getAddress().getNumber()}"-->
           <div class="col-sm-12">
             <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  placeholder="Введите имя..." th:value="${apartment.getAddress().getCity()+' '+apartment.getAddress().getArea()+' '+apartment.getAddress().getStreet()+' '+apartment.getAddress().getNumber()}" required="">
+            <input type="text" class="form-control" name="address"  placeholder="Введите имя..."   required="">
             <div class="invalid-feedback">
               Введите имя...
             </div>
@@ -54,6 +58,15 @@
                 <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}"></option>
               </select>
               <label for="floatingSelect" class="form-label">ЖК</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="user">
+                <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}"></option>
+              </select>
+              <label for="floatingSelect" class="form-label">Владелец</label>
             </div>
           </div>
           <label for="inputImg">Главная картина</label>
@@ -81,9 +94,32 @@
               <label>Размер 1000х190</label>
               <div class="row" >
 
-                <div class="col-sm-3" th:each="photo:${apartment.getPhotosList()}">
+                <div class="col-sm-3" th:each="photo:${apartment.getPhotoList()}">
                   <img th:src="${photo.getFileName()}" id="img1" class="img-fluid mb-2" alt="white sample">
-                  <button type="submit" style="
+<!--                  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--                  <script>-->
+<!--                      function deleteData(idPhoto, idApartment) {-->
+
+<!--                        $.ajax({-->
+<!--                          url: "/delete_photo",-->
+<!--                          method: "POST",-->
+<!--                          data: {-->
+<!--                            idPhoto: idPhoto,-->
+<!--                            idApartment: idApartment-->
+<!--                          } ,-->
+
+<!--                          success: function(response) {-->
+<!--                            window.location.href = "/apartment_edit/" + idApartment;-->
+<!--                          },-->
+<!--                          error: function(xhr, status, error) {-->
+<!--                            console.log('Произошла ошибка:', error);-->
+<!--                            alert('Произошла ошибка при выполнении запроса');-->
+<!--                          }-->
+<!--                      });-->
+<!--                    }-->
+<!--                  </script>-->
+
+                  <button th:attr="onclick='deleteData(' + ${photo.getIdPhotos()} + ', ' + ${apartment.getIdApartment()} + ')'" style="
                 position: absolute;
                 right: -1px;
                 top: -10px;
@@ -107,9 +143,10 @@
                     }
                   </script>
                 </div>
-                <div class="col-sm-3" style="margin-left: 20px">
+                <div class="col-sm-3" style="margin-left: 20px" id="galleryDiv">
                   <div style="display: flex; justify-content: center">
-                    <a th:href="@{/add_photo/{idApartment}(idApartment = ${apartment.getIdApartment()})}">
+<!--                    <a th:href="@{/add_photo/{idApartment}(idApartment = ${apartment.getIdApartment()})}">-->
+                    <a href="#" th:attr="onclick='addPhoto(' + ${apartment.getIdApartment()} + ')'">
                         <img src="../admin/dist/img/addCinema.png" width="150px">
                     </a>
                   </div>
@@ -230,8 +267,68 @@
 </div>
 <div th:insert="admin.shared/footer::footer"></div>
 <div th:replace="~{/admin.shared/script}"></div>
+<!--<script>-->
+<!--  function deleteData(idPhoto, idApartment) {-->
+<!--    fetch('/delete_photo', {-->
+<!--      method: 'POST',-->
+<!--      body:{-->
+<!--        idPhoto: idPhoto,-->
+<!--        idApartment: idApartment-->
+<!--      },-->
+<!--    })-->
+<!--            .then(response => {-->
+<!--              if (response.ok) {-->
+<!--                window.location.href = "/apartment_edit/" + idApartment;-->
+<!--              } else {-->
+<!--                console.log('Ошибка при выполнении запроса');-->
+<!--                alert('Произошла ошибка при выполнении запроса1');-->
+<!--              }-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--              console.log('Произошла ошибка:', error);-->
+<!--              alert('Произошла ошибка при выполнении запроса');-->
+<!--            });-->
+<!--  }-->
 
+<!--</script>-->
 
+                  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                  <script>
+                      function deleteData(idPhoto, idApartment) {
+
+                        $.ajax({
+                          url: "/delete_photo",
+                          method: "POST",
+                          data: {
+                            idPhoto: idPhoto,
+                            idApartment: idApartment
+                          } ,
+
+                          success: function(response) {
+                            window.location.href = "/apartment_edit/" + idApartment;
+                          },
+                          error: function(xhr, status, error) {
+                            console.log('Произошла ошибка:', error);
+                            alert('Произошла ошибка при выполнении запроса');
+                          }
+                      });
+                    }
+                      function addPhoto(idApartment) {
+
+                        $.ajax({
+                          url: "/add_photo/"+idApartment,
+                          method: "GET",
+
+                          success: function(response) {
+                            window.location.href = "/apartment_edit/" + idApartment;
+                          },
+                          error: function(xhr, status, error) {
+                            console.log('Произошла ошибка:', error);
+                            alert('Произошла ошибка при выполнении запроса');
+                          }
+                        });
+                      }
+                  </script>
 </body>
 
 </html>

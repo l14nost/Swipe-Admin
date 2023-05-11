@@ -1,12 +1,13 @@
 package com.example.Swipe.Admin.controller;
 
 import com.example.Swipe.Admin.entity.User;
+import com.example.Swipe.Admin.entity.UserAddInfo;
+import com.example.Swipe.Admin.enums.Role;
 import com.example.Swipe.Admin.enums.TypeNotification;
-import com.example.Swipe.Admin.repository.AdminRepo;
-import com.example.Swipe.Admin.service.impl.ContractorServiceImpl;
-import com.example.Swipe.Admin.service.impl.NotaryServiceImpl;
+import com.example.Swipe.Admin.enums.TypeUser;
+import com.example.Swipe.Admin.service.impl.UserAddInfoServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
-import com.example.Swipe.Admin.token.TokenRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,24 +23,19 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
     @Value("${upload.path}")
     private String upload;
     private TypeNotification typeNotification;
     private final UserServiceImpl userServiceImpl;
-    private final ContractorServiceImpl contractorServiceImpl;
-    private final NotaryServiceImpl notaryServiceImpl;
-    private final TokenRepo tokenRepo;
-    private final AdminRepo adminRepo;
+    private final UserAddInfoServiceImpl userAddInfoService;
 
-    public UserController(UserServiceImpl userServiceImpl, ContractorServiceImpl contractorServiceImpl, NotaryServiceImpl notaryServiceImpl, TokenRepo tokenRepo, AdminRepo adminRepo) {
-        this.userServiceImpl = userServiceImpl;
-        this.contractorServiceImpl = contractorServiceImpl;
 
-        this.notaryServiceImpl = notaryServiceImpl;
-        this.tokenRepo = tokenRepo;
-        this.adminRepo = adminRepo;
-    }
+
+
+
+
 //    @GetMapping("/users")
 //    public String usersMain(Model model) {
 //        model.addAttribute("users", userServiceImpl.users());
@@ -54,15 +50,28 @@ public class UserController {
 //        return "admin/user_main";
 //    }
     @GetMapping("/add_user")
-    public String addUser(Model model){
-//        User user = User.builder().name("").surname("").typeNotification(TypeNotification.ME).callSms(true).dateSub(LocalDate.now()).filename("../admin/dist/img/default.jpg").mail("").number("").password("").build();
-//        userServiceImpl.saveEntity(user);
-        return "admin/user_add";
+    public String addUser(@RequestParam(name = "type") String type, Model model){
+        if(type.equals("client")) {
+            return "admin/user_add";
+        }
+        else if(type.equals("contractor")){
+            return "admin/contractor_add";
+        }
+        else {
+            return "admin/notary_add";
+        }
     }
     @PostMapping("/user_add")
-    public String userAdd(@RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam String number, @RequestParam LocalDate dateSub, @RequestParam TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
+    public String userAdd(@RequestParam(name = "type")String type, @RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam String number, @RequestParam(required = false) LocalDate dateSub, @RequestParam(required = false) TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
         System.out.println(callSms);
-        User user = User.builder().callSms(callSms).name(name).surname(surname).mail(mail).dateSub(dateSub).number(number).typeNotification(typeNotification).build();
+
+        User user = User.builder().name(name).surname(surname).mail(mail).number(number).role(Role.USER).build();
+
+        switch (type) {
+            case "client" -> user.setTypeUser(TypeUser.CLIENT);
+            case "contractor" -> user.setTypeUser(TypeUser.CONTRACTOR);
+            case "notary" -> user.setTypeUser(TypeUser.NOTARY);
+        }
         if (!file.isEmpty()) {
             File uploadDirGallery = new File(upload);
             if (!uploadDirGallery.exists()) {
@@ -74,7 +83,18 @@ public class UserController {
             file.transferTo(new File((resultNameGallery)));
             user.setFilename("../uploads/" + fileNameGallery);
         }
+        else {
+            user.setFilename("../admin/dist/img/default.jpg");
+        }
+        if(dateSub!=null&&typeNotification!=null) {
+            UserAddInfo userAddInfo = UserAddInfo.builder().callSms(callSms).dateSub(dateSub).typeNotification(typeNotification).build();
+            user.setUserAddInfo(userAddInfo);
+            userAddInfoService.saveEntity(userAddInfo);
+        }
+
         userServiceImpl.saveEntity(user);
+
+
         return "redirect:/users";
     }
     @GetMapping("/user_edit/{id}")
@@ -84,10 +104,11 @@ public class UserController {
         return "admin/user_edit";
     }
     @PostMapping("/user_update/{id}")
-    public String userUpdate(@PathVariable int id, @RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam String number, @RequestParam LocalDate dateSub, @RequestParam TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
+    public String userUpdate(@PathVariable int id, @RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam String number, @RequestParam(required = false) LocalDate dateSub, @RequestParam(required = false) TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
         System.out.println(callSms);
-        User user = User.builder().callSms(callSms).name(name).surname(surname).mail(mail).dateSub(dateSub).number(number).typeNotification(typeNotification).build();
+        User user = User.builder().name(name).surname(surname).mail(mail).number(number).build();
         User preUser = userServiceImpl.findById(id);
+
         if (!file.isEmpty()) {
             File uploadDirGallery = new File(upload);
             if (!uploadDirGallery.exists()) {
@@ -104,19 +125,29 @@ public class UserController {
             }
             user.setFilename("../uploads/" + fileNameGallery);
         }
+
         userServiceImpl.updateEntity(user,id);
+        if(preUser.getUserAddInfo()!=null) {
+            UserAddInfo userAddInfo = UserAddInfo.builder().typeNotification(typeNotification).dateSub(dateSub).callSms(callSms).build();
+            userAddInfoService.updateEntity(userAddInfo,preUser.getUserAddInfo().getIdUserAddInfo());
+        }
         return "redirect:/users";
     }
 
-    @PostMapping("/delete_user")
-    public String deleteUser(@RequestParam int id, Model model){
+    @PostMapping("/delete_user/{id}")
+    public String deleteUser(@PathVariable int id, Model model){
         User user = userServiceImpl.findById(id);
-        if (!user.getFilename().equals("../admin/dist/img/default.jpg")) {
-            String fileNameDelete = user.getFilename().substring(11, user.getFilename().length());
-            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-            fileDelete.delete();
+        if(user.getFilename()!=null) {
+            if (!user.getFilename().equals("../admin/dist/img/default.jpg")) {
+                String fileNameDelete = user.getFilename().substring(11, user.getFilename().length());
+                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                fileDelete.delete();
+            }
         }
         userServiceImpl.deleteById(id);
+        if(user.getUserAddInfo()!=null) {
+            userAddInfoService.deleteById(user.getUserAddInfo().getIdUserAddInfo());
+        }
         return "redirect:/users";
     }
 }
