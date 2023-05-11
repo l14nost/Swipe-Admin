@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Spring Security Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style th:replace="~{/admin.shared/style}"></style>
+
+<body>
+<div class="wrapper">
+  <div th:insert="admin.shared/header::header"></div>
+  <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
+
+  <div class="content-wrapper" style="padding-left: 50px">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/lcd_add}">
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="mb-3">ЖК</h4>
+      </div>
+      <div class="col-md-7 col-lg-8">
+        <div class="row g-3">
+          <div class="col-sm-12">
+            <label for="firstName" class="form-label">Название</label>
+            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..."  required="">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="floatingTextarea">Описание</label>
+            <textarea class="form-control"  id="floatingTextarea" name="description"></textarea>
+
+
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Адрес</label>
+            <input type="text" class="form-control" name="address"  placeholder="Введите имя..."  required="" value=" ">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <label  class="form-label" for="5">Преимущество</label>
+            <div id="5">
+              <input type="checkbox" id="1" name="advantages" checked>
+              <label for="1">Спорт. площадка</label>
+              <input type="checkbox" id="2" name="advantages">
+              <label for="2">Парковка</label>
+              <input type="checkbox" id="3" name="advantages">
+              <label for="3">Школа</label>
+              <input type="checkbox" id="4" name="advantages">
+              <label for="4">Дет. Сад</label>
+            </div>
+          </div>
+<!--          <div class="col-sm-6">-->
+
+<!--            <div class="form-floating">-->
+<!--              <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="lcd">-->
+<!--                <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}"></option>-->
+<!--              </select>-->
+<!--              <label for="floatingSelect" class="form-label">ЖК</label>-->
+<!--            </div>-->
+<!--          </div>-->
+          <label for="inputImg">Главная картина</label>
+          <div class="form-group" style="display: flex">
+
+            <div class="form-group" style="display: flex">
+
+              <!--          ${stock.getFileName}-->
+              <img src="../admin/dist/img/default.jpg" id= "imgMain" style="width: 75px; height: 75px" alt="null">
+            </div>
+            <input type="file" name="file" id="inputImg" class="form-control"  style="margin-left: 30px; margin-top: 30px">
+            <script>
+              inputImg.onchange = evt => {
+                const [file] = inputImg.files
+                if (file) {
+                  imgMain.src = URL.createObjectURL(file)
+                }
+              }
+            </script>
+
+          </div>
+<!--          <div>-->
+<!--            <label>Галерея картинок</label>-->
+<!--            <div class="card-body">-->
+<!--              <label>Размер 1000х190</label>-->
+<!--              <div class="row" >-->
+
+<!--                <div class="col-sm-3" th:each="photo:${lcd.getPhotosList()}">-->
+<!--                  <img th:src="${photo.getFileName()}" id="" class="img-fluid mb-2" alt="white sample">-->
+<!--                  <button type="submit" style="-->
+<!--                position: absolute;-->
+<!--                right: -1px;-->
+<!--                top: -10px;-->
+<!--                z-index: 11;-->
+<!--                border: 2px solid black;-->
+<!--                height: 30px;-->
+<!--                width: 30px;-->
+<!--                box-sizing: border-box;-->
+<!--                padding: 2px;-->
+<!--                border-radius: 50%;-->
+<!--            " >-->
+<!--                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">-->
+<!--                  </button>-->
+<!--                  <input type="file" id="inputImg2" name="gallery" class="form-control" th:value="${photo.getFileName()}">-->
+<!--                </div>-->
+<!--                <div class="col-sm-3" style="margin-left: 20px">-->
+<!--                  <div style="display: flex; justify-content: center">-->
+<!--                    <a th:href="@{/add_photo/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
+<!--                      <img src="../admin/dist/img/addCinema.png" width="150px">-->
+<!--                    </a>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+
+
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div>-->
+<!--            <label>Документы</label>-->
+<!--            <div class="card-body">-->
+<!--              <label>Размер 1000х190</label>-->
+<!--              <div class="row" >-->
+
+<!--                <div class="col-sm-3" th:each="document:${lcd.getDocuments()}">-->
+<!--                  <img src="../admin/dist/img/document.png" id="img1" class="img-fluid mb-2" alt="white sample">-->
+<!--                  <button type="submit" style="-->
+<!--                position: absolute;-->
+<!--                right: -1px;-->
+<!--                top: -10px;-->
+<!--                z-index: 11;-->
+<!--                border: 2px solid black;-->
+<!--                height: 30px;-->
+<!--                width: 30px;-->
+<!--                box-sizing: border-box;-->
+<!--                padding: 2px;-->
+<!--                border-radius: 50%;-->
+<!--            " >-->
+<!--                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">-->
+<!--                  </button>-->
+<!--                  <label for="inputDocument" th:text="${document.getName()}" style="text-align: center"></label>-->
+<!--                  <input type="file" id="inputDocument" name="documents" class="form-control" th:value="${document.getFileName()}">-->
+<!--                </div>-->
+<!--                <div class="col-sm-3" style="margin-left: 20px">-->
+<!--                  <div style="display: flex; justify-content: center">-->
+<!--                    <a th:href="@{/add_photo/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
+<!--                      <img src="../admin/dist/img/addCinema.png" width="150px">-->
+<!--                    </a>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+
+
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="status">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.StatusLCDType).values()}" th:value="${type.name()}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label  class="form-label">Статус</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="type">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.LCDType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+
+              </select>
+              <label  class="form-label">Вид дома</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="lcdClass">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.ClassType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label  class="form-label">Класс дома</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="technology">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.TechnologyType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label class="form-label">Технология</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="territory">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.TerritoryType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label  class="form-label">Территория</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="gas">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.GasType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label class="form-label">Газ</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="sewerage">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.HeatingType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label  class="form-label">Канализация</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="waterSupply">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.HeatingType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label  class="form-label">Водоснабжение</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="communal">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.CommunalType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label  class="form-label">Коммуналка</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select"  aria-label="Floating label select example" name="heating">
+                <option th:each="type:${T(com.example.Swipe.Admin.enums.HeatingType).values()}" th:value="${type.name}" th:text="${type.getValue()}" ></option>
+              </select>
+              <label  class="form-label">Отопление</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Высота потолков</label>
+            <input type="text" class="form-control" name="height"  placeholder="Введите имя..."  required="">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Расстояние до моря</label>
+            <input type="text" class="form-control" name="distanceSea"  placeholder="Введите имя..."  required="">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+<!--          <label>Корпуса</label>-->
+<!--          <div>-->
+<!--            <table class="table table-striped" style="margin: 20px">-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th scope="col">Корпус</th>-->
+<!--                <th scope="col">Колв квартир</th>-->
+<!--                <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">-->
+<!--                  <i class="fas fa-plus">-->
+<!--                  </i>-->
+<!--                </button></th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <tr th:each="frame:${lcd.getFrames()}">-->
+<!--                <th scope="row"><p th:text="${frame.getNum()}"></p></th>-->
+<!--                <td><p th:text="${frame.getApartmentList().size()}"></p></td>-->
+<!--                <td>-->
+<!--                  <div style="display: flex">-->
+<!--                    <form th:action="@{/apartment_edit/{id}(id=${frame.getIdFrame()})}"  method="get" >-->
+<!--                      <button type="submit" class="btn btn-info btn-sm">-->
+<!--                        <i class="fas fa-pencil">-->
+<!--                        </i>-->
+<!--                      </button>-->
+<!--                    </form>-->
+<!--                    <form action="/delete_user"  method="post" >-->
+<!--                      <input type="hidden" name="id" th:value="${frame.getIdFrame()}" />-->
+<!--                      <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">-->
+<!--                        <i class="fas fa-trash">-->
+<!--                        </i>-->
+<!--                      </button>-->
+
+<!--                    </form>-->
+<!--                  </div>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--              </tbody>-->
+<!--            </table>-->
+<!--          </div>-->
+
+<!--          <label>Новости</label>-->
+<!--          <div>-->
+<!--            <table class="table table-striped" style="margin: 20px">-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th scope="col">Заголовок</th>-->
+<!--                <th scope="col">Дата</th>-->
+<!--                <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">-->
+<!--                  <i class="fas fa-plus">-->
+<!--                  </i>-->
+<!--                </button></th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <tr th:each="news:${lcd.getNewsList()}">-->
+<!--                <th scope="row"><p th:text="${news.getTitle()}"></p></th>-->
+<!--                <td><p th:text="${news.getDate()}"></p></td>-->
+<!--                <td>-->
+<!--                  <div style="display: flex">-->
+<!--                    <form th:action="@{/apartment_edit/{id}(id=${news.getIdNews()})}"  method="get" >-->
+<!--                      <button type="submit" class="btn btn-info btn-sm">-->
+<!--                        <i class="fas fa-pencil">-->
+<!--                        </i>-->
+<!--                      </button>-->
+<!--                    </form>-->
+<!--                    <form action="/delete_user"  method="post" >-->
+<!--                      <input type="hidden" name="id" th:value="${news.getIdNews()}" />-->
+<!--                      <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">-->
+<!--                        <i class="fas fa-trash">-->
+<!--                        </i>-->
+<!--                      </button>-->
+
+<!--                    </form>-->
+<!--                  </div>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--              </tbody>-->
+<!--            </table>-->
+<!--          </div>-->
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+
+        </div>
+      </div>
+<!--      </div>-->
+    </form>
+
+
+
+
+  </div>
+</div>
+
+</div>
+<div th:insert="admin.shared/footer::footer"></div>
+<div th:replace="~{/admin.shared/script}"></div>
+
+
+</body>
+
+</html>

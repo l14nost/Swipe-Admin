@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Spring Security Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style th:replace="~{/admin.shared/style}"></style>
+
+<body>
+<div class="wrapper">
+  <div th:insert="admin.shared/header::header"></div>
+  <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
+
+  <div class="content-wrapper" style="padding-left: 50px">
+    <div class="col-md-7 col-lg-8">
+      <h5 class="mb-3">Корпус</h5>
+      <form class="needs-validation" method="post" >
+
+        <div class="row g-3">
+          <div class="col-sm-12">
+            <label for="firstName" class="form-label">Номер</label>
+            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите имя..." th:value="${frame.getNum()}" required="">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">
+            <h3>Список квартир от застройщика</h3>
+          </div>
+          <div >
+            <table class="table table-striped" style="margin: 20px">
+              <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Номер</th>
+                <th scope="col">
+                  <button type="button" th:onclick="'addApartment('+${frame.getIdFrame()}+')'" class="btn btn-secondary btn-sm" style="margin-left: 10px">
+                    <i class="fas fa-plus">
+                    </i>
+                  </button>
+                </th>
+              </tr>
+              </thead>
+              <tbody th:if = "${frame.getApartmentList().size()>0}">
+              <tr th:each="apartment:${frame.getApartmentList()}">
+                <th scope="row"><p th:text="${apartment.getIdApartment()}"></p></th>
+                <td><p th:text="${apartment.getNumber()}"></p></td>
+                <td>
+                  <div style="display: flex">
+<!--                    <form th:action="@{/apartment_update/{idApartment}(idApartment = ${apartment.getIdApartment()})}"  method="post" >-->
+                      <button type="submit" class="btn btn-info btn-sm">
+                        <i class="fas fa-pencil">
+                        </i>
+                      </button>
+                    </form>
+                    <form action="/delete_user"  method="post" >
+                      <input type="hidden" name="id" th:value="${apartment.getIdApartment()}" />
+                      <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
+                        <i class="fas fa-trash">
+                        </i>
+                      </button>
+
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <!--        <div style="display: flex; justify-content: center">-->
+            <!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
+            <!--        </div>-->
+          </div>
+
+
+
+        </div>
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+      </form>
+
+
+    </div>
+  </div>
+
+</div>
+<div th:insert="admin.shared/footer::footer"></div>
+<div th:replace="~{/admin.shared/script}"></div>
+<script>
+  function addApartment(idFrame){
+    $.ajax({
+      url: "/add_apartment/"+idFrame,
+      method: "GET",
+
+      success: function(response) {
+        window.location.href = "/add_apartment/" + idFrame;
+      },
+      error: function(xhr, status, error) {
+        console.log('Произошла ошибка:', error);
+        alert('Произошла ошибка при выполнении запроса');
+      }
+    });
+  }
+</script>
+
+</body>
+
+</html>
