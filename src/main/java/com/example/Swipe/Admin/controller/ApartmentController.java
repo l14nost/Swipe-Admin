@@ -27,6 +27,31 @@ public class ApartmentController {
     private final PhotosServiceImpl photosService;
     private final UserServiceImpl userService;
     private final FrameServiceImpl frameService;
+
+    @PostMapping("/delete_apartment")
+    public String deleteApartment(@RequestParam int idApartment){
+        Apartment apartment = apartmentServiceImpl.findById(idApartment);
+        if (!apartment.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+            String fileNameDelete = apartment.getMainPhoto().substring(11, apartment.getMainPhoto().length());
+            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+            fileDelete.delete();
+        }
+        for(int i = 0; i< apartment.getPhotoList().size();i++){
+            if (!apartment.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                String fileNameDelete = apartment.getPhotoList().get(i).getFileName().substring(11, apartment.getPhotoList().get(i).getFileName().length());
+                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                fileDelete.delete();
+            }
+//            photosService.deleteById(apartment.getPhotoList().get(i).getIdPhotos());
+        }
+        apartmentServiceImpl.deleteById(idApartment);
+        if(apartment.getFrame()!=null){
+            return "redirect:/edit_frame/"+apartment.getFrame().getIdFrame();
+        }
+        else {
+            return "redirect:/houses";
+        }
+    }
     @GetMapping("/apartment_edit/{id}")
     public String apartmentEdit(@PathVariable int id, Model model){
         model.addAttribute("apartment", apartmentServiceImpl.findById(id));
@@ -42,8 +67,8 @@ public class ApartmentController {
                                   @RequestParam int number,
                                   @RequestParam String description,
                                   @RequestParam int price,
-                                  @RequestParam int lcd,
-                                  @RequestParam int user,
+                                  @RequestParam(required = false, defaultValue = "0") int lcd,
+                                  @RequestParam(required = false, defaultValue = "0") int user,
                                   @RequestParam MultipartFile file,
                                   @RequestPart(required = false) List<MultipartFile> galleryPhoto,
                                   @RequestParam FoundingDocument foundingDocument,
@@ -59,9 +84,15 @@ public class ApartmentController {
                                   @RequestParam int totalArea,
                                   @RequestParam int kitchenArea, Model model) throws IOException {
 
-        Apartment apartment = Apartment.builder().number(number).price(price).lcd(lcdService.findById(lcd)).foundingDocument(foundingDocument).state(state).type(type).balconyType(balconyType).calculation(calculation).countRoom(countRoom).layout(layout).heatingType(heatingType).communicationType(communicationType).commission(commission).totalArea(totalArea).kitchenArea(kitchenArea).user(userService.findById(user)).build();
+        Apartment apartment = Apartment.builder().number(number).price(price).foundingDocument(foundingDocument).state(state).type(type).balconyType(balconyType).calculation(calculation).countRoom(countRoom).layout(layout).heatingType(heatingType).communicationType(communicationType).commission(commission).totalArea(totalArea).kitchenArea(kitchenArea).build();
         if(description.length()>0){
             apartment.setDescription(description);
+        }
+        if(user>0){
+            apartment.setUser(userService.findById(user));
+        }
+        if(lcd>0){
+            apartment.setLcd(lcdService.findById(lcd));
         }
         Apartment preApartment = apartmentServiceImpl.findById(id);
         if (!file.isEmpty()) {
@@ -100,8 +131,12 @@ public class ApartmentController {
             }
         }
         apartmentServiceImpl.updateEntity(apartment,id);
-
-        return "redirect:/houses";
+        if (preApartment.getFrame()!=null){
+            return "redirect:/edit_frame/"+preApartment.getFrame().getIdFrame();
+        }
+        else {
+            return "redirect:/houses";
+        }
 
     }
 

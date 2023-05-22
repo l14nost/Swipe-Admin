@@ -27,12 +27,26 @@
   <div th:replace="~{/admin.shared/left_sidebar}"></div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <div>
+    <div id="allUserContent">
     <div style="text-align: center">
       <h3>Список клиентов</h3>
     </div>
-    <div>
-      <table class="table table-striped" style="margin: 20px">
+      <div style="display: flex; justify-content: right">
+        <nav class="navbar bg-body-tertiary" id="clientSearch">
+          <div class="container-fluid ">
+            <div style="display: flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInput" name="search">
+              <button class="btn btn-outline-info" type="button" onclick="searchClient()">Search</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+    <div id="tableClient">
+      <div id="closeSearch" th:if="${#strings.length(searchClient) >= 1 && (searchClient != null && !searchClient.equals('null'))}" style="margin-left: 20px">
+        <i th:text="'Результат поиска по значению:'+${searchClient}"></i>
+        <a onclick="closeClient()"><i class="fas fa-times"></i></a>
+      </div>
+      <table class="table table-striped"  style="margin: 20px" id="userTable">
         <thead>
         <tr>
           <th scope="col">ID</th>
@@ -41,7 +55,7 @@
           <th scope="col">Уведомление</th>
           <th scope="col">
             <form method="get" action="/add_user">
-              <input type="hidden" name="type" value="client">
+              <input type="hidden" name="type" th:value="${typeClient}">
                 <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
                 <i class="fas fa-plus">
                 </i>
@@ -70,6 +84,13 @@
                 </button>
 
               </form>
+                <form action="/add_to_black_list"  method="post" >
+                  <input type="hidden" name="idUser" th:value="${user.getIdUser()}" />
+                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px">
+                    <i class="nav-icon fas fa-calendar-minus"></i>
+                  </button>
+
+                </form>
               </div>
             </td>
           </tr>
@@ -79,14 +100,55 @@
 <!--        <button type="button" class="btn btn-secondary">Добавить</button>-->
 <!--      </div>-->
     </div>
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="userPagination">
+<!--          <li class="page-item">-->
+<!--            <a class="page-link bg-gray-light" th:if="${pageUser.getNumber()>0}" th:href="@{'?page='+${pageUser.getNumber()-1}+'&sizePage='+${pageUser.getSize()}}"  aria-label="Previous">-->
+<!--              <span aria-hidden="true">&laquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageUser.getTotalPages()-1)}" th:if="${pageUser.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(0, pageUser.getTotalPages()-1)}"><a class="page-link bg-gray-light" id="tagClient" href="#" th:data-page="${p}+1" th:text="${p+1}"></a></li>-->
+          <!--          <li class="page-item active" th:if ="${pageUser.getNumber()==p}" th:each="p: ${#numbers.sequence(0, pageUser.getTotalPages()-1)}"><a class="page-link bg-gray-light" th:href="@{'?page='+${p}}" th:text="${p+1}"></a></li>-->
+<!--          <li class="page-item">-->
+<!--            <a class="page-link bg-gray-light" th:if="${pageUser.getNumber()<pageUser.getTotalPages()-1}" th:href="@{'?page='+${pageUser.getNumber()+1}+'&sizePage='+${pageUser.getSize()}}" aria-label="Next">-->
+<!--              <span aria-hidden="true">&raquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+        </ul>
+        <ul class="pagination" style="margin-left: 5px">
+          <li class="page-item">
+            <select class="form-select"  aria-label="Floating label select example" id="sizeUserPage" onchange="">
+              <option value="3" th:selected="${pageUser.getSize()}==3">3</option>
+              <option value="5" th:selected="${pageUser.getSize()}==5">5</option>
+              <option value="10" th:selected="${pageUser.getSize()}==10">10</option>
+            </select>
+          </li>
+        </ul>
+      </nav>
 
   </div>
     <div>
       <div style="text-align: center">
         <h3>Список застройщик</h3>
       </div>
-      <div>
-        <table class="table table-striped" style="margin: 20px">
+      <div style="display: flex; justify-content: right">
+        <nav class="navbar bg-body-tertiary" id="contractorSearch">
+          <div class="container-fluid ">
+            <div style="display: flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputContractor" name="search">
+              <button class="btn btn-outline-info" type="button" onclick="searchContractor()">Search</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div id="tableContractor">
+        <div id="closeContractor" th:if="${#strings.length(searchContractor) >= 1 && (searchContractor != null && !searchContractor.equals('null'))}" style="margin-left: 20px">
+          <i th:text="'Результат поиска по значению:'+${searchContractor}"></i>
+          <a onclick="closeContractor()"><i class="fas fa-times"></i></a>
+        </div>
+        <table class="table table-striped" style="margin: 20px" id="contractorTable">
           <thead>
           <tr>
             <th scope="col">ID</th>
@@ -94,7 +156,7 @@
             <th scope="col">Почта</th>
             <th scope="col">
               <form method="get" action="/add_user">
-                <input type="hidden" name="type" value="contractor">
+                <input type="hidden" name="type" th:value="${typeContractor}">
                 <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
                   <i class="fas fa-plus">
                   </i>
@@ -116,7 +178,7 @@
                     </i>
                   </button>
                 </form>
-                <form action="/delete_user"  method="post" >
+                <form th:action="@{/delete_user/{id}(id = ${contractor.getIdUser()})}" method="post" >
                   <input type="hidden" name="id" th:value="${contractor.getIdUser()}" />
                   <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                     <i class="fas fa-trash">
@@ -124,30 +186,75 @@
                   </button>
 
                 </form>
+                <form action="/add_to_black_list"  method="post" >
+                  <input type="hidden" name="idUser" th:value="${contractor.getIdUser()}" />
+                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px">
+                    <i class="nav-icon fas fa-calendar-minus"></i>
+                  </button>
+
+                </form>
+
               </div>
             </td>
           </tr>
           </tbody>
         </table>
-<!--        <div style="display: flex; justify-content: center">-->
-<!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
-<!--        </div>-->
       </div>
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="contractorPagination">
+<!--          <li class="page-item">-->
+<!--            <a class="page-link bg-gray-light" th:if="${pageContractor.getNumber()>0}" th:href="@{'/users?pageContractor='+${pageContractor.getNumber()-1}+'&sizePageContractor='+${pageContractor.getSize()}}"  aria-label="Previous">-->
+<!--              <span aria-hidden="true">&laquo;</span>-->
+<!--            </a>-->
+
+<!--          </li>-->
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageContractor.getTotalPages()-1)}" th:if="${pageContractor.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li class="page-item">-->
+<!--            <a class="page-link bg-gray-light" href="#" aria-label="Next">-->
+<!--              <span aria-hidden="true">&raquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+        </ul>
+        <ul class="pagination" style="margin-left: 5px">
+          <li class="page-item">
+            <select class="form-select"  aria-label="Floating label select example" id="sizeContractorPage" onchange="">
+              <option value="3" th:selected="${pageContractor.getSize()}==3">3</option>
+              <option value="5" th:selected="${pageContractor.getSize()}==5">5</option>
+              <option value="10" th:selected="${pageContractor.getSize()}==10">10</option>
+            </select>
+          </li>
+        </ul>
+      </nav>
 
     </div>
     <div>
       <div style="text-align: center">
         <h3>Список нотариусов</h3>
       </div>
-      <div>
-        <table class="table table-striped" style="margin: 20px">
+      <div style="display: flex; justify-content: right">
+        <nav class="navbar bg-body-tertiary" id="notarySearch">
+          <div class="container-fluid ">
+            <div style="display: flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputNotary" name="search">
+              <button class="btn btn-outline-info" type="button" onclick="searchNotary()">Search</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div id = "tableNotary">
+        <div id="closeNotary" th:if="${#strings.length(searchNotary) >= 1 && (searchNotary != null && !searchNotary.equals('null'))}" style="margin-left: 20px">
+          <i th:text="'Результат поиска по значению:'+${searchNotary}"></i>
+          <a onclick="closeNotary()"><i class="fas fa-times"></i></a>
+        </div>
+        <table class="table table-striped" style="margin: 20px" id="notaryTable">
           <thead>
           <tr>
             <th scope="col">ID</th>
             <th scope="col">ФИО</th>
             <th scope="col">Почта</th>
             <th scope="col"><form method="get" action="/add_user">
-              <input type="hidden" name="type" value="notary">
+              <input type="hidden" name="type" th:value="${typeNotary}">
               <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
                 <i class="fas fa-plus">
                 </i>
@@ -168,7 +275,7 @@
                     </i>
                   </button>
                 </form>
-                <form action="/delete_user"  method="post" >
+                <form th:action="@{/delete_user/{id}(id = ${notary.getIdUser()})}"  method="post" >
                   <input type="hidden" name="id" th:value="${notary.getIdUser()}" />
                   <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                     <i class="fas fa-trash">
@@ -185,7 +292,31 @@
 <!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
 <!--        </div>-->
       </div>
-
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="notaryPagination">
+<!--          <li class="page-item">-->
+<!--            <a class="page-link bg-gray-light" href="#" aria-label="Previous">-->
+<!--              <span aria-hidden="true">&laquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item" th:each="p: ${#numbers.sequence(1, pageNotary.getTotalPages()-1)}" th:if="${pageNotary.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li class="page-item">-->
+<!--            <a class="page-link bg-gray-light" href="#" aria-label="Next">-->
+<!--              <span aria-hidden="true">&raquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+        </ul>
+        <ul class="pagination" style="margin-left: 5px">
+          <li class="page-item">
+            <select class="form-select"  aria-label="Floating label select example" id="sizeNotaryPage" onchange="">
+              <option value="3" th:selected="${pageNotary.getSize()}==3">3</option>
+              <option value="5" th:selected="${pageNotary.getSize()}==5">5</option>
+              <option value="10" th:selected="${pageNotary.getSize()}==10">10</option>
+            </select>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>
@@ -193,7 +324,456 @@
 <div th:replace="~{/admin.shared/footer}"></div>
 <div th:replace="~{/admin.shared/script}"></div>
 <div th:fragment="script"></div>
+<script>
+  function searchClient () {
+    var selectedSize = localStorage.getItem('selectedUserSize');
+    // e.preventDefault();
+    var searchVal = document.getElementById('searchInput').value;
+    var url = '/users';
+    // if(selectedSize == null){
+    //   selectedSize = '3';
+    // }
+    $.ajax({
+      url: url + '?searchClient=' + searchVal,
+      type: 'GET',
+      data: {
+        sizeUserPage: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableClient').html();
+        $('#tableClient').html(tableHtml);
 
+        var pagination = $(data).find('#userPagination').html();
+        $('#userPagination').html(pagination);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchClient', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  function closeClient () {
+    var selectedSize = localStorage.getItem('selectedUserSize');
+    // e.preventDefault();
+    var searchVal = 'null';
+    var url = '/users';
+    if(selectedSize == null){
+      selectedSize = '3';
+    }
+    $.ajax({
+      url: url + '?searchClient=' + searchVal,
+      type: 'GET',
+      data: {
+        sizeUserPage: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableClient').html();
+        $('#tableClient').html(tableHtml);
+
+        var pagination = $(data).find('#userPagination').html();
+        $('#userPagination').html(pagination);
+        var search = $(data).find('#clientSearch').html();
+        $('#clientSearch').html(search);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchClient', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  $(document).ready(function() {
+    var selectedSize = localStorage.getItem('selectedUserSize');
+    var page = localStorage.getItem('pageUser');
+
+    if (selectedSize) {
+      $('#sizeUserPage').val(selectedSize);
+    }
+
+    $('#sizeUserPage').on('change', function() {
+      var search = localStorage.getItem('searchClient');
+      selectedSize = $(this).val();
+      var url = '/users';
+
+      if (page == null) {
+        page = '0';
+      }
+
+      $.ajax({
+        url: url + '?sizeUserPage=' + selectedSize,
+        type: 'GET',
+        data: {
+          sizeUserPage: selectedSize,
+          page: page,
+          searchClient:search
+        },
+        contentType: "application/json"
+      })
+              .done(function(data) {
+                var size = $(data).find('#userTable').html();
+                $('#userTable').html(size);
+                var pagination = $(data).find('#userPagination').html();
+                $('#userPagination').html(pagination);
+                localStorage.setItem('selectedUserSize', selectedSize);
+              })
+              .fail(function() {
+                alert('Произошла ошибка при загрузке данных.');
+              });
+    });
+
+    $('#userPagination').on('click', 'li', function(e) {
+      var search = localStorage.getItem('searchClient');
+      e.preventDefault();
+      var pageNumber = $(this).text();
+      $('#userPagination li').removeClass('active');
+      $(this).addClass('active');
+      var url = '/users';
+
+      if (selectedSize == null) {
+        selectedSize = '3';
+      }
+
+      pageNumber -= 1;
+      $.ajax({
+        url: url + '?page=' + pageNumber,
+        type: 'GET',
+        data: {
+          sizeUserPage: selectedSize,
+          page: pageNumber,
+          searchClient:search
+        }
+      })
+      .done(function(data) {
+        var tableHtml = $(data).find('#userTable').html();
+        $('#userTable').html(tableHtml);
+        localStorage.setItem('pageUser', pageNumber);
+      })
+        .fail( function(xhr, status, error) {
+          console.log(error);
+        })
+      });
+    $(window).on('beforeunload', function() {
+      localStorage.removeItem('selectedUserSize');
+      localStorage.removeItem('pageUser');
+    });
+
+  });
+
+
+
+
+
+
+  function searchContractor () {
+    var selectedSize = localStorage.getItem('selectedContractorSize');
+    // e.preventDefault();
+    var searchVal = document.getElementById('searchInputContractor').value;
+    var url = '/users';
+    // if(selectedSize == null){
+    //   selectedSize = '3';
+    // }
+    $.ajax({
+      url: url + '?searchContractor=' + searchVal,
+      type: 'GET',
+      data: {
+        sizeContractorPage: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableContractor').html();
+        $('#tableContractor').html(tableHtml);
+
+        var pagination = $(data).find('#contractorPagination').html();
+        $('#contractorPagination').html(pagination);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchContractor', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  function closeContractor () {
+    var selectedSize = localStorage.getItem('selectedContractorSize');
+    // e.preventDefault();
+    var searchVal = 'null';
+    var url = '/users';
+    if(selectedSize == null){
+      selectedSize = '3';
+    }
+    $.ajax({
+      url: url + '?searchContractor=' + searchVal,
+      type: 'GET',
+      data: {
+        sizeContractorPage: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableContractor').html();
+        $('#tableContractor').html(tableHtml);
+
+        var pagination = $(data).find('#contractorPagination').html();
+        $('#contractorPagination').html(pagination);
+        var search = $(data).find('#contractorSearch').html();
+        $('#contractorSearch').html(search);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchContractor', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  $(document).ready(function() {
+    // var selectedSize = localStorage.getItem('selectedContractorSize');
+    var page = localStorage.getItem('pageContractor');
+
+    // if (selectedSize) {
+    //   $('#sizeContractorPage').val(selectedSize);
+    // }
+
+    $('#sizeContractorPage').on('change', function() {
+      var selectedSize = localStorage.getItem('selectedContractorSize');
+      var search = localStorage.getItem('searchContractor');
+      selectedSize = $(this).val();
+      var url = '/users';
+
+      if (page == null) {
+        page = '0';
+      }
+
+      $.ajax({
+        url: url + '?sizeContractorPage=' + selectedSize,
+        type: 'GET',
+        data: {
+          sizeContractorPage: selectedSize,
+          pageContractor: page,
+          searchContractor:search
+        },
+        contentType: "application/json"
+      })
+              .done(function(data) {
+                var size = $(data).find('#contractorTable').html();
+                $('#contractorTable').html(size);
+                var pagination = $(data).find('#contractorPagination').html();
+                $('#contractorPagination').html(pagination);
+                localStorage.setItem('selectedContractorSize', selectedSize);
+              })
+              .fail(function() {
+                alert('Произошла ошибка при загрузке данных.');
+              });
+    });
+
+    $('#contractorPagination').on('click', 'li', function(e) {
+      var selectedSize = localStorage.getItem('selectedContractorSize');
+      var search = localStorage.getItem('searchContractor');
+      e.preventDefault();
+      var pageNumber = $(this).text();
+      $('#contractorPagination li').removeClass('active');
+      $(this).addClass('active');
+      var url = '/users';
+
+      if (selectedSize == null) {
+        selectedSize = '3';
+      }
+
+      pageNumber -= 1;
+      $.ajax({
+        url: url + '?pageContractor=' + pageNumber,
+        type: 'GET',
+        data: {
+          sizeContractorPage: selectedSize,
+          pageContractor: pageNumber,
+          searchContractor:search
+        }
+      })
+              .done(function(data) {
+                var tableHtml = $(data).find('#contractorTable').html();
+                $('#contractorTable').html(tableHtml);
+                localStorage.setItem('pageContractor', pageNumber);
+              })
+              .fail( function(xhr, status, error) {
+                console.log(error);
+              })
+    });
+    $(window).on('beforeunload', function() {
+      localStorage.removeItem('selectedContractorSize');
+      localStorage.removeItem('pageContractor');
+    });
+
+  });
+
+
+
+
+
+
+
+
+
+  function searchNotary () {
+    var selectedSize = localStorage.getItem('selectedNotarySize');
+    // e.preventDefault();
+    var searchVal = document.getElementById('searchInputNotary').value;
+    var url = '/users';
+    // if(selectedSize == null){
+    //   selectedSize = '3';
+    // }
+    $.ajax({
+      url: url + '?searchNotary=' + searchVal,
+      type: 'GET',
+      data: {
+        sizeNotaryPage: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableNotary').html();
+        $('#tableNotary').html(tableHtml);
+
+        var pagination = $(data).find('#notaryPagination').html();
+        $('#notaryPagination').html(pagination);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchNotary', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  function closeNotary () {
+    var selectedSize = localStorage.getItem('selectedNotarySize');
+    // e.preventDefault();
+    var searchVal = 'null';
+    var url = '/users';
+    if(selectedSize == null){
+      selectedSize = '3';
+    }
+    $.ajax({
+      url: url + '?searchNotary=' + searchVal,
+      type: 'GET',
+      data: {
+        sizeNotaryPage: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableNotary').html();
+        $('#tableNotary').html(tableHtml);
+
+        var pagination = $(data).find('#notaryPagination').html();
+        $('#notaryPagination').html(pagination);
+        var search = $(data).find('#notarySearch').html();
+        $('#notarySearch').html(search);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchNotary', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  $(document).ready(function() {
+    var selectedSize = localStorage.getItem('selectedNotarySize');
+    var page = localStorage.getItem('pageNotary');
+
+    if (selectedSize) {
+      $('#sizeNotaryPage').val(selectedSize);
+    }
+
+    $('#sizeNotaryPage').on('change', function() {
+      var search = localStorage.getItem('searchNotary');
+      selectedSize = $(this).val();
+      var url = '/users';
+
+      if (page == null) {
+        page = '0';
+      }
+
+      $.ajax({
+        url: url + '?sizeNotaryPage=' + selectedSize,
+        type: 'GET',
+        data: {
+          sizeNotaryPage: selectedSize,
+          pageNotary: page,
+          searchNotary:search
+        },
+        contentType: "application/json"
+      })
+              .done(function(data) {
+                var size = $(data).find('#notaryTable').html();
+                $('#notaryTable').html(size);
+                var pagination = $(data).find('#notaryPagination').html();
+                $('#notaryPagination').html(pagination);
+                localStorage.setItem('selectedNotarySize', selectedSize);
+              })
+              .fail(function() {
+                alert('Произошла ошибка при загрузке данных.');
+              });
+    });
+
+    $('#notaryPagination').on('click', 'li', function(e) {
+      var search = localStorage.getItem('searchNotary');
+      e.preventDefault();
+      var pageNumber = $(this).text();
+      $('#notaryPagination li').removeClass('active');
+      $(this).addClass('active');
+      var url = '/users';
+
+      if (selectedSize == null) {
+        selectedSize = '3';
+      }
+
+      pageNumber -= 1;
+      $.ajax({
+        url: url + '?pageNotary=' + pageNumber,
+        type: 'GET',
+        data: {
+          sizeNotaryPage: selectedSize,
+          pageNotary: pageNumber,
+          searchNotary:search
+        }
+      })
+              .done(function(data) {
+                var tableHtml = $(data).find('#notaryTable').html();
+                $('#notaryTable').html(tableHtml);
+                localStorage.setItem('pageNotary', pageNumber);
+              })
+              .fail( function(xhr, status, error) {
+                console.log(error);
+              })
+    });
+    $(window).on('beforeunload', function() {
+      localStorage.removeItem('selectedNotarySize');
+      localStorage.removeItem('pageNotary');
+    });
+
+  });
+  $(window).on('beforeunload', function() {
+    localStorage.removeItem('searchClient');
+    localStorage.removeItem('searchContractor');
+    localStorage.removeItem('searchNotary');
+  });
+</script>
 </body>
 
 </html>

@@ -31,8 +31,22 @@
     <div style="text-align: center">
       <h3>Список ЖК</h3>
     </div>
-    <div>
-      <table class="table table-striped" style="margin: 20px">
+      <div style="display: flex; justify-content: right">
+        <nav class="navbar bg-body-tertiary" id="lcdSearch">
+          <div class="container-fluid ">
+            <div style="display: flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputLcd" name="search">
+              <button class="btn btn-outline-info" type="button" onclick="searchLcd()">Search</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+    <div id="tableLcd">
+      <div id="closeLcd" th:if="${#strings.length(searchLcd) >= 1 && (searchLcd != null && !searchLcd.equals('null'))}" style="margin-left: 20px">
+        <i th:text="'Результат поиска по значению:'+${searchLcd}"></i>
+        <a onclick="closeLcd()"><i class="fas fa-times"></i></a>
+      </div>
+      <table class="table table-striped" style="margin: 20px" id="lcdTable">
         <thead>
         <tr>
           <th scope="col">ID</th>
@@ -48,7 +62,7 @@
         </tr>
         </thead>
         <tbody>
-          <tr th:each="lcd:${lcds}">
+          <tr th:each="lcd:${lcds.getContent()}">
             <th scope="row"><p th:text="${lcd.getIdLcd()}"></p></th>
             <td><p th:text="${lcd.getName()}"></p></td>
             <td><p th:text="${lcd.getName()}"></p></td>
@@ -60,8 +74,8 @@
                   </i>
                 </button>
               </form>
-              <form action="/delete_user"  method="post" >
-                <input type="hidden" name="id" th:value="${lcd.getIdLcd()}" />
+              <form action="/delete_lcd"  method="post" >
+                <input type="hidden" name="idLcd" th:value="${lcd.getIdLcd()}" />
                 <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                   <i class="fas fa-trash">
                   </i>
@@ -77,14 +91,45 @@
 <!--        <button type="button" class="btn btn-secondary">Добавить</button>-->
 <!--      </div>-->
     </div>
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="lcdPagination">
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, lcds.getTotalPages()-1)}" th:value="${p}" th:if="${lcds.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+
+        </ul>
+        <ul class="pagination" style="margin-left: 5px">
+          <li class="page-item">
+            <select class="form-select"  aria-label="Floating label select example" id="sizeLcd" onchange="">
+              <option value="3" th:selected="${lcds.getSize()}==3">3</option>
+              <option value="5" th:selected="${lcds.getSize()}==5">5</option>
+              <option value="10" th:selected="${lcds.getSize()}==10">10</option>
+            </select>
+          </li>
+        </ul>
+      </nav>
 
   </div>
     <div>
       <div style="text-align: center">
         <h3>Список квартир не от застройщика</h3>
       </div>
-      <div>
-        <table class="table table-striped" style="margin: 20px">
+      <div style="display: flex; justify-content: right">
+        <nav class="navbar bg-body-tertiary" id="apartmentSearch">
+          <div class="container-fluid ">
+            <div style="display: flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputApartment" name="search">
+              <button class="btn btn-outline-info" type="button" onclick="searchApartment()">Search</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div id="tableApartment">
+        <div id="closeApartment" th:if="${searchApartment!=0}" style="margin-left: 20px">
+          <i th:text="'Результат поиска по значению:'+${searchApartment}"></i>
+          <a onclick="closeApartment()"><i class="fas fa-times"></i></a>
+        </div>
+        <table class="table table-striped" style="margin: 20px" id="apartmentTable">
           <thead>
           <tr>
             <th scope="col">ID</th>
@@ -99,7 +144,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="apartment:${apartments}">
+          <tr th:each="apartment:${apartments.getContent()}">
             <th scope="row"><p th:text="${apartment.getIdApartment()}"></p></th>
             <td><p th:text="${apartment.getLcd().getName()}"></p></td>
             <td><p th:text="${apartment.getNumber()}"></p></td>
@@ -111,8 +156,8 @@
                     </i>
                   </button>
                 </form>
-                <form action="/delete_user"  method="post" >
-                  <input type="hidden" name="id" th:value="${apartment.getIdApartment()}" />
+                <form action="/delete_apartment"  method="post" >
+                  <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}" />
                   <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                     <i class="fas fa-trash">
                     </i>
@@ -128,6 +173,24 @@
 <!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
 <!--        </div>-->
       </div>
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="apartmentPagination">
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+
+        </ul>
+        <ul class="pagination" style="margin-left: 5px">
+          <li class="page-item">
+            <select class="form-select"  aria-label="Floating label select example" id="sizeApartment" onchange="">
+              <option value="3" th:selected="${apartments.getSize()}==3">3</option>
+              <option value="5" th:selected="${apartments.getSize()}==5">5</option>
+              <option value="10" th:selected="${apartments.getSize()}==10">10</option>
+            </select>
+          </li>
+        </ul>
+      </nav>
+
 
     </div>
   </div>
@@ -135,7 +198,305 @@
 <div th:replace="~{/admin.shared/footer}"></div>
 <div th:replace="~{/admin.shared/script}"></div>
 <div th:fragment="script"></div>
+<script>
 
+  function searchLcd () {
+    var selectedSize = localStorage.getItem('selectedLcdSize');
+    // e.preventDefault();
+    var searchVal = document.getElementById('searchInputLcd').value;
+    var url = '/houses';
+    // if(selectedSize == null){
+    //   selectedSize = '3';
+    // }
+    $.ajax({
+      url: url + '?searchLcd=' + searchVal,
+      type: 'GET',
+      data: {
+        lcdSize: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableLcd').html();
+        $('#tableLcd').html(tableHtml);
+
+        var pagination = $(data).find('#lcdPagination').html();
+        $('#lcdPagination').html(pagination);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchLcd', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  function closeLcd () {
+    var selectedSize = localStorage.getItem('selectedLcdSize');
+    // e.preventDefault();
+    var searchVal = 'null';
+    var url = '/houses';
+    if(selectedSize == null){
+      selectedSize = '3';
+    }
+    $.ajax({
+      url: url + '?searchLcd=' + searchVal,
+      type: 'GET',
+      data: {
+        lcdSize: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableLcd').html();
+        $('#tableLcd').html(tableHtml);
+
+        var pagination = $(data).find('#lcdPagination').html();
+        $('#lcdPagination').html(pagination);
+        var search = $(data).find('#lcdSearch').html();
+        $('#lcdSearch').html(search);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchLcd', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  $(document).ready(function() {
+    var selectedSize = localStorage.getItem('selectedLcdSize');
+    var page = localStorage.getItem('pageLcd');
+
+    if (selectedSize) {
+      $('#sizeLcd').val(selectedSize);
+    }
+
+    $('#sizeLcd').on('change', function() {
+      var search = localStorage.getItem('searchLcd');
+      selectedSize = $(this).val();
+      var url = '/houses';
+
+      if (page == null) {
+        page = '0';
+      }
+
+      $.ajax({
+        url: url + '?lcdSize=' + selectedSize,
+        type: 'GET',
+        data: {
+          lcdSize: selectedSize,
+          lcdPage: page,
+          searchLcd:search
+        },
+        contentType: "application/json"
+      })
+              .done(function(data) {
+                var size = $(data).find('#lcdTable').html();
+                $('#lcdTable').html(size);
+                var pagination = $(data).find('#lcdPagination').html();
+                $('#lcdPagination').html(pagination);
+                localStorage.setItem('selectedLcdSize', selectedSize);
+              })
+              .fail(function() {
+                alert('Произошла ошибка при загрузке данных.');
+              });
+    });
+
+    $('#lcdPagination').on('click', 'li', function(e) {
+      var search = localStorage.getItem('searchLcd');
+      e.preventDefault();
+      var pageNumber = $(this).text();
+      $('#lcdPagination li').removeClass('active');
+      $(this).addClass('active');
+      var url = '/houses';
+
+      if (selectedSize == null) {
+        selectedSize = '3';
+      }
+
+      pageNumber -= 1;
+      $.ajax({
+        url: url + '?lcdPage=' + pageNumber,
+        type: 'GET',
+        data: {
+          lcdSize: selectedSize,
+          lcdPage: pageNumber,
+          searchLcd:search
+        }
+      })
+              .done(function(data) {
+                var tableHtml = $(data).find('#lcdTable').html();
+                $('#lcdTable').html(tableHtml);
+                localStorage.setItem('pageLcd', pageNumber);
+              })
+              .fail( function(xhr, status, error) {
+                console.log(error);
+              })
+    });
+    $(window).on('beforeunload', function() {
+      localStorage.removeItem('selectedLcdSize');
+      localStorage.removeItem('pageLcd');
+    });
+
+  });
+
+
+
+
+
+
+  function searchApartment () {
+    var selectedSize = localStorage.getItem('selectedApartmentSize');
+    // e.preventDefault();
+    var searchVal = document.getElementById('searchInputApartment').value;
+    var url = '/houses';
+    // if(selectedSize == null){
+    //   selectedSize = '3';
+    // }
+    $.ajax({
+      url: url + '?searchApartment=' + searchVal,
+      type: 'GET',
+      data: {
+        apartmentSize: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableApartment').html();
+        $('#tableApartment').html(tableHtml);
+
+        var pagination = $(data).find('#apartmentPagination').html();
+        $('#apartmentPagination').html(pagination);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchApartment', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  function closeApartment () {
+    var selectedSize = localStorage.getItem('selectedApartmentSize');
+    // e.preventDefault();
+    var searchVal = '0';
+    var url = '/houses';
+    if(selectedSize == null){
+      selectedSize = '3';
+    }
+    $.ajax({
+      url: url + '?searchApartment=' + searchVal,
+      type: 'GET',
+      data: {
+        apartmentSize: selectedSize,
+        // search: searchVal
+      },
+      success: function (data) {
+        var tableHtml = $(data).find('#tableApartment').html();
+        $('#tableApartment').html(tableHtml);
+
+        var pagination = $(data).find('#apartmentPagination').html();
+        $('#apartmentPagination').html(pagination);
+        var search = $(data).find('#apartmentSearch').html();
+        $('#apartmentSearch').html(search);
+        // $('#blackListTable').html(data);
+        localStorage.setItem('searchApartment', searchVal);
+
+
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+
+
+  $(document).ready(function() {
+    var selectedSize = localStorage.getItem('selectedApartmentSize');
+    var page = localStorage.getItem('pageApartment');
+
+    if (selectedSize) {
+      $('#sizeApartment').val(selectedSize);
+    }
+
+    $('#sizeApartment').on('change', function() {
+      var search = localStorage.getItem('searchApartment');
+      selectedSize = $(this).val();
+      var url = '/houses';
+
+      if (page == null) {
+        page = '0';
+      }
+
+      $.ajax({
+        url: url + '?apartmentSize=' + selectedSize,
+        type: 'GET',
+        data: {
+          apartmentSize: selectedSize,
+          apartmentPage: page,
+          searchApartment:search
+        },
+        contentType: "application/json"
+      })
+              .done(function(data) {
+                var size = $(data).find('#apartmentTable').html();
+                $('#apartmentTable').html(size);
+                var pagination = $(data).find('#apartmentPagination').html();
+                $('#apartmentPagination').html(pagination);
+                localStorage.setItem('selectedApartmentSize', selectedSize);
+              })
+              .fail(function() {
+                alert('Произошла ошибка при загрузке данных.');
+              });
+    });
+
+    $('#apartmentPagination').on('click', 'li', function(e) {
+      var search = localStorage.getItem('searchApartment');
+      e.preventDefault();
+      var pageNumber = $(this).text();
+      $('#apartmentPagination li').removeClass('active');
+      $(this).addClass('active');
+      var url = '/houses';
+
+      if (selectedSize == null) {
+        selectedSize = '3';
+      }
+
+      pageNumber -= 1;
+      $.ajax({
+        url: url + '?apartmentPage=' + pageNumber,
+        type: 'GET',
+        data: {
+          apartmentSize: selectedSize,
+          apartmentPage: pageNumber,
+          searchApartment:search
+        }
+      })
+              .done(function(data) {
+                var tableHtml = $(data).find('#apartmentTable').html();
+                $('#apartmentTable').html(tableHtml);
+                localStorage.setItem('pageApartment', pageNumber);
+              })
+              .fail( function(xhr, status, error) {
+                console.log(error);
+              })
+    });
+    $(window).on('beforeunload', function() {
+      localStorage.removeItem('selectedApartmentSize');
+      localStorage.removeItem('pageApartment');
+    });
+
+  });
+  $(window).on('beforeunload', function() {
+    localStorage.removeItem('searchLcd');
+    localStorage.removeItem('searchApartment');
+  });
+</script>
 </body>
 
 </html>

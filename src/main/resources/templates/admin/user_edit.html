@@ -106,7 +106,7 @@
           <div th:if="!${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).NOTARY)}">
             <div th:if="${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).CLIENT)}"> <h6>Агент</h6> </div>
             <div th:if="${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).CONTRACTOR)}"> <h6>Отдел продаж</h6> </div>
-            <div>
+            <div id="agentDiv">
               <table class="table table-striped" style="margin: 20px">
                 <thead>
                 <tr>
@@ -115,8 +115,8 @@
                   <th scope="col">
 <!--                    th:href="@{/agent_edit/{id}(id = ${user.getAgent().getIdAgent()})/{idUser}(idUser = ${user.getIdUser()})}"-->
                     <div style="display: flex" th:if="${user.getAgent()!=null}">
-                      <a th:href="@{/agent_edit/{id}(id = ${user.getAgent().getIdAgent()}+'_'+${user.getIdUser()})}">
-                        <button type="button" name="idUser" th:value="${user.getIdUser()}" class="btn btn-info btn-sm">
+                      <a th:href="@{/agent_edit/{id}(id = ${user.getAgent().getIdAgent()})}">
+                        <button type="button" class="btn btn-info btn-sm">
                           <i class="fas fa-pencil">
                           </i>
                         </button>
@@ -124,10 +124,12 @@
                     </div>
                     <div style="display: flex" th:if="${user.getAgent()==null}">
                       <a th:href="@{/agent_add/{idUser}(idUser = ${user.getIdUser()})}">
-                        <button type="button" name="idUser" th:value="${user.getIdUser()}" class="btn btn-secondary btn-sm">
+<!--                        <button type="button" onclick="addAgent()" class="btn btn-secondary btn-sm">-->
+                         <button type="button" class="btn btn-secondary">
                           <i class="fas fa-plus">
                           </i>
-                        </button>
+                         </button>
+<!--                        </button>-->
                       </a>
                     </div>
                   </th>
@@ -149,7 +151,22 @@
 </div>
 <div th:insert="admin.shared/footer::footer"></div>
 <div th:replace="~{/admin.shared/script}"></div>
-
+<!--<script>-->
+<!--  function addAgent () {-->
+<!--    $.ajax({-->
+<!--      url:  '/agent_add/'+[[${user.getIdUser()}]],-->
+<!--      type: 'GET',-->
+<!--      success: function (response) {-->
+<!--        var galleryHtml = $(response).find('#agentDiv').html();-->
+<!--        $('#agentDiv').html(galleryHtml);-->
+<!--      },-->
+<!--      error: function (xhr, status, error) {-->
+<!--        alert("-")-->
+<!--        console.log(error);-->
+<!--      }-->
+<!--    });-->
+<!--  }-->
+<!--</script>-->
 
 </body>
 

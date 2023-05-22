@@ -14,7 +14,7 @@
 
   <div class="content-wrapper" style="padding-left: 50px">
     <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/user_add}">
-      <input type="hidden" name="type" value="client">
+      <input type="hidden" name="type" th:value="${type}">
     <div style="display: flex; justify-content: space-between">
       <h4 class="mb-3">Пользователь</h4>
       <div class="form-check form-switch" style="display: flex; margin-right: 50px" >

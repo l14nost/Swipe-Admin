@@ -40,16 +40,53 @@
               Введите имя...
             </div>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-6">
+            <label  class="form-label">Оформление</label>
+            <input type="text" class="form-control" name="formalization"  placeholder="Введите имя..."  required="" >
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Варианты расчета</label>
+            <input type="text" class="form-control" name="typePayment"  placeholder="Введите имя..."  required="" >
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Назначение</label>
+            <input type="text" class="form-control" name="appointment"  placeholder="Введите имя..."  required="" >
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Сумма в договоре</label>
+            <input type="text" class="form-control" name="sumContract"  placeholder="Введите имя..."  required="" >
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-floating">
+              <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="contractor">
+                <option th:each="contractor : ${contractors}" th:value="${contractor.getIdUser()}" th:text="${contractor.getName()+' '+contractor.getSurname()}"></option>
+              </select>
+              <label for="floatingSelect" class="form-label">Застройщик</label>
+            </div>
+          </div>
+
+          <div class="col-sm-12">
             <label  class="form-label" for="5">Преимущество</label>
             <div id="5">
-              <input type="checkbox" id="1" name="advantages" checked>
+              <input type="checkbox" id="1" name="advantages" value="Спорт. площадка" >
               <label for="1">Спорт. площадка</label>
-              <input type="checkbox" id="2" name="advantages">
+              <input type="checkbox" id="2" name="advantages" value="Парковка">
               <label for="2">Парковка</label>
-              <input type="checkbox" id="3" name="advantages">
+              <input type="checkbox" id="3" name="advantages" value="Школа" >
               <label for="3">Школа</label>
-              <input type="checkbox" id="4" name="advantages">
+              <input type="checkbox" id="4" name="advantages" value="Дет. Сад">
               <label for="4">Дет. Сад</label>
             </div>
           </div>

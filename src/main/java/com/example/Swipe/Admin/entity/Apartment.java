@@ -69,7 +69,7 @@ public class Apartment {
     private Address address;
 
 
-    @OneToMany(mappedBy = "apartment")
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
     private List<Photo> photoList = new ArrayList<>();
 
     @ManyToOne

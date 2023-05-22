@@ -41,6 +41,34 @@
             </div>
           </div>
           <div class="col-sm-6">
+            <label  class="form-label">Оформление</label>
+            <input type="text" class="form-control" name="formalization"  placeholder="Введите имя..."  required="" th:value="${lcd.getFormalization()}">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Варианты расчета</label>
+            <input type="text" class="form-control" name="typePayment"  placeholder="Введите имя..."  required="" th:value="${lcd.getTypePayment()}">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Назначение</label>
+            <input type="text" class="form-control" name="appointment"  placeholder="Введите имя..."  required="" th:value="${lcd.getAppointment()}">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Сумма в договоре</label>
+            <input type="text" class="form-control" name="sumContract"  placeholder="Введите имя..."  required="" th:value="${lcd.getSumContract()}">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+          <div class="col-sm-6">
             <div class="form-floating">
               <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="contractor">
                 <option th:each="contractor : ${contractors}" th:value="${contractor.getIdUser()}" th:text="${contractor.getName()+' '+contractor.getSurname()}"></option>
@@ -51,13 +79,13 @@
           <div class="col-sm-12">
             <label  class="form-label" for="5">Преимущество</label>
             <div id="5">
-              <input type="checkbox" id="1" name="advantages" checked>
+              <input type="checkbox" id="1" name="advantages" value="Спорт. площадка" th:checked="${T(com.example.Swipe.Admin.controller.LCDController).checkTypes(advantages.stream(),'Спорт. площадка')}">
               <label for="1">Спорт. площадка</label>
-              <input type="checkbox" id="2" name="advantages">
+              <input type="checkbox" id="2" name="advantages" value="Парковка" th:checked="${T(com.example.Swipe.Admin.controller.LCDController).checkTypes(advantages.stream(),'Парковка')}">
               <label for="2">Парковка</label>
-              <input type="checkbox" id="3" name="advantages">
+              <input type="checkbox" id="3" name="advantages" value="Школа" th:checked="${T(com.example.Swipe.Admin.controller.LCDController).checkTypes(advantages.stream(),'Школа')}">
               <label for="3">Школа</label>
-              <input type="checkbox" id="4" name="advantages">
+              <input type="checkbox" id="4" name="advantages" value="Дет. Сад" th:checked="${T(com.example.Swipe.Admin.controller.LCDController).checkTypes(advantages.stream(),'Дет. Сад')}">
               <label for="4">Дет. Сад</label>
             </div>
           </div>
@@ -89,15 +117,15 @@
             </script>
 
           </div>
-          <div>
+          <div id="galleryDiv">
             <label>Галерея картинок</label>
-            <div class="card-body">
+            <div class="card-body" >
               <label>Размер 1000х190</label>
               <div class="row" >
 
                 <div class="col-sm-3" th:each="photo:${lcd.getPhotoList()}">
-                  <img th:src="${photo.getFileName()}" id="" class="img-fluid mb-2" alt="white sample">
-                  <button type="submit" style="
+                  <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2" alt="white sample">
+                  <button type="button" style="
                 position: absolute;
                 right: -1px;
                 top: -10px;
@@ -108,16 +136,30 @@
                 box-sizing: border-box;
                 padding: 2px;
                 border-radius: 50%;
-            " >
+            " th:attr="onclick='deleteData(' + ${photo.getIdPhotos()} + ', ' + ${lcd.getIdLcd()} + ')'">
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
-                  <input type="file" id="inputImg2" name="gallery" class="form-control" th:value="${photo.getFileName()}">
+                  <input type="file" id="inputImg2" th:id="inputGallery+${photo.getIdPhotos()}" name="gallery" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)">
+                  <script>
+                    function handleFileChange(event) {
+                      const input = event.target;
+                      const file = input.files[0];
+                      const id = input.id.slice(12); // Получаем идентификатор после "inputGallery"
+                      const img = document.getElementById(`gallery${id}`);
+
+                      if (file) {
+                        img.src = URL.createObjectURL(file);
+                      }
+                    }
+                  </script>
                 </div>
                 <div class="col-sm-3" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
-                    <a th:href="@{/add_photo_lcd/{idLcd}(idLcd = ${lcd.getIdLcd()})}">
+<!--                    <a th:href="@{/add_photo_lcd/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
+
+                    <button class="btn btn-outline" type="button" onclick="addPhoto()">
                       <img src="../admin/dist/img/addCinema.png" width="150px">
-                    </a>
+                    </button>
                   </div>
                 </div>
 
@@ -127,15 +169,15 @@
             </div>
           </div>
 
-          <div>
+          <div >
             <label>Документы</label>
             <div class="card-body">
               <label>Размер 1000х190</label>
-              <div class="row" >
+              <div class="row" id="documentDiv">
 
                 <div class="col-sm-3" th:each="document:${lcd.getDocuments()}">
                   <img src="../admin/dist/img/document.png" id="img1" class="img-fluid mb-2" alt="white sample">
-                  <button type="submit" style="
+                  <button type="button" style="
                 position: absolute;
                 right: -1px;
                 top: -10px;
@@ -146,17 +188,30 @@
                 box-sizing: border-box;
                 padding: 2px;
                 border-radius: 50%;
-            " >
+            " th:attr="onclick='deleteDocument(' + ${document.getIdDocuments()} + ', ' + ${lcd.getIdLcd()} + ')'">
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
-                  <label for="inputDocument" th:text="${document.getName()}" style="text-align: center"></label>
+                  <label for="inputDocument" id = "filename" th:text="${document.getName()}" style="text-align: center"></label>
                   <input type="file" id="inputDocument" name="documents" class="form-control" th:value="${document.getFileName()}">
                 </div>
+                <script>
+                  var fileInput = document.getElementById('inputDocument');
+                  var listFile = document.getElementById('filename');
+
+                  fileInput.onchange = function () {
+                    var files = Array.from(this.files);
+                    files = files.map(file => file.name);
+                    listFile.innerHTML = files.join('<br/>');
+                  }
+                </script>
+
                 <div class="col-sm-3" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
-                    <a th:href="@{/add_photo_lcd/{idLcd}(idLcd = ${lcd.getIdLcd()})}">
+<!--                    <a th:href="@{/add_document/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
+                    <button class="btn btn-outline" type="button" onclick="addDocument()">
                       <img src="../admin/dist/img/addCinema.png" width="150px">
-                    </a>
+                    </button>
+<!--                    </a>-->
                   </div>
                 </div>
 
@@ -262,18 +317,19 @@
             </div>
           </div>
           <label>Корпуса</label>
-          <div>
+          <div id="frameDiv">
             <table class="table table-striped" style="margin: 20px">
               <thead>
               <tr>
                 <th scope="col">Корпус</th>
                 <th scope="col">Колв квартир</th>
                 <th scope="col">
-<!--                  <button th:attr="onclick='addFrame(' + ${lcd.getIdLcd()} + ')'" class="btn btn-secondary">-->
-                  <a th:href="@{/add_frame/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary">
+<!--                  <a th:href="@{/add_frame/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary">-->
+
+                  <button type="button" onclick="addFrame()" class="btn btn-secondary">
                     <i class="fas fa-plus">
                     </i>
-                </a></th>
+                  </button></th>
               </tr>
               </thead>
               <tbody>
@@ -286,14 +342,14 @@
                         <i class="fas fa-pencil">
                         </i>
                       </button>
-                    <form action="/delete_user"  method="post" >
+
                       <input type="hidden" name="id" th:value="${frame.getIdFrame()}" />
-                      <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
+                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px" th:attr="onclick='deleteFrame('+${frame.getIdFrame()}+','+${lcd.getIdLcd()}+')'">
                         <i class="fas fa-trash">
                         </i>
                       </button>
 
-                    </form>
+
                   </div>
                 </td>
               </tr>
@@ -302,16 +358,17 @@
           </div>
 
           <label>Новости</label>
-          <div>
+          <div id="newsDiv">
             <table class="table table-striped" style="margin: 20px">
               <thead>
               <tr>
                 <th scope="col">Заголовок</th>
                 <th scope="col">Дата</th>
-                <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
+                <th scope="col">
+                  <a th:href="@{/add_news/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary btn-sm" style="margin-left: 10px">
                   <i class="fas fa-plus">
                   </i>
-                </button></th>
+                </a></th>
               </tr>
               </thead>
               <tbody>
@@ -320,20 +377,16 @@
                 <td><p th:text="${news.getDate()}"></p></td>
                 <td>
                   <div style="display: flex">
-                    <form th:action="@{/apartment_edit/{id}(id=${news.getIdNews()})}"  method="get" >
-                      <button type="submit" class="btn btn-info btn-sm">
+                      <a th:href="@{/edit_news/{idNews}(idNews = ${news.getIdNews()})}" class="btn btn-info btn-sm">
                         <i class="fas fa-pencil">
                         </i>
-                      </button>
-                    </form>
-                    <form action="/delete_user"  method="post" >
-                      <input type="hidden" name="id" th:value="${news.getIdNews()}" />
-                      <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
+                      </a>
+
+                      <button type="button" th:attr="onclick='deleteNews('+${news.getIdNews()}+', '+${lcd.getIdLcd()}+')'" class="btn btn-danger btn-sm" style="margin-left: 10px">
                         <i class="fas fa-trash">
                         </i>
                       </button>
 
-                    </form>
                   </div>
                 </td>
               </tr>
@@ -374,6 +427,34 @@
 <!--</script>-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+  function addPhoto () {
+    $.ajax({
+      url:  '/add_photo_lcd/'+[[${lcd.getIdLcd}]],
+      type: 'GET',
+      success: function (data) {
+        var galleryHtml = $(data).find('#galleryDiv').html();
+        $('#galleryDiv').html(galleryHtml);
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
+  function addDocument () {
+    $.ajax({
+      url:  '/add_document/'+[[${lcd.getIdLcd}]],
+      type: 'GET',
+      success: function (data) {
+        var galleryHtml = $(data).find('#documentDiv').html();
+        $('#documentDiv').html(galleryHtml);
+      },
+      error: function (xhr, status, error) {
+        alert("-")
+        console.log(error);
+      }
+    });
+  }
   function editFrame(idFrame) {
 
     $.ajax({
@@ -383,11 +464,107 @@
         window.location.href = "/edit_frame/" + idFrame;
       },
       error: function (xhr, status, error) {
+        console.error('Произошла ошибка:', error);
+        alert('Произошла ошибка при выполнении запроса');
+      }
+    });
+  }
+  function addFrame() {
+
+    $.ajax({
+      url: "/add_frame/" + [[${lcd.getIdLcd}]],
+      method: "GET",
+      success: function (response) {
+        var galleryHtml = $(response).find('#frameDiv').html();
+        $('#frameDiv').html(galleryHtml);
+      },
+      error: function (xhr, status, error) {
+        console.error('Произошла ошибка:', error);
+        alert('Произошла ошибка при выполнении запроса');
+      }
+    });
+  }
+
+  function deleteData(idPhoto, idLcd) {
+
+    $.ajax({
+      url: "/delete_photo_lcd",
+      method: "POST",
+      data: {
+        idPhoto: idPhoto,
+        idLcd: idLcd
+      } ,
+      success: function(data) {
+        var galleryHtml = $(data).find('#galleryDiv').html();
+        $('#galleryDiv').html(galleryHtml);
+      },
+      error: function(xhr, status, error) {
         console.log('Произошла ошибка:', error);
         alert('Произошла ошибка при выполнении запроса');
       }
     });
   }
+  function deleteFrame(idFrame, idLcd) {
+
+    $.ajax({
+      url: "/delete_frame",
+      method: "POST",
+      data: {
+        idFrame: idFrame,
+        idLcd: idLcd
+      } ,
+
+      success: function(data) {
+        var galleryHtml = $(data).find('#frameDiv').html();
+        $('#frameDiv').html(galleryHtml);
+      },
+      error: function(xhr, status, error) {
+        console.log('Произошла ошибка:', error);
+        alert('Произошла ошибка при выполнении запроса');
+      }
+    });
+  }
+  function deleteDocument(idDocument, idLcd) {
+
+    $.ajax({
+      url: "/delete_document",
+      method: "POST",
+      data: {
+        idDocument: idDocument,
+        idLcd: idLcd
+      } ,
+
+      success: function(data) {
+        var galleryHtml = $(data).find('#documentDiv').html();
+        $('#documentDiv').html(galleryHtml);
+      },
+      error: function(xhr, status, error) {
+        console.error('Произошла ошибка:', error,status);
+        alert('Произошла ошибка при выполнении запроса');
+      }
+    });
+  }
+  function deleteNews(idNews, idLcd) {
+
+    $.ajax({
+      url: "/delete_news",
+      method: "POST",
+      data: {
+        idNews: idNews,
+        idLcd: idLcd
+      } ,
+
+      success: function(data) {
+        var galleryHtml = $(data).find('#newsDiv').html();
+        $('#newsDiv').html(galleryHtml);
+      },
+      error: function(xhr, status, error) {
+        console.log('Произошла ошибка:', error);
+        alert('Произошла ошибка при выполнении запроса');
+      }
+    });
+  }
+
 </script>
 
 </body>

@@ -3,6 +3,9 @@ package com.example.Swipe.Admin.service.impl;
 import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.repository.LCDRepo;
 import com.example.Swipe.Admin.service.LCDService;
+import com.example.Swipe.Admin.specification.LcdSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +17,13 @@ public class LCDServiceImpl implements LCDService {
 
     public LCDServiceImpl(LCDRepo lcdRepo) {
         this.lcdRepo = lcdRepo;
+    }
+    public Page<LCD> findAllPagination(Pageable pageable,String keyWord){
+        if(!keyWord.equals("null")){
+            LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord(keyWord).build();
+            return lcdRepo.findAll(lcdSpecification,pageable);
+        }
+        return lcdRepo.findAll(pageable);
     }
 
     @Override
@@ -89,7 +99,7 @@ public class LCDServiceImpl implements LCDService {
             if(lcd.getHeight()!=0){
                 lcdUpdate.setHeight(lcd.getHeight());
             }
-            if(lcd.getSumContract()!=0){
+            if(lcd.getSumContract()!=null){
                 lcdUpdate.setSumContract(lcd.getSumContract());
             }
             if(lcd.getTerritory()!=null){
@@ -112,6 +122,9 @@ public class LCDServiceImpl implements LCDService {
             }
             if(lcd.getUser()!=null){
                 lcdUpdate.setUser(lcd.getUser());
+            }
+            if(lcd.getFormalization()!=null){
+                lcdUpdate.setFormalization(lcd.getFormalization());
             }
             lcdRepo.saveAndFlush(lcdUpdate);
         }

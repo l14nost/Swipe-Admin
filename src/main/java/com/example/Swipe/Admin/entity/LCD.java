@@ -1,12 +1,14 @@
 package com.example.Swipe.Admin.entity;
 
 import com.example.Swipe.Admin.enums.*;
+import com.example.Swipe.Admin.enums.converter.AdvantageConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -53,7 +55,7 @@ public class LCD {
 
     @Column(name = "water_supply")
     private HeatingType waterSupply;
-
+//    @Convert(converter = AdvantageConverter.class)
     private String advantages;
 
     @Column(name = "type_payment")
@@ -62,25 +64,27 @@ public class LCD {
     private String appointment;
 
     @Column(name = "sum_contract")
-    private int sumContract;
+    private String sumContract;
+
+    private String formalization;
 
     @OneToOne
     @JoinColumn(name = "id_contractor")
     private User user;
 
-    @OneToMany(mappedBy = "lcd")
+    @OneToMany(mappedBy = "lcd", cascade = CascadeType.ALL)
     private List<News> newsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "lcd")
+    @OneToMany(mappedBy = "lcd", cascade = CascadeType.ALL)
     private List<Photo> photoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "lcd")
     private List<Apartment> apartmentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "lcd")
+    @OneToMany(mappedBy = "lcd", cascade = CascadeType.ALL)
     private List<Documents> documents = new ArrayList<>();
 
-    @OneToMany(mappedBy = "lcd")
+    @OneToMany(mappedBy = "lcd", cascade = CascadeType.ALL)
     private List<Frame> frames = new ArrayList<>();
 
 }

@@ -48,11 +48,11 @@ public class AgentController {
         userService.updateEntity(user,idUser);
         return "redirect:/user_edit/"+idUser;
     }
-    @GetMapping("/agent_edit/{id}")
-    public String agentEdit(@PathVariable String id, Model model){
-        String[] idList = id.split("_");
-        model.addAttribute("agent",agentServiceImpl.findById(Integer.valueOf(idList[0])));
-        model.addAttribute("idUser", Integer.valueOf(idList[1]));
+    @GetMapping("/agent_edit/{idAgent}")
+    public String agentEdit( @PathVariable int idAgent, Model model){
+//        String[] idList = id.split("_");
+        model.addAttribute("agent",agentServiceImpl.findById(idAgent));
+//        model.addAttribute("idUser", idUser);
         return "admin/agent_edit";
     }
     @PostMapping("/agent_update/{id}")

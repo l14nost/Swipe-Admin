@@ -15,12 +15,14 @@
   <div class="content-wrapper" style="padding-left: 50px">
     <div class="col-md-7 col-lg-8">
       <h5 class="mb-3">Корпус</h5>
-      <form class="needs-validation" method="post" >
+      <form class="needs-validation" method="post" action = "/frame_update">
+
+          <input type="hidden" name = "idFrame" th:value="${frame.getIdFrame()}">
 
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
-            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите имя..." th:value="${frame.getNum()}" required="">
+            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите имя..." th:value="${frame.getNum()}">
             <div class="invalid-feedback">
               Введите имя...
             </div>
@@ -30,8 +32,22 @@
           <div style="text-align: center">
             <h3>Список квартир от застройщика</h3>
           </div>
-          <div >
-            <table class="table table-striped" style="margin: 20px">
+            <div style="display: flex; justify-content: right">
+                <nav class="navbar bg-body-tertiary" id="apartmentSearch">
+                    <div class="container-fluid ">
+                        <div style="display: flex">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputApartment" name="search">
+                            <button class="btn btn-outline-info" type="button" onclick="searchApartment()">Search</button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+          <div id="tableApartment">
+              <div id="closeApartment" th:if="${searchApartment!=0}" style="margin-left: 20px">
+                  <i th:text="'Результат поиска по значению:'+${searchApartment}"></i>
+                  <a onclick="closeApartment()"><i class="fas fa-times"></i></a>
+              </div>
+            <table class="table table-striped" style="margin: 20px" id="apartmentTable">
               <thead>
               <tr>
                 <th scope="col">ID</th>
@@ -44,26 +60,23 @@
                 </th>
               </tr>
               </thead>
-              <tbody th:if = "${frame.getApartmentList().size()>0}">
-              <tr th:each="apartment:${frame.getApartmentList()}">
+              <tbody th:if = "${apartments.getContent().size()>0}">
+              <tr th:each="apartment:${apartments.getContent()}">
                 <th scope="row"><p th:text="${apartment.getIdApartment()}"></p></th>
                 <td><p th:text="${apartment.getNumber()}"></p></td>
                 <td>
                   <div style="display: flex">
 <!--                    <form th:action="@{/apartment_update/{idApartment}(idApartment = ${apartment.getIdApartment()})}"  method="post" >-->
-                      <button type="submit" class="btn btn-info btn-sm">
+                      <button type="button" th:onclick="'editApartment('+${apartment.getIdApartment()}+')'" class="btn btn-info btn-sm">
                         <i class="fas fa-pencil">
                         </i>
                       </button>
-                    </form>
-                    <form action="/delete_user"  method="post" >
-                      <input type="hidden" name="id" th:value="${apartment.getIdApartment()}" />
-                      <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
+
+                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px"  th:onclick="'deleteApartment('+${apartment.getIdApartment()}+', ' +${frame.getIdFrame()}+ ')'">
                         <i class="fas fa-trash">
                         </i>
                       </button>
 
-                    </form>
                   </div>
                 </td>
               </tr>
@@ -73,6 +86,23 @@
             <!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
             <!--        </div>-->
           </div>
+            <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+                <ul class="pagination" id="apartmentPagination">
+                   <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+
+                </ul>
+                <ul class="pagination" style="margin-left: 5px">
+                    <li class="page-item">
+                        <select class="form-select"  aria-label="Floating label select example" id="sizeApartment" onchange="">
+                            <option value="3" th:selected="${apartments.getSize()}==3">3</option>
+                            <option value="5" th:selected="${apartments.getSize()}==5">5</option>
+                            <option value="10" th:selected="${apartments.getSize()}==10">10</option>
+                        </select>
+                    </li>
+                </ul>
+            </nav>
 
 
 
@@ -102,6 +132,190 @@
       }
     });
   }
+
+  function editApartment(idApartment) {
+
+      $.ajax({
+          url: "/apartment_edit/"+idApartment,
+          method: "GET",
+          success: function(response) {
+              window.location.href = "/apartment_edit/" + idApartment;
+          },
+          error: function(xhr, status, error) {
+              console.log('Произошла ошибка:', error);
+              alert('Произошла ошибка при выполнении запроса');
+          }
+      });
+  }
+
+  function deleteApartment(idApartment, idFrame) {
+
+      $.ajax({
+          url: "/delete_apartment",
+          method: "POST",
+          data:{
+              idApartment: idApartment
+          },
+          success: function(response) {
+              window.location.href = "/edit_frame/" + idFrame;
+          },
+          error: function(xhr, status, error) {
+              console.log('Произошла ошибка:', error);
+              alert('Произошла ошибка при выполнении запроса');
+          }
+      });
+  }
+
+
+
+  function searchApartment () {
+      var selectedSize = localStorage.getItem('selectedApartmentSize');
+      // e.preventDefault();
+      var searchVal = document.getElementById('searchInputApartment').value;
+      var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+      // if(selectedSize == null){
+      //   selectedSize = '3';
+      // }
+      $.ajax({
+          url: url + '?searchApartment=' + searchVal,
+          type: 'GET',
+          data: {
+              apartmentSize: selectedSize,
+              // search: searchVal
+          },
+          success: function (data) {
+              var tableHtml = $(data).find('#tableApartment').html();
+              $('#tableApartment').html(tableHtml);
+
+              var pagination = $(data).find('#apartmentPagination').html();
+              $('#apartmentPagination').html(pagination);
+              // $('#blackListTable').html(data);
+              localStorage.setItem('searchApartment', searchVal);
+
+
+          },
+          error: function (xhr, status, error) {
+              alert("-")
+              console.log(error);
+          }
+      });
+  }
+  function closeApartment () {
+      var selectedSize = localStorage.getItem('selectedApartmentSize');
+      // e.preventDefault();
+      var searchVal = '0';
+      var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+      if(selectedSize == null){
+          selectedSize = '3';
+      }
+      $.ajax({
+          url: url + '?searchApartment=' + searchVal,
+          type: 'GET',
+          data: {
+              apartmentSize: selectedSize,
+              // search: searchVal
+          },
+          success: function (data) {
+              var tableHtml = $(data).find('#tableApartment').html();
+              $('#tableApartment').html(tableHtml);
+
+              var pagination = $(data).find('#apartmentPagination').html();
+              $('#apartmentPagination').html(pagination);
+              var search = $(data).find('#apartmentSearch').html();
+              $('#apartmentSearch').html(search);
+              // $('#blackListTable').html(data);
+              localStorage.setItem('searchApartment', searchVal);
+
+
+          },
+          error: function (xhr, status, error) {
+              alert("-")
+              console.log(error);
+          }
+      });
+  }
+
+  $(document).ready(function() {
+      var selectedSize = localStorage.getItem('selectedApartmentSize');
+      var page = localStorage.getItem('pageApartment');
+
+      if (selectedSize) {
+          $('#sizeApartment').val(selectedSize);
+      }
+
+      $('#sizeApartment').on('change', function() {
+          var search = localStorage.getItem('searchApartment');
+          selectedSize = $(this).val();
+          var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+
+          if (page == null) {
+              page = '0';
+          }
+
+          $.ajax({
+              url: url + '?apartmentSize=' + selectedSize,
+              type: 'GET',
+              data: {
+                  apartmentSize: selectedSize,
+                  apartmentPage: page,
+                  searchApartment:search
+              },
+              contentType: "application/json"
+          })
+              .done(function(data) {
+                  var size = $(data).find('#apartmentTable').html();
+                  $('#apartmentTable').html(size);
+                  var pagination = $(data).find('#apartmentPagination').html();
+                  $('#apartmentPagination').html(pagination);
+                  localStorage.setItem('selectedApartmentSize', selectedSize);
+              })
+              .fail(function() {
+                  alert('Произошла ошибка при загрузке данных.');
+              });
+      });
+
+      $('#apartmentPagination').on('click', 'li', function(e) {
+          var search = localStorage.getItem('searchApartment');
+          e.preventDefault();
+          var pageNumber = $(this).text();
+          $('#apartmentPagination li').removeClass('active');
+          $(this).addClass('active');
+          var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+
+          if (selectedSize == null) {
+              selectedSize = '3';
+          }
+
+          pageNumber -= 1;
+          $.ajax({
+              url: url + '?apartmentPage=' + pageNumber,
+              type: 'GET',
+              data: {
+                  apartmentSize: selectedSize,
+                  apartmentPage: pageNumber,
+                  searchApartment:search
+              }
+          })
+              .done(function(data) {
+                  var tableHtml = $(data).find('#apartmentTable').html();
+                  $('#apartmentTable').html(tableHtml);
+                  localStorage.setItem('pageApartment', pageNumber);
+              })
+              .fail( function(xhr, status, error) {
+                  console.log(error);
+              })
+      });
+      $(window).on('beforeunload', function() {
+          localStorage.removeItem('selectedApartmentSize');
+          localStorage.removeItem('pageApartment');
+      });
+
+  });
+  $(window).on('beforeunload', function() {
+      localStorage.removeItem('searchApartment');
+
+  });
+</script>
 </script>
 
 </body>

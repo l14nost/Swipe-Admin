@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Spring Security Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style th:replace="~{/admin.shared/style}"></style>
+
+<body>
+<div class="wrapper">
+  <div th:insert="admin.shared/header::header"></div>
+  <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
+
+  <div class="content-wrapper" style="padding-left: 50px">
+    <div class="col-md-7 col-lg-8">
+      <h4 class="mb-3">Новость</h4>
+      <form class="needs-validation" method="post" action="/update_news">
+        <input type="hidden" name="idNews" th:value="${news.getIdNews()}">
+
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <label for="firstName" class="form-label">Заголовок</label>
+            <input type="text" class="form-control" name="title" id="firstName" placeholder="Введите имя..." th:value="${news.getTitle()}" required="">
+            <div class="invalid-feedback">
+              Введите имя...
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <label for="lastName" class="form-label">Описание</label>
+            <textarea class="form-control" name="description" id="lastName" placeholder="Введите фамилию..." th:value="${news.getDescription()}" th:placeholder="${news.getDescription()}" ></textarea>
+          </div>
+          <div class="col-sm-6">
+            <label for="mail" class="form-label">Дата</label>
+            <input type="date" class="form-control" name = "date" id="mail" placeholder="you@example.com" th:value="${news.getDate()}" required="">
+            <div class="invalid-feedback">
+              Введите почту...
+            </div>
+          </div>
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+
+        </div>
+      </form>
+
+
+    </div>
+  </div>
+
+</div>
+<div th:insert="admin.shared/footer::footer"></div>
+<div th:replace="~{/admin.shared/script}"></div>
+
+
+</body>
+
+</html>

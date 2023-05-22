@@ -16,9 +16,12 @@
 
   <div class="content-wrapper" style="padding-left: 50px">
     <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/apartment_update/{id}(id=${apartment.getIdApartment()})}">
-    <div style="display: flex; justify-content: space-between">
+    <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()==null}">
       <h4 class="mb-3">Квартира не от застройщика</h4>
     </div>
+        <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()!=null}">
+            <h4 class="mb-3">Квартира от застройщика</h4>
+        </div>
     <div class="col-md-7 col-lg-8">
         <div class="row g-3">
           <div class="col-sm-12">
@@ -51,25 +54,27 @@
               Введите имя...
             </div>
           </div>
-          <div class="col-sm-6">
+          <div th:if = "${apartment.getFrame()==null}") style="display: flex">
+              <div class="col-sm-6">
 
-            <div class="form-floating">
-              <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="lcd">
-                <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}"></option>
-              </select>
-              <label for="floatingSelect" class="form-label">ЖК</label>
-            </div>
-          </div>
-          <div class="col-sm-6">
+                <div class="form-floating">
+                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="lcd">
+                    <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}"></option>
+                  </select>
+                  <label for="floatingSelect" class="form-label">ЖК</label>
+                </div>
+              </div>
+              <div class="col-sm-6">
 
-            <div class="form-floating">
-              <select class="form-select"  aria-label="Floating label select example" name="user">
-                <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}"></option>
-              </select>
-              <label for="floatingSelect" class="form-label">Владелец</label>
-            </div>
+                <div class="form-floating">
+                  <select class="form-select"  aria-label="Floating label select example" name="user">
+                    <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}"></option>
+                  </select>
+                  <label for="floatingSelect" class="form-label">Владелец</label>
+                </div>
+              </div>
           </div>
-          <label for="inputImg">Главная картина</label>
+          <label for="inputImg">Главная картинка</label>
           <div class="form-group" style="display: flex">
 
             <div class="form-group" style="display: flex">
@@ -88,14 +93,14 @@
             </script>
 
           </div>
-          <div>
+          <div id="galleryDiv">
             <label>Галерея картинок</label>
             <div class="card-body">
               <label>Размер 1000х190</label>
               <div class="row" >
 
                 <div class="col-sm-3" th:each="photo:${apartment.getPhotoList()}">
-                  <img th:src="${photo.getFileName()}" id="img1" class="img-fluid mb-2" alt="white sample">
+                  <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2" alt="white sample">
 <!--                  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 <!--                  <script>-->
 <!--                      function deleteData(idPhoto, idApartment) {-->
@@ -119,7 +124,7 @@
 <!--                    }-->
 <!--                  </script>-->
 
-                  <button th:attr="onclick='deleteData(' + ${photo.getIdPhotos()} + ', ' + ${apartment.getIdApartment()} + ')'" style="
+                  <button type="button" th:attr="onclick='deleteData(' + ${photo.getIdPhotos()} + ', ' + ${apartment.getIdApartment()} + ')'" style="
                 position: absolute;
                 right: -1px;
                 top: -10px;
@@ -133,22 +138,36 @@
             " >
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
-                  <input type="file" id="inputImg1" name="galleryPhoto" class="form-control" th:value="${photo.getFileName()}">
-                  <script>
-                    inputImg1.onchange = evt => {
-                      const [file] = inputImg1.files
-                      if (file) {
-                        img1.src = URL.createObjectURL(file)
-                      }
-                    }
-                  </script>
+                  <input type="file" th:id="inputGallery+${photo.getIdPhotos()}" name="galleryPhoto" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)">
+<!--                  <script>-->
+<!--                      var idImg = `gallery[[${photo.getIdPhotos}]]`;-->
+<!--                      var idInput = `inputGallery[[${photo.getIdPhotos()}]]`;-->
+<!--                      idInput.onchange = evt => {-->
+<!--                      const [file] = idInput.files-->
+<!--                      if (file) {-->
+<!--                          idImg.src = URL.createObjectURL(file)-->
+<!--                      }-->
+<!--                    }-->
+<!--                  </script>-->
+                    <script>
+                        function handleFileChange(event) {
+                            const input = event.target;
+                            const file = input.files[0];
+                            const id = input.id.slice(12); // Получаем идентификатор после "inputGallery"
+                            const img = document.getElementById(`gallery${id}`);
+
+                            if (file) {
+                                img.src = URL.createObjectURL(file);
+                            }
+                        }
+                    </script>
                 </div>
-                <div class="col-sm-3" style="margin-left: 20px" id="galleryDiv">
+                <div class="col-sm-3" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
 <!--                    <a th:href="@{/add_photo/{idApartment}(idApartment = ${apartment.getIdApartment()})}">-->
-                    <a href="#" th:attr="onclick='addPhoto(' + ${apartment.getIdApartment()} + ')'">
+                    <button class="btn btn-outline" type="button" th:attr="onclick='addPhoto(' + ${apartment.getIdApartment()} + ')'">
                         <img src="../admin/dist/img/addCinema.png" width="150px">
-                    </a>
+                    </button>
                   </div>
                 </div>
 
@@ -295,9 +314,8 @@
                   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                   <script>
                       function deleteData(idPhoto, idApartment) {
-
                         $.ajax({
-                          url: "/delete_photo",
+                          url: "/delete_photo_apartment",
                           method: "POST",
                           data: {
                             idPhoto: idPhoto,
@@ -305,7 +323,8 @@
                           } ,
 
                           success: function(response) {
-                            window.location.href = "/apartment_edit/" + idApartment;
+                              var galleryHtml = $(response).find('#galleryDiv').html();
+                              $('#galleryDiv').html(galleryHtml);
                           },
                           error: function(xhr, status, error) {
                             console.log('Произошла ошибка:', error);
@@ -314,13 +333,13 @@
                       });
                     }
                       function addPhoto(idApartment) {
-
                         $.ajax({
                           url: "/add_photo/"+idApartment,
                           method: "GET",
 
                           success: function(response) {
-                            window.location.href = "/apartment_edit/" + idApartment;
+                              var galleryHtml = $(response).find('#galleryDiv').html();
+                              $('#galleryDiv').html(galleryHtml);
                           },
                           error: function(xhr, status, error) {
                             console.log('Произошла ошибка:', error);

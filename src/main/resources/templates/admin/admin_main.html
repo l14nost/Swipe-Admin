@@ -8,51 +8,302 @@
     <style th:replace="~{/admin.shared/style}"></style>
 
 <body>
-<!--<script>-->
-
-<!--     fetch('http://localhost:8081/users', {-->
-<!--        method: 'GET',-->
-<!--        headers: new Headers({-->
-<!--            'Authorization': 'Bearer ' + [[${token}]],-->
-<!--            'Content-Type': 'application/json'-->
-<!--        }),-->
-<!--        body: { /* some data */ }-->
-<!--    });-->
-<!--</script>-->
 <div class="wrapper">
     <div th:insert="admin.shared/header::header"></div>
     <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
     <div class="content-wrapper" style="padding-left: 50px">
+        <h5 style="text-align: center">Пользователи не в черном списке</h5>
+        <div style="display: flex; justify-content: center">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-gradient-info">
+                    <div class="inner">
+                        <h3 th:text="${client.size()}"></h3>
+
+                        <p>Клиент</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                    <a href="/users" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-gradient-warning">
+                    <div class="inner">
+                        <h3 th:text="${contractor.size()}"></h3>
+
+                        <p>Застройщик</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                    <a href="/users" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-gradient-success">
+                    <div class="inner">
+                        <h3 th:text="${notary.size()}"></h3>
+
+                        <p>Нотариус</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                    <a href="/users" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="max-width: 750px; margin: 0 auto">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-pie mr-1"></i>
+                    Users
+                </h3>
+                <div class="card-tools">
+                    <ul class="nav nav-pills ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#sales-chart" data-toggle="tab">Donut</a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="tab-content p-0">
+                    <!-- Morris chart - Sales -->
+                    <div class="chart tab-pane active" id="sales-chart" style="position: relative; height: 300px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                        <canvas id="sales-chart-canvas" height="300" style="height: 450px; display: block; width: 684px;" width="1197" class="chartjs-render-monitor"></canvas>
+                    </div>
+                </div>
+            </div><!-- /.card-body -->
+        </div>
+
+
+        <div class="card bg-gradient-info" style="max-height: 500px; max-width: 750px; margin: 0 auto; margin-top: 20px">
+            <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title">
+                    <i class="fas fa-th mr-1"></i>
+                    News
+                </h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+<!--                    <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">-->
+<!--                        <i class="fas fa-times"></i>-->
+<!--                    </button>-->
+                </div>
+            </div>
+            <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                <canvas class="chart chartjs-render-monitor" id="line-chart" style="min-height: 250px; height: 250px; max-height: 500px; max-width: 750px; display: block; width: 286px;" width="750" height="437"></canvas>
+            </div>
+            <!-- /.card-body -->
+
+        </div>
+        <div class="card" style="max-height: 500px; max-width: 750px; margin: 0 auto; margin-top: 20px">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-pie mr-1"></i>
+                    News
+                </h3>
+                <div class="card-tools">
+                    <ul class="nav nav-pills ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="tab-content p-0">
+                    <!-- Morris chart - Sales -->
+                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                        <canvas id="revenue-chart-canvas" height="525" style="height: 300px; display: block; width: 664px;" width="1162" class="chartjs-render-monitor"></canvas>
+                    </div>
+                </div>
+            </div><!-- /.card-body -->
+        </div>
     </div>
+
 
 </div>
 <div th:insert="admin.shared/footer::footer"></div>
 <div th:replace="~{/admin.shared/script}"></div>
 <script>
-    // Получение токена из HTML-страницы
-    var token = "${token}";
+    var clientCount = [[${client.size()}]];
+    var contractorCount = [[${contractor.size()}]];
+    var notaryCount = [[${notary.size()}]]
+    // var ctx = document.getElementById('sales-chart-canvas').getContext('2d');
+    // var genderChart = new Chart(ctx, {
+    //     type: 'pie',
+    //     data: {
+    //         datasets: [{
+    //             data: [clientCount, contractorCount,notaryCount],
+    //             backgroundColor: ['#17a2b8', '#ffc107',"#28a745"]
+    //         }],
+    //         labels: ['Client', 'Contractor', 'Notary']
+    //     },
+    //     options: {
+    //         responsive: true,
+    //         legend: {
+    //             position: 'bottom'
+    //         }
+    //     }
+    // });
 
-    // Получение текущего URL-адреса страницы
-    var url = window.location.pathname;
+    var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
+    var pieData = {
+        labels: [
+            'Client',
+            'Contractor',
+            'Notary'
+        ],
+        datasets: [
+            {
+                data: [clientCount, contractorCount, notaryCount],
+                backgroundColor: ['#17a2b8', '#ffc107', '#28a745']
+            }
+        ]
+    }
+    var pieOptions = {
+        legend: {
+            display: false
+        },
+        maintainAspectRatio: false,
+        responsive: true
+    }
+    // Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    // eslint-disable-next-line no-unused-vars
+    var pieChart = new Chart(pieChartCanvas, { // lgtm[js/unused-local-variable]
+        type: 'doughnut',
+        data: pieData,
+        options: pieOptions
+    })
 
-    // AJAX-запрос с использованием токена и текущего URL-адреса
-    $.ajax({
-        url: '/admin/authenticate',
-        method: 'POST', // Используем метод POST
-        headers: {
-            'Authorization': 'Bearer ' + [[${token}]] // Передача токена в заголовке Authorization
-        },
-        data: { /* данные для запроса */ },
-        success: function(response) {
-            // Обработка успешного ответа
-        },
-        error: function(xhr, status, error) {
-            // Обработка ошибки
-        }
-    });
 </script>
+<script th:inline="javascript">
+    $(function () {
+        'use strict'
+        var months = /*[[${month}]]*/ [];
+        var salesGraphChartCanvas = $('#line-chart').get(0).getContext('2d');
+        var salesGraphChartData = {
+            // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+           labels:months,
+            datasets: [
+                {
+                        label: 'News',
+                    fill: false,
+                    borderWidth: 2,
+                    lineTension: 0,
+                    spanGaps: true,
+                    borderColor: '#efefef',
+                    pointRadius: 3,
+                    pointHoverRadius: 7,
+                    pointColor: '#efefef',
+                    pointBackgroundColor: '#efefef',
+                        data: [[${newsData}]],
 
+                }
+            ]
+
+        }
+        var salesGraphChartOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        fontColor: '#efefef'
+                    },
+                    grid: {
+                        display: false,
+                        color: '#efefef',
+                        drawBorder: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        stepSize: 1,
+                        fontColor: '#efefef'
+                    },
+                    grid: {
+                        display: true,
+                        color: '#efefef',
+                        drawBorder: false
+                    }
+                }]
+            }
+        };
+
+        var salesGraphChart = new Chart(salesGraphChartCanvas, { // lgtm[js/unused-local-variable]
+            type: 'line',
+            data: salesGraphChartData,
+            options: salesGraphChartOptions
+        })
+    })
+
+</script>
+<script th:inline="javascript">
+    var months = /*[[${month}]]*/ [];
+    var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d')
+    // $('#revenue-chart').get(0).getContext('2d');
+
+    var salesChartData = {
+        // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels:months,
+        datasets: [
+            {
+                label: 'Digital Goods',
+                backgroundColor: 'rgba(60,141,188,0.9)',
+                borderColor: 'rgba(60,141,188,0.8)',
+                pointRadius: false,
+                pointColor: '#3b8bba',
+                pointStrokeColor: 'rgba(60,141,188,1)',
+                pointHighlightFill: '#fff',
+                pointHighlightStroke: 'rgba(60,141,188,1)',
+                data: [[${newsData}]]
+            },
+        ]
+    }
+
+    var salesChartOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+            display: false
+        },
+        scales: {
+            xAxes: [{
+                gridLines: {
+                    display: false
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+                    display: false
+                }
+            }]
+        }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    // eslint-disable-next-line no-unused-vars
+    var salesChart = new Chart(salesChartCanvas, { // lgtm[js/unused-local-variable]
+        type: 'line',
+        data: salesChartData,
+        options: salesChartOptions
+    })
+</script>
 </body>
 
 </html>

@@ -1,7 +1,6 @@
 package com.example.Swipe.Admin.enums.converter;
 
 import com.example.Swipe.Admin.enums.BalconyType;
-import com.example.Swipe.Admin.enums.HeatingType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

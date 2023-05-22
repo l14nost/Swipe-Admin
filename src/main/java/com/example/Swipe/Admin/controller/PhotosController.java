@@ -32,7 +32,7 @@ public class PhotosController {
         photosServiceImpl.saveEntity(photo);
         return "redirect:/lcd_edit/"+idLcd;
     }
-    @PostMapping("/delete_photo")
+    @PostMapping("/delete_photo_apartment")
     public String deletePhoto(@RequestParam(name = "idPhoto") int idPhoto,@RequestParam(name = "idApartment") int idApartment){
         Photo photo = photosServiceImpl.findById(idPhoto);
         if (!photo.getFileName().equals("../admin/dist/img/default.jpg")) {
@@ -43,7 +43,20 @@ public class PhotosController {
         photosServiceImpl.deleteById(idPhoto);
 
         return "redirect:/apartment_edit/"+idApartment;
-//        return ResponseEntity.ok().body("{\"message\": \"Фото успешно удалено\"}");
+    }
+
+    @PostMapping("/delete_photo_lcd")
+    public String deletePhotoLcd(@RequestParam(name = "idPhoto") int idPhoto,@RequestParam(name = "idLcd") int idLcd){
+        Photo photo = photosServiceImpl.findById(idPhoto);
+        System.out.println(photo.getFileName());
+        if (!photo.getFileName().equals("../admin/dist/img/default.jpg")) {
+            String fileNameDelete = photo.getFileName().substring(11, photo.getFileName().length());
+            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+            fileDelete.delete();
+        }
+        photosServiceImpl.deleteById(idPhoto);
+
+        return "redirect:/lcd_edit/"+idLcd;
     }
 
 }

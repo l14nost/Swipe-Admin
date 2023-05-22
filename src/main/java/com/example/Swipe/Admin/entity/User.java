@@ -6,10 +6,14 @@ import com.example.Swipe.Admin.enums.TypeUser;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -25,15 +29,18 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iduser")
     private int idUser;
-
+    @NotBlank(message = "Input name")
     private String name;
 
     private String password;
-
+    @NotBlank(message = "Input surname")
+    @Size(min = 3, max = 20, message = "3 to 20")
     private String surname;
 
     private String number;
 
+    @Email(message = "email is not correct")
+    @NotBlank(message = "Input email")
     private String mail;
 
     @Enumerated(EnumType.STRING)
@@ -57,8 +64,11 @@ public class User implements UserDetails {
     @ManyToOne
     private Agent agent;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private UserAddInfo userAddInfo;
+
+
+    private boolean blackList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

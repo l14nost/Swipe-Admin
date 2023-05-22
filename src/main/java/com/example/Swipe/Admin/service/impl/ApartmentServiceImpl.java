@@ -1,8 +1,13 @@
 package com.example.Swipe.Admin.service.impl;
 
 import com.example.Swipe.Admin.entity.Apartment;
+import com.example.Swipe.Admin.entity.Frame;
 import com.example.Swipe.Admin.repository.ApartmentRepo;
 import com.example.Swipe.Admin.service.ApartmentService;
+import com.example.Swipe.Admin.specification.ApartmentForFrameSpecification;
+import com.example.Swipe.Admin.specification.ApartmentForLcdSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +28,22 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     public List<Apartment> findAllByFrame(){
         return apartmentRepo.findAllByFrameIsNull();
+    }
+
+    public Page<Apartment> findAllByFramePagination(Pageable pageable,int keyWord){
+        if(keyWord != 0){
+            ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().keyWord(keyWord).build();
+            return apartmentRepo.findAll(apartmentForLcdSpecification,pageable);
+        }
+        return apartmentRepo.findAllByFrameIsNull(pageable);
+    }
+
+    public Page<Apartment> findAllForFramePagination(Frame frame,Pageable pageable, int keyWord){
+        if (keyWord!=0){
+            ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).build();
+            return apartmentRepo.findAll(apartmentForFrameSpecification,pageable);
+        }
+        return apartmentRepo.findAllByFrame(frame,pageable);
     }
 
     @Override

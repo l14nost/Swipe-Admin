@@ -43,19 +43,19 @@ public class FrameServiceImpl implements FrameService {
 
     @Override
     public void updateEntity(Frame frame, int id) {
-//        Optional<Photos> photosOptional = photosRepo.findById(id);
-//        if(photosOptional.isPresent()){
-//            Photos photosUpdate = photosOptional.get();
-//            if(photos.getApartment()!=null){
-//                photosUpdate.setApartment(photos.getApartment());
-//            }
-//            if (photos.getLcd()!=null){
-//                photosUpdate.setLcd(photos.getLcd());
-//            }
-//            if(photos.getFileName()!=null){
-//                photosUpdate.setFileName(photos.getFileName());
-//            }
-//            photosRepo.saveAndFlush(photosUpdate);
-//        }
+        Optional<Frame> frameOptional = frameRepo.findById(id);
+        if(frameOptional.isPresent()){
+            Frame frameUpdate = frameOptional.get();
+            if(frame.getApartmentList()!=null){
+                frameUpdate.setApartmentList(frame.getApartmentList());
+            }
+            if (frame.getLcd()!=null){
+                frameUpdate.setLcd(frame.getLcd());
+            }
+            if(frame.getNum()!=0){
+                frameUpdate.setNum(frame.getNum());
+            }
+            frameRepo.saveAndFlush(frameUpdate);
+        }
     }
 }

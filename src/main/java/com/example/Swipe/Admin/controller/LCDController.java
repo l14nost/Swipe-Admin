@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.controller;
 
+import com.example.Swipe.Admin.entity.Apartment;
 import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.service.impl.DocumentsServiceImpl;
@@ -16,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +32,8 @@ public class LCDController {
     private final UserServiceImpl userService;
     @GetMapping("/lcd_edit/{id}")
     public String lcdEdit(@PathVariable int id, Model model){
+        List<String> advantages = List.of(lcdServiceImpl.findById(id).getAdvantages().split(","));
+        model.addAttribute("advantages", advantages);
         model.addAttribute("lcd", lcdServiceImpl.findById(id));
         model.addAttribute("contractors", userService.findAllByType(TypeUser.CONTRACTOR));
         return "admin/lcd_edit";
@@ -39,6 +44,10 @@ public class LCDController {
                                   @RequestParam String description,
                                   @RequestParam int contractor,
                                   @RequestParam String advantages,
+                                  @RequestParam String formalization,
+                                  @RequestParam String typePayment,
+                                  @RequestParam String appointment,
+                                  @RequestParam String sumContract,
                                   @RequestParam MultipartFile file,
                                   @RequestPart(required = false) List<MultipartFile> gallery,
                                   @RequestPart(required = false) List<MultipartFile> documents,
@@ -55,8 +64,8 @@ public class LCDController {
                                   @RequestParam int height,
                                   @RequestParam int distanceSea,
                                   Model model) throws IOException {
-
-        LCD lcd = LCD.builder().name(name).advantages(advantages).status(status).type(type).lcdClass(lcdClass).technology(technology).territory(territory).gas(gas).sewerage(sewerage).waterSupply(waterSupply).communal(communal).heating(heating).height(height).distanceSea(distanceSea).user(userService.findById(contractor)).build();
+        System.out.println(advantages);
+        LCD lcd = LCD.builder().name(name).advantages(advantages).status(status).type(type).lcdClass(lcdClass).technology(technology).territory(territory).gas(gas).sewerage(sewerage).waterSupply(waterSupply).communal(communal).heating(heating).height(height).distanceSea(distanceSea).user(userService.findById(contractor)).sumContract(sumContract).appointment(appointment).formalization(formalization).typePayment(typePayment).build();
         if(description.length()>0){
             lcd.setDescription(description);
         }
@@ -125,6 +134,7 @@ public class LCDController {
     }
     @GetMapping("/add_lcd")
     public String addPage(Model model){
+        model.addAttribute("contractors",userService.findAllByType(TypeUser.CONTRACTOR));
         return "admin/lcd_add";
     }
 
@@ -134,6 +144,10 @@ public class LCDController {
                             @RequestParam String name,
                             @RequestParam String description,
                             @RequestParam String advantages,
+                            @RequestParam String formalization,
+                            @RequestParam String typePayment,
+                            @RequestParam String appointment,
+                            @RequestParam String sumContract,
                             @RequestParam MultipartFile file,
 //                            @RequestPart(required = false) List<MultipartFile> gallery,
 //                            @RequestPart List<MultipartFile> documents,
@@ -151,7 +165,7 @@ public class LCDController {
                             @RequestParam int distanceSea,
                             Model model) throws IOException {
 
-        LCD lcd = LCD.builder().name(name).advantages(advantages).status(status).type(type).lcdClass(lcdClass).technology(technology).territory(territory).gas(gas).sewerage(sewerage).waterSupply(waterSupply).communal(communal).heating(heating).height(height).distanceSea(distanceSea).build();
+        LCD lcd = LCD.builder().name(name).advantages(advantages).status(status).type(type).lcdClass(lcdClass).technology(technology).territory(territory).gas(gas).sewerage(sewerage).waterSupply(waterSupply).communal(communal).heating(heating).height(height).distanceSea(distanceSea).formalization(formalization).typePayment(typePayment).appointment(appointment).sumContract(sumContract).build();
         if(description.length()>0){
             lcd.setDescription(description);
         }
@@ -173,6 +187,9 @@ public class LCDController {
 //                fileDelete.delete();
 //            }
             lcd.setMainPhoto("../uploads/" + fileNameGallery);
+        }
+        else {
+            lcd.setMainPhoto("../admin/dist/img/default.jpg");
         }
 //        for(int i = 0; i<preLcd.getPhotosList().size();i++){
 //            if (!gallery.get(i).isEmpty()) {
@@ -218,4 +235,53 @@ public class LCDController {
         return "redirect:/houses";
 
     }
+    @PostMapping("/delete_lcd")
+    public String deleteLcd(int idLcd, Model model){
+        LCD lcd = lcdServiceImpl.findById(idLcd);
+        if (!lcd.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+            String fileNameDelete = lcd.getMainPhoto().substring(11, lcd.getMainPhoto().length());
+            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+            fileDelete.delete();
+        }
+        for(int i = 0; i< lcd.getPhotoList().size();i++){
+            if (!lcd.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                String fileNameDelete = lcd.getPhotoList().get(i).getFileName().substring(11, lcd.getPhotoList().get(i).getFileName().length());
+                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                fileDelete.delete();
+            }
+        }
+        for(int i = 0; i< lcd.getDocuments().size();i++){
+            if (!lcd.getDocuments().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                String fileNameDelete = lcd.getDocuments().get(i).getFileName().substring(11, lcd.getDocuments().get(i).getFileName().length());
+                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                fileDelete.delete();
+            }
+        }
+
+        for (int i = 0; i<lcd.getFrames().size();i++){
+            for(int j = 0;j<lcd.getFrames().get(i).getApartmentList().size();j++){
+                if (!lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+                    String fileNameDelete = lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().substring(11, lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().length());
+                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                    fileDelete.delete();
+                }
+                for (int k = 0; k < lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().size(); k++) {
+                    if (!lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().equals("../admin/dist/img/default.jpg")) {
+                        String fileNameDelete = lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().substring(11, lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().length());
+                        File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                        fileDelete.delete();
+                    }
+
+                }
+            }
+        }
+        lcdServiceImpl.deleteById(idLcd);
+
+        return "redirect:/houses";
+
+    }
+    public static final boolean checkTypes(Stream stream, String typeVal){
+        return stream.anyMatch(v->v.equals(typeVal));
+    }
+
 }

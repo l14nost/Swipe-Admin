@@ -16,6 +16,18 @@ public class NewsServiceImpl implements NewsService {
         this.newsRepo = newsRepo;
     }
 
+    public int countNews(int monthNum){
+        int count = 0;
+        List<News> news = newsRepo.findAll();
+        for (News news1 : news
+        ) {
+            if(news1.getDate().getMonthValue() == monthNum){
+                count++;
+            }
+        }
+        return count;
+    }
+
     @Override
     public List<News> findAll() {
         return newsRepo.findAll();
@@ -44,6 +56,23 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void updateEntity(News news, int id) {
+        Optional<News> newsOptional = newsRepo.findById(id);
+        if(newsOptional.isPresent()){
+            News updateNews = newsOptional.get();
+            if(news.getDate()!=null){
+                updateNews.setDate(news.getDate());
+            }
+            if(news.getLcd()!=null){
+                updateNews.setLcd(news.getLcd());
+            }
+            if(news.getDescription()!=null){
+                updateNews.setDescription(news.getDescription());
+            }
+            if(news.getTitle()!=null){
+                updateNews.setTitle(news.getTitle());
+            }
+            newsRepo.saveAndFlush(updateNews);
+        }
 
     }
 }
