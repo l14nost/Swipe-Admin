@@ -87,16 +87,28 @@
           </tr>
         </tbody>
       </table>
-<!--      <div style="display: flex; justify-content: center">-->
-<!--        <button type="button" class="btn btn-secondary">Добавить</button>-->
-<!--      </div>-->
+
     </div>
       <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="previousLcd">
+          <li class="page-item" th:hidden="${lcds.getNumber()==0}">
+            <input type="hidden" id="pageNumberLcdPr" th:value="${lcds.getNumber()-1}">
+            <a class="page-link" href="#" aria-label="Previous" th:value="${lcds.getTotalPages()}">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        </ul>
         <ul class="pagination" id="lcdPagination">
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
           <li class="page-item"  th:each="p: ${#numbers.sequence(1, lcds.getTotalPages()-1)}" th:value="${p}" th:if="${lcds.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-
-
+        </ul>
+        <ul class="pagination" id="nextLcd" >
+          <li class="page-item" th:hidden="${lcds.getNumber()==lcds.getTotalPages()-1}">
+            <input type="hidden" id="pageNumberLcdNext" th:value="${lcds.getNumber()+1}">
+            <a class="page-link" href="#" aria-label="Next" th:value="${lcds.getTotalPages()}">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
         </ul>
         <ul class="pagination" style="margin-left: 5px">
           <li class="page-item">
@@ -174,11 +186,25 @@
 <!--        </div>-->
       </div>
       <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="previousApartment">
+          <li class="page-item" th:hidden="${apartments.getNumber()==0}">
+            <input type="hidden" id="pageNumberApartmentPr" th:value="${apartments.getNumber()-1}">
+            <a class="page-link" href="#" aria-label="Previous" th:value="${apartments.getTotalPages()}">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        </ul>
         <ul class="pagination" id="apartmentPagination">
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
           <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-
-
+        </ul>
+        <ul class="pagination" id="nextApartment" >
+          <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}">
+            <input type="hidden" id="pageNumberApartmentNext" th:value="${apartments.getNumber()+1}">
+            <a class="page-link" href="#" aria-label="Next" th:value="${apartments.getTotalPages()}">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
         </ul>
         <ul class="pagination" style="margin-left: 5px">
           <li class="page-item">
@@ -221,6 +247,10 @@
 
         var pagination = $(data).find('#lcdPagination').html();
         $('#lcdPagination').html(pagination);
+        var next = $(data).find('#nextLcd').html();
+        $('#nextLcd').html(next);
+        var previous = $(data).find('#previousLcd').html();
+        $('#previousLcd').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchLcd', searchVal);
 
@@ -255,6 +285,10 @@
         $('#lcdPagination').html(pagination);
         var search = $(data).find('#lcdSearch').html();
         $('#lcdSearch').html(search);
+        var next = $(data).find('#nextLcd').html();
+        $('#nextLcd').html(next);
+        var previous = $(data).find('#previousLcd').html();
+        $('#previousLcd').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchLcd', searchVal);
 
@@ -273,7 +307,79 @@
     if (selectedSize) {
       $('#sizeLcd').val(selectedSize);
     }
+    $('#previousLcd').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchLcd');
+      e.preventDefault();
 
+      var pageNumber = $('#pageNumberLcdPr').val();
+
+      var url = '/houses';
+
+      // pageNumber -= 1;
+      $.ajax({
+        url:url+'?lcdPage='+pageNumber,
+        type: 'GET',
+        data:{
+          lcdSize: selectedSize,
+          searchLcd: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#lcdTable').html();
+          $('#lcdTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextLcd').html();
+          $('#nextLcd').html(next);
+          var previous = $(data).find('#previousLcd').html();
+          $('#previousLcd').html(previous);
+
+          $('#lcdPagination li').removeClass('active');
+          $('#lcdPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageLcd', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
+
+    $('#nextLcd').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchLcd');
+      e.preventDefault();
+      var pageNumber = $('#pageNumberLcdNext').val();
+      var url = '/houses';
+
+
+      $.ajax({
+        url:url+'?lcdPage='+pageNumber,
+        type: 'GET',
+        data:{
+          lcdSize: selectedSize,
+          searchLcd: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#lcdTable').html();
+          $('#lcdTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextLcd').html();
+          $('#nextLcd').html(next);
+          var previous = $(data).find('#previousLcd').html();
+          $('#previousLcd').html(previous);
+
+          $('#lcdPagination li').removeClass('active');
+          $('#lcdPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageContractor', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
     $('#sizeLcd').on('change', function() {
       var search = localStorage.getItem('searchLcd');
       selectedSize = $(this).val();
@@ -298,6 +404,10 @@
                 $('#lcdTable').html(size);
                 var pagination = $(data).find('#lcdPagination').html();
                 $('#lcdPagination').html(pagination);
+                var next = $(data).find('#nextLcd').html();
+                $('#nextLcd').html(next);
+                var previous = $(data).find('#previousLcd').html();
+                $('#previousLcd').html(previous);
                 localStorage.setItem('selectedLcdSize', selectedSize);
               })
               .fail(function() {
@@ -330,6 +440,10 @@
               .done(function(data) {
                 var tableHtml = $(data).find('#lcdTable').html();
                 $('#lcdTable').html(tableHtml);
+                var next = $(data).find('#nextLcd').html();
+                $('#nextLcd').html(next);
+                var previous = $(data).find('#previousLcd').html();
+                $('#previousLcd').html(previous);
                 localStorage.setItem('pageLcd', pageNumber);
               })
               .fail( function(xhr, status, error) {
@@ -369,6 +483,10 @@
 
         var pagination = $(data).find('#apartmentPagination').html();
         $('#apartmentPagination').html(pagination);
+        var next = $(data).find('#nextApartment').html();
+        $('#nextApartment').html(next);
+        var previous = $(data).find('#previousApartment').html();
+        $('#previousApartment').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchApartment', searchVal);
 
@@ -403,6 +521,10 @@
         $('#apartmentPagination').html(pagination);
         var search = $(data).find('#apartmentSearch').html();
         $('#apartmentSearch').html(search);
+        var next = $(data).find('#nextApartment').html();
+        $('#nextApartment').html(next);
+        var previous = $(data).find('#previousApartment').html();
+        $('#previousApartment').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchApartment', searchVal);
 
@@ -423,6 +545,82 @@
     if (selectedSize) {
       $('#sizeApartment').val(selectedSize);
     }
+
+
+    $('#previousApartment').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchApartment');
+      e.preventDefault();
+
+      var pageNumber = $('#pageNumberApartmentPr').val();
+
+      var url = '/houses';
+
+      // pageNumber -= 1;
+      $.ajax({
+        url:url+'?apartmentPage='+pageNumber,
+        type: 'GET',
+        data:{
+          apartmentSize: selectedSize,
+          searchApartment: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#apartmentTable').html();
+          $('#apartmentTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextApartment').html();
+          $('#nextApartment').html(next);
+          var previous = $(data).find('#previousApartment').html();
+          $('#previousApartment').html(previous);
+
+          $('#apartmentPagination li').removeClass('active');
+          $('#apartmentPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageApartment', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
+
+    $('#nextApartment').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchApartment');
+      e.preventDefault();
+      var pageNumber = $('#pageNumberApartmentNext').val();
+      var url = '/houses';
+
+
+      $.ajax({
+        url:url+'?apartmentPage='+pageNumber,
+        type: 'GET',
+        data:{
+          apartmentSize: selectedSize,
+          searchApartment: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#apartmentTable').html();
+          $('#apartmentTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextApartment').html();
+          $('#nextApartment').html(next);
+          var previous = $(data).find('#previousApartment').html();
+          $('#previousApartment').html(previous);
+
+          $('#apartmentPagination li').removeClass('active');
+          $('#apartmentPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageApartment', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
+
 
     $('#sizeApartment').on('change', function() {
       var search = localStorage.getItem('searchApartment');
@@ -448,6 +646,10 @@
                 $('#apartmentTable').html(size);
                 var pagination = $(data).find('#apartmentPagination').html();
                 $('#apartmentPagination').html(pagination);
+                var next = $(data).find('#nextApartment').html();
+                $('#nextApartment').html(next);
+                var previous = $(data).find('#previousApartment').html();
+                $('#previousApartment').html(previous);
                 localStorage.setItem('selectedApartmentSize', selectedSize);
               })
               .fail(function() {
@@ -480,6 +682,10 @@
               .done(function(data) {
                 var tableHtml = $(data).find('#apartmentTable').html();
                 $('#apartmentTable').html(tableHtml);
+                var next = $(data).find('#nextApartment').html();
+                $('#nextApartment').html(next);
+                var previous = $(data).find('#previousApartment').html();
+                $('#previousApartment').html(previous);
                 localStorage.setItem('pageApartment', pageNumber);
               })
               .fail( function(xhr, status, error) {

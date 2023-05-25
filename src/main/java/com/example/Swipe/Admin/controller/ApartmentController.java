@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.controller;
 
+import com.example.Swipe.Admin.dto.ApartmentDTO;
 import com.example.Swipe.Admin.entity.Apartment;
 import com.example.Swipe.Admin.entity.Frame;
 import com.example.Swipe.Admin.enums.*;
@@ -62,83 +63,91 @@ public class ApartmentController {
         System.out.println(Arrays.toString(FoundingDocument.values()));
         return "admin/apartment_edit";
     }
-    @PostMapping("/apartment_update/{id}")
-    public String apartmentUpdate(@PathVariable int id,
-                                  @RequestParam int number,
-                                  @RequestParam String description,
-                                  @RequestParam int price,
-                                  @RequestParam(required = false, defaultValue = "0") int lcd,
-                                  @RequestParam(required = false, defaultValue = "0") int user,
-                                  @RequestParam MultipartFile file,
-                                  @RequestPart(required = false) List<MultipartFile> galleryPhoto,
-                                  @RequestParam FoundingDocument foundingDocument,
-                                  @RequestParam State state,
-                                  @RequestParam TypeApartment type,
-                                  @RequestParam BalconyType balconyType,
-                                  @RequestParam Calculation calculation,
-                                  @RequestParam CountRoom countRoom,
-                                  @RequestParam LayoutType layout,
-                                  @RequestParam HeatingType heatingType,
-                                  @RequestParam CommunicationType communicationType,
-                                  @RequestParam Commission commission,
-                                  @RequestParam int totalArea,
-                                  @RequestParam int kitchenArea, Model model) throws IOException {
+//    @PostMapping("/apartment_update/{id}")
+//    public String apartmentUpdate(@PathVariable int id,
+//                                  @RequestParam int number,
+//                                  @RequestParam String description,
+//                                  @RequestParam int price,
+//                                  @RequestParam(required = false, defaultValue = "0") int lcd,
+//                                  @RequestParam(required = false, defaultValue = "0") int user,
+//                                  @RequestParam MultipartFile file,
+//                                  @RequestPart(required = false) List<MultipartFile> galleryPhoto,
+//                                  @RequestParam FoundingDocument foundingDocument,
+//                                  @RequestParam State state,
+//                                  @RequestParam TypeApartment type,
+//                                  @RequestParam BalconyType balconyType,
+//                                  @RequestParam Calculation calculation,
+//                                  @RequestParam CountRoom countRoom,
+//                                  @RequestParam LayoutType layout,
+//                                  @RequestParam HeatingType heatingType,
+//                                  @RequestParam CommunicationType communicationType,
+//                                  @RequestParam Commission commission,
+//                                  @RequestParam int totalArea,
+//                                  @RequestParam int kitchenArea, Model model) throws IOException {
+//
+//        Apartment apartment = Apartment.builder().number(number).price(price).foundingDocument(foundingDocument).state(state).type(type).balconyType(balconyType).calculation(calculation).countRoom(countRoom).layout(layout).heatingType(heatingType).communicationType(communicationType).commission(commission).totalArea(totalArea).kitchenArea(kitchenArea).build();
+//        if(description.length()>0){
+//            apartment.setDescription(description);
+//        }
+//        if(user>0){
+//            apartment.setUser(userService.findById(user));
+//        }
+//        if(lcd>0){
+//            apartment.setLcd(lcdService.findById(lcd));
+//        }
+//        Apartment preApartment = apartmentServiceImpl.findById(id);
+//        if (!file.isEmpty()) {
+//            File uploadDirGallery = new File(upload);
+//            if (!uploadDirGallery.exists()) {
+//                uploadDirGallery.mkdir();
+//            }
+//            String uuid = UUID.randomUUID().toString();
+//            String fileNameGallery = uuid + "-" + file.getOriginalFilename();
+//            String resultNameGallery = upload + "" + fileNameGallery;
+//            file.transferTo(new File((resultNameGallery)));
+//            if (!preApartment.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+//                String fileNameDelete = preApartment.getMainPhoto().substring(11, preApartment.getMainPhoto().length());
+//                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                fileDelete.delete();
+//            }
+//            apartment.setMainPhoto("../uploads/" + fileNameGallery);
+//        }
+//        for(int i = 0; i<preApartment.getPhotoList().size(); i++){
+//            if (!galleryPhoto.get(i).isEmpty()) {
+//                File uploadDirGallery = new File(upload);
+//                if (!uploadDirGallery.exists()) {
+//                    uploadDirGallery.mkdir();
+//                }
+//                String uuid = UUID.randomUUID().toString();
+//                String fileNameGallery = uuid + "-" + galleryPhoto.get(i).getOriginalFilename();
+//                String resultNameGallery = upload + "" + fileNameGallery;
+//                galleryPhoto.get(i).transferTo(new File((resultNameGallery)));
+//                if (!preApartment.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+//                    String fileNameDelete = preApartment.getPhotoList().get(i).getFileName().substring(11, preApartment.getPhotoList().get(i).getFileName().length());
+//                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                    fileDelete.delete();
+//                }
+//                preApartment.getPhotoList().get(i).setFileName("../uploads/" + fileNameGallery);
+//                photosService.updateEntity(preApartment.getPhotoList().get(i),preApartment.getPhotoList().get(i).getIdPhotos() );
+//            }
+//        }
+//        apartmentServiceImpl.updateEntity(apartment,id);
+//        if (preApartment.getFrame()!=null){
+//            return "redirect:/edit_frame/"+preApartment.getFrame().getIdFrame();
+//        }
+//        else {
+//            return "redirect:/houses";
+//        }
+//
+//    }
+@PostMapping("/apartment_edit/{id}")
+public String apartmentUpdate(@PathVariable int id,
+                              @ModelAttribute ApartmentDTO apartmentDTO,
+                              Model model) throws IOException {
 
-        Apartment apartment = Apartment.builder().number(number).price(price).foundingDocument(foundingDocument).state(state).type(type).balconyType(balconyType).calculation(calculation).countRoom(countRoom).layout(layout).heatingType(heatingType).communicationType(communicationType).commission(commission).totalArea(totalArea).kitchenArea(kitchenArea).build();
-        if(description.length()>0){
-            apartment.setDescription(description);
-        }
-        if(user>0){
-            apartment.setUser(userService.findById(user));
-        }
-        if(lcd>0){
-            apartment.setLcd(lcdService.findById(lcd));
-        }
-        Apartment preApartment = apartmentServiceImpl.findById(id);
-        if (!file.isEmpty()) {
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
-            }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + file.getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            file.transferTo(new File((resultNameGallery)));
-            if (!preApartment.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
-                String fileNameDelete = preApartment.getMainPhoto().substring(11, preApartment.getMainPhoto().length());
-                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                fileDelete.delete();
-            }
-            apartment.setMainPhoto("../uploads/" + fileNameGallery);
-        }
-        for(int i = 0; i<preApartment.getPhotoList().size(); i++){
-            if (!galleryPhoto.get(i).isEmpty()) {
-                File uploadDirGallery = new File(upload);
-                if (!uploadDirGallery.exists()) {
-                    uploadDirGallery.mkdir();
-                }
-                String uuid = UUID.randomUUID().toString();
-                String fileNameGallery = uuid + "-" + galleryPhoto.get(i).getOriginalFilename();
-                String resultNameGallery = upload + "" + fileNameGallery;
-                galleryPhoto.get(i).transferTo(new File((resultNameGallery)));
-                if (!preApartment.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
-                    String fileNameDelete = preApartment.getPhotoList().get(i).getFileName().substring(11, preApartment.getPhotoList().get(i).getFileName().length());
-                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                    fileDelete.delete();
-                }
-                preApartment.getPhotoList().get(i).setFileName("../uploads/" + fileNameGallery);
-                photosService.updateEntity(preApartment.getPhotoList().get(i),preApartment.getPhotoList().get(i).getIdPhotos() );
-            }
-        }
-        apartmentServiceImpl.updateEntity(apartment,id);
-        if (preApartment.getFrame()!=null){
-            return "redirect:/edit_frame/"+preApartment.getFrame().getIdFrame();
-        }
-        else {
-            return "redirect:/houses";
-        }
+    return "redirect:/houses";
 
-    }
+}
 
     @GetMapping("/add_apartment")
     public String addPage(Model model){

@@ -15,7 +15,7 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/apartment_update/{id}(id=${apartment.getIdApartment()})}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}" th:object="${apartment}">
     <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()==null}">
       <h4 class="mb-3">Квартира не от застройщика</h4>
     </div>
@@ -59,7 +59,7 @@
 
                 <div class="form-floating">
                   <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="lcd">
-                    <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}"></option>
+                    <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}" th:selected="${apartment.getLcd() == lcd}"></option>
                   </select>
                   <label for="floatingSelect" class="form-label">ЖК</label>
                 </div>
@@ -68,7 +68,7 @@
 
                 <div class="form-floating">
                   <select class="form-select"  aria-label="Floating label select example" name="user">
-                    <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}"></option>
+                    <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}" th:selected="${apartment.getUser() == user}"></option>
                   </select>
                   <label for="floatingSelect" class="form-label">Владелец</label>
                 </div>

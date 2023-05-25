@@ -1,6 +1,8 @@
 package com.example.Swipe.Admin.controller;
 
 
+import com.example.Swipe.Admin.dto.ClientDTO;
+import com.example.Swipe.Admin.dto.UserAddInfoDTO;
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.entity.UserAddInfo;
 import com.example.Swipe.Admin.enums.Role;
@@ -9,17 +11,15 @@ import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.mapper.ClientMapper;
 import com.example.Swipe.Admin.service.impl.UserAddInfoServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Email;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping("/add_user")
     public String addUser(@RequestParam(name = "type") TypeUser type, Model model){
         model.addAttribute("type", type);
-//        model.addAttribute("userDTO", UserDTO.builder().build());
+        model.addAttribute("client", ClientDTO.builder().userAddInfoDTO(UserAddInfoDTO.builder().typeNotification(TypeNotification.ME).build()).build());
         if(type.equals(TypeUser.CLIENT)) {
             return "admin/user_add";
         }
@@ -109,51 +109,11 @@ public class UserController {
 
 
 
-    @PostMapping("/user_add")
-    public String userAdd(@RequestParam(name = "type")TypeUser type, @RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname,
-                          @RequestParam String mail, @RequestParam String number, @RequestParam(required = false) LocalDate dateSub, @RequestParam(required = false) TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
-        System.out.println(callSms);
-        User user = User.builder().name(name).surname(surname).mail(mail).number(number).role(Role.USER).blackList(false).typeUser(type).build();
-
-
-//        switch (type) {
-//            case "client" -> user.setTypeUser(TypeUser.CLIENT);
-//            case "contractor" -> user.setTypeUser(TypeUser.CONTRACTOR);
-//            case "notary" -> user.setTypeUser(TypeUser.NOTARY);
-//        }
-        if (!file.isEmpty()) {
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
-            }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + file.getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            file.transferTo(new File((resultNameGallery)));
-            user.setFilename("../uploads/" + fileNameGallery);
-        }
-        else {
-            user.setFilename("../admin/dist/img/default.jpg");
-        }
-        if(dateSub!=null&&typeNotification!=null) {
-            UserAddInfo userAddInfo = UserAddInfo.builder().callSms(callSms).dateSub(dateSub).typeNotification(typeNotification).build();
-            user.setUserAddInfo(userAddInfo);
-            userAddInfoService.saveEntity(userAddInfo);
-        }
-
-        userServiceImpl.saveEntity(user);
-
-
-        return "redirect:/users";
-    }
-
-
-//@RequestParam(name = "type")TypeUser type, @RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam String number,@RequestParam(name = "file", required = false) MultipartFile file
 //    @PostMapping("/user_add")
-//    public String userAdd(@Valid @ModelAttribute UserDTO userDTO , Model model) throws IOException {
-////        System.out.println(callSms);
-//
-////        User user = User.builder().name(name).surname(surname).mail(mail).number(number).role(Role.USER).blackList(false).typeUser(type).build();
+//    public String userAdd(@RequestParam(name = "type")TypeUser type, @RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname,
+//                          @RequestParam String mail, @RequestParam String number, @RequestParam(required = false) LocalDate dateSub, @RequestParam(required = false) TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
+//        System.out.println(callSms);
+//        User user = User.builder().name(name).surname(surname).mail(mail).number(number).role(Role.USER).blackList(false).typeUser(type).build();
 //
 //
 ////        switch (type) {
@@ -161,65 +121,105 @@ public class UserController {
 ////            case "contractor" -> user.setTypeUser(TypeUser.CONTRACTOR);
 ////            case "notary" -> user.setTypeUser(TypeUser.NOTARY);
 ////        }
-////        if (!file.isEmpty()) {
-////            File uploadDirGallery = new File(upload);
-////            if (!uploadDirGallery.exists()) {
-////                uploadDirGallery.mkdir();
-////            }
-////            String uuid = UUID.randomUUID().toString();
-////            String fileNameGallery = uuid + "-" + file.getOriginalFilename();
-////            String resultNameGallery = upload + "" + fileNameGallery;
-////            file.transferTo(new File((resultNameGallery)));
-////            userDTO.setFilename("../uploads/" + fileNameGallery);
-////        }
-////        else {
-////            userDTO.setFilename("../admin/dist/img/default.jpg");
-////        }
-////        if(dateSub!=null&&typeNotification!=null) {
-////            UserAddInfo userAddInfo = UserAddInfo.builder().callSms(callSms).dateSub(dateSub).typeNotification(typeNotification).build();
-////            userDTO.setUserAddInfo(userAddInfo);
-////            userAddInfoService.saveEntity(userAddInfo);
-////        }
-//        User user = userMapper.toEntity(userDTO);
+//        if (!file.isEmpty()) {
+//            File uploadDirGallery = new File(upload);
+//            if (!uploadDirGallery.exists()) {
+//                uploadDirGallery.mkdir();
+//            }
+//            String uuid = UUID.randomUUID().toString();
+//            String fileNameGallery = uuid + "-" + file.getOriginalFilename();
+//            String resultNameGallery = upload + "" + fileNameGallery;
+//            file.transferTo(new File((resultNameGallery)));
+//            user.setFilename("../uploads/" + fileNameGallery);
+//        }
+//        else {
+//            user.setFilename("../admin/dist/img/default.jpg");
+//        }
+//        if(dateSub!=null&&typeNotification!=null) {
+//            UserAddInfo userAddInfo = UserAddInfo.builder().callSms(callSms).dateSub(dateSub).typeNotification(typeNotification).build();
+//            user.setUserAddInfo(userAddInfo);
+//            userAddInfoService.saveEntity(userAddInfo);
+//        }
+//
 //        userServiceImpl.saveEntity(user);
 //
 //
 //        return "redirect:/users";
 //    }
+    @PostMapping("/add_user")
+    public String userAdd(@Valid @ModelAttribute(name = "client") ClientDTO clientDTO, BindingResult bindingResult, Model model) throws IOException {
+
+        System.out.println(clientDTO);
+
+        if (bindingResult.hasErrors()){
+            System.out.println(bindingResult.getAllErrors());
+            model.addAttribute("type", clientDTO.getType());
+            model.addAttribute("client", clientDTO);
+            if(clientDTO.getType().equals(TypeUser.CLIENT)) {
+                return "admin/user_add";
+            }
+            else if(clientDTO.getType().equals(TypeUser.CONTRACTOR)){
+                return "admin/contractor_add";
+            }
+            else {
+                return "admin/notary_add";
+            }
+        }
+        userServiceImpl.saveEntityDTO(clientDTO);
+
+
+        return "redirect:/users";
+    }
+
     @GetMapping("/user_edit/{id}")
     public String userEdit(@PathVariable int id, Model model){
-        model.addAttribute("user",userServiceImpl.findById(id));
+        model.addAttribute("user",userServiceImpl.findByIdDTO(id));
         model.addAttribute("type",typeNotification);
         return "admin/user_edit";
     }
-    @PostMapping("/user_update/{id}")
-    public String userUpdate(@PathVariable int id, @RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam String number, @RequestParam(required = false) LocalDate dateSub, @RequestParam(required = false) TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
-        System.out.println(callSms);
-        User user = User.builder().name(name).surname(surname).mail(mail).number(number).build();
-        User preUser = userServiceImpl.findById(id);
-
-        if (!file.isEmpty()) {
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
-            }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + file.getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            file.transferTo(new File((resultNameGallery)));
-            if (!preUser.getFilename().equals("../admin/dist/img/default.jpg")) {
-                String fileNameDelete = preUser.getFilename().substring(11, preUser.getFilename().length());
-                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                fileDelete.delete();
-            }
-            user.setFilename("../uploads/" + fileNameGallery);
+//    @PostMapping("/user_edit/{id}")
+//    public String userUpdate(@PathVariable int id, @RequestParam(required = false,name = "callSms") boolean callSms, @RequestParam String name, @RequestParam String surname, @RequestParam String mail, @RequestParam String number, @RequestParam(required = false) LocalDate dateSub, @RequestParam(required = false) TypeNotification typeNotification, @RequestParam(name = "file") MultipartFile file, Model model) throws IOException {
+//        System.out.println(callSms);
+//        User user = User.builder().name(name).surname(surname).mail(mail).number(number).build();
+//        User preUser = userServiceImpl.findById(id);
+//
+//        if (!file.isEmpty()) {
+//            File uploadDirGallery = new File(upload);
+//            if (!uploadDirGallery.exists()) {
+//                uploadDirGallery.mkdir();
+//            }
+//            String uuid = UUID.randomUUID().toString();
+//            String fileNameGallery = uuid + "-" + file.getOriginalFilename();
+//            String resultNameGallery = upload + "" + fileNameGallery;
+//            file.transferTo(new File((resultNameGallery)));
+//            if (!preUser.getFilename().equals("../admin/dist/img/default.jpg")) {
+//                String fileNameDelete = preUser.getFilename().substring(11, preUser.getFilename().length());
+//                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                fileDelete.delete();
+//            }
+//            user.setFilename("../uploads/" + fileNameGallery);
+//        }
+//
+//        userServiceImpl.updateEntity(user,id);
+//        if(preUser.getUserAddInfo()!=null) {
+//            UserAddInfo userAddInfo = UserAddInfo.builder().typeNotification(typeNotification).dateSub(dateSub).callSms(callSms).build();
+//            userAddInfoService.updateEntity(userAddInfo,preUser.getUserAddInfo().getIdUserAddInfo());
+//        }
+//        return "redirect:/users";
+//    }
+    @PostMapping("/user_edit/{id}")
+    public String userUpdate(@PathVariable int id, @Valid @ModelAttribute(name = "user") ClientDTO clientDTO,BindingResult result, Model model) {
+        System.out.println(clientDTO);
+        if (result.hasErrors()){
+            clientDTO.setAgent(userServiceImpl.findByIdDTO(id).getAgent());
+            clientDTO.setPhoto(userServiceImpl.findByIdDTO(id).getPhoto());
+            model.addAttribute("user",clientDTO);
+            model.addAttribute("type",typeNotification);
+            return "admin/user_edit";
         }
+        clientDTO.setIdUser(id);
+        userServiceImpl.updateDTO(clientDTO,id);
 
-        userServiceImpl.updateEntity(user,id);
-        if(preUser.getUserAddInfo()!=null) {
-            UserAddInfo userAddInfo = UserAddInfo.builder().typeNotification(typeNotification).dateSub(dateSub).callSms(callSms).build();
-            userAddInfoService.updateEntity(userAddInfo,preUser.getUserAddInfo().getIdUserAddInfo());
-        }
         return "redirect:/users";
     }
 

@@ -15,29 +15,38 @@
   <div class="content-wrapper" style="padding-left: 50px">
     <div class="col-md-7 col-lg-8">
       <h4 class="mb-3">Агент</h4>
-      <form class="needs-validation" method="post" th:action="@{/agent_update/{id}(id=${agent.getIdAgent()})}">
-        <input type="hidden" name="idUser" th:value="${agent.getUsers().get(0).getIdUser()}" />
+      <form class="needs-validation" method="post" th:action="@{/agent_edit/{id}(id=${agent.getIdAgent()})}" th:object="${agent}">
+        <input type="hidden" name="idUser" th:value="${idUser}" />
+        <input type="hidden" name="idAgent" th:value="${agent.getIdAgent()}" />
+
+
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Имя</label>
             <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..." th:value="${agent.getName()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
+            <div th:if="${#fields.hasErrors('name')}">
+              <div class="text-danger">
+                <p th:errors="*{name}"></p>
+              </div>
             </div>
           </div>
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Фамилия</label>
             <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..." th:value="${agent.getSurname()}" required="">
-            <div class="invalid-feedback">
-              Введите фамилию...
+            <div th:if="${#fields.hasErrors('surname')}">
+              <div class="text-danger">
+                <p th:errors="*{surname}"></p>
+              </div>
             </div>
           </div>
           <div class="col-sm-6">
             <label for="mail" class="form-label">Почта</label>
             <input type="text" class="form-control" name = "mail" id="mail" placeholder="you@example.com" th:value="${agent.getMail()}" required="">
-            <div class="invalid-feedback">
-              Введите почту...
+            <div th:if="${#fields.hasErrors('mail')}">
+              <div class="text-danger">
+                <p th:errors="*{mail}"></p>
+              </div>
             </div>
           </div>
           <div class="col-sm-6">
@@ -45,11 +54,14 @@
             <div class="input-group has-validation">
               <span class="input-group-text">+380</span>
               <input type="text" class="form-control" name ="number" id="username" placeholder="Введите номер..." th:value="${agent.getNumber()}" required="">
-              <div class="invalid-feedback">
-                Введите номер...
+              <div th:if="${#fields.hasErrors('number')}">
+                <div class="text-danger">
+                  <p th:errors="*{number}"></p>
+                </div>
               </div>
             </div>
           </div>
+          <input type="hidden" name="typeAgent" th:value="${agent.getType()}" />
         <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
 
         </div>

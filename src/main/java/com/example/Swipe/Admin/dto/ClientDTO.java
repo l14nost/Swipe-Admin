@@ -1,41 +1,48 @@
 package com.example.Swipe.Admin.dto;
 
 import com.example.Swipe.Admin.enums.TypeUser;
+import com.example.Swipe.Admin.validation.FileExtension;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClientDTO {
 
-//    int idUser;
+    int idUser;
 
-    @NotNull(message = "Name must be not null")
-    @NotEmpty(message = "Name must be not null")
+    @NotBlank
+    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Имя должно содержать только буквы и начинаться с заглавной буквы")
     String name;
 
-    @NotNull(message = "Surname must be not null")
-    @NotEmpty(message = "Surname must be not null")
+    @NotBlank
+    @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
     String surname;
 
-//    @NotNull(message = "Mail must be not null")
-    @NotEmpty(message = "Mail must be not null")
-    @Email(regexp = "^(?=.{1,64}@)[\\p{L}0-9_-]+(\\.[\\p{L}0-9_-]+)*@"
-            + "[^-][\\p{L}0-9-]+(\\.[\\p{L}0-9-]+)*(\\.[\\p{L}]{2,})$")
+    @NotBlank
+    @Email(message = "Не рправильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     String mail;
 
-    boolean blackList;
-
-    String filename;
+//    boolean blackList;
+    @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")
+    MultipartFile filename;
+    @NotBlank
+    @Pattern(regexp = "^[0-9]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
+    @Size(max = 9, min = 9)
     String number;
+    String photo;
 
-//    TypeUser typeUser;
+    TypeUser type;
 
     UserAddInfoDTO userAddInfoDTO;
-    AgentDTO agentDTO;
+    AgentDTO agent;
 
 }

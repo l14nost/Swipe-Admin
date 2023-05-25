@@ -13,15 +13,16 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/user_update/{id}(id=${id})}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/user_edit/{id}(id=${id})}" th:object="${user}">
+      <input type="hidden" name="type" th:value="${user.getType()}">
     <div style="display: flex; justify-content: space-between">
       <h4 class="mb-3">Пользователь</h4>
-      <div class="form-check form-switch" style="display: flex; margin-right: 50px" th:if="${user.getUserAddInfo()!=null}">
+      <div class="form-check form-switch" style="display: flex; margin-right: 50px" th:if="${user.getUserAddInfoDTO()!=null}">
         <div>
           <h6 for="flexSwitchCheckDefault" style="margin-right: 5px">Уведомление</h6>
         </div>
         <div>
-          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="callSms" th:checked="${user.getUserAddInfo().isCallSms()}" style="margin-left: 5px" >
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="callSms" th:checked="${user.getUserAddInfoDTO().isCallSms()}" style="margin-left: 5px" >
         </div>
       </div>
     </div>
@@ -33,23 +34,29 @@
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Имя</label>
             <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..." th:value="${user.getName()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
+            <div th:if="${#fields.hasErrors('name')}">
+            <div class="text-danger">
+              <p th:errors="*{name}"></p>
             </div>
+          </div>
           </div>
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Фамилия</label>
             <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..." th:value="${user.getSurname()}" required="">
-            <div class="invalid-feedback">
-              Введите фамилию...
+            <div th:if="${#fields.hasErrors('surname')}">
+              <div class="text-danger">
+                <p th:errors="*{surname}"></p>
+              </div>
             </div>
           </div>
           <div class="col-sm-6">
             <label for="mail" class="form-label">Почта</label>
             <input type="email" class="form-control" name = "mail" id="mail" placeholder="you@example.com" th:value="${user.getMail()}" required="">
-            <div class="invalid-feedback">
-              Введите почту...
+            <div th:if="${#fields.hasErrors('mail')}">
+              <div class="text-danger">
+                <p th:errors="*{mail}"></p>
+              </div>
             </div>
           </div>
           <div class="col-sm-6">
@@ -57,16 +64,18 @@
             <div class="input-group has-validation">
               <span class="input-group-text">+380</span>
               <input type="text" class="form-control" name ="number" id="username" placeholder="Введите номер..." th:value="${user.getNumber()}" required="">
-              <div class="invalid-feedback">
-                Введите номер...
+              <div th:if="${#fields.hasErrors('number')}">
+                <div class="text-danger">
+                  <p th:errors="*{number}"></p>
+                </div>
               </div>
             </div>
           </div>
-          <div th:if="${user.getUserAddInfo()!=null}" style="display: flex">
+          <div th:if="${user.getUserAddInfoDTO()!=null}" style="display: flex">
             <div class="col-sm-6">
               <label for="username" class="form-label">Подписка</label>
               <div class="input-group has-validation">
-                <input type="date" class="form-control" name ="dateSub" id="sub" placeholder="Введите номер..." th:value="${user.getUserAddInfo().getDateSub()}" required="">
+                <input type="date" class="form-control" name ="userAddInfoDTO.dateSub" id="sub" placeholder="Введите номер..." th:value="${user.getUserAddInfoDTO().getDateSub()}" required="">
                 <div class="invalid-feedback">
                   Введите номер...
                 </div>
@@ -75,11 +84,11 @@
             <div class="col-sm-6">
 
               <div class="form-floating">
-                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="typeNotification">
-                  <option value="ME" th:selected="${user.getUserAddInfo().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).ME)}">Мне</option>
-                  <option value="MEANDAGENT" th:selected="${user.getUserAddInfo().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}">Мне и агенту</option>
-                  <option value="AGENT" th:selected="${user.getUserAddInfo().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).AGENT)}">Агенту</option>
-                  <option value="OFF" th:selected="${user.getUserAddInfo().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).OFF)}">Отключить</option>
+                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="userAddInfoDTO.typeNotification">
+                  <option value="ME" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).ME)}">Мне</option>
+                  <option value="MEANDAGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}">Мне и агенту</option>
+                  <option value="AGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).AGENT)}">Агенту</option>
+                  <option value="OFF" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).OFF)}">Отключить</option>
                 </select>
                 <label for="floatingSelect" class="form-label">Тип уведомления</label>
               </div>
@@ -90,9 +99,14 @@
             <div class="form-group" style="display: flex">
 
               <!--          ${stock.getFileName}-->
-              <img th:src="${user.getFilename()}" id="img" style="width: 75px; height: 75px" alt="null">
+              <img th:src="${user.getPhoto()}" id="img" style="width: 75px; height: 75px" alt="null">
 
-            <input aria-label="file example" type="file" name="file" id="inputImg" class="form-control" th:value="${user.getFilename()}" style="margin-left: 30px; margin-top: 30px">
+            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" th:value="${user.getPhoto()}" style="margin-left: 30px; margin-top: 30px">
+              <div th:if="${#fields.hasErrors('filename')}">
+                <div class="text-danger">
+                  <p th:errors="*{filename}"></p>
+                </div>
+              </div>
           </div>
             <script>
               inputImg.onchange = evt => {
@@ -103,9 +117,9 @@
               }
             </script>
           </div>
-          <div th:if="!${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).NOTARY)}">
-            <div th:if="${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).CLIENT)}"> <h6>Агент</h6> </div>
-            <div th:if="${user.getTypeUser().equals(T(com.example.Swipe.Admin.enums.TypeUser).CONTRACTOR)}"> <h6>Отдел продаж</h6> </div>
+          <div th:if="!${user.getType().equals(T(com.example.Swipe.Admin.enums.TypeUser).NOTARY)}">
+            <div th:if="${user.getType().equals(T(com.example.Swipe.Admin.enums.TypeUser).CLIENT)}"> <h6>Агент</h6> </div>
+            <div th:if="${user.getType().equals(T(com.example.Swipe.Admin.enums.TypeUser).CONTRACTOR)}"> <h6>Отдел продаж</h6> </div>
             <div id="agentDiv">
               <table class="table table-striped" style="margin: 20px">
                 <thead>

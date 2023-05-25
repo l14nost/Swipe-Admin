@@ -87,11 +87,25 @@
             <!--        </div>-->
           </div>
             <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+                <ul class="pagination" id="previousApartment">
+                    <li class="page-item" th:hidden="${apartments.getNumber()==0}">
+                        <input type="hidden" id="pageNumberApartmentPr" th:value="${apartments.getNumber()-1}">
+                        <a class="page-link" href="#" aria-label="Previous" th:value="${apartments.getTotalPages()}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                </ul>
                 <ul class="pagination" id="apartmentPagination">
                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
                     <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-
-
+                </ul>
+                <ul class="pagination" id="nextApartment" >
+                    <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}">
+                        <input type="hidden" id="pageNumberApartmentNext" th:value="${apartments.getNumber()+1}">
+                        <a class="page-link" href="#" aria-label="Next" th:value="${apartments.getTotalPages()}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
                 </ul>
                 <ul class="pagination" style="margin-left: 5px">
                     <li class="page-item">
@@ -189,6 +203,10 @@
 
               var pagination = $(data).find('#apartmentPagination').html();
               $('#apartmentPagination').html(pagination);
+              var next = $(data).find('#nextApartment').html();
+              $('#nextApartment').html(next);
+              var previous = $(data).find('#previousApartment').html();
+              $('#previousApartment').html(previous);
               // $('#blackListTable').html(data);
               localStorage.setItem('searchApartment', searchVal);
 
@@ -223,6 +241,10 @@
               $('#apartmentPagination').html(pagination);
               var search = $(data).find('#apartmentSearch').html();
               $('#apartmentSearch').html(search);
+              var next = $(data).find('#nextApartment').html();
+              $('#nextApartment').html(next);
+              var previous = $(data).find('#previousApartment').html();
+              $('#previousApartment').html(previous);
               // $('#blackListTable').html(data);
               localStorage.setItem('searchApartment', searchVal);
 
@@ -242,7 +264,79 @@
       if (selectedSize) {
           $('#sizeApartment').val(selectedSize);
       }
+      $('#previousApartment').on('click','li',function(e) {
+          var searchBlack = localStorage.getItem('searchApartment');
+          e.preventDefault();
 
+          var pageNumber = $('#pageNumberApartmentPr').val();
+
+          var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+
+          // pageNumber -= 1;
+          $.ajax({
+              url:url+'?apartmentPage='+pageNumber,
+              type: 'GET',
+              data:{
+                  apartmentSize: selectedSize,
+                  searchApartment: searchBlack
+              },
+              success: function(data) {
+                  var tableHtml = $(data).find('#apartmentTable').html();
+                  $('#apartmentTable').html(tableHtml);
+                  // var pagination = $(data).find('#paginationList').html();
+                  // $('#paginationList').html(pagination);
+                  var next = $(data).find('#nextApartment').html();
+                  $('#nextApartment').html(next);
+                  var previous = $(data).find('#previousApartment').html();
+                  $('#previousApartment').html(previous);
+
+                  $('#apartmentPagination li').removeClass('active');
+                  $('#apartmentPagination li').eq(pageNumber).addClass('active');
+                  localStorage.setItem('pageApartment', pageNumber);
+
+
+              },
+              error: function(xhr, status, error) {
+                  console.log(error);
+              }
+          });
+      });
+
+      $('#nextApartment').on('click','li',function(e) {
+          var searchBlack = localStorage.getItem('searchApartment');
+          e.preventDefault();
+          var pageNumber = $('#pageNumberApartmentNext').val();
+          var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+
+
+          $.ajax({
+              url:url+'?apartmentPage='+pageNumber,
+              type: 'GET',
+              data:{
+                  apartmentSize: selectedSize,
+                  searchApartment: searchBlack
+              },
+              success: function(data) {
+                  var tableHtml = $(data).find('#apartmentTable').html();
+                  $('#apartmentTable').html(tableHtml);
+                  // var pagination = $(data).find('#paginationList').html();
+                  // $('#paginationList').html(pagination);
+                  var next = $(data).find('#nextApartment').html();
+                  $('#nextApartment').html(next);
+                  var previous = $(data).find('#previousApartment').html();
+                  $('#previousApartment').html(previous);
+
+                  $('#apartmentPagination li').removeClass('active');
+                  $('#apartmentPagination li').eq(pageNumber).addClass('active');
+                  localStorage.setItem('pageApartment', pageNumber);
+
+
+              },
+              error: function(xhr, status, error) {
+                  console.log(error);
+              }
+          });
+      });
       $('#sizeApartment').on('change', function() {
           var search = localStorage.getItem('searchApartment');
           selectedSize = $(this).val();
@@ -267,6 +361,10 @@
                   $('#apartmentTable').html(size);
                   var pagination = $(data).find('#apartmentPagination').html();
                   $('#apartmentPagination').html(pagination);
+                  var next = $(data).find('#nextApartment').html();
+                  $('#nextApartment').html(next);
+                  var previous = $(data).find('#previousApartment').html();
+                  $('#previousApartment').html(previous);
                   localStorage.setItem('selectedApartmentSize', selectedSize);
               })
               .fail(function() {
@@ -299,6 +397,10 @@
               .done(function(data) {
                   var tableHtml = $(data).find('#apartmentTable').html();
                   $('#apartmentTable').html(tableHtml);
+                  var next = $(data).find('#nextApartment').html();
+                  $('#nextApartment').html(next);
+                  var previous = $(data).find('#previousApartment').html();
+                  $('#previousApartment').html(previous);
                   localStorage.setItem('pageApartment', pageNumber);
               })
               .fail( function(xhr, status, error) {

@@ -68,7 +68,7 @@
             <th scope="row"><p th:text="${user.getIdUser()}"></p></th>
             <td><p th:text="${user.getSurname()+' '+user.getName()}"></p></td>
             <td><p th:text="${user.getMail()}"></p></td>
-            <td th:text="${user.getUserAddInfo().isCallSms()}"></td>
+            <td th:text="${user.getUserAddInfoDTO().isCallSms()}"></td>
             <td>
               <div style="display: flex">
               <form th:action="@{/user_edit/{id}(id=${user.getIdUser()})}"  method="get" >
@@ -101,21 +101,26 @@
 <!--      </div>-->
     </div>
       <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="previousClient">
+          <li class="page-item" th:hidden="${pageUser.getNumber()==0}">
+            <input type="hidden" id="pageNumberClientPr" th:value="${pageUser.getNumber()-1}">
+            <a class="page-link" href="#" aria-label="Previous" th:value="${pageUser.getTotalPages()}">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        </ul>
         <ul class="pagination" id="userPagination">
-<!--          <li class="page-item">-->
-<!--            <a class="page-link bg-gray-light" th:if="${pageUser.getNumber()>0}" th:href="@{'?page='+${pageUser.getNumber()-1}+'&sizePage='+${pageUser.getSize()}}"  aria-label="Previous">-->
-<!--              <span aria-hidden="true">&laquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
+
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
           <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageUser.getTotalPages()-1)}" th:if="${pageUser.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(0, pageUser.getTotalPages()-1)}"><a class="page-link bg-gray-light" id="tagClient" href="#" th:data-page="${p}+1" th:text="${p+1}"></a></li>-->
-          <!--          <li class="page-item active" th:if ="${pageUser.getNumber()==p}" th:each="p: ${#numbers.sequence(0, pageUser.getTotalPages()-1)}"><a class="page-link bg-gray-light" th:href="@{'?page='+${p}}" th:text="${p+1}"></a></li>-->
-<!--          <li class="page-item">-->
-<!--            <a class="page-link bg-gray-light" th:if="${pageUser.getNumber()<pageUser.getTotalPages()-1}" th:href="@{'?page='+${pageUser.getNumber()+1}+'&sizePage='+${pageUser.getSize()}}" aria-label="Next">-->
-<!--              <span aria-hidden="true">&raquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
+        </ul>
+        <ul class="pagination" id="nextClient" >
+          <li class="page-item" th:hidden="${pageUser.getNumber()==pageUser.getTotalPages()-1}">
+            <input type="hidden" id="pageNumberClientNext" th:value="${pageUser.getNumber()+1}">
+            <a class="page-link" href="#" aria-label="Next" th:value="${pageUser.getTotalPages()}">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
         </ul>
         <ul class="pagination" style="margin-left: 5px">
           <li class="page-item">
@@ -201,20 +206,27 @@
         </table>
       </div>
       <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="previousContractor">
+          <li class="page-item" th:hidden="${pageContractor.getNumber()==0}">
+            <input type="hidden" id="pageNumberContractorPr" th:value="${pageContractor.getNumber()-1}">
+            <a class="page-link" href="#" aria-label="Previous" th:value="${pageContractor.getTotalPages()}">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        </ul>
         <ul class="pagination" id="contractorPagination">
-<!--          <li class="page-item">-->
-<!--            <a class="page-link bg-gray-light" th:if="${pageContractor.getNumber()>0}" th:href="@{'/users?pageContractor='+${pageContractor.getNumber()-1}+'&sizePageContractor='+${pageContractor.getSize()}}"  aria-label="Previous">-->
-<!--              <span aria-hidden="true">&laquo;</span>-->
-<!--            </a>-->
 
-<!--          </li>-->
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
           <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageContractor.getTotalPages()-1)}" th:if="${pageContractor.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-<!--          <li class="page-item">-->
-<!--            <a class="page-link bg-gray-light" href="#" aria-label="Next">-->
-<!--              <span aria-hidden="true">&raquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
+
+        </ul>
+        <ul class="pagination" id="nextContractor" >
+          <li class="page-item" th:hidden="${pageContractor.getNumber()==pageContractor.getTotalPages()-1}">
+            <input type="hidden" id="pageNumberContractorNext" th:value="${pageContractor.getNumber()+1}">
+            <a class="page-link" href="#" aria-label="Next" th:value="${pageContractor.getTotalPages()}">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
         </ul>
         <ul class="pagination" style="margin-left: 5px">
           <li class="page-item">
@@ -288,24 +300,29 @@
           </tr>
           </tbody>
         </table>
-<!--        <div style="display: flex; justify-content: center">-->
-<!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
-<!--        </div>-->
       </div>
       <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="previousNotary">
+          <li class="page-item" th:hidden="${pageNotary.getNumber()==0}">
+            <input type="hidden" id="pageNumberNotaryPr" th:value="${pageNotary.getNumber()-1}">
+            <a class="page-link" href="#" aria-label="Previous" th:value="${pageNotary.getTotalPages()}">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        </ul>
         <ul class="pagination" id="notaryPagination">
-<!--          <li class="page-item">-->
-<!--            <a class="page-link bg-gray-light" href="#" aria-label="Previous">-->
-<!--              <span aria-hidden="true">&laquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
+
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
           <li class="page-item" th:each="p: ${#numbers.sequence(1, pageNotary.getTotalPages()-1)}" th:if="${pageNotary.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-<!--          <li class="page-item">-->
-<!--            <a class="page-link bg-gray-light" href="#" aria-label="Next">-->
-<!--              <span aria-hidden="true">&raquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
+
+        </ul>
+        <ul class="pagination" id="nextNotary" >
+          <li class="page-item" th:hidden="${pageNotary.getNumber()==pageNotary.getTotalPages()-1}">
+            <input type="hidden" id="pageNumberNotaryNext" th:value="${pageNotary.getNumber()+1}">
+            <a class="page-link" href="#" aria-label="Next" th:value="${pageNotary.getTotalPages()}">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
         </ul>
         <ul class="pagination" style="margin-left: 5px">
           <li class="page-item">
@@ -346,6 +363,10 @@
 
         var pagination = $(data).find('#userPagination').html();
         $('#userPagination').html(pagination);
+        var next = $(data).find('#nextClient').html();
+        $('#nextClient').html(next);
+        var previous = $(data).find('#previousClient').html();
+        $('#previousClient').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchClient', searchVal);
 
@@ -380,6 +401,10 @@
         $('#userPagination').html(pagination);
         var search = $(data).find('#clientSearch').html();
         $('#clientSearch').html(search);
+        var next = $(data).find('#nextClient').html();
+        $('#nextClient').html(next);
+        var previous = $(data).find('#previousClient').html();
+        $('#previousClient').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchClient', searchVal);
 
@@ -398,6 +423,79 @@
     if (selectedSize) {
       $('#sizeUserPage').val(selectedSize);
     }
+    $('#previousClient').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchClient');
+      e.preventDefault();
+
+      var pageNumber = $('#pageNumberClientPr').val();
+
+      var url = '/users';
+
+      // pageNumber -= 1;
+      $.ajax({
+        url:url+'?page='+pageNumber,
+        type: 'GET',
+        data:{
+          sizeUserPage: selectedSize,
+          searchClient: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#userTable').html();
+          $('#userTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextClient').html();
+          $('#nextClient').html(next);
+          var previous = $(data).find('#previousClient').html();
+          $('#previousClient').html(previous);
+
+          $('#userPagination li').removeClass('active');
+          $('#userPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageUser', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
+
+    $('#nextClient').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchClient');
+      e.preventDefault();
+      var pageNumber = $('#pageNumberClientNext').val();
+      var url = '/users';
+
+
+      $.ajax({
+        url:url+'?page='+pageNumber,
+        type: 'GET',
+        data:{
+          sizeUserPage: selectedSize,
+          searchClient: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#userTable').html();
+          $('#userTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextClient').html();
+          $('#nextClient').html(next);
+          var previous = $(data).find('#previousClient').html();
+          $('#previousClient').html(previous);
+
+          $('#userPagination li').removeClass('active');
+          $('#userPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageUser', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
 
     $('#sizeUserPage').on('change', function() {
       var search = localStorage.getItem('searchClient');
@@ -423,6 +521,10 @@
                 $('#userTable').html(size);
                 var pagination = $(data).find('#userPagination').html();
                 $('#userPagination').html(pagination);
+                var next = $(data).find('#nextClient').html();
+                $('#nextClient').html(next);
+                var previous = $(data).find('#previousClient').html();
+                $('#previousClient').html(previous);
                 localStorage.setItem('selectedUserSize', selectedSize);
               })
               .fail(function() {
@@ -455,6 +557,10 @@
       .done(function(data) {
         var tableHtml = $(data).find('#userTable').html();
         $('#userTable').html(tableHtml);
+        var next = $(data).find('#nextClient').html();
+        $('#nextClient').html(next);
+        var previous = $(data).find('#previousClient').html();
+        $('#previousClient').html(previous);
         localStorage.setItem('pageUser', pageNumber);
       })
         .fail( function(xhr, status, error) {
@@ -494,6 +600,10 @@
 
         var pagination = $(data).find('#contractorPagination').html();
         $('#contractorPagination').html(pagination);
+        var next = $(data).find('#nextContractor').html();
+        $('#nextContractor').html(next);
+        var previous = $(data).find('#previousContractor').html();
+        $('#previousContractor').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchContractor', searchVal);
 
@@ -528,6 +638,10 @@
         $('#contractorPagination').html(pagination);
         var search = $(data).find('#contractorSearch').html();
         $('#contractorSearch').html(search);
+        var next = $(data).find('#nextContractor').html();
+        $('#nextContractor').html(next);
+        var previous = $(data).find('#previousContractor').html();
+        $('#previousContractor').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchContractor', searchVal);
 
@@ -540,15 +654,87 @@
     });
   }
   $(document).ready(function() {
+    var selectedSize = localStorage.getItem('selectedContractorSize');
     // var selectedSize = localStorage.getItem('selectedContractorSize');
     var page = localStorage.getItem('pageContractor');
 
     // if (selectedSize) {
     //   $('#sizeContractorPage').val(selectedSize);
     // }
+    $('#previousContractor').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchContractor');
+      e.preventDefault();
 
+      var pageNumber = $('#pageNumberContractorPr').val();
+
+      var url = '/users';
+
+      // pageNumber -= 1;
+      $.ajax({
+        url:url+'?pageContractor='+pageNumber,
+        type: 'GET',
+        data:{
+          sizeContractorPage: selectedSize,
+          searchContractor: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#contractorTable').html();
+          $('#contractorTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextContractor').html();
+          $('#nextContractor').html(next);
+          var previous = $(data).find('#previousContractor').html();
+          $('#previousContractor').html(previous);
+
+          $('#contractorPagination li').removeClass('active');
+          $('#contractorPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageContractor', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
+
+    $('#nextContractor').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchContractor');
+      e.preventDefault();
+      var pageNumber = $('#pageNumberContractorNext').val();
+      var url = '/users';
+
+
+      $.ajax({
+        url:url+'?pageContractor='+pageNumber,
+        type: 'GET',
+        data:{
+          sizeContractorPage: selectedSize,
+          searchContractor: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#contractorTable').html();
+          $('#contractorTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextContractor').html();
+          $('#nextContractor').html(next);
+          var previous = $(data).find('#previousContractor').html();
+          $('#previousContractor').html(previous);
+
+          $('#contractorPagination li').removeClass('active');
+          $('#contractorPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageContractor', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
     $('#sizeContractorPage').on('change', function() {
-      var selectedSize = localStorage.getItem('selectedContractorSize');
       var search = localStorage.getItem('searchContractor');
       selectedSize = $(this).val();
       var url = '/users';
@@ -572,6 +758,10 @@
                 $('#contractorTable').html(size);
                 var pagination = $(data).find('#contractorPagination').html();
                 $('#contractorPagination').html(pagination);
+                var next = $(data).find('#nextContractor').html();
+                $('#nextContractor').html(next);
+                var previous = $(data).find('#previousContractor').html();
+                $('#previousContractor').html(previous);
                 localStorage.setItem('selectedContractorSize', selectedSize);
               })
               .fail(function() {
@@ -605,6 +795,10 @@
               .done(function(data) {
                 var tableHtml = $(data).find('#contractorTable').html();
                 $('#contractorTable').html(tableHtml);
+                var next = $(data).find('#nextContractor').html();
+                $('#nextContractor').html(next);
+                var previous = $(data).find('#previousContractor').html();
+                $('#previousContractor').html(previous);
                 localStorage.setItem('pageContractor', pageNumber);
               })
               .fail( function(xhr, status, error) {
@@ -647,6 +841,10 @@
 
         var pagination = $(data).find('#notaryPagination').html();
         $('#notaryPagination').html(pagination);
+        var next = $(data).find('#nextNotary').html();
+        $('#nextNotary').html(next);
+        var previous = $(data).find('#previousNotary').html();
+        $('#previousNotary').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchNotary', searchVal);
 
@@ -681,6 +879,10 @@
         $('#notaryPagination').html(pagination);
         var search = $(data).find('#notarySearch').html();
         $('#notarySearch').html(search);
+        var next = $(data).find('#nextNotary').html();
+        $('#nextNotary').html(next);
+        var previous = $(data).find('#previousNotary').html();
+        $('#previousNotary').html(previous);
         // $('#blackListTable').html(data);
         localStorage.setItem('searchNotary', searchVal);
 
@@ -699,7 +901,79 @@
     if (selectedSize) {
       $('#sizeNotaryPage').val(selectedSize);
     }
+    $('#previousNotary').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchNotary');
+      e.preventDefault();
 
+      var pageNumber = $('#pageNumberNotaryPr').val();
+
+      var url = '/users';
+
+      // pageNumber -= 1;
+      $.ajax({
+        url:url+'?pageNotary='+pageNumber,
+        type: 'GET',
+        data:{
+          sizeNotaryPage: selectedSize,
+          searchNotary: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#notaryTable').html();
+          $('#notaryTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextNotary').html();
+          $('#nextNotary').html(next);
+          var previous = $(data).find('#previousNotary').html();
+          $('#previousNotary').html(previous);
+
+          $('#notaryPagination li').removeClass('active');
+          $('#notaryPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageNotary', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
+
+    $('#nextNotary').on('click','li',function(e) {
+      var searchBlack = localStorage.getItem('searchNotary');
+      e.preventDefault();
+      var pageNumber = $('#pageNumberNotaryNext').val();
+      var url = '/users';
+
+
+      $.ajax({
+        url:url+'?pageNotary='+pageNumber,
+        type: 'GET',
+        data:{
+          sizeNotaryPage: selectedSize,
+          searchNotary: searchBlack
+        },
+        success: function(data) {
+          var tableHtml = $(data).find('#notaryTable').html();
+          $('#notaryTable').html(tableHtml);
+          // var pagination = $(data).find('#paginationList').html();
+          // $('#paginationList').html(pagination);
+          var next = $(data).find('#nextNotary').html();
+          $('#nextNotary').html(next);
+          var previous = $(data).find('#previousNotary').html();
+          $('#previousNotary').html(previous);
+
+          $('#notaryPagination li').removeClass('active');
+          $('#notaryPagination li').eq(pageNumber).addClass('active');
+          localStorage.setItem('pageNotary', pageNumber);
+
+
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
     $('#sizeNotaryPage').on('change', function() {
       var search = localStorage.getItem('searchNotary');
       selectedSize = $(this).val();
@@ -724,6 +998,10 @@
                 $('#notaryTable').html(size);
                 var pagination = $(data).find('#notaryPagination').html();
                 $('#notaryPagination').html(pagination);
+                var next = $(data).find('#nextNotary').html();
+                $('#nextNotary').html(next);
+                var previous = $(data).find('#previousNotary').html();
+                $('#previousNotary').html(previous);
                 localStorage.setItem('selectedNotarySize', selectedSize);
               })
               .fail(function() {
@@ -756,6 +1034,10 @@
               .done(function(data) {
                 var tableHtml = $(data).find('#notaryTable').html();
                 $('#notaryTable').html(tableHtml);
+                var next = $(data).find('#nextNotary').html();
+                $('#nextNotary').html(next);
+                var previous = $(data).find('#previousNotary').html();
+                $('#previousNotary').html(previous);
                 localStorage.setItem('pageNotary', pageNumber);
               })
               .fail( function(xhr, status, error) {

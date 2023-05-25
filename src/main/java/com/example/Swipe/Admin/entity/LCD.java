@@ -1,14 +1,12 @@
 package com.example.Swipe.Admin.entity;
 
 import com.example.Swipe.Admin.enums.*;
-import com.example.Swipe.Admin.enums.converter.AdvantageConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @Getter
