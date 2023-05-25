@@ -18,11 +18,10 @@ import java.util.Optional;
 public class AgentServiceImpl implements AgentService {
     private final UserServiceImpl userService;
     private final AgentRepo agentRepo;
-    private final AgentMapper agentMapper;
 
 
     public void saveDTO(AgentDTO agentDTO){
-        Agent agent = agentMapper.toEntity(agentDTO);
+        Agent agent = AgentMapper.toEntity(agentDTO);
         User user = userService.findById(agentDTO.getIdUser());
         agentRepo.save(agent);
         user.setAgent(agent);
@@ -83,7 +82,7 @@ public class AgentServiceImpl implements AgentService {
         }
     }
     public void updateEntityDTO(AgentDTO agentDTO, int id) {
-        Agent agent = agentMapper.toEntity(agentDTO);
+        Agent agent = AgentMapper.toEntity(agentDTO);
         Optional<Agent> agentOptional = agentRepo.findById(id);
         if(agentOptional.isPresent()){
             Agent agentUpdate = agentOptional.get();

@@ -10,11 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
-@Service
 @RequiredArgsConstructor
-public class ApartmentMapper implements Function<Apartment, ApartmentDTO> {
-    private final ClientMapper clientMapper;
-    private final PhotoMapper photoMapper;
+public class ApartmentMapper  {
     public Agent toEntity(AgentDTO agentDTO){
 
         Agent agent = Agent.builder()
@@ -31,15 +28,14 @@ public class ApartmentMapper implements Function<Apartment, ApartmentDTO> {
 
     }
 
-    @Override
-    public ApartmentDTO apply(Apartment apartment) {
+    public static ApartmentDTO apply(Apartment apartment) {
         return ApartmentDTO.builder()
                 .idApartment(apartment.getIdApartment())
                 .number(apartment.getNumber())
                 .description(apartment.getDescription())
                 .price(apartment.getPrice())
-                .user(clientMapper.apply(apartment.getUser()))
-                .photoList(apartment.getPhotoList().stream().map(photoMapper).toList())
+                .user(ClientMapper.apply(apartment.getUser()))
+                .photoList(apartment.getPhotoList().stream().map(PhotoMapper::apply).toList())
 
                 .build();
 

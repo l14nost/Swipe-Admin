@@ -33,7 +33,6 @@ public class UserController {
     private TypeNotification typeNotification;
     private final UserServiceImpl userServiceImpl;
     private final UserAddInfoServiceImpl userAddInfoService;
-    private final ClientMapper clientMapper;
 
 
 
@@ -225,18 +224,15 @@ public class UserController {
 
     @PostMapping("/delete_user/{id}")
     public String deleteUser(@PathVariable int id, Model model){
-        User user = userServiceImpl.findById(id);
-        if(user.getFilename()!=null) {
-            if (!user.getFilename().equals("../admin/dist/img/default.jpg")) {
-                String fileNameDelete = user.getFilename().substring(11, user.getFilename().length());
-                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                fileDelete.delete();
-            }
-        }
+//        User user = userServiceImpl.findById(id);
+//        if(user.getFilename()!=null) {
+//            if (!user.getFilename().equals("../admin/dist/img/default.jpg")) {
+//                String fileNameDelete = user.getFilename().substring(11, user.getFilename().length());
+//                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                fileDelete.delete();
+//            }
+//        }
         userServiceImpl.deleteById(id);
-        if(user.getUserAddInfo()!=null) {
-            userAddInfoService.deleteById(user.getUserAddInfo().getIdUserAddInfo());
-        }
         return "redirect:/users";
     }
 }

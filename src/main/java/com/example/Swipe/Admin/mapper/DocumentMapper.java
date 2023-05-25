@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
-@Service
 @RequiredArgsConstructor
-public class DocumentMapper implements Function<Documents, DocumentDTO> {
+public class DocumentMapper {
     public Agent toEntity(AgentDTO agentDTO){
 //        List<User> users = new ArrayList<>();
 //        users.add(userService.findById(agentDTO.getIdUser()));
@@ -33,8 +32,7 @@ public class DocumentMapper implements Function<Documents, DocumentDTO> {
 
     }
 
-    @Override
-    public DocumentDTO apply(Documents documents) {
+    public static DocumentDTO apply(Documents documents) {
         return DocumentDTO.builder()
                 .idDocuments(documents.getIdDocuments())
                 .fileName(documents.getFileName())

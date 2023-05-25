@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
-@Service
-public class UserAddInfoMapper implements Function<UserAddInfo,UserAddInfoDTO> {
-    public UserAddInfo toEntity(UserAddInfoDTO userAddInfoDTO){
+public class UserAddInfoMapper  {
+    public static UserAddInfo toEntity(UserAddInfoDTO userAddInfoDTO){
        return UserAddInfo.builder()
                .callSms(userAddInfoDTO.isCallSms())
                .typeNotification(userAddInfoDTO.getTypeNotification())
@@ -21,8 +20,7 @@ public class UserAddInfoMapper implements Function<UserAddInfo,UserAddInfoDTO> {
                .build();
     }
 
-    @Override
-    public UserAddInfoDTO apply(UserAddInfo userAddInfo) {
+    public static UserAddInfoDTO apply(UserAddInfo userAddInfo) {
         return UserAddInfoDTO.builder()
                 .callSms(userAddInfo.isCallSms())
                 .typeNotification(userAddInfo.getTypeNotification())

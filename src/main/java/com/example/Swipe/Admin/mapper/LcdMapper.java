@@ -12,15 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
-@Service
 @RequiredArgsConstructor
-public class LcdMapper implements Function<LCD, LcdDTO> {
-    private final ClientMapper clientMapper;
-    private final NewsMapper newsMapper;
-    private final PhotoMapper photoMapper;
-    private final DocumentMapper documentMapper;
-    private final FrameMapper frameMapper;
-    public Agent toEntity(AgentDTO agentDTO){
+public class LcdMapper  {
+//    private final ClientMapper clientMapper;
+//    private final NewsMapper newsMapper;
+//    private final PhotoMapper photoMapper;
+//    private final DocumentMapper documentMapper;
+//    private final FrameMapper frameMapper;
+    public static Agent toEntity(AgentDTO agentDTO){
 
         Agent agent = Agent.builder()
                 .name(agentDTO.getName())
@@ -36,8 +35,7 @@ public class LcdMapper implements Function<LCD, LcdDTO> {
 
     }
 
-    @Override
-    public LcdDTO apply(LCD lcd) {
+    public static LcdDTO apply(LCD lcd) {
         return LcdDTO.builder()
                 .idLcd(lcd.getIdLcd())
                 .name(lcd.getName())
@@ -58,11 +56,11 @@ public class LcdMapper implements Function<LCD, LcdDTO> {
                 .appointment(lcd.getAppointment())
                 .sumContract(lcd.getSumContract())
                 .formalization(lcd.getFormalization())
-                .clientDTO(clientMapper.apply(lcd.getUser()))
-                .newsList(lcd.getNewsList().stream().map(newsMapper).toList())
-                .photoList(lcd.getPhotoList().stream().map(photoMapper).toList())
-                .documents(lcd.getDocuments().stream().map(documentMapper).toList())
-                .frames(lcd.getFrames().stream().map(frameMapper).toList())
+                .clientDTO(ClientMapper.apply(lcd.getUser()))
+                .newsList(lcd.getNewsList().stream().map(NewsMapper::apply).toList())
+                .photoList(lcd.getPhotoList().stream().map(PhotoMapper::apply).toList())
+                .documents(lcd.getDocuments().stream().map(DocumentMapper::apply).toList())
+                .frames(lcd.getFrames().stream().map(FrameMapper::apply).toList())
                 .build();
 
     }

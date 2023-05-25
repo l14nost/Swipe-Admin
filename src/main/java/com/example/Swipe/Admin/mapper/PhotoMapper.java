@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
-@Service
 @RequiredArgsConstructor
-public class PhotoMapper implements Function<Photo, PhotoDTO> {
+public class PhotoMapper {
     public Agent toEntity(AgentDTO agentDTO){
 //        List<User> users = new ArrayList<>();
 //        users.add(userService.findById(agentDTO.getIdUser()));
@@ -33,8 +32,7 @@ public class PhotoMapper implements Function<Photo, PhotoDTO> {
 
     }
 
-    @Override
-    public PhotoDTO apply(Photo photo) {
+    public static PhotoDTO apply(Photo photo) {
         return PhotoDTO.builder()
                 .idPhotos(photo.getIdPhotos())
                 .fileName(photo.getFileName())

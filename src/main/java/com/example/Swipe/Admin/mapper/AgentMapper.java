@@ -15,10 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-@Service
 @RequiredArgsConstructor
-public class AgentMapper implements Function<Agent, AgentDTO> {
-    public Agent toEntity(AgentDTO agentDTO){
+public class AgentMapper  {
+    public static Agent toEntity(AgentDTO agentDTO){
 //        List<User> users = new ArrayList<>();
 //        users.add(userService.findById(agentDTO.getIdUser()));
         Agent agent = Agent.builder()
@@ -36,8 +35,7 @@ public class AgentMapper implements Function<Agent, AgentDTO> {
 
     }
 
-    @Override
-    public AgentDTO apply(Agent agent) {
+    public static AgentDTO apply(Agent agent) {
         return AgentDTO.builder()
                 .idAgent(agent.getIdAgent())
                 .type(agent.getType())

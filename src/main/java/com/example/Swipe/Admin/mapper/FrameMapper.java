@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
-@Service
 @RequiredArgsConstructor
-public class FrameMapper implements Function<Frame, FrameDTO> {
+public class FrameMapper  {
     private final ApartmentMapper apartmentMapper;
     public Agent toEntity(AgentDTO agentDTO){
 //        List<User> users = new ArrayList<>();
@@ -34,12 +33,11 @@ public class FrameMapper implements Function<Frame, FrameDTO> {
 
     }
 
-    @Override
-    public FrameDTO apply(Frame frame) {
+    public static FrameDTO apply(Frame frame) {
         return FrameDTO.builder()
                 .idFrame(frame.getIdFrame())
                 .num(frame.getNum())
-                .apartmentList(frame.getApartmentList().stream().map(apartmentMapper).toList())
+                .apartmentList(frame.getApartmentList().stream().map(ApartmentMapper::apply).toList())
                 .build();
 
     }

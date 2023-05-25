@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
-@Service
 @RequiredArgsConstructor
-public class NewsMapper implements Function<News, NewsDTO> {
+public class NewsMapper  {
     public Agent toEntity(AgentDTO agentDTO){
 //        List<User> users = new ArrayList<>();
 //        users.add(userService.findById(agentDTO.getIdUser()));
@@ -30,8 +29,7 @@ public class NewsMapper implements Function<News, NewsDTO> {
 
     }
 
-    @Override
-    public NewsDTO apply(News news) {
+    public static NewsDTO apply(News news) {
         return NewsDTO.builder()
                 .idNews(news.getIdNews())
                 .title(news.getTitle())
