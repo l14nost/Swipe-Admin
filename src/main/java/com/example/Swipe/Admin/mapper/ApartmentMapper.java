@@ -12,32 +12,60 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor
 public class ApartmentMapper  {
-    public Agent toEntity(AgentDTO agentDTO){
-
-        Agent agent = Agent.builder()
-                .name(agentDTO.getName())
-                .number(agentDTO.getNumber())
-                .mail(agentDTO.getMail())
-                .surname(agentDTO.getSurname())
-                .type(agentDTO.getType())
-                .build();
-        if (agentDTO.getIdAgent()!=0){
-            agent.setIdAgent(agentDTO.getIdAgent());
-        }
-        return agent;
-
-    }
-
-    public static ApartmentDTO apply(Apartment apartment) {
-        return ApartmentDTO.builder()
+    public static Apartment toEntity(ApartmentDTO apartment){
+        Apartment apartment1 = Apartment.builder()
                 .idApartment(apartment.getIdApartment())
                 .number(apartment.getNumber())
                 .description(apartment.getDescription())
                 .price(apartment.getPrice())
-                .user(ClientMapper.apply(apartment.getUser()))
-                .photoList(apartment.getPhotoList().stream().map(PhotoMapper::apply).toList())
-
+                .mainPhoto(apartment.getMainPhoto())
+                .balconyType(apartment.getBalconyType())
+                .calculation(apartment.getCalculation())
+                .commission(apartment.getCommission())
+                .communicationType(apartment.getCommunicationType())
+                .countRoom(apartment.getCountRoom())
+                .heatingType(apartment.getHeatingType())
+                .kitchenArea(apartment.getKitchenArea())
+                .state(apartment.getState())
+                .layout(apartment.getLayout())
+                .totalArea(apartment.getTotalArea())
+                .foundingDocument(apartment.getFoundingDocument())
+                .type(apartment.getType())
                 .build();
+        return apartment1;
+
+
+    }
+
+    public static ApartmentDTO apply(Apartment apartment) {
+        ApartmentDTO apartmentDTO = ApartmentDTO.builder()
+                .idApartment(apartment.getIdApartment())
+                .number(apartment.getNumber())
+                .description(apartment.getDescription())
+                .price(apartment.getPrice())
+                .user(apartment.getUser().getIdUser())
+                .photoList(apartment.getPhotoList().stream().map(PhotoMapper::apply).toList())
+                .mainPhoto(apartment.getMainPhoto())
+                .balconyType(apartment.getBalconyType())
+                .calculation(apartment.getCalculation())
+                .commission(apartment.getCommission())
+                .communicationType(apartment.getCommunicationType())
+                .countRoom(apartment.getCountRoom())
+                .heatingType(apartment.getHeatingType())
+                .kitchenArea(apartment.getKitchenArea())
+                .state(apartment.getState())
+                .layout(apartment.getLayout())
+                .totalArea(apartment.getTotalArea())
+                .foundingDocument(apartment.getFoundingDocument())
+                .type(apartment.getType())
+                .build();
+        if (apartment.getFrame()!=null){
+            apartmentDTO.setFrame(apartment.getFrame().getIdFrame());
+        }else apartmentDTO.setFrame(0);
+        if (apartment.getLcd()!=null){
+            apartmentDTO.setLcd(apartment.getLcd().getIdLcd());
+        }else apartmentDTO.setLcd(0);
+        return apartmentDTO;
 
     }
 }

@@ -35,6 +35,9 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllByType(TypeUser typeUser){
         return userRepo.findAllByTypeUserAndBlackListIsFalse(typeUser);
     }
+    public List<ClientDTO> findAllByTypeDTO(TypeUser typeUser){
+        return userRepo.findAllByTypeUserAndBlackListIsFalse(typeUser).stream().map(ClientMapper::apply).toList();
+    }
 //    public Page<UserDTO> specificationForBlackList(String keyWord, Pageable pageable){
 //        BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).build();
 //        return userRepo.findAll(blackListSpecification,pageable).map(userMapper);

@@ -89,7 +89,7 @@
       </table>
 
     </div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center " th:if = "${lcds.getTotalPages()>1}">
         <ul class="pagination" id="previousLcd">
           <li class="page-item" th:hidden="${lcds.getNumber()==0}">
             <input type="hidden" id="pageNumberLcdPr" th:value="${lcds.getNumber()-1}">
@@ -185,7 +185,7 @@
 <!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
 <!--        </div>-->
       </div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center " th:if = "${apartments.getTotalPages()>1}">
         <ul class="pagination" id="previousApartment">
           <li class="page-item" th:hidden="${apartments.getNumber()==0}">
             <input type="hidden" id="pageNumberApartmentPr" th:value="${apartments.getNumber()-1}">

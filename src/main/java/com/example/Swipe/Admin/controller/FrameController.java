@@ -7,6 +7,7 @@ import com.example.Swipe.Admin.service.impl.FrameServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.File;
-
+@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class FrameController {
@@ -57,6 +58,7 @@ public class FrameController {
     public String updateFrame(@RequestParam int idFrame, @RequestParam int number){
         Frame frame = Frame.builder().num(number).build();
         frameService.updateEntity(frame,idFrame);
+        log.info("Frame id:"+idFrame+", was update");
         System.out.println("+++");
         return "redirect:/lcd_edit/"+frameService.findById(idFrame).getLcd().getIdLcd();
     }
@@ -83,6 +85,7 @@ public class FrameController {
                 }
             }
         }
+        log.info("Frame id:"+idFrame+", was delete");
        frameService.deleteById(idFrame);
 
         return "redirect:/lcd_edit/"+idLcd;

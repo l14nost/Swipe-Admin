@@ -4,9 +4,10 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
+import java.util.List;
 
-public class FileExtensionValidator implements ConstraintValidator<FileExtension, MultipartFile> {
+public class FileExtensionValidator implements ConstraintValidator<FileExtension, Object> {
+
     private String[] allowedExtensions;
 
     @Override
@@ -15,21 +16,53 @@ public class FileExtensionValidator implements ConstraintValidator<FileExtension
     }
 
     @Override
-    public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
-        if (file == null || file.isEmpty()) {
-            return true;  // Пустые файлы допустимы, если это требуется
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
         }
 
-        String fileExtension = getFileExtension(file.getOriginalFilename());
-        return Arrays.stream(allowedExtensions)
-                .anyMatch(extension -> extension.equalsIgnoreCase(fileExtension));
+        if (value instanceof List) {
+            List<MultipartFile> files = (List<MultipartFile>) value;
+            return isValidFileList(files);
+        } else if (value instanceof MultipartFile) {
+            MultipartFile file = (MultipartFile) value;
+            return isValidSingleFile(file);
+        }
+
+        return true;
     }
 
-    private String getFileExtension(String filename) {
-        int dotIndex = filename.lastIndexOf('.');
-        if (dotIndex >= 0 && dotIndex < filename.length() - 1) {
-            return filename.substring(dotIndex + 1).toLowerCase();
+    private boolean isValidFileList(List<MultipartFile> files) {
+
+
+        if (files.isEmpty()) {
+            return true;
         }
-        return "";
+
+
+        for (MultipartFile file : files) {
+            if (!isFileExtensionAllowed(file)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isValidSingleFile(MultipartFile file) {
+        return file.isEmpty() || isFileExtensionAllowed(file);
+    }
+
+    private boolean isFileExtensionAllowed(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename.length()>3) {
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            for (String allowedExtension : allowedExtensions) {
+                if (allowedExtension.equalsIgnoreCase(fileExtension)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

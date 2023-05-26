@@ -35,7 +35,7 @@ public class ClientDTO {
     @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")
     MultipartFile filename;
     @NotBlank
-    @Pattern(regexp = "^[0-9]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
+    @Pattern(regexp = "^[0-9]*$")
     @Size(max = 9, min = 9)
     String number;
     String photo;

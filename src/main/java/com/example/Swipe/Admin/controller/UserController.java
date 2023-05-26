@@ -13,6 +13,7 @@ import com.example.Swipe.Admin.service.impl.UserAddInfoServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.UUID;
-
+@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -165,7 +166,7 @@ public class UserController {
             }
         }
         userServiceImpl.saveEntityDTO(clientDTO);
-
+        log.info("Create new "+clientDTO.getType());
 
         return "redirect:/users";
     }
@@ -218,7 +219,7 @@ public class UserController {
         }
         clientDTO.setIdUser(id);
         userServiceImpl.updateDTO(clientDTO,id);
-
+        log.info("User id "+id+", was update");
         return "redirect:/users";
     }
 
@@ -233,6 +234,7 @@ public class UserController {
 //            }
 //        }
         userServiceImpl.deleteById(id);
+        log.info("User id "+id+", was delete");
         return "redirect:/users";
     }
 }

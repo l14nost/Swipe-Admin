@@ -100,7 +100,7 @@
 <!--        <button type="button" class="btn btn-secondary">Добавить</button>-->
 <!--      </div>-->
     </div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center " th:if = "${pageUser.getTotalPages()>1}">
         <ul class="pagination" id="previousClient">
           <li class="page-item" th:hidden="${pageUser.getNumber()==0}">
             <input type="hidden" id="pageNumberClientPr" th:value="${pageUser.getNumber()-1}">
@@ -205,7 +205,7 @@
           </tbody>
         </table>
       </div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center " th:if = "${pageContractor.getTotalPages()>1}">
         <ul class="pagination" id="previousContractor">
           <li class="page-item" th:hidden="${pageContractor.getNumber()==0}">
             <input type="hidden" id="pageNumberContractorPr" th:value="${pageContractor.getNumber()-1}">
@@ -301,7 +301,7 @@
           </tbody>
         </table>
       </div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center " th:if = "${pageNotary.getTotalPages()>1}">
         <ul class="pagination" id="previousNotary">
           <li class="page-item" th:hidden="${pageNotary.getNumber()==0}">
             <input type="hidden" id="pageNumberNotaryPr" th:value="${pageNotary.getNumber()-1}">

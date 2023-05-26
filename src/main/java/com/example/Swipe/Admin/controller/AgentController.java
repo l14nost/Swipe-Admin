@@ -9,6 +9,7 @@ import com.example.Swipe.Admin.service.impl.AgentServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class AgentController {
@@ -28,6 +29,7 @@ public class AgentController {
     public String addAgent(@PathVariable int idUser, Model model){
         model.addAttribute("idUser", idUser);
         model.addAttribute("agent",AgentDTO.builder().build());
+
         return "admin/agent_add";
     }
 
@@ -69,7 +71,7 @@ public class AgentController {
             agentDTO.setType(TypeAgent.SALES);
         }
         agentServiceImpl.saveDTO(agentDTO);
-
+        log.info("User id:"+idUser+",agent add");
         return "redirect:/user_edit/"+agentDTO.getIdUser();
     }
     @GetMapping("/agent_edit/{idAgent}")
@@ -94,6 +96,7 @@ public class AgentController {
             return "admin/agent_edit";
         }
         agentServiceImpl.updateEntityDTO(agentDTO,id);
+        log.info("Agent id:"+id+", was update");
         return "redirect:/user_edit/"+agentDTO.getIdUser();
     }
 }

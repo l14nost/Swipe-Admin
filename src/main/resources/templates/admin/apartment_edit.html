@@ -16,33 +16,43 @@
 
   <div class="content-wrapper" style="padding-left: 50px">
     <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}" th:object="${apartment}">
-    <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()==null}">
+       <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}">
+        <input type="hidden" name="frame" th:value="${apartment.getFrame()}">
+    <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()==0}">
       <h4 class="mb-3">Квартира не от застройщика</h4>
     </div>
-        <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()!=null}">
+        <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()!=0}">
             <h4 class="mb-3">Квартира от застройщика</h4>
+            <input type="hidden" name="lcd" th:value="${apartment.getLcd()}">
+            <input type="hidden" name="user" th:value="${apartment.getUser()}">
         </div>
     <div class="col-md-7 col-lg-8">
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
             <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите имя..." th:value="${apartment.getNumber()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('number')}">
+                  <div class="text-danger">
+                      <p th:errors="*{number}"></p>
+                  </div>
+              </div>
           </div>
 
           <div class="col-sm-12">
             <label for="floatingTextarea">Описание</label>
-            <textarea class="form-control" th:placeholder="${apartment.getDescription()}" id="floatingTextarea" name="description"></textarea>
-
+            <textarea class="form-control" th:placeholder="${apartment.getDescription()}" id="floatingTextarea" name="description" th:field="*{description}" th:value="${apartment.getDescription()}"></textarea>
+              <div th:if="${#fields.hasErrors('description')}">
+                  <div class="text-danger">
+                      <p th:errors="*{description}"></p>
+                  </div>
+              </div>
 
           </div>
 
 <!--            th:value="${apartment.getAddress().getCity()+' '+apartment.getAddress().getArea()+' '+apartment.getAddress().getStreet()+' '+apartment.getAddress().getNumber()}"-->
           <div class="col-sm-12">
             <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  placeholder="Введите имя..."   required="">
+            <input type="text" class="form-control" name="address"  placeholder="Введите имя..."  >
             <div class="invalid-feedback">
               Введите имя...
             </div>
@@ -50,16 +60,18 @@
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
             <input type="text" class="form-control" name="price"  placeholder="Введите имя..." th:value="${apartment.getPrice()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('price')}">
+                  <div class="text-danger">
+                      <p th:errors="*{price}"></p>
+                  </div>
+              </div>
           </div>
-          <div th:if = "${apartment.getFrame()==null}") style="display: flex">
+          <div th:if = "${apartment.getFrame()==0}") style="display: flex">
               <div class="col-sm-6">
 
                 <div class="form-floating">
-                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="lcd">
-                    <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}" th:selected="${apartment.getLcd() == lcd}"></option>
+                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="lcd" th:field="*{lcd}">
+                    <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}" th:selected="${apartment.getLcd() == lcd.getIdLcd()}"></option>
                   </select>
                   <label for="floatingSelect" class="form-label">ЖК</label>
                 </div>
@@ -67,8 +79,8 @@
               <div class="col-sm-6">
 
                 <div class="form-floating">
-                  <select class="form-select"  aria-label="Floating label select example" name="user">
-                    <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}" th:selected="${apartment.getUser() == user}"></option>
+                  <select class="form-select"  aria-label="Floating label select example" name="user" th:field="*{user}">
+                    <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}" th:selected="${apartment.getUser() == user.getIdUser()}"></option>
                   </select>
                   <label for="floatingSelect" class="form-label">Владелец</label>
                 </div>
@@ -83,6 +95,11 @@
               <img th:src="${apartment.getMainPhoto()}" id= "imgMain" style="width: 75px; height: 75px" alt="null">
             </div>
             <input type="file" name="file" id="inputImg" class="form-control" th:value="${apartment.getMainPhoto()}" style="margin-left: 30px; margin-top: 30px">
+              <div th:if="${#fields.hasErrors('file')}">
+                  <div class="text-danger">
+                      <p th:errors="*{file}"></p>
+                  </div>
+              </div>
             <script>
               inputImg.onchange = evt => {
                 const [file] = inputImg.files
@@ -260,16 +277,20 @@
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
             <input type="text" class="form-control" name="totalArea"  placeholder="Введите имя..." th:value="${apartment.getTotalArea()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('totalArea')}">
+                  <div class="text-danger">
+                      <p th:errors="*{totalArea}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
             <input type="text" class="form-control" name="kitchenArea"  placeholder="Введите имя..." th:value="${apartment.getKitchenArea()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('kitchenArea')}">
+                  <div class="text-danger">
+                      <p th:errors="*{kitchenArea}"></p>
+                  </div>
+              </div>
           </div>
 
         <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>

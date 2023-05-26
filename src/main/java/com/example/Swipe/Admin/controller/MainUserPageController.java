@@ -3,6 +3,7 @@ package com.example.Swipe.Admin.controller;
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class MainUserPageController {
@@ -50,6 +51,9 @@ public class MainUserPageController {
         model.addAttribute("searchClient", keyWordClient);
         model.addAttribute("searchContractor", keyWordContractor);
         model.addAttribute("searchNotary", keyWordNotary);
+        log.info("Current page client table:"+page+", size:"+sizePage);
+        log.info("Current page contractor table:"+pageContractor+", size:"+sizePageContractor);
+        log.info("Current page notary table:"+pageNotary+", size:"+sizePageNotary);
         return "admin/user_main";
     }
 }

@@ -1,32 +1,24 @@
 package com.example.Swipe.Admin.dto;
 
-import com.example.Swipe.Admin.entity.News;
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.validation.FileExtension;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-
 @Data
 @Builder
-public class LcdDTO {
+public class RequestLcdDto {
     int idLcd;
-
-    String mainPhoto;
     @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")
     MultipartFile file;
     @NotBlank
     @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Имя должно содержать только буквы и начинаться с заглавной буквы")
     String name;
     @NotBlank
-    @Size(min = 5, max = 1000)
     String description;
     StatusLCDType status;
     ClassType lcdClass;
@@ -40,21 +32,14 @@ public class LcdDTO {
     HeatingType heating;
     HeatingType sewerage;
     HeatingType waterSupply;
-    @NotBlank
     String advantages;
-    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$" )
     String typePayment;
-    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$" )
     String appointment;
-    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$")
     String sumContract;
-    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$")
     String formalization;
     int contractor;
-    List<NewsDTO> newsList;
-    List<PhotoDTO> photoList;
+//    @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")
     List<MultipartFile> gallery;
-    List<DocumentDTO> documents;
-    List<MultipartFile> documentsFiles;
-    List<FrameDTO> frames;
+//    @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")
+    List<MultipartFile> documents;
 }

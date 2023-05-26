@@ -2,6 +2,11 @@ package com.example.Swipe.Admin.dto;
 
 import com.example.Swipe.Admin.entity.Photo;
 import com.example.Swipe.Admin.enums.*;
+import com.example.Swipe.Admin.validation.FileExtension;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,12 +17,18 @@ import java.util.List;
 @Builder
 public class ApartmentDTO {
     int  idApartment;
+    @Min(5)
+            @Max(500)
     int number;
+    String mainPhoto;
+    @NotBlank
+    @Size(min = 5, max = 1000)
     String description;
     int price;
-    LcdDTO lcd;
+    int lcd;
     List<PhotoDTO> photoList;
-    ClientDTO user;
+    int user;
+    @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")
     MultipartFile file;
     List<MultipartFile> galleryPhoto;
     FoundingDocument foundingDocument;
@@ -32,7 +43,7 @@ public class ApartmentDTO {
     Commission commission;
     int totalArea;
     int kitchenArea;
-
+    int frame;
 
 
 

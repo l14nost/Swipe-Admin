@@ -13,45 +13,54 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_apartment}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_apartment}" th:object="${apartment}">
     <div style="display: flex; justify-content: space-between">
       <h4 class="mb-3">Квартира не от застройщика</h4>
     </div>
+        <input type="hidden" name="idApartment" value="0">
+        <input type="hidden" name="frame" value="0">
     <div class="col-md-7 col-lg-8">
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
-            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите имя..."  required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите имя..." th:value="${apartment.getNumber()}" required="">
+              <div th:if="${#fields.hasErrors('number')}">
+                  <div class="text-danger">
+                      <p th:errors="*{number}"></p>
+                  </div>
+              </div>
           </div>
 
           <div class="col-sm-12">
             <label for="floatingTextarea">Описание</label>
-            <textarea class="form-control"  id="floatingTextarea" name="description"></textarea>
-
-
+            <textarea class="form-control"  id="floatingTextarea" name="description"  th:field="*{description}"></textarea>
+              <div th:if="${#fields.hasErrors('description')}">
+                  <div class="text-danger">
+                      <p th:errors="*{description}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  placeholder="Введите имя..." required="">
+            <input type="text" class="form-control" name="address"  placeholder="Введите имя..." >
             <div class="invalid-feedback">
               Введите имя...
             </div>
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
-            <input type="text" class="form-control" name="price"  placeholder="Введите имя..."  required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+            <input type="text" class="form-control" name="price"  placeholder="Введите имя..." th:value="${apartment.getPrice()}" required="">
+              <div th:if="${#fields.hasErrors('price')}">
+                  <div class="text-danger">
+                      <p th:errors="*{price}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-6">
 
             <div class="form-floating">
-              <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="lcd">
-                <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}"></option>
+              <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="lcd" th:field="*{lcd}">
+                <option th:each="lcd : ${lcds}" th:value="${lcd.getIdLcd()}" th:text="${lcd.getName()}" th:selected="${apartment.getLcd() == lcd.getIdLcd()}"></option>
               </select>
               <label for="floatingSelect" class="form-label">ЖК</label>
             </div>
@@ -59,8 +68,8 @@
             <div class="col-sm-6">
 
                 <div class="form-floating">
-                    <select class="form-select"  aria-label="Floating label select example" name="user">
-                        <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}"></option>
+                    <select class="form-select"  aria-label="Floating label select example" name="user" th:field="*{user}">
+                        <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}" th:selected="${apartment.getUser() == user.getIdUser()}"></option>
                     </select>
                     <label for="floatingSelect" class="form-label">Владелец</label>
                 </div>
@@ -74,6 +83,11 @@
               <img src="../admin/dist/img/default.jpg" id= "imgMain" style="width: 75px; height: 75px" alt="null">
             </div>
             <input type="file" name="file" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px">
+              <div th:if="${#fields.hasErrors('file')}">
+                  <div class="text-danger">
+                      <p th:errors="*{file}"></p>
+                  </div>
+              </div>
             <script>
               inputImg.onchange = evt => {
                 const [file] = inputImg.files
@@ -84,51 +98,51 @@
             </script>
 
           </div>
-          <div>
-            <label>Галерея картинок</label>
-            <div class="card-body">
-              <label>Размер 1000х190</label>
-              <div class="row" >
+<!--          <div>-->
+<!--            <label>Галерея картинок</label>-->
+<!--            <div class="card-body">-->
+<!--              <label>Размер 1000х190</label>-->
+<!--              <div class="row" >-->
 
-<!--                <div class="col-sm-3">-->
-<!--                  <img id="img1" class="img-fluid mb-2" alt="white sample">-->
-<!--                  <button type="submit" style="-->
-<!--                position: absolute;-->
-<!--                right: -1px;-->
-<!--                top: -10px;-->
-<!--                z-index: 11;-->
-<!--                border: 2px solid black;-->
-<!--                height: 30px;-->
-<!--                width: 30px;-->
-<!--                box-sizing: border-box;-->
-<!--                padding: 2px;-->
-<!--                border-radius: 50%;-->
-<!--            " >-->
-<!--                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">-->
-<!--                  </button>-->
-<!--                  <input type="file" id="inputImg1" name="galleryPhoto" class="form-control">-->
-<!--                  <script>-->
-<!--                    inputImg1.onchange = evt => {-->
-<!--                      const [file] = inputImg1.files-->
-<!--                      if (file) {-->
-<!--                        img1.src = URL.createObjectURL(file)-->
-<!--                      }-->
-<!--                    }-->
-<!--                  </script>-->
+<!--&lt;!&ndash;                <div class="col-sm-3">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <img id="img1" class="img-fluid mb-2" alt="white sample">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <button type="submit" style="&ndash;&gt;-->
+<!--&lt;!&ndash;                position: absolute;&ndash;&gt;-->
+<!--&lt;!&ndash;                right: -1px;&ndash;&gt;-->
+<!--&lt;!&ndash;                top: -10px;&ndash;&gt;-->
+<!--&lt;!&ndash;                z-index: 11;&ndash;&gt;-->
+<!--&lt;!&ndash;                border: 2px solid black;&ndash;&gt;-->
+<!--&lt;!&ndash;                height: 30px;&ndash;&gt;-->
+<!--&lt;!&ndash;                width: 30px;&ndash;&gt;-->
+<!--&lt;!&ndash;                box-sizing: border-box;&ndash;&gt;-->
+<!--&lt;!&ndash;                padding: 2px;&ndash;&gt;-->
+<!--&lt;!&ndash;                border-radius: 50%;&ndash;&gt;-->
+<!--&lt;!&ndash;            " >&ndash;&gt;-->
+<!--&lt;!&ndash;                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">&ndash;&gt;-->
+<!--&lt;!&ndash;                  </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <input type="file" id="inputImg1" name="galleryPhoto" class="form-control">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <script>&ndash;&gt;-->
+<!--&lt;!&ndash;                    inputImg1.onchange = evt => {&ndash;&gt;-->
+<!--&lt;!&ndash;                      const [file] = inputImg1.files&ndash;&gt;-->
+<!--&lt;!&ndash;                      if (file) {&ndash;&gt;-->
+<!--&lt;!&ndash;                        img1.src = URL.createObjectURL(file)&ndash;&gt;-->
+<!--&lt;!&ndash;                      }&ndash;&gt;-->
+<!--&lt;!&ndash;                    }&ndash;&gt;-->
+<!--&lt;!&ndash;                  </script>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                <div class="col-sm-3" style="margin-left: 20px">-->
+<!--                  <div style="display: flex; justify-content: center">-->
+<!--                    <a>-->
+<!--                        <img src="../admin/dist/img/addCinema.png" width="150px">-->
+<!--                    </a>-->
+<!--                  </div>-->
 <!--                </div>-->
-                <div class="col-sm-3" style="margin-left: 20px">
-                  <div style="display: flex; justify-content: center">
-                    <a>
-                        <img src="../admin/dist/img/addCinema.png" width="150px">
-                    </a>
-                  </div>
-                </div>
 
 
 
-              </div>
-            </div>
-          </div>
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
           <div class="col-sm-6">
             <div class="form-floating">
               <select class="form-select"  aria-label="Floating label select example" name="foundingDocument">
@@ -212,17 +226,21 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
-            <input type="text" class="form-control" name="totalArea"  placeholder="Введите имя..."  required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+            <input type="text" class="form-control" name="totalArea"  placeholder="Введите имя..." th:value="${apartment.getTotalArea()}"  required="">
+              <div th:if="${#fields.hasErrors('totalArea')}">
+                  <div class="text-danger">
+                      <p th:errors="*{totalArea}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
-            <input type="text" class="form-control" name="kitchenArea"  placeholder="Введите имя..."  required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+            <input type="text" class="form-control" name="kitchenArea"  placeholder="Введите имя..."  th:value="${apartment.getKitchenArea()}" required="">
+              <div th:if="${#fields.hasErrors('kitchenArea')}">
+                  <div class="text-danger">
+                      <p th:errors="*{kitchenArea}"></p>
+                  </div>
+              </div>
           </div>
 
         <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>

@@ -64,7 +64,7 @@
         </tbody>
       </table>
     </div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: center " th:if = "${blackList.getTotalPages()>1}">
           <ul class="pagination" id="previous">
               <li class="page-item" th:hidden="${blackList.getNumber()==0}">
                   <input type="hidden" id="pageNumberPr" th:value="${blackList.getNumber()-1}">

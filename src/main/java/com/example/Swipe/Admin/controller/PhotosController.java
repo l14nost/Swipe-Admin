@@ -5,13 +5,14 @@ import com.example.Swipe.Admin.service.impl.ApartmentServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-
+@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class PhotosController {
@@ -24,12 +25,15 @@ public class PhotosController {
     public String addPhoto(@PathVariable int idApartment, Model model){
         Photo photo = Photo.builder().fileName("../admin/dist/img/default.jpg").apartment(apartmentService.findById(idApartment)).build();
         photosServiceImpl.saveEntity(photo);
+        log.info("Photo, for apartment:"+idApartment+", was add");
         return "redirect:/apartment_edit/"+idApartment;
     }
     @GetMapping("/add_photo_lcd/{idLcd}")
     public String addPhotoLcd(@PathVariable int idLcd, Model model){
         Photo photo = Photo.builder().fileName("../admin/dist/img/default.jpg").lcd(lcdService.findById(idLcd)).build();
         photosServiceImpl.saveEntity(photo);
+        log.info("Photo, for lcd:"+idLcd+", was add");
+
         return "redirect:/lcd_edit/"+idLcd;
     }
     @PostMapping("/delete_photo_apartment")
@@ -41,7 +45,7 @@ public class PhotosController {
             fileDelete.delete();
         }
         photosServiceImpl.deleteById(idPhoto);
-
+        log.info("Photo, for apartment:"+idApartment+", was delete");
         return "redirect:/apartment_edit/"+idApartment;
     }
 
@@ -55,6 +59,7 @@ public class PhotosController {
             fileDelete.delete();
         }
         photosServiceImpl.deleteById(idPhoto);
+        log.info("Photo, for lcd:"+idLcd+", was delete");
 
         return "redirect:/lcd_edit/"+idLcd;
     }

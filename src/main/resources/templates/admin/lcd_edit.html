@@ -13,7 +13,8 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/lcd_update/{id}(id=${lcd.getIdLcd()})}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}" th:object="${lcd}">
+     <input type="hidden" name="idLcd" th:value="${lcd.getIdLcd()}">
       <div style="display: flex; justify-content: space-between">
         <h4 class="mb-3">ЖК</h4>
       </div>
@@ -22,15 +23,21 @@
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Название</label>
             <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..." th:value="${lcd.getName()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('name')}">
+                  <div class="text-danger">
+                      <p th:errors="*{name}"></p>
+                  </div>
+              </div>
           </div>
 
           <div class="col-sm-12">
             <label for="floatingTextarea">Описание</label>
-            <textarea class="form-control" th:placeholder="${lcd.getDescription()}" id="floatingTextarea" name="description"></textarea>
-
+            <textarea class="form-control" th:placeholder="${lcd.getDescription()}" id="floatingTextarea" name="description" th:value="${lcd.getDescription()}" th:field="*{description}"></textarea>
+              <div th:if="${#fields.hasErrors('description')}">
+                  <div class="text-danger">
+                      <p th:errors="*{description}"></p>
+                  </div>
+              </div>
 
           </div>
           <div class="col-sm-6">
@@ -43,35 +50,43 @@
           <div class="col-sm-6">
             <label  class="form-label">Оформление</label>
             <input type="text" class="form-control" name="formalization"  placeholder="Введите имя..."  required="" th:value="${lcd.getFormalization()}">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('formalization')}">
+                  <div class="text-danger">
+                      <p th:errors="*{formalization}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Варианты расчета</label>
             <input type="text" class="form-control" name="typePayment"  placeholder="Введите имя..."  required="" th:value="${lcd.getTypePayment()}">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('typePayment')}">
+                  <div class="text-danger">
+                      <p th:errors="*{typePayment}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Назначение</label>
             <input type="text" class="form-control" name="appointment"  placeholder="Введите имя..."  required="" th:value="${lcd.getAppointment()}">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('appointment')}">
+                  <div class="text-danger">
+                      <p th:errors="*{appointment}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Сумма в договоре</label>
             <input type="text" class="form-control" name="sumContract"  placeholder="Введите имя..."  required="" th:value="${lcd.getSumContract()}">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('sumContract')}">
+                  <div class="text-danger">
+                      <p th:errors="*{sumContract}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <div class="form-floating">
               <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="contractor">
-                <option th:each="contractor : ${contractors}" th:value="${contractor.getIdUser()}" th:text="${contractor.getName()+' '+contractor.getSurname()}"></option>
+                <option th:each="contractor : ${contractors}" th:value="${contractor.getIdUser()}" th:text="${contractor.getName()+' '+contractor.getSurname()}" th:selected="${contractor.getIdUser() == lcd.getContractor()}"></option>
               </select>
               <label for="floatingSelect" class="form-label">Застройщик</label>
             </div>
@@ -88,6 +103,11 @@
               <input type="checkbox" id="4" name="advantages" value="Дет. Сад" th:checked="${T(com.example.Swipe.Admin.controller.LCDController).checkTypes(advantages.stream(),'Дет. Сад')}">
               <label for="4">Дет. Сад</label>
             </div>
+              <div th:if="${#fields.hasErrors('advantages')}">
+                  <div class="text-danger">
+                      <p th:errors="*{advantages}"></p>
+                  </div>
+              </div>
           </div>
 <!--          <div class="col-sm-6">-->
 
@@ -106,8 +126,13 @@
               <!--          ${stock.getFileName}-->
               <img th:src="${lcd.getMainPhoto()}" id= "imgMain" style="width: 75px; height: 75px" alt="null">
             </div>
-            <input type="file" name="file" id="inputImg" class="form-control" th:value="${lcd.getMainPhoto()}" style="margin-left: 30px; margin-top: 30px">
-            <script>
+            <input type="file" name="file" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px">
+              <div th:if="${#fields.hasErrors('file')}">
+                  <div class="text-danger">
+                      <p th:errors="*{file}"></p>
+                  </div>
+              </div>
+              <script>
               inputImg.onchange = evt => {
                 const [file] = inputImg.files
                 if (file) {
@@ -140,6 +165,11 @@
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
                   <input type="file" id="inputImg2" th:id="inputGallery+${photo.getIdPhotos()}" name="gallery" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)">
+                    <div th:if="${#fields.hasErrors('gallery')}">
+                        <div class="text-danger">
+                            <p th:errors="*{gallery}"></p>
+                        </div>
+                    </div>
                   <script>
                     function handleFileChange(event) {
                       const input = event.target;
@@ -192,7 +222,7 @@
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
                   <label for="inputDocument" id = "filename" th:text="${document.getName()}" style="text-align: center"></label>
-                  <input type="file" id="inputDocument" name="documents" class="form-control" th:value="${document.getFileName()}">
+                  <input type="file" id="inputDocument" name="documentsFiles" class="form-control" th:value="${document.getFileName()}">
                 </div>
                 <script>
                   var fileInput = document.getElementById('inputDocument');
