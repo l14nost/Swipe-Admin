@@ -38,12 +38,7 @@ public class PhotosController {
     }
     @PostMapping("/delete_photo_apartment")
     public String deletePhoto(@RequestParam(name = "idPhoto") int idPhoto,@RequestParam(name = "idApartment") int idApartment){
-        Photo photo = photosServiceImpl.findById(idPhoto);
-        if (!photo.getFileName().equals("../admin/dist/img/default.jpg")) {
-            String fileNameDelete = photo.getFileName().substring(11, photo.getFileName().length());
-            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-            fileDelete.delete();
-        }
+
         photosServiceImpl.deleteById(idPhoto);
         log.info("Photo, for apartment:"+idApartment+", was delete");
         return "redirect:/apartment_edit/"+idApartment;

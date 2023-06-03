@@ -11,6 +11,7 @@ import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.mapper.ClientMapper;
 import com.example.Swipe.Admin.service.impl.UserAddInfoServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
+import com.example.Swipe.Admin.validation.UniqueEmailValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -148,11 +149,11 @@ public class UserController {
 //    }
     @PostMapping("/add_user")
     public String userAdd(@Valid @ModelAttribute(name = "client") ClientDTO clientDTO, BindingResult bindingResult, Model model) throws IOException {
-
+        bindingResult = userServiceImpl.userByMail(clientDTO.getMail(),0,bindingResult);
         System.out.println(clientDTO);
-
         if (bindingResult.hasErrors()){
             System.out.println(bindingResult.getAllErrors());
+
             model.addAttribute("type", clientDTO.getType());
             model.addAttribute("client", clientDTO);
             if(clientDTO.getType().equals(TypeUser.CLIENT)) {
@@ -209,8 +210,10 @@ public class UserController {
 //    }
     @PostMapping("/user_edit/{id}")
     public String userUpdate(@PathVariable int id, @Valid @ModelAttribute(name = "user") ClientDTO clientDTO,BindingResult result, Model model) {
-        System.out.println(clientDTO);
+        System.out.println(result.getFieldError("mail"));
+        result = userServiceImpl.userByMailUpdate(clientDTO.getMail(),id,result);
         if (result.hasErrors()){
+            System.out.println(result);
             clientDTO.setAgent(userServiceImpl.findByIdDTO(id).getAgent());
             clientDTO.setPhoto(userServiceImpl.findByIdDTO(id).getPhoto());
             model.addAttribute("user",clientDTO);

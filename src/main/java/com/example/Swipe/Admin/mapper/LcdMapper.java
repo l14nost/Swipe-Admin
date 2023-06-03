@@ -42,13 +42,14 @@ public class LcdMapper  {
                 .sumContract(lcd.getSumContract())
                 .formalization(lcd.getFormalization())
                 .type(lcd.getType())
+                .address(lcd.getAddress())
                 .build();
         return lcdRes;
 
     }
 
     public static LcdDTO apply(LCD lcd) {
-        return LcdDTO.builder()
+        LcdDTO lcdDTO = LcdDTO.builder()
                 .idLcd(lcd.getIdLcd())
                 .name(lcd.getName())
                 .description(lcd.getDescription())
@@ -68,14 +69,28 @@ public class LcdMapper  {
                 .appointment(lcd.getAppointment())
                 .sumContract(lcd.getSumContract())
                 .formalization(lcd.getFormalization())
-                .contractor(lcd.getUser().getIdUser())
-                .newsList(lcd.getNewsList().stream().map(NewsMapper::apply).toList())
-                .photoList(lcd.getPhotoList().stream().map(PhotoMapper::apply).toList())
-                .documents(lcd.getDocuments().stream().map(DocumentMapper::apply).toList())
-                .frames(lcd.getFrames().stream().map(FrameMapper::apply).toList())
                 .type(lcd.getType())
+                .address(lcd.getAddress())
                 .mainPhoto(lcd.getMainPhoto())
                 .build();
+        if (lcd.getUser()!=null){
+            lcdDTO.setContractor(lcd.getUser().getIdUser());
+        }
+        if (lcd.getNewsList()!=null){
+            lcdDTO.setNewsList(lcd.getNewsList().stream().map(NewsMapper::apply).toList());
+        }
+        if (lcd.getPhotoList()!=null){
+            lcdDTO.setPhotoList(lcd.getPhotoList().stream().map(PhotoMapper::apply).toList());
+        }
+        if (lcd.getDocuments()!=null){
+            lcdDTO.setDocuments(lcd.getDocuments().stream().map(DocumentMapper::apply).toList());
+        }
+        if (lcd.getFrames()!=null){
+            lcdDTO.setFrames(lcd.getFrames().stream().map(FrameMapper::apply).toList());
+        }
+
+        return lcdDTO;
+
 
     }
 }

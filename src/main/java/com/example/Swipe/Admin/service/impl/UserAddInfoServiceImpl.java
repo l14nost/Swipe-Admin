@@ -20,12 +20,12 @@ public class UserAddInfoServiceImpl implements UserAddInfoService {
 
     @Override
     public List<UserAddInfo> findAll() {
-        return null;
+        return userAddInfoRepo.findAll();
     }
 
     @Override
     public UserAddInfo findById(int id) {
-        return null;
+        return userAddInfoRepo.findById(id).orElse(null);
     }
 
     @Override

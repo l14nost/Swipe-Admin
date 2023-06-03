@@ -4,10 +4,7 @@ import com.example.Swipe.Admin.entity.News;
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.validation.FileExtension;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,8 +30,16 @@ public class LcdDTO {
     LCDType type;
     TechnologyType technology;
     TerritoryType territory;
+    @NotBlank
+    @NotEmpty
+    @Pattern(message = "г.Город, р.Район, вул.Вулиця,1",regexp = "г\\.[A-Za-zА-Яа-я]+, р\\.[A-Za-zА-Яа-я]+, вул\\.[A-Za-zА-Яа-я]+,\\d+")
+    String address;
+    @Min(5)
+    @Max(150)
     int distanceSea;
     CommunalType communal;
+    @Min(3)
+    @Max(5)
     int height;
     GasType gas;
     HeatingType heating;
@@ -53,8 +58,10 @@ public class LcdDTO {
     int contractor;
     List<NewsDTO> newsList;
     List<PhotoDTO> photoList;
+    @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")
     List<MultipartFile> gallery;
     List<DocumentDTO> documents;
+    @FileExtension(value = {"pdf", "doc", "docx", "xlsx"}, message = "Формат не корректный (.pdf,.doc,.docx,.xlsx)")
     List<MultipartFile> documentsFiles;
     List<FrameDTO> frames;
 }

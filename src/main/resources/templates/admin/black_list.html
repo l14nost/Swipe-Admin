@@ -77,8 +77,8 @@
 
 <!--          <a class="page-link bg-gray-light" th:href="@{'/black_list?pageBlackList='+${p}+'&sizeBlackList='+${size}}" th:text="${p+1}"></a>-->
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, blackList.getTotalPages()-1)}" th:value="${p}" th:if="${blackList.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, blackList.getTotalPages()-2)}" th:value="${p}" th:if="${blackList.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+            <li class="page-item"><a class="page-link" href="#" th:text="${blackList.getTotalPages()}"></a></li>
 <!--          <li class="page-item">-->
 <!--            <a class="page-link" href="#" aria-label="Next">-->
 <!--              <span aria-hidden="true">&raquo;</span>-->

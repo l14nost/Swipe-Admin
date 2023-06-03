@@ -8,6 +8,7 @@ import com.example.Swipe.Admin.repository.LCDRepo;
 import com.example.Swipe.Admin.service.LCDService;
 import com.example.Swipe.Admin.specification.LcdSpecification;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Setter
 public class LCDServiceImpl implements LCDService {
     private final LCDRepo lcdRepo;
     @Value("${upload.path}")
@@ -29,12 +31,12 @@ public class LCDServiceImpl implements LCDService {
     private final DocumentsServiceImpl documentsService;
     private final UserServiceImpl userService;
 
-    public Page<LCD> findAllPagination(Pageable pageable,String keyWord){
+    public Page<LcdDTO> findAllPagination(Pageable pageable,String keyWord){
         if(!keyWord.equals("null")){
             LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord(keyWord).build();
-            return lcdRepo.findAll(lcdSpecification,pageable);
+            return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
         }
-        return lcdRepo.findAll(pageable);
+        return lcdRepo.findAll(pageable).map(LcdMapper::apply);
     }
 
     @Override
@@ -57,29 +59,29 @@ public class LCDServiceImpl implements LCDService {
             return lcd.get();
         }
         else {
-            return LCD.builder().build();
+            return null;
         }
     }
     public void saveDTO(LcdDTO lcdDTO) {
         LCD lcd = LcdMapper.toEntity(lcdDTO);
         lcd.setUser(userService.findById(lcdDTO.getContractor()));
-        if (!lcdDTO.getFile().isEmpty()) {
-            System.out.println("+");
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
-            }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + lcdDTO.getFile().getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            try {
-                lcdDTO.getFile().transferTo(new File((resultNameGallery)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            lcd.setMainPhoto("../uploads/" + fileNameGallery);
-        }
-        else lcd.setMainPhoto("../admin/dist/img/default.jpg");
+        if (lcdDTO.getFile()!=null) {
+            if (!lcdDTO.getFile().isEmpty()) {
+                File uploadDirGallery = new File(upload);
+                if (!uploadDirGallery.exists()) {
+                    uploadDirGallery.mkdir();
+                }
+                String uuid = UUID.randomUUID().toString();
+                String fileNameGallery = uuid + "-" + lcdDTO.getFile().getOriginalFilename();
+                String resultNameGallery = upload + "" + fileNameGallery;
+                try {
+                    lcdDTO.getFile().transferTo(new File((resultNameGallery)));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                lcd.setMainPhoto("../uploads/" + fileNameGallery);
+            } else lcd.setMainPhoto("../admin/dist/img/default.jpg");
+        }else lcd.setMainPhoto("../admin/dist/img/default.jpg");
         lcdRepo.save(lcd);
     }
     @Override
@@ -160,6 +162,9 @@ public class LCDServiceImpl implements LCDService {
             if(lcd.getLcdClass()!=null){
                 lcdUpdate.setLcdClass(lcd.getLcdClass());
             }
+            if (lcd.getAddress()!=null){
+                lcdUpdate.setAddress(lcd.getAddress());
+            }
             if(lcd.getUser()!=null){
                 lcdUpdate.setUser(lcd.getUser());
             }
@@ -171,24 +176,26 @@ public class LCDServiceImpl implements LCDService {
 
     }
 
-    public void updateDTO(LcdDTO lcdDTO, int id) throws IOException {
-        User user = userService.findById(lcdDTO.getContractor());
+    public void updateDTO(LcdDTO lcdDTO, int id) {
+        User user = User.builder().idUser(lcdDTO.getContractor()).build();
         LCD lcd = LcdMapper.toEntity(lcdDTO);
-        if (!lcdDTO.getFile().isEmpty()) {
-            System.out.println("+");
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
+        if (lcdDTO.getFile()!=null) {
+            if (!lcdDTO.getFile().isEmpty()) {
+                System.out.println("+");
+                File uploadDirGallery = new File(upload);
+                if (!uploadDirGallery.exists()) {
+                    uploadDirGallery.mkdir();
+                }
+                String uuid = UUID.randomUUID().toString();
+                String fileNameGallery = uuid + "-" + lcdDTO.getFile().getOriginalFilename();
+                String resultNameGallery = upload + "" + fileNameGallery;
+                try {
+                    lcdDTO.getFile().transferTo(new File((resultNameGallery)));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                lcd.setMainPhoto("../uploads/" + fileNameGallery);
             }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + lcdDTO.getFile().getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            try {
-                lcdDTO.getFile().transferTo(new File((resultNameGallery)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            lcd.setMainPhoto("../uploads/" + fileNameGallery);
         }
 
         Optional<LCD> lcdOptional = lcdRepo.findById(id);
@@ -204,7 +211,11 @@ public class LCDServiceImpl implements LCDService {
                         String uuid = UUID.randomUUID().toString();
                         String fileNameGallery = uuid + "-" + lcdDTO.getGallery().get(i).getOriginalFilename();
                         String resultNameGallery = upload + "" + fileNameGallery;
-                        lcdDTO.getGallery().get(i).transferTo(new File((resultNameGallery)));
+                        try {
+                            lcdDTO.getGallery().get(i).transferTo(new File((resultNameGallery)));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         if (!lcdUpdate.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
                             String fileNameDelete = lcdUpdate.getPhotoList().get(i).getFileName().substring(11, lcdUpdate.getPhotoList().get(i).getFileName().length());
                             File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
@@ -226,7 +237,11 @@ public class LCDServiceImpl implements LCDService {
                         String fileNameGallery = uuid + "-" + lcdDTO.getDocumentsFiles().get(i).getOriginalFilename();
                         lcdUpdate.getDocuments().get(i).setName(lcdDTO.getDocumentsFiles().get(i).getOriginalFilename());
                         String resultNameGallery = upload + "" + fileNameGallery;
-                        lcdDTO.getDocumentsFiles().get(i).transferTo(new File((resultNameGallery)));
+                        try {
+                            lcdDTO.getDocumentsFiles().get(i).transferTo(new File((resultNameGallery)));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         if (!lcdUpdate.getDocuments().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
                             String fileNameDelete = lcdUpdate.getDocuments().get(i).getFileName().substring(11, lcdUpdate.getDocuments().get(i).getFileName().length());
                             File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
@@ -237,13 +252,18 @@ public class LCDServiceImpl implements LCDService {
                     }
                 }
             }
-            if(!lcdUpdate.getMainPhoto().equals("../admin/dist/img/default.jpg")&&!lcdDTO.getFile().isEmpty()){
-                String fileNameDelete = lcdUpdate.getMainPhoto().substring(11, lcdUpdate.getMainPhoto().length());
-                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                fileDelete.delete();
+            if (lcdUpdate.getMainPhoto()!=null) {
+                if (!lcdUpdate.getMainPhoto().equals("../admin/dist/img/default.jpg") && !lcdDTO.getFile().isEmpty()) {
+                    String fileNameDelete = lcdUpdate.getMainPhoto().substring(11, lcdUpdate.getMainPhoto().length());
+                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                    fileDelete.delete();
+                }
             }
             if(lcd.getAdvantages()!=null){
                 lcdUpdate.setAdvantages(lcd.getAdvantages());
+            }
+            if (lcd.getAddress()!=null){
+                lcdUpdate.setAddress(lcd.getAddress());
             }
             if(lcd.getAppointment() !=null){
                 lcdUpdate.setAppointment(lcd.getAppointment());
@@ -298,9 +318,6 @@ public class LCDServiceImpl implements LCDService {
             }
             if(lcd.getLcdClass()!=null){
                 lcdUpdate.setLcdClass(lcd.getLcdClass());
-            }
-            if(lcd.getUser()!=null){
-                lcdUpdate.setUser(lcd.getUser());
             }
             if(lcd.getFormalization()!=null){
                 lcdUpdate.setFormalization(lcd.getFormalization());

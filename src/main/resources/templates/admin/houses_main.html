@@ -65,7 +65,7 @@
           <tr th:each="lcd:${lcds.getContent()}">
             <th scope="row"><p th:text="${lcd.getIdLcd()}"></p></th>
             <td><p th:text="${lcd.getName()}"></p></td>
-            <td><p th:text="${lcd.getName()}"></p></td>
+            <td><p th:text="${lcd.getAddress()}"></p></td>
             <td>
               <div style="display: flex">
               <form th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}"  method="get" >
@@ -158,7 +158,7 @@
           <tbody>
           <tr th:each="apartment:${apartments.getContent()}">
             <th scope="row"><p th:text="${apartment.getIdApartment()}"></p></th>
-            <td><p th:text="${apartment.getLcd().getName()}"></p></td>
+            <td><p th:text="${apartment.getNameLcd()}"></p></td>
             <td><p th:text="${apartment.getNumber()}"></p></td>
             <td>
               <div style="display: flex">

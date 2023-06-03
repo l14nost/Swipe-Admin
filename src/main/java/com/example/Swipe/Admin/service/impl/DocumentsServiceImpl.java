@@ -28,7 +28,7 @@ public class DocumentsServiceImpl implements DocumentsService {
             return documents.get();
         }
         else {
-            return Documents.builder().build();
+            return null;
         }
     }
 

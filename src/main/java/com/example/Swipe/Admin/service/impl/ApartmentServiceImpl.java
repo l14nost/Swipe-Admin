@@ -11,6 +11,7 @@ import com.example.Swipe.Admin.service.ApartmentService;
 import com.example.Swipe.Admin.specification.ApartmentForFrameSpecification;
 import com.example.Swipe.Admin.specification.ApartmentForLcdSpecification;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,12 +24,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Setter
 @RequiredArgsConstructor
 public class ApartmentServiceImpl implements ApartmentService {
     private final ApartmentRepo apartmentRepo;
-    private final LCDServiceImpl lcdService;
     private final FrameServiceImpl frameService;
-    private final UserServiceImpl userService;
     private final PhotosServiceImpl photosService;
     @Value("${upload.path}")
     private String upload;
@@ -38,24 +38,21 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepo.findAll();
     }
 
-    public List<Apartment> findAllByFrame(){
-        return apartmentRepo.findAllByFrameIsNull();
-    }
 
-    public Page<Apartment> findAllByFramePagination(Pageable pageable,int keyWord){
+    public Page<ApartmentDTO> findAllByFramePagination(Pageable pageable,int keyWord){
         if(keyWord != 0){
             ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().keyWord(keyWord).build();
-            return apartmentRepo.findAll(apartmentForLcdSpecification,pageable);
+            return apartmentRepo.findAll(apartmentForLcdSpecification,pageable).map(ApartmentMapper::apply);
         }
-        return apartmentRepo.findAllByFrameIsNull(pageable);
+        return apartmentRepo.findAllByFrameIsNull(pageable).map(ApartmentMapper::apply);
     }
 
-    public Page<Apartment> findAllForFramePagination(Frame frame,Pageable pageable, int keyWord){
+    public Page<ApartmentDTO> findAllForFramePagination(Frame frame,Pageable pageable, int keyWord){
         if (keyWord!=0){
             ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).build();
-            return apartmentRepo.findAll(apartmentForFrameSpecification,pageable);
+            return apartmentRepo.findAll(apartmentForFrameSpecification,pageable).map(ApartmentMapper::apply);
         }
-        return apartmentRepo.findAllByFrame(frame,pageable);
+        return apartmentRepo.findAllByFrame(frame,pageable).map(ApartmentMapper::apply);
     }
     public ApartmentDTO findByIdDTO(int id) {
         Optional<Apartment> apartment = apartmentRepo.findById(id);
@@ -73,7 +70,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             return apartment.get();
         }
         else {
-            return Apartment.builder().build();
+            return null;
         }
     }
     public void saveDTO(ApartmentDTO apartmentDTO) {
@@ -86,27 +83,27 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setUser(frame.getLcd().getUser());
         }
         else {
-            apartment.setLcd(lcdService.findById(apartmentDTO.getLcd()));
-            apartment.setUser(userService.findById(apartmentDTO.getUser()));
+            apartment.setLcd(LCD.builder().idLcd(apartmentDTO.getLcd()).build());
+            apartment.setUser(User.builder().idUser(apartmentDTO.getUser()).build());
         }
-        if (!apartmentDTO.getFile().isEmpty()) {
-            System.out.println("+");
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
+        if (apartmentDTO.getFile()!=null) {
+            if (!apartmentDTO.getFile().isEmpty()) {
+                File uploadDirGallery = new File(upload);
+                if (!uploadDirGallery.exists()) {
+                    uploadDirGallery.mkdir();
+                }
+                String uuid = UUID.randomUUID().toString();
+                String fileNameGallery = uuid + "-" + apartmentDTO.getFile().getOriginalFilename();
+                String resultNameGallery = upload + "" + fileNameGallery;
+                try {
+                    apartmentDTO.getFile().transferTo(new File((resultNameGallery)));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                apartment.setMainPhoto("../uploads/" + fileNameGallery);
+            } else {
+                apartment.setMainPhoto("../admin/dist/img/default.jpg");
             }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + apartmentDTO.getFile().getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            try {
-                apartmentDTO.getFile().transferTo(new File((resultNameGallery)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            apartment.setMainPhoto("../uploads/" + fileNameGallery);
-        }
-        else {
-            apartment.setMainPhoto("../admin/dist/img/default.jpg");
         }
         apartmentRepo.save(apartment);
     }
@@ -127,12 +124,6 @@ public class ApartmentServiceImpl implements ApartmentService {
             Apartment apartmentUpdate = apartmentOptional.get();
             if(apartment.getPhotoList()!=null){
                 apartmentUpdate.setPhotoList(apartment.getPhotoList());
-            }
-            if(apartment.getMainPhoto()!=null){
-                apartmentUpdate.setMainPhoto(apartment.getMainPhoto());
-            }
-            if(apartment.getAddress()!=null){
-                apartmentUpdate.setAddress(apartment.getAddress());
             }
             if(apartment.getCommission()!=null){
                 apartmentUpdate.setCommission(apartment.getCommission());
@@ -176,9 +167,6 @@ public class ApartmentServiceImpl implements ApartmentService {
             if(apartment.getPrice()!=0){
                 apartmentUpdate.setPrice(apartment.getPrice());
             }
-            if(apartment.getMainPhoto()!=null){
-                apartmentUpdate.setMainPhoto(apartment.getMainPhoto());
-            }
             if(apartment.getState()!=null){
                 apartmentUpdate.setState(apartment.getState());
             }
@@ -188,15 +176,14 @@ public class ApartmentServiceImpl implements ApartmentService {
             if(apartment.getUser()!=null){
                 apartmentUpdate.setUser(apartment.getUser());
             }
-
+            if (apartment.getAddress()!=null){
+                apartmentUpdate.setAddress(apartment.getAddress());
+            }
             apartmentRepo.saveAndFlush(apartmentUpdate);
         }
     }
 
     public void updateDTO(ApartmentDTO apartmentDTO, int id) throws IOException {
-        Frame frame = frameService.findById(apartmentDTO.getFrame());
-        LCD lcd = lcdService.findById(apartmentDTO.getLcd());
-        User user = userService.findById(apartmentDTO.getUser());
         Apartment apartment = ApartmentMapper.toEntity(apartmentDTO);
         if (!apartmentDTO.getFile().isEmpty()) {
             System.out.println("+");
@@ -243,9 +230,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                 File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
                 fileDelete.delete();
             }
-            if(apartment.getAddress()!=null){
-                apartmentUpdate.setAddress(apartment.getAddress());
-            }
+
             if(apartment.getCommission()!=null){
                 apartmentUpdate.setCommission(apartment.getCommission());
             }
@@ -255,8 +240,8 @@ public class ApartmentServiceImpl implements ApartmentService {
             if(apartment.getBalconyType()!=null){
                 apartmentUpdate.setBalconyType(apartment.getBalconyType());
             }
-            if(apartment.getLcd()!=null){
-                apartmentUpdate.setLcd(apartment.getLcd());
+            if (apartment.getAddress()!=null){
+                apartmentUpdate.setAddress(apartment.getAddress());
             }
             if(apartment.getDescription()!=null){
                 apartmentUpdate.setDescription(apartment.getDescription());
@@ -297,14 +282,12 @@ public class ApartmentServiceImpl implements ApartmentService {
             if(apartment.getType()!=null){
                 apartmentUpdate.setType(apartment.getType());
             }
-            if (apartmentDTO.getFrame()!=0){
-                apartmentUpdate.setFrame(frameService.findById(apartmentDTO.getFrame()));
-            }
+
             if (apartmentDTO.getLcd()!=0){
-                apartmentUpdate.setLcd(lcdService.findById(apartmentDTO.getLcd()));
+                apartmentUpdate.setLcd(LCD.builder().idLcd(apartmentDTO.getLcd()).build());
             }
             if (apartmentDTO.getUser()!=0){
-                apartmentUpdate.setUser(userService.findById(apartmentDTO.getUser()));
+                apartmentUpdate.setUser(User.builder().idUser(apartmentDTO.getUser()).build());
             }
             apartmentRepo.saveAndFlush(apartmentUpdate);
         }

@@ -18,14 +18,12 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class AgentMapper  {
     public static Agent toEntity(AgentDTO agentDTO){
-//        List<User> users = new ArrayList<>();
-//        users.add(userService.findById(agentDTO.getIdUser()));
+
         Agent agent = Agent.builder()
                 .name(agentDTO.getName())
                 .number(agentDTO.getNumber())
                 .mail(agentDTO.getMail())
                 .surname(agentDTO.getSurname())
-//                .users(users)
                 .type(agentDTO.getType())
                 .build();
         if (agentDTO.getIdAgent()!=0){

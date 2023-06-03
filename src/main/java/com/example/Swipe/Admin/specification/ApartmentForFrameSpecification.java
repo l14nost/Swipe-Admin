@@ -7,9 +7,11 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 @Builder
+@EqualsAndHashCode
 public class ApartmentForFrameSpecification implements Specification<Apartment> {
     private int keyWord;
     private Frame frame;

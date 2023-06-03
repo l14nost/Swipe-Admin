@@ -27,7 +27,7 @@ public class FrameServiceImpl implements FrameService {
             return frame.get();
         }
         else {
-            return Frame.builder().build();
+            return null;
         }
     }
 

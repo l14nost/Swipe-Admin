@@ -1,6 +1,7 @@
 package com.example.Swipe.Admin.dto;
 
 import com.example.Swipe.Admin.enums.TypeAgent;
+import com.example.Swipe.Admin.validation.UniqueEmailAgent;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -20,10 +21,11 @@ public class AgentDTO {
     @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
     String surname;
     @NotBlank
-    @Email(message = "Не рправильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @Email(message = "Не правильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @UniqueEmailAgent
     String mail;
     @NotBlank
-    @Pattern(regexp = "^[0-9]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
+    @Pattern(regexp = "^[0-9]*$", message = "Номер должен содержать 9 цифр")
     @Size(max = 9, min = 9)
     String number;
     TypeAgent type;

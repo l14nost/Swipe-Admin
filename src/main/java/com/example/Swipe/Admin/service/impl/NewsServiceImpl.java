@@ -44,7 +44,7 @@ public class NewsServiceImpl implements NewsService {
             return  news.get();
         }
         else {
-            return News.builder().build();
+            return null;
         }
     }
     public NewsDTO findByIdDTO(int id) {
@@ -54,7 +54,7 @@ public class NewsServiceImpl implements NewsService {
         }
         else {
             log.info("News by id"+id+"not found");
-            throw new UsernameNotFoundException("new");
+            return null;
 
         }
     }
@@ -101,9 +101,6 @@ public class NewsServiceImpl implements NewsService {
             News updateNews = newsOptional.get();
             if(news.getDate()!=null){
                 updateNews.setDate(news.getDate());
-            }
-            if(news.getLcd()!=null){
-                updateNews.setLcd(news.getLcd());
             }
             if(news.getDescription()!=null){
                 updateNews.setDescription(news.getDescription());

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Builder
 @Getter
@@ -28,4 +29,26 @@ public class UserAddInfo {
 
     @Column(name = "call_sms")
     private boolean callSms;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserAddInfo that = (UserAddInfo) o;
+
+        if (idUserAddInfo != that.idUserAddInfo) return false;
+        if (callSms != that.callSms) return false;
+        if (typeNotification != that.typeNotification) return false;
+        return Objects.equals(dateSub, that.dateSub);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = idUserAddInfo;
+        result = 31 * result + (typeNotification != null ? typeNotification.hashCode() : 0);
+        result = 31 * result + (dateSub != null ? dateSub.hashCode() : 0);
+        result = 31 * result + (callSms ? 1 : 0);
+        return result;
+    }
 }

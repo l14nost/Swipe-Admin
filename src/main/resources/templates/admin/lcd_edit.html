@@ -40,13 +40,15 @@
               </div>
 
           </div>
-          <div class="col-sm-6">
-            <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  placeholder="Введите имя..."  required="" value=" ">
-            <div class="invalid-feedback">
-              Введите имя...
+            <div class="col-sm-6">
+                <label  class="form-label">Адрес</label>
+                <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" placeholder="Введите имя..." >
+                <div th:if="${#fields.hasErrors('address')}">
+                    <div class="text-danger">
+                        <p th:errors="*{address}"></p>
+                    </div>
+                </div>
             </div>
-          </div>
           <div class="col-sm-6">
             <label  class="form-label">Оформление</label>
             <input type="text" class="form-control" name="formalization"  placeholder="Введите имя..."  required="" th:value="${lcd.getFormalization()}">
@@ -119,6 +121,11 @@
 <!--            </div>-->
 <!--          </div>-->
           <label for="inputImg">Главная картина</label>
+            <div th:if="${#fields.hasErrors('file')}">
+                <div class="text-danger">
+                    <p th:errors="*{file}"></p>
+                </div>
+            </div>
           <div class="form-group" style="display: flex">
 
             <div class="form-group" style="display: flex">
@@ -127,11 +134,7 @@
               <img th:src="${lcd.getMainPhoto()}" id= "imgMain" style="width: 75px; height: 75px" alt="null">
             </div>
             <input type="file" name="file" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px">
-              <div th:if="${#fields.hasErrors('file')}">
-                  <div class="text-danger">
-                      <p th:errors="*{file}"></p>
-                  </div>
-              </div>
+
               <script>
               inputImg.onchange = evt => {
                 const [file] = inputImg.files
@@ -144,6 +147,11 @@
           </div>
           <div id="galleryDiv">
             <label>Галерея картинок</label>
+              <div th:if="${#fields.hasErrors('gallery')}">
+                  <div class="text-danger">
+                      <p th:errors="*{gallery}"></p>
+                  </div>
+              </div>
             <div class="card-body" >
               <label>Размер 1000х190</label>
               <div class="row" >
@@ -165,11 +173,6 @@
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
                   <input type="file" id="inputImg2" th:id="inputGallery+${photo.getIdPhotos()}" name="gallery" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)">
-                    <div th:if="${#fields.hasErrors('gallery')}">
-                        <div class="text-danger">
-                            <p th:errors="*{gallery}"></p>
-                        </div>
-                    </div>
                   <script>
                     function handleFileChange(event) {
                       const input = event.target;
@@ -201,6 +204,11 @@
 
           <div >
             <label>Документы</label>
+              <div th:if="${#fields.hasErrors('documentsFiles')}">
+                  <div class="text-danger">
+                      <p th:errors="*{documentsFiles}"></p>
+                  </div>
+              </div>
             <div class="card-body">
               <label>Размер 1000х190</label>
               <div class="row" id="documentDiv">
@@ -335,16 +343,20 @@
           <div class="col-sm-6">
             <label  class="form-label">Высота потолков</label>
             <input type="text" class="form-control" name="height"  placeholder="Введите имя..." th:value="${lcd.getHeight()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('height')}">
+                  <div class="text-danger">
+                      <p th:errors="*{height}"></p>
+                  </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Расстояние до моря</label>
             <input type="text" class="form-control" name="distanceSea"  placeholder="Введите имя..." th:value="${lcd.getDistanceSea()}" required="">
-            <div class="invalid-feedback">
-              Введите имя...
-            </div>
+              <div th:if="${#fields.hasErrors('distanceSea')}">
+                  <div class="text-danger">
+                      <p th:errors="*{distanceSea}"></p>
+                  </div>
+              </div>
           </div>
           <label>Корпуса</label>
           <div id="frameDiv">

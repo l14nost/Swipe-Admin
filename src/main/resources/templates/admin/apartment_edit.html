@@ -50,13 +50,15 @@
           </div>
 
 <!--            th:value="${apartment.getAddress().getCity()+' '+apartment.getAddress().getArea()+' '+apartment.getAddress().getStreet()+' '+apartment.getAddress().getNumber()}"-->
-          <div class="col-sm-12">
-            <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  placeholder="Введите имя..."  >
-            <div class="invalid-feedback">
-              Введите имя...
+            <div class="col-sm-12">
+                <label  class="form-label">Адрес</label>
+                <input type="text" class="form-control" name="address"  th:value="${apartment.getAddress()}" placeholder="Введите имя..." >
+                <div th:if="${#fields.hasErrors('address')}">
+                    <div class="text-danger">
+                        <p th:errors="*{address}"></p>
+                    </div>
+                </div>
             </div>
-          </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
             <input type="text" class="form-control" name="price"  placeholder="Введите имя..." th:value="${apartment.getPrice()}" required="">
@@ -87,6 +89,11 @@
               </div>
           </div>
           <label for="inputImg">Главная картинка</label>
+            <div th:if="${#fields.hasErrors('file')}">
+                <div class="text-danger">
+                    <p th:errors="*{file}"></p>
+                </div>
+            </div>
           <div class="form-group" style="display: flex">
 
             <div class="form-group" style="display: flex">
@@ -95,11 +102,6 @@
               <img th:src="${apartment.getMainPhoto()}" id= "imgMain" style="width: 75px; height: 75px" alt="null">
             </div>
             <input type="file" name="file" id="inputImg" class="form-control" th:value="${apartment.getMainPhoto()}" style="margin-left: 30px; margin-top: 30px">
-              <div th:if="${#fields.hasErrors('file')}">
-                  <div class="text-danger">
-                      <p th:errors="*{file}"></p>
-                  </div>
-              </div>
             <script>
               inputImg.onchange = evt => {
                 const [file] = inputImg.files
@@ -112,6 +114,11 @@
           </div>
           <div id="galleryDiv">
             <label>Галерея картинок</label>
+              <div th:if="${#fields.hasErrors('galleryPhoto')}">
+                  <div class="text-danger">
+                      <p th:errors="*{galleryPhoto}"></p>
+                  </div>
+              </div>
             <div class="card-body">
               <label>Размер 1000х190</label>
               <div class="row" >
@@ -179,6 +186,7 @@
                         }
                     </script>
                 </div>
+
                 <div class="col-sm-3" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
 <!--                    <a th:href="@{/add_photo/{idApartment}(idApartment = ${apartment.getIdApartment()})}">-->

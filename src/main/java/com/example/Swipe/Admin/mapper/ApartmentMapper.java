@@ -31,6 +31,7 @@ public class ApartmentMapper  {
                 .totalArea(apartment.getTotalArea())
                 .foundingDocument(apartment.getFoundingDocument())
                 .type(apartment.getType())
+                .address(apartment.getAddress())
                 .build();
         return apartment1;
 
@@ -43,8 +44,6 @@ public class ApartmentMapper  {
                 .number(apartment.getNumber())
                 .description(apartment.getDescription())
                 .price(apartment.getPrice())
-                .user(apartment.getUser().getIdUser())
-                .photoList(apartment.getPhotoList().stream().map(PhotoMapper::apply).toList())
                 .mainPhoto(apartment.getMainPhoto())
                 .balconyType(apartment.getBalconyType())
                 .calculation(apartment.getCalculation())
@@ -58,13 +57,21 @@ public class ApartmentMapper  {
                 .totalArea(apartment.getTotalArea())
                 .foundingDocument(apartment.getFoundingDocument())
                 .type(apartment.getType())
+                .address(apartment.getAddress())
                 .build();
         if (apartment.getFrame()!=null){
             apartmentDTO.setFrame(apartment.getFrame().getIdFrame());
         }else apartmentDTO.setFrame(0);
         if (apartment.getLcd()!=null){
             apartmentDTO.setLcd(apartment.getLcd().getIdLcd());
+            apartmentDTO.setNameLcd(apartment.getLcd().getName());
         }else apartmentDTO.setLcd(0);
+        if (apartment.getUser()!=null){
+            apartmentDTO.setUser(apartment.getUser().getIdUser());
+        }
+        if (apartment.getPhotoList()!=null){
+            apartmentDTO.setPhotoList(apartment.getPhotoList().stream().map(PhotoMapper::apply).toList());
+        }
         return apartmentDTO;
 
     }

@@ -7,9 +7,11 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 @Builder
+@EqualsAndHashCode
 public class LcdSpecification implements Specification<LCD> {
     private String keyWord;
 
@@ -19,7 +21,9 @@ public class LcdSpecification implements Specification<LCD> {
 
         Predicate predicate = criteriaBuilder.and(
                 criteriaBuilder.or(
-                        criteriaBuilder.like(root.get("name"), "%" + keyWord + "%")
+                        criteriaBuilder.like(root.get("name"), "%" + keyWord + "%"),
+                        criteriaBuilder.like(root.get("address"), "%" + keyWord + "%")
+
 //                        criteriaBuilder.like(root.get("surname"), "%" + keyWord + "%"),
 //                        criteriaBuilder.like(root.get("mail"), "%" + keyWord + "%")
 //                    criteriaBuilder.equal(root.get("id"), userSearchingDto.getName())

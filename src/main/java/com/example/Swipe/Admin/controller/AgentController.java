@@ -1,7 +1,6 @@
 package com.example.Swipe.Admin.controller;
 
 import com.example.Swipe.Admin.dto.AgentDTO;
-import com.example.Swipe.Admin.entity.Agent;
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.enums.TypeAgent;
 import com.example.Swipe.Admin.enums.TypeUser;
@@ -15,8 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 @Log4j2
 @Controller
 @RequiredArgsConstructor
@@ -95,7 +92,7 @@ public class AgentController {
             model.addAttribute("idUser", agentDTO.getIdUser());
             return "admin/agent_edit";
         }
-        agentServiceImpl.updateEntityDTO(agentDTO,id);
+        agentServiceImpl.updateDTO(agentDTO,id);
         log.info("Agent id:"+id+", was update");
         return "redirect:/user_edit/"+agentDTO.getIdUser();
     }

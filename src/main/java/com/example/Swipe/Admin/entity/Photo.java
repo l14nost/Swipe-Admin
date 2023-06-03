@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.Builder;
 
+import java.util.Objects;
+
 @Builder
 @Getter
 @Setter
@@ -27,4 +29,19 @@ public class Photo {
     @ManyToOne
     @JoinColumn(name = "id_apartment")
     private Apartment apartment;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Photo photo = (Photo) o;
+
+        return idPhotos == photo.idPhotos;
+    }
+
+    @Override
+    public int hashCode() {
+        return idPhotos;
+    }
 }

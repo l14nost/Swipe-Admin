@@ -24,4 +24,18 @@ public class Documents {
     @JoinColumn(name = "id_lcd")
     private LCD lcd;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Documents documents = (Documents) o;
+
+        return idDocuments == documents.idDocuments;
+    }
+
+    @Override
+    public int hashCode() {
+        return idDocuments;
+    }
 }

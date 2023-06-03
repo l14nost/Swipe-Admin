@@ -2,6 +2,7 @@ package com.example.Swipe.Admin.dto;
 
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.validation.FileExtension;
+import com.example.Swipe.Admin.validation.UniqueEmail;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,8 +29,10 @@ public class ClientDTO {
     String surname;
 
     @NotBlank
-    @Email(message = "Не рправильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @Email(message = "Не рправильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]*.[a-z]$")
+    @UniqueEmail
     String mail;
+
 
 //    boolean blackList;
     @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")

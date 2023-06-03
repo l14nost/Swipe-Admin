@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileExtensionValidator implements ConstraintValidator<FileExtension, Object> {
@@ -33,7 +34,7 @@ public class FileExtensionValidator implements ConstraintValidator<FileExtension
     }
 
     private boolean isValidFileList(List<MultipartFile> files) {
-
+        List<Boolean> checkList = new ArrayList<>();
 
         if (files.isEmpty()) {
             return true;
@@ -41,11 +42,19 @@ public class FileExtensionValidator implements ConstraintValidator<FileExtension
 
 
         for (MultipartFile file : files) {
+            if (file.isEmpty()){
+                checkList.add(true);
+                continue;
+            }
             if (!isFileExtensionAllowed(file)) {
+                checkList.add(false);
+            }
+        }
+        for (boolean check:checkList){
+            if (!check){
                 return false;
             }
         }
-
         return true;
     }
 

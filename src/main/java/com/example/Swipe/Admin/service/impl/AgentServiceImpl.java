@@ -1,7 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
 import com.example.Swipe.Admin.dto.AgentDTO;
-import com.example.Swipe.Admin.entity.Address;
 import com.example.Swipe.Admin.entity.Agent;
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.mapper.AgentMapper;
@@ -40,7 +39,7 @@ public class AgentServiceImpl implements AgentService {
             return agent.get();
         }
         else {
-            return Agent.builder().name("").surname("").mail("").number("").build();
+            return null;
         }
     }
 
@@ -71,17 +70,10 @@ public class AgentServiceImpl implements AgentService {
             if(agent.getSurname()!=null){
                 agentUpdate.setSurname(agent.getSurname());
             }
-            if(agent.getUsers()!=null){
-                agentUpdate.setUsers(agent.getUsers());
-            }
-            agentRepo.saveAndFlush(agentUpdate);
-        }
-        else {
-            Agent agentUpdate = Agent.builder().name("").surname("").mail("").number("").build();
             agentRepo.saveAndFlush(agentUpdate);
         }
     }
-    public void updateEntityDTO(AgentDTO agentDTO, int id) {
+    public void updateDTO(AgentDTO agentDTO, int id) {
         Agent agent = AgentMapper.toEntity(agentDTO);
         Optional<Agent> agentOptional = agentRepo.findById(id);
         if(agentOptional.isPresent()){
@@ -98,13 +90,6 @@ public class AgentServiceImpl implements AgentService {
             if(agent.getSurname()!=null){
                 agentUpdate.setSurname(agent.getSurname());
             }
-            if(agent.getUsers()!=null){
-                agentUpdate.setUsers(agent.getUsers());
-            }
-            agentRepo.saveAndFlush(agentUpdate);
-        }
-        else {
-            Agent agentUpdate = Agent.builder().name("").surname("").mail("").number("").build();
             agentRepo.saveAndFlush(agentUpdate);
         }
     }

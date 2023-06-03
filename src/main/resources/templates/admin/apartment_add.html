@@ -13,7 +13,7 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_apartment}" th:object="${apartment}">
+    <form class="needs-validation" method="post" enctype="multipart/mixed" th:action="@{/add_apartment}" th:object="${apartment}">
     <div style="display: flex; justify-content: space-between">
       <h4 class="mb-3">Квартира не от застройщика</h4>
     </div>
@@ -42,9 +42,11 @@
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  placeholder="Введите имя..." >
-            <div class="invalid-feedback">
-              Введите имя...
+            <input type="text" class="form-control" name="address"  th:value="${apartment.getAddress()}" placeholder="Введите имя..." >
+            <div th:if="${#fields.hasErrors('address')}">
+              <div class="text-danger">
+                <p th:errors="*{address}"></p>
+              </div>
             </div>
           </div>
           <div class="col-sm-12">
@@ -75,6 +77,11 @@
                 </div>
             </div>
           <label for="inputImg">Главная картина</label>
+          <div th:if="${#fields.hasErrors('file')}">
+            <div class="text-danger">
+              <p th:errors="*{file}"></p>
+            </div>
+          </div>
           <div class="form-group" style="display: flex">
 
             <div class="form-group" style="display: flex">
@@ -83,11 +90,6 @@
               <img src="../admin/dist/img/default.jpg" id= "imgMain" style="width: 75px; height: 75px" alt="null">
             </div>
             <input type="file" name="file" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px">
-              <div th:if="${#fields.hasErrors('file')}">
-                  <div class="text-danger">
-                      <p th:errors="*{file}"></p>
-                  </div>
-              </div>
             <script>
               inputImg.onchange = evt => {
                 const [file] = inputImg.files

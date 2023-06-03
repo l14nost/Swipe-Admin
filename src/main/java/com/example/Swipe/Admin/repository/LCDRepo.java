@@ -1,6 +1,5 @@
 package com.example.Swipe.Admin.repository;
 
-import com.example.Swipe.Admin.entity.Address;
 import com.example.Swipe.Admin.entity.LCD;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

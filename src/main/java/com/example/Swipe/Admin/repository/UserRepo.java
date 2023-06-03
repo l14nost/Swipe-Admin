@@ -17,8 +17,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> , JpaSpecificationExecutor<User> {
     Optional<User> findByMail(String mail);
+    List<User> findAllByMail(String mail);
     List<User> findAllByTypeUserAndBlackListIsFalse(TypeUser typeUser);
     Page<User> findAllByBlackListIsTrue(Pageable pageable);
 
     Page<User> findAllByTypeUserAndBlackListIsFalse(TypeUser typeUser, Pageable pageable);
+    int countByMail(String email);
+
 }

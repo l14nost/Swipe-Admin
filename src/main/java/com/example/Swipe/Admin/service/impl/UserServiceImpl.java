@@ -11,11 +11,16 @@ import com.example.Swipe.Admin.repository.UserRepo;
 import com.example.Swipe.Admin.service.UserService;
 import com.example.Swipe.Admin.specification.BlackListSpecification;
 import com.example.Swipe.Admin.specification.UserSpecification;
+import com.example.Swipe.Admin.validation.UniqueEmail;
+import com.example.Swipe.Admin.validation.UniqueEmailValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +30,9 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Setter
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
-    private final BlackLIstMapper blackLIstMapper;
     @Value("${upload.path}")
     private String upload;
 
@@ -38,10 +43,6 @@ public class UserServiceImpl implements UserService {
     public List<ClientDTO> findAllByTypeDTO(TypeUser typeUser){
         return userRepo.findAllByTypeUserAndBlackListIsFalse(typeUser).stream().map(ClientMapper::apply).toList();
     }
-//    public Page<UserDTO> specificationForBlackList(String keyWord, Pageable pageable){
-//        BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).build();
-//        return userRepo.findAll(blackListSpecification,pageable).map(userMapper);
-//    }
 
     public Page<ClientDTO> findAllByTypePagination(TypeUser typeUser, Pageable pageable,String keyWord){
         if (!keyWord.equals("null")) {
@@ -53,9 +54,9 @@ public class UserServiceImpl implements UserService {
     public Page<BlackListDTO> blackList(Pageable pageable, String keyWord){
         if (!keyWord.equals("null")) {
             BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).build();
-            return userRepo.findAll(blackListSpecification, pageable).map(blackLIstMapper);
+            return userRepo.findAll(blackListSpecification, pageable).map(BlackLIstMapper::apply);
         }
-        else return userRepo.findAllByBlackListIsTrue(pageable).map(blackLIstMapper);
+        else return userRepo.findAllByBlackListIsTrue(pageable).map(BlackLIstMapper::apply);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
             return ClientMapper.apply(user.get());
         }
         else {
-            return ClientDTO.builder().build();
+            return null;
         }
     }
     @Override
@@ -78,30 +79,31 @@ public class UserServiceImpl implements UserService {
             return user.get();
         }
         else {
-            return User.builder().build();
+            return null;
         }
     }
     public void saveEntityDTO(ClientDTO clientDTO) {
         User user = ClientMapper.toEntity(clientDTO);
-        System.out.println(clientDTO.getFilename().isEmpty());
-        if (!clientDTO.getFilename().isEmpty()) {
-            System.out.println("+");;
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
+        if (clientDTO.getFilename()!=null) {
+            if (!clientDTO.getFilename().isEmpty()) {
+                File uploadDirGallery = new File(upload);
+                if (!uploadDirGallery.exists()) {
+                    uploadDirGallery.mkdir();
+                }
+                String uuid = UUID.randomUUID().toString();
+                String fileNameGallery = uuid + "-" + clientDTO.getFilename().getOriginalFilename();
+                String resultNameGallery = upload + "" + fileNameGallery;
+                try {
+                    clientDTO.getFilename().transferTo(new File((resultNameGallery)));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                user.setFilename("../uploads/" + fileNameGallery);
             }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + clientDTO.getFilename().getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            try {
-                clientDTO.getFilename().transferTo(new File((resultNameGallery)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            else if (clientDTO.getFilename().isEmpty() && clientDTO.getIdUser() == 0) {
+                System.out.println("+");
+                user.setFilename("../admin/dist/img/default.jpg");
             }
-            user.setFilename("../uploads/" + fileNameGallery);
-        }
-        else if(clientDTO.getFilename().isEmpty()&&clientDTO.getIdUser()==0){
-            user.setFilename("../admin/dist/img/default.jpg");
         }
 
         userRepo.save(user);
@@ -109,10 +111,53 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void saveEntity(User user) {
-
         userRepo.save(user);
-
     }
+    public BindingResult userByMail(String email, int id, BindingResult result){
+        List<User> user = userRepo.findAllByMail(email);
+        if (user.size()==0){
+            return result;
+        }
+        else {
+            if (result.hasErrors()&&result.getFieldErrorCount("mail")>0) {
+//                if (user.size() == 1 && user.get(0).getIdUser() == id && id!=0) {
+//                    for (int i = 0; i < result.getAllErrors().size(); i++) {
+//                        if (result.getAllErrors().get(i).equals(result.getFieldError("mail"))) {
+//                            result.getAllErrors().remove(result.getAllErrors().get(i));
+//                        }
+//                    }
+//                    return result;
+//                } else return result;
+                return result;
+            }
+            else {
+                if (user.size()>0&&id==0) {
+                    result.addError(new FieldError("client", "mail", "Email already exists"));
+                }
+                return result;
+            }
+        }
+    }
+    public BindingResult userByMailUpdate(String email, int id, BindingResult result){
+        List<User> user = userRepo.findAllByMail(email);
+        if (user.size()==0){
+            return result;
+        }
+        else {
+                if (user.size() == 1 && user.get(0).getIdUser() == id) {
+                    for (int i = 0; i < result.getAllErrors().size(); i++) {
+                        if (result.getAllErrors().get(i).equals(result.getFieldError("mail"))) {
+                            result.getAllErrors().remove(result.getAllErrors().get(i));
+                        }
+                    }
+                    return result;
+                } else {
+                    result.addError(new FieldError("user", "mail", "Email already exists"));
+                    return result;
+                }
+        }
+    }
+
 
     @Override
     public void deleteById(int id) {
@@ -147,9 +192,6 @@ public class UserServiceImpl implements UserService {
             if (user.getNumber() != null) {
                 updateUser.setNumber(user.getNumber());
             }
-            if(user.getAgent()!=null){
-                updateUser.setAgent(user.getAgent());
-            }
             updateUser.setBlackList(user.isBlackList());
 
 
@@ -160,7 +202,6 @@ public class UserServiceImpl implements UserService {
     public void updateDTO(ClientDTO clientDTO, int id) {
         User user = ClientMapper.toEntity(clientDTO);
         if (!clientDTO.getFilename().isEmpty()) {
-            System.out.println("+");;
             File uploadDirGallery = new File(upload);
             if (!uploadDirGallery.exists()) {
                 uploadDirGallery.mkdir();
@@ -199,9 +240,6 @@ public class UserServiceImpl implements UserService {
             }
             if (user.getNumber() != null) {
                 updateUser.setNumber(user.getNumber());
-            }
-            if(user.getAgent()!=null){
-                updateUser.setAgent(user.getAgent());
             }
             updateUser.setBlackList(user.isBlackList());
 
