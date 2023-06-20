@@ -1,12 +1,11 @@
 package com.example.Swipe.Admin.dto;
 
 import com.example.Swipe.Admin.entity.LCD;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -20,7 +19,7 @@ public class NewsDTO {
     @NotBlank
     @Size(min = 5, max = 1000)
     String description;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate date;
 
     int idLcd;

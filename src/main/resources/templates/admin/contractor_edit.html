@@ -90,7 +90,7 @@
               <!--          ${stock.getFileName}-->
               <img th:src="${user.getFilename()}" id="img" style="width: 75px; height: 75px" alt="null">
 
-            <input aria-label="file example" type="file" name="file" id="inputImg" class="form-control" th:value="${user.getFilename()}" style="margin-left: 30px; margin-top: 30px">
+            <input aria-label="file example" type="file" name="file" id="inputImg" class="form-control" th:value="${user.getFilename()}" style="margin-left: 30px; margin-top: 30px" accept=".jpg,.jpeg">
           </div>
             <script>
               inputImg.onchange = evt => {

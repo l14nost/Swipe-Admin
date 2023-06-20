@@ -2,10 +2,8 @@ package com.example.Swipe.Admin.specification;
 
 import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.entity.User;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,22 +13,27 @@ import org.springframework.data.jpa.domain.Specification;
 public class LcdSpecification implements Specification<LCD> {
     private String keyWord;
 
+    private String sort;
+
     @Override
     public Predicate toPredicate(Root<LCD> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         query.distinct(true);
-
-        Predicate predicate = criteriaBuilder.and(
-                criteriaBuilder.or(
-                        criteriaBuilder.like(root.get("name"), "%" + keyWord + "%"),
-                        criteriaBuilder.like(root.get("address"), "%" + keyWord + "%")
+        Predicate predicate = null;
+        if (keyWord!=null) {
+             predicate = criteriaBuilder.and(
+                    criteriaBuilder.or(
+                            criteriaBuilder.like(root.get("name"), "%" + keyWord + "%"),
+                            criteriaBuilder.like(root.get("address"), "%" + keyWord + "%")
 
 //                        criteriaBuilder.like(root.get("surname"), "%" + keyWord + "%"),
 //                        criteriaBuilder.like(root.get("mail"), "%" + keyWord + "%")
 //                    criteriaBuilder.equal(root.get("id"), userSearchingDto.getName())
 
-                )
-        );
-        query.orderBy(criteriaBuilder.asc(root.get("name")));
+                    )
+            );
+        }
+
+        query.orderBy(criteriaBuilder.asc(root.get(sort)));
         return predicate;
 
 

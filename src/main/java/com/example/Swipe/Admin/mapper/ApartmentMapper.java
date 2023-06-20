@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ApartmentMapper  {
@@ -70,7 +71,7 @@ public class ApartmentMapper  {
             apartmentDTO.setUser(apartment.getUser().getIdUser());
         }
         if (apartment.getPhotoList()!=null){
-            apartmentDTO.setPhotoList(apartment.getPhotoList().stream().map(PhotoMapper::apply).toList());
+            apartmentDTO.setPhotoList(apartment.getPhotoList().stream().map(PhotoMapper::apply).collect(Collectors.toList()));
         }
         return apartmentDTO;
 

@@ -3,6 +3,8 @@ package com.example.Swipe.Admin.service.impl;
 import com.example.Swipe.Admin.entity.Documents;
 import com.example.Swipe.Admin.repository.DocumentsRepo;
 import com.example.Swipe.Admin.service.DocumentsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class DocumentsServiceImpl implements DocumentsService {
+    private Logger log = LoggerFactory.getLogger(DocumentsServiceImpl.class);
     private final DocumentsRepo documentsRepo;
 
     public DocumentsServiceImpl(DocumentsRepo documentsRepo) {

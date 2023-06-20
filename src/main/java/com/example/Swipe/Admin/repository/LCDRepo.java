@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LCDRepo extends JpaRepository<LCD, Integer>, JpaSpecificationExecutor<LCD> {
     Page<LCD> findAll(Pageable pageable);
+
 }

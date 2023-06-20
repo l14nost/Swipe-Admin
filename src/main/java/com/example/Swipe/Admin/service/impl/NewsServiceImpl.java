@@ -7,15 +7,18 @@ import com.example.Swipe.Admin.repository.NewsRepo;
 import com.example.Swipe.Admin.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-@Log4j2
+
 @Service
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
+    private Logger log = LoggerFactory.getLogger(NewsServiceImpl.class);
     private final NewsRepo newsRepo;
     private final LCDServiceImpl lcdService;
 

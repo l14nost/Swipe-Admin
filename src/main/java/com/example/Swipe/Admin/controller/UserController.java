@@ -12,9 +12,11 @@ import com.example.Swipe.Admin.mapper.ClientMapper;
 import com.example.Swipe.Admin.service.impl.UserAddInfoServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
 import com.example.Swipe.Admin.validation.UniqueEmailValidator;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,10 +28,11 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.UUID;
-@Log4j2
+
 @Controller
 @RequiredArgsConstructor
 public class UserController {
+    private Logger log = LoggerFactory.getLogger(UserController.class);
     @Value("${upload.path}")
     private String upload;
     private TypeNotification typeNotification;
@@ -57,7 +60,7 @@ public class UserController {
     @GetMapping("/add_user")
     public String addUser(@RequestParam(name = "type") TypeUser type, Model model){
         model.addAttribute("type", type);
-        model.addAttribute("client", ClientDTO.builder().userAddInfoDTO(UserAddInfoDTO.builder().typeNotification(TypeNotification.ME).build()).build());
+        model.addAttribute("user", ClientDTO.builder().userAddInfoDTO(UserAddInfoDTO.builder().typeNotification(TypeNotification.ME).build()).build());
         if(type.equals(TypeUser.CLIENT)) {
             return "admin/user_add";
         }
@@ -148,14 +151,14 @@ public class UserController {
 //        return "redirect:/users";
 //    }
     @PostMapping("/add_user")
-    public String userAdd(@Valid @ModelAttribute(name = "client") ClientDTO clientDTO, BindingResult bindingResult, Model model) throws IOException {
-        bindingResult = userServiceImpl.userByMail(clientDTO.getMail(),0,bindingResult);
+    public String userAdd(@Valid @ModelAttribute(name = "user") ClientDTO clientDTO, BindingResult bindingResult, Model model) throws IOException {
+        bindingResult = userServiceImpl.uniqueMail(clientDTO.getMail(),bindingResult,0,"add");
         System.out.println(clientDTO);
         if (bindingResult.hasErrors()){
             System.out.println(bindingResult.getAllErrors());
 
             model.addAttribute("type", clientDTO.getType());
-            model.addAttribute("client", clientDTO);
+            model.addAttribute("user", clientDTO);
             if(clientDTO.getType().equals(TypeUser.CLIENT)) {
                 return "admin/user_add";
             }
@@ -211,7 +214,7 @@ public class UserController {
     @PostMapping("/user_edit/{id}")
     public String userUpdate(@PathVariable int id, @Valid @ModelAttribute(name = "user") ClientDTO clientDTO,BindingResult result, Model model) {
         System.out.println(result.getFieldError("mail"));
-        result = userServiceImpl.userByMailUpdate(clientDTO.getMail(),id,result);
+        result = userServiceImpl.uniqueMail(clientDTO.getMail(),result,id,"update");
         if (result.hasErrors()){
             System.out.println(result);
             clientDTO.setAgent(userServiceImpl.findByIdDTO(id).getAgent());

@@ -133,7 +133,7 @@
               <!--          ${stock.getFileName}-->
               <img th:src="${lcd.getMainPhoto()}" id= "imgMain" style="width: 75px; height: 75px" alt="null">
             </div>
-            <input type="file" name="file" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px">
+            <input type="file" name="file" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px" accept=".jpg,.jpeg,.png">
 
               <script>
               inputImg.onchange = evt => {
@@ -172,7 +172,7 @@
             " th:attr="onclick='deleteData(' + ${photo.getIdPhotos()} + ', ' + ${lcd.getIdLcd()} + ')'">
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
-                  <input type="file" id="inputImg2" th:id="inputGallery+${photo.getIdPhotos()}" name="gallery" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)">
+                  <input type="file" id="inputImg2" th:id="inputGallery+${photo.getIdPhotos()}" name="gallery" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png">
                   <script>
                     function handleFileChange(event) {
                       const input = event.target;
@@ -230,7 +230,7 @@
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
                   <label for="inputDocument" id = "filename" th:text="${document.getName()}" style="text-align: center"></label>
-                  <input type="file" id="inputDocument" name="documentsFiles" class="form-control" th:value="${document.getFileName()}">
+                  <input type="file" id="inputDocument" name="documentsFiles" class="form-control" th:value="${document.getFileName()}" accept=".doc,.docx,.xlsx">
                 </div>
                 <script>
                   var fileInput = document.getElementById('inputDocument');

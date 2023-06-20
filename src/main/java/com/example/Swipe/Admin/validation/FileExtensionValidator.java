@@ -1,7 +1,6 @@
 package com.example.Swipe.Admin.validation;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;

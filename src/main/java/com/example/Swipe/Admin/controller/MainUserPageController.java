@@ -4,6 +4,8 @@ import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +15,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-@Log4j2
+
 @Controller
 @RequiredArgsConstructor
 public class MainUserPageController {
+    private Logger log = LoggerFactory.getLogger(MainUserPageController.class);
     private final UserServiceImpl userServiceImpl;
     private TypeUser typeUser;
 
@@ -33,17 +37,21 @@ public class MainUserPageController {
                             @RequestParam(name = "searchClient", required = false, defaultValue = "null") String keyWordClient,
                             @RequestParam(name = "searchContractor", required = false, defaultValue = "null") String keyWordContractor,
                             @RequestParam(name = "searchNotary", required = false, defaultValue = "null") String keyWordNotary,
+                            @RequestParam(name = "sortedClient", required = false,defaultValue = "idUser") String sortedClient,
+                            @RequestParam(name = "sortedContractor", required = false,defaultValue = "idUser") String sortedContractor,
+                            @RequestParam(name = "sortedNotary", required = false,defaultValue = "idUser") String sortedNotary,
                             Model model) {
         Pageable pageClient = PageRequest.of(page,sizePage);
         Pageable pageable = PageRequest.of(pageContractor,sizePageContractor);
         Pageable pageableNotary = PageRequest.of(pageNotary,sizePageNotary);
-        model.addAttribute("users", userServiceImpl.findAllByTypePagination(TypeUser.CLIENT, pageClient,keyWordClient).getContent());
-        model.addAttribute("pageUser", userServiceImpl.findAllByTypePagination(TypeUser.CLIENT, pageClient,keyWordClient));
-        model.addAttribute("contractors", userServiceImpl.findAllByTypePagination(TypeUser.CONTRACTOR, pageable,keyWordContractor).getContent());
-        model.addAttribute("pageContractor", userServiceImpl.findAllByTypePagination(TypeUser.CONTRACTOR, pageable,keyWordContractor));
-        model.addAttribute("notaries", userServiceImpl.findAllByTypePagination(TypeUser.NOTARY,pageableNotary,keyWordNotary).getContent());
-        model.addAttribute("pageNotary", userServiceImpl.findAllByTypePagination(TypeUser.NOTARY,pageableNotary,keyWordNotary));
-//        model.addAttribute("url","/users");
+        model.addAttribute("users", userServiceImpl.findAllByTypePagination(TypeUser.CLIENT, pageClient,keyWordClient,sortedClient).getContent());
+        model.addAttribute("pageUser", userServiceImpl.findAllByTypePagination(TypeUser.CLIENT, pageClient,keyWordClient,sortedClient));
+        model.addAttribute("contractors", userServiceImpl.findAllByTypePagination(TypeUser.CONTRACTOR, pageable,keyWordContractor,sortedContractor).getContent());
+        model.addAttribute("pageContractor", userServiceImpl.findAllByTypePagination(TypeUser.CONTRACTOR, pageable,keyWordContractor,sortedContractor));
+        model.addAttribute("notaries", userServiceImpl.findAllByTypePagination(TypeUser.NOTARY,pageableNotary,keyWordNotary,sortedNotary).getContent());
+        model.addAttribute("pageNotary", userServiceImpl.findAllByTypePagination(TypeUser.NOTARY,pageableNotary,keyWordNotary,sortedNotary));
+
+
         model.addAttribute("typeClient", TypeUser.CLIENT );
         model.addAttribute("typeContractor", TypeUser.CONTRACTOR );
         model.addAttribute("typeNotary", TypeUser.NOTARY );
@@ -51,6 +59,12 @@ public class MainUserPageController {
         model.addAttribute("searchClient", keyWordClient);
         model.addAttribute("searchContractor", keyWordContractor);
         model.addAttribute("searchNotary", keyWordNotary);
+
+        model.addAttribute("sizeClient",userServiceImpl.countByTypeUser(TypeUser.CLIENT));
+        model.addAttribute("sizeContractor",userServiceImpl.countByTypeUser(TypeUser.CONTRACTOR));
+        model.addAttribute("sizeNotary",userServiceImpl.countByTypeUser(TypeUser.NOTARY));
+
+
         log.info("Current page client table:"+page+", size:"+sizePage);
         log.info("Current page contractor table:"+pageContractor+", size:"+sizePageContractor);
         log.info("Current page notary table:"+pageNotary+", size:"+sizePageNotary);

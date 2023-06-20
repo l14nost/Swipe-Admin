@@ -6,9 +6,11 @@ import com.example.Swipe.Admin.entity.Frame;
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.mapper.RequestToDtoApartment;
 import com.example.Swipe.Admin.service.impl.*;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +23,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-@Log4j2
+
 @Controller
 @RequiredArgsConstructor
 public class ApartmentController {
+    private Logger log = LoggerFactory.getLogger(ApartmentController.class);
     @Value("${upload.path}")
     private String upload;
     private final ApartmentServiceImpl apartmentServiceImpl;

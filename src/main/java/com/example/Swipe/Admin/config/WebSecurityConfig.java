@@ -35,12 +35,12 @@ public class WebSecurityConfig {
         http.
                 cors().and().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/login").hasRole("ADMIN")
+                        .antMatchers("/login").permitAll()
                         .anyRequest().hasAuthority("ADMIN")
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/main")
+                        .defaultSuccessUrl("/Swipe-Admin/main")
                         .loginProcessingUrl("/login")
                         .failureUrl("/login?error=true")
                         .permitAll()

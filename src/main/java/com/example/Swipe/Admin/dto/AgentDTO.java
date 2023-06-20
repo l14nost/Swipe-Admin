@@ -2,10 +2,7 @@ package com.example.Swipe.Admin.dto;
 
 import com.example.Swipe.Admin.enums.TypeAgent;
 import com.example.Swipe.Admin.validation.UniqueEmailAgent;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,7 +19,7 @@ public class AgentDTO {
     String surname;
     @NotBlank
     @Email(message = "Не правильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
-    @UniqueEmailAgent
+//    @UniqueEmailAgent
     String mail;
     @NotBlank
     @Pattern(regexp = "^[0-9]*$", message = "Номер должен содержать 9 цифр")

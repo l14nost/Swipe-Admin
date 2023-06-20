@@ -6,6 +6,7 @@ import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.enums.Role;
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.repository.UserRepo;
+import com.example.Swipe.Admin.specification.BlackListSpecification;
 import com.example.Swipe.Admin.specification.UserSpecification;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -85,8 +86,9 @@ class UserServiceImplTest {
                 User.builder().typeUser(TypeUser.CLIENT).build()
         );
         Pageable pageable = PageRequest.of(0,3);
-        when(userRepo.findAllByTypeUserAndBlackListIsFalse(TypeUser.CLIENT,pageable)).thenReturn(new PageImpl<>(client));
-        Page<ClientDTO> users = userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"null");
+        UserSpecification blackListSpecification1 = UserSpecification.builder().typeUser(TypeUser.CLIENT).sort("idUser").build();
+        when(userRepo.findAll(blackListSpecification1,pageable)).thenReturn(new PageImpl<>(client));
+        Page<ClientDTO> users = userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"null","idUser");
         assertEquals(5,users.getContent().size());
         for (ClientDTO user : users) {
             assertEquals(TypeUser.CLIENT, user.getType());
@@ -94,9 +96,9 @@ class UserServiceImplTest {
         List<User> client1 = Arrays.asList(
                 User.builder().name("Amir").typeUser(TypeUser.CLIENT).build()
         );
-        UserSpecification blackListSpecification = UserSpecification.builder().keyWord("Amir").typeUser(TypeUser.CLIENT).build();
+        UserSpecification blackListSpecification = UserSpecification.builder().keyWord("Amir").typeUser(TypeUser.CLIENT).sort("idUser").build();
         when(userRepo.findAll(blackListSpecification,pageable)).thenReturn(new PageImpl<>(client1));
-        Page<ClientDTO> users1 = userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"Amir");
+        Page<ClientDTO> users1 = userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"Amir","idUser");
         assertEquals(1,users1.getContent().size());
     }
 
@@ -110,8 +112,9 @@ class UserServiceImplTest {
                 User.builder().typeUser(TypeUser.CLIENT).build()
         );
         Pageable pageable = PageRequest.of(0,3);
-        when(userRepo.findAllByBlackListIsTrue(pageable)).thenReturn(new PageImpl<>(client));
-        Page<BlackListDTO> users = userService.blackList(pageable,"null");
+        BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord("null").sortedBy("surname").build();
+        when(userRepo.findAll(blackListSpecification,pageable)).thenReturn(new PageImpl<>(client));
+        Page<BlackListDTO> users = userService.blackList(pageable,"null", "surname");
         assertEquals(5,users.getContent().size());
     }
 

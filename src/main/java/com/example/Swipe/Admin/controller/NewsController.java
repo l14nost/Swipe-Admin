@@ -4,19 +4,22 @@ import com.example.Swipe.Admin.dto.NewsDTO;
 import com.example.Swipe.Admin.entity.News;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.NewsServiceImpl;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-@Log4j2
+
 @Controller
 @RequiredArgsConstructor
 public class NewsController {
+    private Logger log = LoggerFactory.getLogger(NewsController.class);
     private final NewsServiceImpl newsServiceImpl;
     private final LCDServiceImpl lcdService;
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class LcdMapper  {
@@ -77,16 +78,16 @@ public class LcdMapper  {
             lcdDTO.setContractor(lcd.getUser().getIdUser());
         }
         if (lcd.getNewsList()!=null){
-            lcdDTO.setNewsList(lcd.getNewsList().stream().map(NewsMapper::apply).toList());
+            lcdDTO.setNewsList(lcd.getNewsList().stream().map(NewsMapper::apply).collect(Collectors.toList()));
         }
         if (lcd.getPhotoList()!=null){
-            lcdDTO.setPhotoList(lcd.getPhotoList().stream().map(PhotoMapper::apply).toList());
+            lcdDTO.setPhotoList(lcd.getPhotoList().stream().map(PhotoMapper::apply).collect(Collectors.toList()));
         }
         if (lcd.getDocuments()!=null){
-            lcdDTO.setDocuments(lcd.getDocuments().stream().map(DocumentMapper::apply).toList());
+            lcdDTO.setDocuments(lcd.getDocuments().stream().map(DocumentMapper::apply).collect(Collectors.toList()));
         }
         if (lcd.getFrames()!=null){
-            lcdDTO.setFrames(lcd.getFrames().stream().map(FrameMapper::apply).toList());
+            lcdDTO.setFrames(lcd.getFrames().stream().map(FrameMapper::apply).collect(Collectors.toList()));
         }
 
         return lcdDTO;

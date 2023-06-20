@@ -4,6 +4,8 @@ import com.example.Swipe.Admin.entity.Frame;
 import com.example.Swipe.Admin.repository.FrameRepo;
 import com.example.Swipe.Admin.service.FrameService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FrameServiceImpl implements FrameService {
+    private Logger log = LoggerFactory.getLogger(FrameServiceImpl.class);
     private final FrameRepo frameRepo;
 
 

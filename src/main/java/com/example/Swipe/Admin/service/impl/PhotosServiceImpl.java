@@ -5,6 +5,8 @@ import com.example.Swipe.Admin.repository.PhotosRepo;
 import com.example.Swipe.Admin.service.PhotosService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Setter
 public class PhotosServiceImpl implements PhotosService {
+    private Logger log = LoggerFactory.getLogger(PhotosServiceImpl.class);
     @Value("${upload.path}")
     private String upload;
     private final PhotosRepo photosRepo;

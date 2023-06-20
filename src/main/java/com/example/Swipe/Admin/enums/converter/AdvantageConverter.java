@@ -1,8 +1,7 @@
 package com.example.Swipe.Admin.enums.converter;
 
 import com.example.Swipe.Admin.enums.Advantage;
-import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.Converter;
+import javax.persistence.*;
 
 @Converter(autoApply = true)
 public class AdvantageConverter implements AttributeConverter<Advantage, String> {

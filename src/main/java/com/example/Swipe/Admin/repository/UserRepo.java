@@ -24,4 +24,8 @@ public interface UserRepo extends JpaRepository<User, Integer> , JpaSpecificatio
     Page<User> findAllByTypeUserAndBlackListIsFalse(TypeUser typeUser, Pageable pageable);
     int countByMail(String email);
 
+    int countByBlackListTrue();
+
+    int countByTypeUserAndBlackListFalse(TypeUser typeUser);
+
 }

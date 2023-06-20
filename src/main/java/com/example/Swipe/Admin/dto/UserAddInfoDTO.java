@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Builder
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class UserAddInfoDTO {
     boolean callSms;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate dateSub;
     TypeNotification typeNotification;
 }

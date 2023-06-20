@@ -2,7 +2,6 @@ package com.example.Swipe.Admin.service.impl;
 
 
 import com.example.Swipe.Admin.entity.User;
-//import com.example.Swipe.Admin.repository.AdminRepo;
 import com.example.Swipe.Admin.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

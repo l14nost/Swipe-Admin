@@ -76,8 +76,10 @@
               <label for="username" class="form-label">Подписка</label>
               <div class="input-group has-validation">
                 <input type="date" class="form-control" name ="userAddInfoDTO.dateSub" id="sub" placeholder="Введите номер..." th:value="${user.getUserAddInfoDTO().getDateSub()}" required="">
-                <div class="invalid-feedback">
-                  Введите номер...
+                <div th:if="${#fields.hasErrors('userAddInfoDTO.dateSub')}">
+                  <div class="text-danger">
+                    <p th:errors="*{userAddInfoDTO.dateSub}"></p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -101,7 +103,7 @@
               <!--          ${stock.getFileName}-->
               <img th:src="${user.getPhoto()}" id="img" style="width: 75px; height: 75px" alt="null">
 
-            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" th:value="${user.getPhoto()}" style="margin-left: 30px; margin-top: 30px">
+            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" th:value="${user.getPhoto()}" style="margin-left: 30px; margin-top: 30px" accept=".jpg,.jpeg,.png">
               <div th:if="${#fields.hasErrors('filename')}">
                 <div class="text-danger">
                   <p th:errors="*{filename}"></p>

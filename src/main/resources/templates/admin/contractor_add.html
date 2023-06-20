@@ -13,7 +13,7 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_user}" th:object="${client}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_user}" th:object="${user}">
     <input type="hidden" name="type" th:value="${type}">
       <div style="display: flex; justify-content: space-between">
       <h4 class="mb-3">Пользователь</h4>
@@ -25,7 +25,7 @@
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Имя</label>
-            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..."  required="" th:value="${client.getName()}">
+            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..."  required="" th:value="${user.getName()}">
             <div th:if="${#fields.hasErrors('name')}">
               <div class="text-danger">
                 <p th:errors="*{name}"></p>
@@ -35,7 +35,7 @@
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Фамилия</label>
-            <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..."  required="" th:value="${client.getSurname()}">
+            <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..."  required="" th:value="${user.getSurname()}">
             <div th:if="${#fields.hasErrors('surname')}">
               <div class="text-danger">
                 <p th:errors="*{surname}"></p>
@@ -44,7 +44,7 @@
           </div>
           <div class="col-sm-6">
             <label for="mail" class="form-label">Почта</label>
-            <input type="text" class="form-control" name = "mail" id="mail" placeholder="you@example.com"  required="" th:value="${client.getMail()}">
+            <input type="text" class="form-control" name = "mail" id="mail" placeholder="you@example.com"  required="" th:value="${user.getMail()}">
             <div th:if="${#fields.hasErrors('mail')}">
               <div class="text-danger">
                 <p th:errors="*{mail}"></p>
@@ -55,7 +55,7 @@
             <label for="username" class="form-label">Номер</label>
             <div class="input-group has-validation">
               <span class="input-group-text">+380</span>
-              <input type="text" class="form-control" name ="number" id="username" placeholder="Введите номер..."  required="" th:value="${client.getNumber()}">
+              <input type="text" class="form-control" name ="number" id="username" placeholder="Введите номер..."  required="" th:value="${user.getNumber()}">
               <div th:if="${#fields.hasErrors('number')}">
                 <div class="text-danger">
                   <p th:errors="*{number}"></p>
@@ -70,7 +70,7 @@
               <!--          ${stock.getFileName}-->
               <img src="../admin/dist/img/default.jpg" id="img" style="width: 75px; height: 75px" alt="null">
 
-            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px" th:value="${client.getFilename()}">
+            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px" th:value="${user.getFilename()}">
               <div th:if="${#fields.hasErrors('filename')}">
                 <div class="text-danger">
                   <p th:errors="*{filename}"></p>

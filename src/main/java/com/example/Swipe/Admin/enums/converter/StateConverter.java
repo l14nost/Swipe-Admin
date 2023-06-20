@@ -2,8 +2,7 @@ package com.example.Swipe.Admin.enums.converter;
 
 import com.example.Swipe.Admin.enums.Calculation;
 import com.example.Swipe.Admin.enums.State;
-import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.Converter;
+import javax.persistence.*;
 
 import java.util.stream.Stream;
 

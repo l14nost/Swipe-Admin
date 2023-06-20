@@ -2,10 +2,7 @@ package com.example.Swipe.Admin.specification;
 
 import com.example.Swipe.Admin.entity.Apartment;
 import com.example.Swipe.Admin.entity.Frame;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,22 +12,21 @@ import org.springframework.data.jpa.domain.Specification;
 public class ApartmentForFrameSpecification implements Specification<Apartment> {
     private int keyWord;
     private Frame frame;
+    private String sort;
 
     @Override
     public Predicate toPredicate(Root<Apartment> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         query.distinct(true);
 
         Predicate predicate = criteriaBuilder.and(
-                criteriaBuilder.equal(root.get("frame"),frame),
-                criteriaBuilder.or(
-                        criteriaBuilder.equal(root.get("number"),keyWord)
-//                        criteriaBuilder.like(root.get("surname"), "%" + keyWord + "%"),
-//                        criteriaBuilder.like(root.get("mail"), "%" + keyWord + "%")
-//                    criteriaBuilder.equal(root.get("id"), userSearchingDto.getName())
-
-                )
-        );
-        query.orderBy(criteriaBuilder.asc(root.get("number")));
+                criteriaBuilder.equal(root.get("frame"),frame));
+        if(keyWord!=0){
+               predicate = criteriaBuilder.and(
+                       criteriaBuilder.equal(root.get("frame"),frame),
+                       criteriaBuilder.equal(root.get("number"),keyWord)
+               );
+        }
+        query.orderBy(criteriaBuilder.asc(root.get(sort)));
         return predicate;
 
 

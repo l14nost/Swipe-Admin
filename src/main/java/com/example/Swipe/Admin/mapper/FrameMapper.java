@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class FrameMapper  {
@@ -37,7 +38,7 @@ public class FrameMapper  {
         return FrameDTO.builder()
                 .idFrame(frame.getIdFrame())
                 .num(frame.getNum())
-                .apartmentList(frame.getApartmentList().stream().map(ApartmentMapper::apply).toList())
+                .apartmentList(frame.getApartmentList().stream().map(ApartmentMapper::apply).collect(Collectors.toList()))
                 .build();
 
     }

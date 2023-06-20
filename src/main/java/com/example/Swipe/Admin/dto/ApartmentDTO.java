@@ -3,7 +3,7 @@ package com.example.Swipe.Admin.dto;
 import com.example.Swipe.Admin.entity.Photo;
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.validation.FileExtension;
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

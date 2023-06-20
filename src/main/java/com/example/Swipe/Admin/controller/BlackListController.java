@@ -6,35 +6,36 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
-@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class BlackListController {
+    private Logger log = LoggerFactory.getLogger(BlackListController.class);
     private final UserServiceImpl userService;
     @GetMapping("/black_list")
     public String blackListPage(
             @RequestParam(name = "pageBlackList", defaultValue = "0", required = false)int pageBlackList,
             @RequestParam(name = "sizeBlackList", defaultValue = "3", required = false)int sizeBlackList,
             @RequestParam(name = "search", required = false, defaultValue = "null") String keyWord,
+            @RequestParam(name = "sortedBy", required = false, defaultValue = "idUser") String sortedBy,
             Model model){
         System.out.println(keyWord);
+        System.out.println(sortedBy);
         log.info("Current page:"+pageBlackList+", size:"+sizeBlackList);
         Pageable pageable = PageRequest.of(pageBlackList,sizeBlackList);
+        System.out.println(userService.blackList(pageable,keyWord,sortedBy).getTotalPages());
         model.addAttribute("searchV", keyWord);
-        model.addAttribute("blackList", userService.blackList(pageable,keyWord));
+        model.addAttribute("blackList", userService.blackList(pageable,keyWord,sortedBy));
         model.addAttribute("size", sizeBlackList);
+        model.addAttribute("allSize",userService.countBlackList());
         return "admin/black_list";
     }
 //    @GetMapping("/black_list/search/{name}")

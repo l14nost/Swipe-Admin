@@ -2,8 +2,8 @@ package com.example.Swipe.Admin.dto;
 
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.validation.FileExtension;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

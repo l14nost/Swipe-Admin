@@ -12,6 +12,8 @@ import com.example.Swipe.Admin.specification.ApartmentForFrameSpecification;
 import com.example.Swipe.Admin.specification.ApartmentForLcdSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,7 @@ import java.util.UUID;
 @Setter
 @RequiredArgsConstructor
 public class ApartmentServiceImpl implements ApartmentService {
+    private Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
     private final ApartmentRepo apartmentRepo;
     private final FrameServiceImpl frameService;
     private final PhotosServiceImpl photosService;
@@ -39,20 +42,23 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
 
-    public Page<ApartmentDTO> findAllByFramePagination(Pageable pageable,int keyWord){
+    public Page<ApartmentDTO> findAllByFramePagination(Pageable pageable,int keyWord,String field){
         if(keyWord != 0){
-            ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().keyWord(keyWord).build();
+            ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().isFrame(false).keyWord(keyWord).sort(field).build();
             return apartmentRepo.findAll(apartmentForLcdSpecification,pageable).map(ApartmentMapper::apply);
         }
-        return apartmentRepo.findAllByFrameIsNull(pageable).map(ApartmentMapper::apply);
+        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().isFrame(false).sort(field).build();
+        return apartmentRepo.findAll(apartmentForLcdSpecification,pageable).map(ApartmentMapper::apply);
     }
 
-    public Page<ApartmentDTO> findAllForFramePagination(Frame frame,Pageable pageable, int keyWord){
+    public Page<ApartmentDTO> findAllForFramePagination(Frame frame,Pageable pageable, int keyWord, String field){
         if (keyWord!=0){
-            ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).build();
+            ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).sort(field).build();
             return apartmentRepo.findAll(apartmentForFrameSpecification,pageable).map(ApartmentMapper::apply);
         }
-        return apartmentRepo.findAllByFrame(frame,pageable).map(ApartmentMapper::apply);
+        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).sort(field).build();
+        return apartmentRepo.findAll(apartmentForFrameSpecification,pageable).map(ApartmentMapper::apply);
+
     }
     public ApartmentDTO findByIdDTO(int id) {
         Optional<Apartment> apartment = apartmentRepo.findById(id);
@@ -294,4 +300,10 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
 
+    public int count() {
+        return apartmentRepo.countByFrameIsNull();
+    }
+    public int count(Frame frame) {
+        return apartmentRepo.countByFrame(frame);
+    }
 }

@@ -50,8 +50,14 @@
             <table class="table table-striped" style="margin: 20px" id="apartmentTable">
               <thead>
               <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Номер</th>
+                  <th scope="col">
+                      <input  type="hidden" name="sorted" value="idUser">
+                      <button class="btn btn-outline-info" type="button" onclick="sortedApartment('idApartment')">ID</button>
+                  </th>
+                  <th scope="col">
+                      <input  type="hidden" name="sorted" value="idUser">
+                      <button class="btn btn-outline-info" type="button" onclick="sortedApartment('number')">Номер</button>
+                  </th>
                 <th scope="col">
                   <button type="button" th:onclick="'addApartment('+${frame.getIdFrame()}+')'" class="btn btn-secondary btn-sm" style="margin-left: 10px">
                     <i class="fas fa-plus">
@@ -86,7 +92,9 @@
             <!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
             <!--        </div>-->
           </div>
-            <nav aria-label="Page navigation example" style="display: flex; justify-content: center " th:if="${apartments.getTotalPages()>1}">
+            <div style="display: flex; justify-content: space-between" >
+                <div id="textApartment" style="margin-left: 10px"><h6 th:text="'Показано 1 – '+${apartments.getContent().size()} + ' из '+${sizeApartment}+' записей'" ></h6></div>
+                <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
                 <ul class="pagination" id="previousApartment">
                     <li class="page-item" th:hidden="${apartments.getNumber()==0}">
                         <input type="hidden" id="pageNumberApartmentPr" th:value="${apartments.getNumber()-1}">
@@ -117,6 +125,7 @@
                     </li>
                 </ul>
             </nav>
+            </div>
 
 
 
@@ -207,8 +216,48 @@
               $('#nextApartment').html(next);
               var previous = $(data).find('#previousApartment').html();
               $('#previousApartment').html(previous);
+              var textHouses = $(data).find('#textApartment').html();
+              $('#textApartment').html(textHouses);
               // $('#blackListTable').html(data);
               localStorage.setItem('searchApartment', searchVal);
+
+
+          },
+          error: function (xhr, status, error) {
+              alert("-")
+              console.log(error);
+          }
+      });
+  }
+  function sortedApartment (field) {
+      var selectedSize = localStorage.getItem('selectedApartmentSize');
+      var searchVal = localStorage.getItem('searchApartment');
+      var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+      // if(selectedSize == null){
+      //   selectedSize = '3';
+      // }
+      $.ajax({
+          url: url + '?sortedApartment=' + field,
+          type: 'GET',
+          data: {
+              apartmentSize: selectedSize,
+              searchApartment: searchVal
+              // search: searchVal
+          },
+          success: function (data) {
+              var tableHtml = $(data).find('#tableApartment').html();
+              $('#tableApartment').html(tableHtml);
+
+              var pagination = $(data).find('#apartmentPagination').html();
+              $('#apartmentPagination').html(pagination);
+              var next = $(data).find('#nextApartment').html();
+              $('#nextApartment').html(next);
+              var previous = $(data).find('#previousApartment').html();
+              $('#previousApartment').html(previous);
+              var textHouses = $(data).find('#textApartment').html();
+              $('#textApartment').html(textHouses);
+              // $('#blackListTable').html(data);
+              localStorage.setItem('sortedApartment', field);
 
 
           },
@@ -231,6 +280,7 @@
           type: 'GET',
           data: {
               apartmentSize: selectedSize,
+
               // search: searchVal
           },
           success: function (data) {
@@ -245,6 +295,8 @@
               $('#nextApartment').html(next);
               var previous = $(data).find('#previousApartment').html();
               $('#previousApartment').html(previous);
+              var textHouses = $(data).find('#textApartment').html();
+              $('#textApartment').html(textHouses);
               // $('#blackListTable').html(data);
               localStorage.setItem('searchApartment', searchVal);
 
@@ -260,6 +312,8 @@
   $(document).ready(function() {
       var selectedSize = localStorage.getItem('selectedApartmentSize');
       var page = localStorage.getItem('pageApartment');
+      var sortedVal = localStorage.getItem('sortedApartment');
+
 
       if (selectedSize) {
           $('#sizeApartment').val(selectedSize);
@@ -278,7 +332,8 @@
               type: 'GET',
               data:{
                   apartmentSize: selectedSize,
-                  searchApartment: searchBlack
+                  searchApartment: searchBlack,
+                  sortedApartment:sortedVal
               },
               success: function(data) {
                   var tableHtml = $(data).find('#apartmentTable').html();
@@ -289,6 +344,8 @@
                   $('#nextApartment').html(next);
                   var previous = $(data).find('#previousApartment').html();
                   $('#previousApartment').html(previous);
+                  var textHouses = $(data).find('#textApartment').html();
+                  $('#textApartment').html(textHouses);
 
                   $('#apartmentPagination li').removeClass('active');
                   $('#apartmentPagination li').eq(pageNumber).addClass('active');
@@ -303,6 +360,7 @@
       });
 
       $('#nextApartment').on('click','li',function(e) {
+          var sortedVal = localStorage.getItem('sortedApartment');
           var searchBlack = localStorage.getItem('searchApartment');
           e.preventDefault();
           var pageNumber = $('#pageNumberApartmentNext').val();
@@ -314,7 +372,8 @@
               type: 'GET',
               data:{
                   apartmentSize: selectedSize,
-                  searchApartment: searchBlack
+                  searchApartment: searchBlack,
+                  sortedApartment:sortedVal
               },
               success: function(data) {
                   var tableHtml = $(data).find('#apartmentTable').html();
@@ -325,6 +384,8 @@
                   $('#nextApartment').html(next);
                   var previous = $(data).find('#previousApartment').html();
                   $('#previousApartment').html(previous);
+                  var textHouses = $(data).find('#textApartment').html();
+                  $('#textApartment').html(textHouses);
 
                   $('#apartmentPagination li').removeClass('active');
                   $('#apartmentPagination li').eq(pageNumber).addClass('active');
@@ -338,6 +399,8 @@
           });
       });
       $('#sizeApartment').on('change', function() {
+          var sortedVal = localStorage.getItem('sortedApartment');
+
           var search = localStorage.getItem('searchApartment');
           selectedSize = $(this).val();
           var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
@@ -352,7 +415,8 @@
               data: {
                   apartmentSize: selectedSize,
                   apartmentPage: page,
-                  searchApartment:search
+                  searchApartment:search,
+                  sortedApartment:sortedVal
               },
               contentType: "application/json"
           })
@@ -365,6 +429,8 @@
                   $('#nextApartment').html(next);
                   var previous = $(data).find('#previousApartment').html();
                   $('#previousApartment').html(previous);
+                  var textHouses = $(data).find('#textApartment').html();
+                  $('#textApartment').html(textHouses);
                   localStorage.setItem('selectedApartmentSize', selectedSize);
               })
               .fail(function() {
@@ -373,6 +439,7 @@
       });
 
       $('#apartmentPagination').on('click', 'li', function(e) {
+          var sortedVal = localStorage.getItem('sortedApartment');
           var search = localStorage.getItem('searchApartment');
           e.preventDefault();
           var pageNumber = $(this).text();
@@ -391,7 +458,8 @@
               data: {
                   apartmentSize: selectedSize,
                   apartmentPage: pageNumber,
-                  searchApartment:search
+                  searchApartment:search,
+                  sortedApartment:sortedVal
               }
           })
               .done(function(data) {
@@ -401,6 +469,8 @@
                   $('#nextApartment').html(next);
                   var previous = $(data).find('#previousApartment').html();
                   $('#previousApartment').html(previous);
+                  var textHouses = $(data).find('#textApartment').html();
+                  $('#textApartment').html(textHouses);
                   localStorage.setItem('pageApartment', pageNumber);
               })
               .fail( function(xhr, status, error) {
@@ -415,6 +485,7 @@
   });
   $(window).on('beforeunload', function() {
       localStorage.removeItem('searchApartment');
+      localStorage.removeItem('sortedApartment');
 
   });
 </script>

@@ -101,7 +101,7 @@
               <!--          ${stock.getFileName}-->
               <img th:src="${apartment.getMainPhoto()}" id= "imgMain" style="width: 75px; height: 75px" alt="null">
             </div>
-            <input type="file" name="file" id="inputImg" class="form-control" th:value="${apartment.getMainPhoto()}" style="margin-left: 30px; margin-top: 30px">
+            <input type="file" name="file" id="inputImg" class="form-control" th:value="${apartment.getMainPhoto()}" style="margin-left: 30px; margin-top: 30px" accept=".jpg,.jpeg,.png">
             <script>
               inputImg.onchange = evt => {
                 const [file] = inputImg.files
@@ -124,7 +124,7 @@
               <div class="row" >
 
                 <div class="col-sm-3" th:each="photo:${apartment.getPhotoList()}">
-                  <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2" alt="white sample">
+                  <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2" alt="white sample" accept=".jpg,.jpeg,.png">
 <!--                  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 <!--                  <script>-->
 <!--                      function deleteData(idPhoto, idApartment) {-->
@@ -162,7 +162,7 @@
             " >
                     <img src="/admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
-                  <input type="file" th:id="inputGallery+${photo.getIdPhotos()}" name="galleryPhoto" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)">
+                  <input type="file" th:id="inputGallery+${photo.getIdPhotos()}" name="galleryPhoto" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png" >
 <!--                  <script>-->
 <!--                      var idImg = `gallery[[${photo.getIdPhotos}]]`;-->
 <!--                      var idInput = `inputGallery[[${photo.getIdPhotos()}]]`;-->

@@ -1,7 +1,7 @@
 package com.example.Swipe.Admin.entity;
 
 import com.example.Swipe.Admin.enums.TypeNotification;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;

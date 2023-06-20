@@ -7,6 +7,8 @@ import com.example.Swipe.Admin.entity.UserAddInfo;
 import com.example.Swipe.Admin.repository.UserAddInfoRepo;
 import com.example.Swipe.Admin.service.UserAddInfoService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserAddInfoServiceImpl implements UserAddInfoService {
+    private Logger log = LoggerFactory.getLogger(UserAddInfoServiceImpl.class);
     private final UserAddInfoRepo userAddInfoRepo;
 
 

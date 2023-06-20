@@ -8,21 +8,21 @@ import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-@Log4j2
+
 @Controller
 @RequiredArgsConstructor
 public class FrameController {
+    private Logger log = LoggerFactory.getLogger(FrameController.class);
     @Value("${upload.path}")
     private String upload;
     private final FrameServiceImpl frameService;
@@ -46,11 +46,14 @@ public class FrameController {
             @RequestParam(name = "apartmentPage", required = false, defaultValue = "0") int apartmentPage,
             @RequestParam(name = "apartmentSize", required = false, defaultValue = "3") int apartmentSize,
             @RequestParam(name = "searchApartment", required = false, defaultValue = "0")int keyWord,
+            @RequestParam(name = "sortedApartment", required = false, defaultValue = "idApartment")String field,
             Model model){
         Pageable pageable = PageRequest.of(apartmentPage,apartmentSize);
         model.addAttribute("searchApartment", keyWord);
         model.addAttribute("frame", frameService.findById(idFrame));
-        model.addAttribute("apartments", apartmentService.findAllForFramePagination(frameService.findById(idFrame),pageable,keyWord ));
+        model.addAttribute("apartments", apartmentService.findAllForFramePagination(frameService.findById(idFrame),pageable,keyWord,field ));
+
+        model.addAttribute("sizeApartment", apartmentService.count(frameService.findById(idFrame)));
         return "admin/frame_edit";
     }
 

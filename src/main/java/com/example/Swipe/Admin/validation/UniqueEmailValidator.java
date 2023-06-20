@@ -2,8 +2,8 @@ package com.example.Swipe.Admin.validation;
 
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.repository.UserRepo;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.*;
+
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;

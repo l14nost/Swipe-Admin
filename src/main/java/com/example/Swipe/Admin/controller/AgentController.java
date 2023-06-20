@@ -6,21 +6,22 @@ import com.example.Swipe.Admin.enums.TypeAgent;
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.service.impl.AgentServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class AgentController {
     private final UserServiceImpl userService;
     private final AgentServiceImpl agentServiceImpl;
-
+    private Logger log = LoggerFactory.getLogger(AgentController.class);
 
     @GetMapping("/agent_add/{idUser}")
     public String addAgent(@PathVariable int idUser, Model model){
@@ -52,6 +53,7 @@ public class AgentController {
     public String saveAgent(@PathVariable int idUser,@Valid @ModelAttribute(name = "agent") AgentDTO agentDTO, BindingResult result,Model model){
         User user = userService.findById(idUser);
         System.out.println(agentDTO);
+        result = agentServiceImpl.uniqueEmail(agentDTO.getMail(),result,0,"add");
         if (result.hasErrors()){
             System.out.println(result.getAllErrors());
             model.addAttribute("idUser", idUser);
@@ -86,6 +88,7 @@ public class AgentController {
 //    }
     @PostMapping("/agent_edit/{id}")
     public String agentUpdate(@PathVariable int id,@Valid @ModelAttribute(name = "agent") AgentDTO agentDTO,BindingResult result, Model model){
+        result = agentServiceImpl.uniqueEmail(agentDTO.getMail(),result,id,"update");
         if (result.hasErrors()){
             System.out.println(agentDTO);
             model.addAttribute("agent", agentDTO);

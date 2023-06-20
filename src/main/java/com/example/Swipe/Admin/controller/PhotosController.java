@@ -6,16 +6,19 @@ import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-@Log4j2
+
 @Controller
 @RequiredArgsConstructor
 public class PhotosController {
+    private Logger log = LoggerFactory.getLogger(PhotosController.class);
     @Value("${upload.path}")
     private String upload;
     private final PhotosServiceImpl photosServiceImpl;

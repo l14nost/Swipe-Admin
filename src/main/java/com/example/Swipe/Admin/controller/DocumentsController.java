@@ -5,16 +5,16 @@ import com.example.Swipe.Admin.service.impl.DocumentsServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-@Log4j2
+import org.springframework.web.bind.annotation.*;
+
 @Controller
 @RequiredArgsConstructor
 public class DocumentsController {
+    private Logger log = LoggerFactory.getLogger(DocumentsController.class);
     private final DocumentsServiceImpl documentsServiceImpl;
     private final LCDServiceImpl lcdService;
 

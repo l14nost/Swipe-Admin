@@ -3,7 +3,7 @@ package com.example.Swipe.Admin.dto;
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.validation.FileExtension;
 import com.example.Swipe.Admin.validation.UniqueEmail;
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class ClientDTO {
 
     @NotBlank
     @Email(message = "Не рправильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]*.[a-z]$")
-    @UniqueEmail
+//    @UniqueEmail
     String mail;
 
 

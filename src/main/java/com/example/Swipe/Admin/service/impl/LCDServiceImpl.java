@@ -9,6 +9,8 @@ import com.example.Swipe.Admin.service.LCDService;
 import com.example.Swipe.Admin.specification.LcdSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Setter
 public class LCDServiceImpl implements LCDService {
+    private Logger log = LoggerFactory.getLogger(LCDServiceImpl.class);
     private final LCDRepo lcdRepo;
     @Value("${upload.path}")
     private String upload;
@@ -31,12 +34,17 @@ public class LCDServiceImpl implements LCDService {
     private final DocumentsServiceImpl documentsService;
     private final UserServiceImpl userService;
 
-    public Page<LcdDTO> findAllPagination(Pageable pageable,String keyWord){
+    public Page<LcdDTO> findAllPagination(Pageable pageable,String keyWord,String sort){
         if(!keyWord.equals("null")){
-            LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord(keyWord).build();
+            LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord(keyWord).sort(sort).build();
             return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
         }
-        return lcdRepo.findAll(pageable).map(LcdMapper::apply);
+        LcdSpecification lcdSpecification = LcdSpecification.builder().sort(sort).build();
+        return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
+    }
+
+    public int count(){
+        return (int) lcdRepo.count();
     }
 
     @Override

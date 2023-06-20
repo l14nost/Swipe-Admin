@@ -38,9 +38,14 @@
         <table class="table table-striped" style="margin: 20px">
         <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">ФИО</th>
-          <th scope="col">Почта</th>
+          <th scope="col">
+              <input  type="hidden"  id="sortedInput" name="sorted" value="idUser">
+              <button class="btn btn-outline-info" type="button" onclick="sortedBlackListID()">ID</button>
+          </th>
+          <th scope="col"><input  type="hidden"   id="sortedInput1" name="sorted1" value="surname">
+              <button class="btn btn-outline-info" type="button" onclick="sortedBlackListSurname()">ФИО</button></th>
+          <th scope="col"><input type="hidden"  id="sortedInput2" name="sorted2" value="mail">
+              <button class="btn btn-outline-info" type="button" onclick="sortedBlackListMail()">Почта</button></th>
           <th scope="col">#</th>
         </tr>
         </thead>
@@ -64,7 +69,9 @@
         </tbody>
       </table>
     </div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: center " th:if = "${blackList.getTotalPages()>1}">
+        <div style="display: flex; justify-content: space-between">
+        <div id="textPagination" style="margin-left: 10px"><h6 th:text="'Показано 1 – '+${blackList.getContent().size()} + ' из '+${allSize}+' записей'" ></h6></div>
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: right; margin-right: 10px">
           <ul class="pagination" id="previous">
               <li class="page-item" th:hidden="${blackList.getNumber()==0}">
                   <input type="hidden" id="pageNumberPr" th:value="${blackList.getNumber()-1}">
@@ -75,15 +82,8 @@
           </ul>
         <ul class="pagination" id="paginationList">
 
-<!--          <a class="page-link bg-gray-light" th:href="@{'/black_list?pageBlackList='+${p}+'&sizeBlackList='+${size}}" th:text="${p+1}"></a>-->
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, blackList.getTotalPages()-2)}" th:value="${p}" th:if="${blackList.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-            <li class="page-item"><a class="page-link" href="#" th:text="${blackList.getTotalPages()}"></a></li>
-<!--          <li class="page-item">-->
-<!--            <a class="page-link" href="#" aria-label="Next">-->
-<!--              <span aria-hidden="true">&raquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, blackList.getTotalPages()-1)}" th:if="${blackList.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
 
         </ul>
 
@@ -106,7 +106,7 @@
         </li>
         </ul>
       </nav>
-
+        </div>
 
 
     </div>
@@ -119,8 +119,7 @@
 <!--<div th:fragment="script"></div>-->
 <script>
     // var searchBlack = localStorage.getItem('search');
-    var selectedSize = localStorage.getItem('selectedSize');
-    var page = localStorage.getItem('page');
+
 
     // function deleteFromBlackList(idUser) {
     //
@@ -141,11 +140,13 @@
     //     });
     // }
 
-    function searchBlackList () {
-        // var selectedSize = localStorage.getItem('selectedSize');
+    function searchBlackList() {
+        var selectedSize = localStorage.getItem('selectedSize');
         // e.preventDefault();
         var searchVal = document.getElementById('searchInput').value;
+        var sortVal = localStorage.getItem('sortVal');
         var url = '/black_list';
+
         if(selectedSize == null){
             selectedSize = '3';
         }
@@ -154,7 +155,45 @@
             type: 'GET',
             data: {
                 sizeBlackList: selectedSize,
-                // search: searchVal
+                sortedBy:sortVal
+            },
+            success: function (data) {
+                var tableHtml = $(data).find('#blackListTable').html();
+                $('#blackListTable').html(tableHtml);
+                var pagination = $(data).find('#paginationList').html();
+                $('#paginationList').html(pagination);
+                var next = $(data).find('#next').html();
+                $('#next').html(next);
+                var previous = $(data).find('#previous').html();
+                $('#previous').html(previous);
+                var textPag = $(data).find('#textPagination').html();
+                $('#textPagination').html(textPag);
+                // $('#blackListTable').html(data);
+
+                localStorage.setItem('search', searchVal);
+            },
+            error: function (xhr, status, error) {
+                alert("-")
+                console.log(error);
+            }
+        });
+    }
+    function sortedBlackListID () {
+        var selectedSize = localStorage.getItem('selectedSize');
+        var search = localStorage.getItem('search');
+        // e.preventDefault();
+        var sortVal = document.getElementById('sortedInput').value;
+        var url = '/black_list';
+        if(selectedSize == null){
+            selectedSize = '3';
+
+        }
+        $.ajax({
+            url: url + '?sortedBy=' + sortVal,
+            type: 'GET',
+            data: {
+                sizeBlackList: selectedSize,
+                search: search
             },
             success: function (data) {
                 var tableHtml = $(data).find('#blackListTable').html();
@@ -166,9 +205,93 @@
                 $('#next').html(next);
                 var previous = $(data).find('#previous').html();
                 $('#previous').html(previous);
+                var textPag = $(data).find('#textPagination').html();
+                $('#textPagination').html(textPag);
                 // $('#blackListTable').html(data);
 
-                localStorage.setItem('search', searchVal);
+                localStorage.setItem('sortVal', sortVal);
+
+
+            },
+            error: function (xhr, status, error) {
+                alert("-")
+                console.log(error);
+            }
+        });
+    }
+    function sortedBlackListSurname () {
+        var selectedSize = localStorage.getItem('selectedSize');
+        var search = localStorage.getItem('search');
+        // var selectedSize = localStorage.getItem('selectedSize');
+        // e.preventDefault();
+        var sortVal = document.getElementById('sortedInput1').value;
+        var url = '/black_list';
+        if(selectedSize == null){
+            selectedSize = '3';
+
+        }
+        $.ajax({
+            url: url + '?sortedBy=' + sortVal,
+            type: 'GET',
+            data: {
+                sizeBlackList: selectedSize,
+                search: search
+            },
+            success: function (data) {
+                var tableHtml = $(data).find('#blackListTable').html();
+                $('#blackListTable').html(tableHtml);
+                var pagination = $(data).find('#paginationList').html();
+                $('#paginationList').html(pagination);
+                var next = $(data).find('#next').html();
+                $('#next').html(next);
+                var previous = $(data).find('#previous').html();
+                $('#previous').html(previous);
+                var textPag = $(data).find('#textPagination').html();
+                $('#textPagination').html(textPag);
+                // $('#blackListTable').html(data);
+
+                localStorage.setItem('sortVal', sortVal);
+
+
+            },
+            error: function (xhr, status, error) {
+                alert("-")
+                console.log(error);
+            }
+        });
+    }
+    function sortedBlackListMail () {
+        var selectedSize = localStorage.getItem('selectedSize');
+        var search = localStorage.getItem('search');
+        // var selectedSize = localStorage.getItem('selectedSize');
+        // e.preventDefault();
+        var sortVal = document.getElementById('sortedInput2').value;
+        var url = '/black_list';
+        if(selectedSize == null){
+            selectedSize = '3';
+        }
+        $.ajax({
+            url: url + '?sortedBy=' + sortVal,
+            type: 'GET',
+            data: {
+                sizeBlackList: selectedSize,
+                search: search
+            },
+            success: function (data) {
+                var tableHtml = $(data).find('#blackListTable').html();
+                $('#blackListTable').html(tableHtml);
+
+                var pagination = $(data).find('#paginationList').html();
+                $('#paginationList').html(pagination);
+                var next = $(data).find('#next').html();
+                $('#next').html(next);
+                var previous = $(data).find('#previous').html();
+                $('#previous').html(previous);
+                var textPag = $(data).find('#textPagination').html();
+                $('#textPagination').html(textPag);
+                // $('#blackListTable').html(data);
+
+                localStorage.setItem('sortVal', sortVal);
 
 
             },
@@ -179,6 +302,8 @@
         });
     }
     function searchToNull () {
+        var selectedSize = localStorage.getItem('selectedSize');
+        var sortedBlack = localStorage.getItem('sortVal');
         // var selectedSize = localStorage.getItem('selectedSize');
         // e.preventDefault();
         var searchVal = 'null';
@@ -191,6 +316,7 @@
             type: 'GET',
             data: {
                 sizeBlackList: selectedSize,
+                sortedBy:sortedBlack
                 // search: searchVal
             },
             success: function (data) {
@@ -207,6 +333,8 @@
                 $('#next').html(next);
                 var previous = $(data).find('#previous').html();
                 $('#previous').html(previous);
+                var textPag = $(data).find('#textPagination').html();
+                $('#textPagination').html(textPag);
                 // $('#blackListTable').html(data);
                 localStorage.setItem('search', searchVal);
 
@@ -221,7 +349,9 @@
 
   $(document).ready(function() {
       $('#previous').on('click','li',function(e) {
+          var selectedSize = localStorage.getItem('selectedSize');
           var searchBlack = localStorage.getItem('search');
+          var sortedBlack = localStorage.getItem('sortVal');
           e.preventDefault();
 
           var pageNumber = $('#pageNumberPr').val();
@@ -234,7 +364,9 @@
               type: 'GET',
               data:{
                   sizeBlackList: selectedSize,
-                  search: searchBlack
+                  search: searchBlack,
+                  sortedBy:sortedBlack
+
               },
               success: function(data) {
                   var tableHtml = $(data).find('#blackListTable').html();
@@ -245,6 +377,8 @@
                   $('#next').html(next);
                   var previous = $(data).find('#previous').html();
                   $('#previous').html(previous);
+                  var textPag = $(data).find('#textPagination').html();
+                  $('#textPagination').html(textPag);
 
                   $('#paginationList li').removeClass('active');
                   $('#paginationList li').eq(pageNumber).addClass('active');
@@ -259,7 +393,9 @@
       });
 
       $('#next').on('click','li',function(e) {
+          var selectedSize = localStorage.getItem('selectedSize');
           var searchBlack = localStorage.getItem('search');
+          var sortedBlack = localStorage.getItem('sortVal');
           e.preventDefault();
 
           // var pageNumber = $(this).val();
@@ -276,7 +412,8 @@
               type: 'GET',
               data:{
                   sizeBlackList: selectedSize,
-                  search: searchBlack
+                  search: searchBlack,
+                  sortedBy:sortedBlack
               },
               success: function(data) {
                   var tableHtml = $(data).find('#blackListTable').html();
@@ -287,6 +424,8 @@
                   $('#next').html(next);
                   var previous = $(data).find('#previous').html();
                   $('#previous').html(previous);
+                  var textPag = $(data).find('#textPagination').html();
+                  $('#textPagination').html(textPag);
 
                   $('#paginationList li').removeClass('active');
                   $('#paginationList li').eq(pageNumber).addClass('active');
@@ -300,25 +439,24 @@
           });
       });
 
-
-    if (selectedSize) {
-      $('#sizeBlackList').val(selectedSize);
+      var selectedSize1 = localStorage.getItem('selectedSize');
+    if (selectedSize1) {
+      $('#sizeBlackList').val(selectedSize1);
     }
     $('#sizeBlackList').on('change', function() {
+        var selectedSize = localStorage.getItem('selectedSize');
         var searchBlack = localStorage.getItem('search');
+        var sortedBlack = localStorage.getItem('sortVal');
       selectedSize = $(this).val();
       var url = '/black_list';
-      if(page==null){
-        // alert(page);
-        page = '0';
-      }
       // alert(page);
       $.ajax({
         url: url+'?sizeBlackList='+selectedSize,
         type: 'GET',
         data:{
           // sizeBlackList: selectedSize,
-          search:searchBlack
+          search:searchBlack,
+          sortedBy: sortedBlack
           // pageBlackList: page
         },
         contentType: "application/json",
@@ -330,8 +468,11 @@
           $('#paginationList').html(pagination);
           var next = $(data).find('#next').html();
           $('#next').html(next);
+
           var previous = $(data).find('#previous').html();
           $('#previous').html(previous);
+            var textPag = $(data).find('#textPagination').html();
+            $('#textPagination').html(textPag);
 
 
           localStorage.setItem('selectedSize', selectedSize);
@@ -344,7 +485,9 @@
 
 
     $('#paginationList').on('click','li',function(e) {
+        var selectedSize = localStorage.getItem('selectedSize');
         var searchBlack = localStorage.getItem('search');
+        var sortedBlack = localStorage.getItem('sortVal');
       e.preventDefault();
       var pageNumber = $(this).text();
       $('#paginationList li').removeClass('active');
@@ -357,7 +500,8 @@
         type: 'GET',
         data:{
           sizeBlackList: selectedSize,
-          search: searchBlack
+          search: searchBlack,
+          sortedBy: sortedBlack
         },
         success: function(data) {
           var tableHtml = $(data).find('#blackListTable').html();
@@ -366,6 +510,8 @@
             $('#next').html(next);
             var previous = $(data).find('#previous').html();
             $('#previous').html(previous);
+            var textPag = $(data).find('#textPagination').html();
+            $('#textPagination').html(textPag);
           localStorage.setItem('page', pageNumber);
 
 
@@ -409,6 +555,7 @@
       localStorage.removeItem('search')
       localStorage.removeItem('selectedSize');
       localStorage.removeItem('page');
+      localStorage.removeItem("sortVal")
     });
 
   });

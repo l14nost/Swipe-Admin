@@ -1,7 +1,7 @@
 package com.example.Swipe.Admin.entity;
 
 import com.example.Swipe.Admin.enums.*;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import lombok.Builder;
 

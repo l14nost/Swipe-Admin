@@ -13,7 +13,7 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_user}" th:object="${client}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_user}" th:object="${user}">
       <input type="hidden" name="type" th:value="${type}">
       <input type="hidden" name="idUser" value="0">
     <div style="display: flex; justify-content: space-between">
@@ -23,7 +23,7 @@
           <h6 for="flexSwitchCheckDefault" style="margin-right: 5px">Уведомление</h6>
         </div>
         <div>
-          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="userAddInfoDTO.callSms"  style="margin-left: 5px" th:checked="${client.getUserAddInfoDTO().isCallSms()}">
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="userAddInfoDTO.callSms"  style="margin-left: 5px" th:checked="${user.getUserAddInfoDTO().isCallSms()}">
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Имя</label>
-            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..."  required="" th:value="${client.getName()}">
+            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..."  required="" th:value="${user.getName()}">
             <div th:if="${#fields.hasErrors('name')}">
               <div class="text-danger">
                 <p th:errors="*{name}"></p>
@@ -44,7 +44,7 @@
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Фамилия</label>
-            <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..."  required="" th:value="${client.getSurname()}">
+            <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..."  required="" th:value="${user.getSurname()}">
             <div th:if="${#fields.hasErrors('surname')}">
               <div class="text-danger">
                 <p th:errors="*{surname}"></p>
@@ -53,7 +53,7 @@
           </div>
           <div class="col-sm-6">
             <label for="mail" class="form-label">Почта</label>
-            <input type="text" class="form-control" name = "mail" id="mail" placeholder="you@example.com"  required="" th:value="${client.getMail()}">
+            <input type="text" class="form-control" name = "mail" id="mail" placeholder="you@example.com"  required="" th:value="${user.getMail()}">
             <div th:if="${#fields.hasErrors('mail')}">
               <div class="text-danger">
                 <p th:errors="*{mail}"></p>
@@ -64,7 +64,7 @@
             <label for="username" class="form-label">Номер</label>
             <div class="input-group has-validation">
               <span class="input-group-text">+380</span>
-              <input type="text" class="form-control" name ="number" id="username" placeholder="Введите номер..."  required="" th:value="${client.getNumber()}">
+              <input type="text" class="form-control" name ="number" id="username" placeholder="Введите номер..."  required="" th:value="${user.getNumber()}">
               <div th:if="${#fields.hasErrors('number')}">
                 <div class="text-danger">
                   <p th:errors="*{number}"></p>
@@ -75,7 +75,7 @@
           <div class="col-sm-6">
             <label for="username" class="form-label">Подписка</label>
             <div class="input-group has-validation">
-              <input type="date" class="form-control" name ="userAddInfoDTO.dateSub" id="sub" placeholder="Введите номер..."  required="" th:value="${client.getUserAddInfoDTO().getDateSub()}">
+              <input type="date" class="form-control" name ="userAddInfoDTO.dateSub" id="sub" placeholder="Введите номер..."  required="" th:value="${user.getUserAddInfoDTO().getDateSub()}">
               <div class="invalid-feedback">
                 Введите номер...
               </div>
@@ -85,10 +85,10 @@
 
             <div class="form-floating">
               <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="userAddInfoDTO.typeNotification">
-                <option value="ME" th:selected="${client.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).ME)}">Мне</option>
-                <option value="MEANDAGENT" th:selected="${client.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}">Мне и агенту</option>
-                <option value="AGENT" th:selected="${client.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).AGENT)}">Агенту</option>
-                <option value="OFF" th:selected="${client.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).OFF)}">Отключить</option>
+                <option value="ME" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).ME)}">Мне</option>
+                <option value="MEANDAGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}">Мне и агенту</option>
+                <option value="AGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).AGENT)}">Агенту</option>
+                <option value="OFF" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).OFF)}">Отключить</option>
               </select>
               <label for="floatingSelect" class="form-label">Тип уведомления</label>
             </div>
@@ -100,7 +100,7 @@
               <!--          ${stock.getFileName}-->
               <img src="../admin/dist/img/default.jpg" id="img" style="width: 75px; height: 75px" alt="null">
 
-            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px">
+            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px" accept=".jpg,.jpeg,.png">
               <div th:if="${#fields.hasErrors('filename')}">
                 <div class="text-danger">
                   <p th:errors="*{filename}"></p>

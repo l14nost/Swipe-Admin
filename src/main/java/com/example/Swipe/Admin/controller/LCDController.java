@@ -11,9 +11,11 @@ import com.example.Swipe.Admin.service.impl.DocumentsServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,10 +30,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
-@Log4j2
+
 @Controller
 @RequiredArgsConstructor
 public class LCDController {
+    private Logger log = LoggerFactory.getLogger(LCDController.class);
     @Value("${upload.path}")
     private String upload;
     private final LCDServiceImpl lcdServiceImpl;

@@ -3,7 +3,7 @@ package com.example.Swipe.Admin.dto;
 import com.example.Swipe.Admin.entity.Apartment;
 import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.validation.FileExtension;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

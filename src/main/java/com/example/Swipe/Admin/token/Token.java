@@ -1,7 +1,7 @@
 package com.example.Swipe.Admin.token;
 
 import com.example.Swipe.Admin.entity.User;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 @Data
