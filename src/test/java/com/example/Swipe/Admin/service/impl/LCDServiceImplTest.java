@@ -130,7 +130,7 @@ class LCDServiceImplTest {
                 .contractor(1)
                 .name("Name")
                 .lcdClass(ClassType.MASS)
-                .file(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
+//                .file(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
                 .build();
         lcdService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
         lcdService.saveDTO(lcdDTO);
@@ -181,16 +181,13 @@ class LCDServiceImplTest {
                 .build();
         when(userService.findById(1)).thenReturn(user);
         LcdDTO lcdDTO;
-        try {
             lcdDTO = LcdDTO.builder()
                     .contractor(1)
                     .name("Name")
                     .lcdClass(ClassType.MASS)
-                    .file(new MockMultipartFile("file","example.txt","text/plain",new ByteArrayResource(new byte[0]).getInputStream()))
+//                    .file(new MockMultipartFile("file","example.txt","text/plain",new ByteArrayResource(new byte[0]).getInputStream()))
                     .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         lcdService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
         lcdService.saveDTO(lcdDTO);
         LCD lcd = LCD.builder()

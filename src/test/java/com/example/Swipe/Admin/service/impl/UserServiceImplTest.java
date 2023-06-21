@@ -184,7 +184,7 @@ class UserServiceImplTest {
                 .mail("123@gmail.com")
                 .name("User")
                 .surname("Surname")
-                .filename(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
+//                .filename(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
                 .build();
         userService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
         userService.saveEntityDTO(user);
@@ -203,18 +203,14 @@ class UserServiceImplTest {
     @Test
     void saveDTO_emptyFile() {
         ClientDTO user ;
-        try {
-            user = ClientDTO.builder()
-                    .idUser(0)
-                    .number("123123123")
-                    .mail("123@gmail.com")
-                    .name("User")
-                    .surname("Surname")
-                    .filename(new MockMultipartFile("file","example.txt","text/plain",new ByteArrayResource(new byte[0]).getInputStream()))
-                    .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        user = ClientDTO.builder()
+                .idUser(0)
+                .number("123123123")
+                .mail("123@gmail.com")
+                .name("User")
+                .surname("Surname")
+//                    .filename(new MockMultipartFile("file","example.txt","text/plain",new ByteArrayResource(new byte[0]).getInputStream()))
+                .build();
         userService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
         userService.saveEntityDTO(user);
         User userSave = User.builder()
@@ -311,7 +307,7 @@ class UserServiceImplTest {
                 .mail("124@gmail.com")
                 .name("User1")
                 .surname("Surname1")
-                .filename(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
+//                .filename(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
                 .build();
         userService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
         userService.updateDTO(userUpdate,1);

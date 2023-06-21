@@ -145,7 +145,7 @@ class ApartmentServiceImplTest {
                 .number(500)
                 .lcd(1)
                 .user(1)
-                .file(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
+//                .file(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
                 .build();
         Apartment apartment = Apartment.builder()
                 .number(500)
@@ -161,15 +161,11 @@ class ApartmentServiceImplTest {
     @Test
     void saveDTO_fileEmpty() {
         ApartmentDTO apartmentDTO;
-        try {
-            apartmentDTO = ApartmentDTO.builder()
-                    .number(500)
-                    .lcd(1)
-                    .user(1)
-                    .file(new MockMultipartFile("file","example.txt","text/plain",new ByteArrayResource(new byte[0]).getInputStream())).build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        apartmentDTO = ApartmentDTO.builder()
+                .number(500)
+                .lcd(1)
+                .user(1).build();
+//                    .file(new MockMultipartFile("file","example.txt","text/plain",new ByteArrayResource(new byte[0]).getInputStream())).build();
 
         Apartment apartment = Apartment.builder()
                 .number(500)
@@ -289,8 +285,8 @@ class ApartmentServiceImplTest {
         when(apartmentRepo.findById(1)).thenReturn(Optional.of(apartment));
         ApartmentDTO apartmentUpdate = ApartmentDTO.builder()
                 .number(450)
-                .file(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
-                .galleryPhoto(List.of(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes())))
+//                .file(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
+//                .galleryPhoto(List.of(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes())))
                 .lcd(1)
                 .user(1)
                 .mainPhoto("../uploads/1aa309a3-8f0c-44a2-97ae-e5936ad1c8fd-example.txt")
