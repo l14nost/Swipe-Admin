@@ -15,7 +15,7 @@
   <div class="content-wrapper" style="padding-left: 50px">
     <div class="col-md-7 col-lg-8">
       <h5 class="mb-3">Корпус</h5>
-      <form class="needs-validation" method="post" action = "/frame_update">
+      <form class="needs-validation" method="post" th:action = "@{/frame_update}">
 
           <input type="hidden" name = "idFrame" th:value="${frame.getIdFrame()}">
 
@@ -93,7 +93,8 @@
             <!--        </div>-->
           </div>
             <div style="display: flex; justify-content: space-between" >
-                <div id="textApartment" style="margin-left: 10px"><h6 th:text="'Показано 1 – '+${apartments.getContent().size()} + ' из '+${sizeApartment}+' записей'" ></h6></div>
+                <div style="margin-left: 10px" th:if="${apartments.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
+                <div id="textApartment" style="margin-left: 10px" th:if="${apartments.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${apartments.getContent().size()} + ' из '+${sizeApartment}+' записей'" ></h6></div>
                 <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
                 <ul class="pagination" id="previousApartment">
                     <li class="page-item" th:hidden="${apartments.getNumber()==0}">
@@ -107,7 +108,7 @@
                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
                     <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
                 </ul>
-                <ul class="pagination" id="nextApartment" >
+                <ul class="pagination" id="nextApartment" th:if="${apartments.getTotalPages()>1}">
                     <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}">
                         <input type="hidden" id="pageNumberApartmentNext" th:value="${apartments.getNumber()+1}">
                         <a class="page-link" href="#" aria-label="Next" th:value="${apartments.getTotalPages()}">
@@ -143,11 +144,11 @@
 <script>
   function addApartment(idFrame){
     $.ajax({
-      url: "/add_apartment/"+idFrame,
+      url: "/Swipe-Admin/add_apartment/"+idFrame,
       method: "GET",
 
       success: function(response) {
-        window.location.href = "/add_apartment/" + idFrame;
+        window.location.href = "/Swipe-Admin/add_apartment/" + idFrame;
       },
       error: function(xhr, status, error) {
         console.log('Произошла ошибка:', error);
@@ -159,10 +160,10 @@
   function editApartment(idApartment) {
 
       $.ajax({
-          url: "/apartment_edit/"+idApartment,
+          url: "/Swipe-Admin/apartment_edit/"+idApartment,
           method: "GET",
           success: function(response) {
-              window.location.href = "/apartment_edit/" + idApartment;
+              window.location.href = "/Swipe-Admin/apartment_edit/" + idApartment;
           },
           error: function(xhr, status, error) {
               console.log('Произошла ошибка:', error);
@@ -174,13 +175,13 @@
   function deleteApartment(idApartment, idFrame) {
 
       $.ajax({
-          url: "/delete_apartment",
+          url: "/Swipe-Admin/delete_apartment",
           method: "POST",
           data:{
               idApartment: idApartment
           },
           success: function(response) {
-              window.location.href = "/edit_frame/" + idFrame;
+              window.location.href = "/Swipe-Admin/edit_frame/" + idFrame;
           },
           error: function(xhr, status, error) {
               console.log('Произошла ошибка:', error);
@@ -195,7 +196,7 @@
       var selectedSize = localStorage.getItem('selectedApartmentSize');
       // e.preventDefault();
       var searchVal = document.getElementById('searchInputApartment').value;
-      var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+      var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
       // if(selectedSize == null){
       //   selectedSize = '3';
       // }
@@ -232,7 +233,7 @@
   function sortedApartment (field) {
       var selectedSize = localStorage.getItem('selectedApartmentSize');
       var searchVal = localStorage.getItem('searchApartment');
-      var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+      var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
       // if(selectedSize == null){
       //   selectedSize = '3';
       // }
@@ -271,7 +272,7 @@
       var selectedSize = localStorage.getItem('selectedApartmentSize');
       // e.preventDefault();
       var searchVal = '0';
-      var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+      var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
       if(selectedSize == null){
           selectedSize = '3';
       }
@@ -324,7 +325,7 @@
 
           var pageNumber = $('#pageNumberApartmentPr').val();
 
-          var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+          var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
 
           // pageNumber -= 1;
           $.ajax({
@@ -364,7 +365,7 @@
           var searchBlack = localStorage.getItem('searchApartment');
           e.preventDefault();
           var pageNumber = $('#pageNumberApartmentNext').val();
-          var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+          var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
 
 
           $.ajax({
@@ -403,7 +404,7 @@
 
           var search = localStorage.getItem('searchApartment');
           selectedSize = $(this).val();
-          var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+          var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
 
           if (page == null) {
               page = '0';
@@ -445,7 +446,7 @@
           var pageNumber = $(this).text();
           $('#apartmentPagination li').removeClass('active');
           $(this).addClass('active');
-          var url = '/edit_frame/'+[[${frame.getIdFrame()}]];
+          var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
 
           if (selectedSize == null) {
               selectedSize = '3';

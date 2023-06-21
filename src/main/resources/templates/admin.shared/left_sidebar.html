@@ -2,8 +2,8 @@
 <div th:fragment = "left_sidebar">
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="/main_admin" class="brand-link">
-    <img src="/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+  <a th:href="@{/main}" class="brand-link">
+    <img th:src="@{/admin/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">AdminLTE 3</span>
   </a>
 
@@ -36,7 +36,7 @@
     <!-- Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library -->
     <li class="nav-item">
-      <a href="/Swipe-Admin/main" class="nav-link">
+      <a th:href="@{/main}" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
         <p>
           Статистика
@@ -44,7 +44,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="/Swipe-Admin/houses" class="nav-link">
+      <a th:href="@{/houses}" class="nav-link">
       <i class="nav-icon fas fa-home"></i>
         <p>
           Объявление
@@ -52,7 +52,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="/Swipe-Admin/users" class="nav-link">
+      <a th:href="@{/users}" class="nav-link">
         <i class="nav-icon fas fa-user-alt"></i>
         <p>
           Пользователи
@@ -60,7 +60,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="/Swipe-Admin/black_list" class="nav-link">
+      <a th:href="@{/black_list}" class="nav-link">
         <i class="nav-icon fas fa-calendar-minus"></i>
         <p>
           Черный список

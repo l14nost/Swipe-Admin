@@ -36,6 +36,7 @@ public class BlackListController {
         model.addAttribute("blackList", userService.blackList(pageable,keyWord,sortedBy));
         model.addAttribute("size", sizeBlackList);
         model.addAttribute("allSize",userService.countBlackList());
+        model.addAttribute("currentPage",pageBlackList);
         return "admin/black_list";
     }
 //    @GetMapping("/black_list/search/{name}")

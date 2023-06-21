@@ -160,7 +160,7 @@
                 padding: 2px;
                 border-radius: 50%;
             " >
-                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">
+                    <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
                   </button>
                   <input type="file" th:id="inputGallery+${photo.getIdPhotos()}" name="galleryPhoto" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png" >
 <!--                  <script>-->
@@ -191,7 +191,7 @@
                   <div style="display: flex; justify-content: center">
 <!--                    <a th:href="@{/add_photo/{idApartment}(idApartment = ${apartment.getIdApartment()})}">-->
                     <button class="btn btn-outline" type="button" th:attr="onclick='addPhoto(' + ${apartment.getIdApartment()} + ')'">
-                        <img src="../admin/dist/img/addCinema.png" width="150px">
+                        <img th:src="@{/admin/dist/img/addCinema.png}" width="150px">
                     </button>
                   </div>
                 </div>

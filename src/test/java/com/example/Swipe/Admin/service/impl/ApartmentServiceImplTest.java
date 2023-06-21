@@ -70,7 +70,7 @@ class ApartmentServiceImplTest {
             apartmentsByFrame.add(Apartment.builder().number(111).build());
         }
         Pageable pageable = PageRequest.of(0,4);
-        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().keyWord(111).build();
+        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().keyWord(111).sort("idApartment").build();
         when(apartmentRepo.findAll(eq(apartmentForLcdSpecification),eq(pageable))).thenReturn(new PageImpl<>(apartmentsByFrame));
         Page<ApartmentDTO> apartmentsList = apartmentService.findAllByFramePagination(pageable,111,"idApartment");
         assertEquals(4,apartmentsList.getContent().size());
@@ -83,7 +83,8 @@ class ApartmentServiceImplTest {
             apartmentsByFrame.add(Apartment.builder().frame(Frame.builder().idFrame(3).build()).build());
         }
         Pageable pageable = PageRequest.of(0,4);
-        when(apartmentRepo.findAllByFrame(eq(Frame.builder().idFrame(3).build()),eq(pageable))).thenReturn(new PageImpl<>(apartmentsByFrame));
+        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(0).frame(Frame.builder().idFrame(3).build()).sort("idApartment").build();
+        when(apartmentRepo.findAll(eq(apartmentForFrameSpecification),eq(pageable))).thenReturn(new PageImpl<>(apartmentsByFrame));
         Page<ApartmentDTO> apartmentsList = apartmentService.findAllForFramePagination(Frame.builder().idFrame(3).build(),pageable,0,"idApartment");
         assertEquals(4,apartmentsList.getContent().size());
     }
@@ -94,7 +95,7 @@ class ApartmentServiceImplTest {
             apartmentsByFrameKey.add(Apartment.builder().frame(Frame.builder().idFrame(3).build()).number(111).build());
         }
         Pageable pageable1 = PageRequest.of(0,2);
-        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(111).frame(Frame.builder().idFrame(3).build()).build();
+        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(111).frame(Frame.builder().idFrame(3).build()).sort("idApartment").build();
         when(apartmentRepo.findAll(eq(apartmentForFrameSpecification),eq(pageable1))).thenReturn(new PageImpl<>(apartmentsByFrameKey));
         Page<ApartmentDTO> apartmentsList1 = apartmentService.findAllForFramePagination(Frame.builder().idFrame(3).build(),pageable1,111,"idApartment");
         assertEquals(2,apartmentsList1.getContent().size());

@@ -24,6 +24,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
@@ -40,7 +41,9 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/Swipe-Admin/main")
+                        .successHandler(customAuthenticationSuccessHandler)
+//                        .successForwardUrl("/main")
+//                        .defaultSuccessUrl("/main")
                         .loginProcessingUrl("/login")
                         .failureUrl("/login?error=true")
                         .permitAll()

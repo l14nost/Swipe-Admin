@@ -170,7 +170,7 @@
                 padding: 2px;
                 border-radius: 50%;
             " th:attr="onclick='deleteData(' + ${photo.getIdPhotos()} + ', ' + ${lcd.getIdLcd()} + ')'">
-                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">
+                    <img src="../admin/dist/img/cross.png" width="20px" height="20px">
                   </button>
                   <input type="file" id="inputImg2" th:id="inputGallery+${photo.getIdPhotos()}" name="gallery" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png">
                   <script>
@@ -202,7 +202,7 @@
             </div>
           </div>
 
-          <div >
+          <div>
             <label>Документы</label>
               <div th:if="${#fields.hasErrors('documentsFiles')}">
                   <div class="text-danger">
@@ -214,7 +214,7 @@
               <div class="row" id="documentDiv">
 
                 <div class="col-sm-3" th:each="document:${lcd.getDocuments()}">
-                  <img src="../admin/dist/img/document.png" id="img1" class="img-fluid mb-2" alt="white sample">
+                  <img th:src="@{/admin/dist/img/document.png}" id="img1" class="img-fluid mb-2" alt="white sample">
                   <button type="button" style="
                 position: absolute;
                 right: -1px;
@@ -227,7 +227,7 @@
                 padding: 2px;
                 border-radius: 50%;
             " th:attr="onclick='deleteDocument(' + ${document.getIdDocuments()} + ', ' + ${lcd.getIdLcd()} + ')'">
-                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">
+                    <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
                   </button>
                   <label for="inputDocument" id = "filename" th:text="${document.getName()}" style="text-align: center"></label>
                   <input type="file" id="inputDocument" name="documentsFiles" class="form-control" th:value="${document.getFileName()}" accept=".doc,.docx,.xlsx">
@@ -247,7 +247,7 @@
                   <div style="display: flex; justify-content: center">
 <!--                    <a th:href="@{/add_document/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
                     <button class="btn btn-outline" type="button" onclick="addDocument()">
-                      <img src="../admin/dist/img/addCinema.png" width="150px">
+                      <img th:src="@{/admin/dist/img/addCinema.png}" width="150px">
                     </button>
 <!--                    </a>-->
                   </div>

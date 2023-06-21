@@ -64,6 +64,9 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     private UserAddInfo userAddInfo;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Apartment> apartment;
+
 
     private boolean blackList;
 
