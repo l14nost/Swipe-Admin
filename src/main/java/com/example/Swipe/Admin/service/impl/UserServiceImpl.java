@@ -239,20 +239,22 @@ public class UserServiceImpl implements UserService {
 
     public void updateDTO(ClientDTO clientDTO, int id) {
         User user = ClientMapper.toEntity(clientDTO);
-        if (!clientDTO.getFilename().isEmpty()) {
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
+        if (clientDTO.getFilename()!=null) {
+            if (!clientDTO.getFilename().isEmpty()) {
+                File uploadDirGallery = new File(upload);
+                if (!uploadDirGallery.exists()) {
+                    uploadDirGallery.mkdir();
+                }
+                String uuid = UUID.randomUUID().toString();
+                String fileNameGallery = uuid + "-" + clientDTO.getFilename().getOriginalFilename();
+                String resultNameGallery = upload + "" + fileNameGallery;
+                try {
+                    clientDTO.getFilename().transferTo(new File((resultNameGallery)));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                user.setFilename("../uploads/" + fileNameGallery);
             }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + clientDTO.getFilename().getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            try {
-                clientDTO.getFilename().transferTo(new File((resultNameGallery)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            user.setFilename("../uploads/" + fileNameGallery);
         }
         Optional<User> userOptional = userRepo.findById(id);
         if (userOptional.isPresent()){

@@ -191,50 +191,56 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     public void updateDTO(ApartmentDTO apartmentDTO, int id) throws IOException {
         Apartment apartment = ApartmentMapper.toEntity(apartmentDTO);
-        if (!apartmentDTO.getFile().isEmpty()) {
-            System.out.println("+");
-            File uploadDirGallery = new File(upload);
-            if (!uploadDirGallery.exists()) {
-                uploadDirGallery.mkdir();
+        if (apartmentDTO.getFile()!=null) {
+            if (!apartmentDTO.getFile().isEmpty()) {
+                System.out.println("+");
+                File uploadDirGallery = new File(upload);
+                if (!uploadDirGallery.exists()) {
+                    uploadDirGallery.mkdir();
+                }
+                String uuid = UUID.randomUUID().toString();
+                String fileNameGallery = uuid + "-" + apartmentDTO.getFile().getOriginalFilename();
+                String resultNameGallery = upload + "" + fileNameGallery;
+                try {
+                    apartmentDTO.getFile().transferTo(new File((resultNameGallery)));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                apartment.setMainPhoto("../uploads/" + fileNameGallery);
             }
-            String uuid = UUID.randomUUID().toString();
-            String fileNameGallery = uuid + "-" + apartmentDTO.getFile().getOriginalFilename();
-            String resultNameGallery = upload + "" + fileNameGallery;
-            try {
-                apartmentDTO.getFile().transferTo(new File((resultNameGallery)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            apartment.setMainPhoto("../uploads/" + fileNameGallery);
         }
         Optional<Apartment> apartmentOptional = apartmentRepo.findById(id);
         if(apartmentOptional.isPresent()){
             Apartment apartmentUpdate = apartmentOptional.get();
             if(apartmentUpdate.getPhotoList()!=null){
-                for(int i = 0; i<apartmentUpdate.getPhotoList().size(); i++){
-                    if (!apartmentDTO.getGalleryPhoto().get(i).isEmpty()) {
-                        File uploadDirGallery = new File(upload);
-                        if (!uploadDirGallery.exists()) {
-                            uploadDirGallery.mkdir();
+                if (apartmentDTO.getGalleryPhoto()!=null) {
+                    for (int i = 0; i < apartmentUpdate.getPhotoList().size(); i++) {
+                        if (!apartmentDTO.getGalleryPhoto().get(i).isEmpty()) {
+                            File uploadDirGallery = new File(upload);
+                            if (!uploadDirGallery.exists()) {
+                                uploadDirGallery.mkdir();
+                            }
+                            String uuid = UUID.randomUUID().toString();
+                            String fileNameGallery = uuid + "-" + apartmentDTO.getGalleryPhoto().get(i).getOriginalFilename();
+                            String resultNameGallery = upload + "" + fileNameGallery;
+                            apartmentDTO.getGalleryPhoto().get(i).transferTo(new File((resultNameGallery)));
+                            if (!apartmentUpdate.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                                String fileNameDelete = apartmentUpdate.getPhotoList().get(i).getFileName().substring(11, apartmentUpdate.getPhotoList().get(i).getFileName().length());
+                                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                                fileDelete.delete();
+                            }
+                            apartmentUpdate.getPhotoList().get(i).setFileName("../uploads/" + fileNameGallery);
+                            photosService.updateEntity(apartmentUpdate.getPhotoList().get(i), apartmentUpdate.getPhotoList().get(i).getIdPhotos());
                         }
-                        String uuid = UUID.randomUUID().toString();
-                        String fileNameGallery = uuid + "-" + apartmentDTO.getGalleryPhoto().get(i).getOriginalFilename();
-                        String resultNameGallery = upload + "" + fileNameGallery;
-                        apartmentDTO.getGalleryPhoto().get(i).transferTo(new File((resultNameGallery)));
-                        if (!apartmentUpdate.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
-                            String fileNameDelete = apartmentUpdate.getPhotoList().get(i).getFileName().substring(11, apartmentUpdate.getPhotoList().get(i).getFileName().length());
-                            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                            fileDelete.delete();
-                        }
-                        apartmentUpdate.getPhotoList().get(i).setFileName("../uploads/" + fileNameGallery);
-                        photosService.updateEntity(apartmentUpdate.getPhotoList().get(i),apartmentUpdate.getPhotoList().get(i).getIdPhotos() );
                     }
                 }
             }
-            if(!apartmentUpdate.getMainPhoto().equals("../admin/dist/img/default.jpg")&&!apartmentDTO.getFile().isEmpty()){
-                String fileNameDelete = apartmentUpdate.getMainPhoto().substring(11, apartmentUpdate.getMainPhoto().length());
-                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                fileDelete.delete();
+            if (apartmentDTO.getFile()!=null) {
+                if (!apartmentUpdate.getMainPhoto().equals("../admin/dist/img/default.jpg") && !apartmentDTO.getFile().isEmpty()) {
+                    String fileNameDelete = apartmentUpdate.getMainPhoto().substring(11, apartmentUpdate.getMainPhoto().length());
+                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                    fileDelete.delete();
+                }
             }
 
             if(apartment.getCommission()!=null){
