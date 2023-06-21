@@ -210,61 +210,68 @@ public class LCDServiceImpl implements LCDService {
         if(lcdOptional.isPresent()){
             LCD lcdUpdate = lcdOptional.get();
             if(lcdUpdate.getPhotoList()!=null){
+                if (lcdDTO.getGallery()!=null) {
                 for(int i = 0; i<lcdUpdate.getPhotoList().size(); i++){
-                    if (!lcdDTO.getGallery().get(i).isEmpty()) {
-                        File uploadDirGallery = new File(upload);
-                        if (!uploadDirGallery.exists()) {
-                            uploadDirGallery.mkdir();
+
+                        if (!lcdDTO.getGallery().get(i).isEmpty()) {
+                            File uploadDirGallery = new File(upload);
+                            if (!uploadDirGallery.exists()) {
+                                uploadDirGallery.mkdir();
+                            }
+                            String uuid = UUID.randomUUID().toString();
+                            String fileNameGallery = uuid + "-" + lcdDTO.getGallery().get(i).getOriginalFilename();
+                            String resultNameGallery = upload + "" + fileNameGallery;
+                            try {
+                                lcdDTO.getGallery().get(i).transferTo(new File((resultNameGallery)));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            if (!lcdUpdate.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                                String fileNameDelete = lcdUpdate.getPhotoList().get(i).getFileName().substring(11, lcdUpdate.getPhotoList().get(i).getFileName().length());
+                                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                                fileDelete.delete();
+                            }
+                            lcdUpdate.getPhotoList().get(i).setFileName("../uploads/" + fileNameGallery);
+                            photosService.updateEntity(lcdUpdate.getPhotoList().get(i), lcdUpdate.getPhotoList().get(i).getIdPhotos());
                         }
-                        String uuid = UUID.randomUUID().toString();
-                        String fileNameGallery = uuid + "-" + lcdDTO.getGallery().get(i).getOriginalFilename();
-                        String resultNameGallery = upload + "" + fileNameGallery;
-                        try {
-                            lcdDTO.getGallery().get(i).transferTo(new File((resultNameGallery)));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        if (!lcdUpdate.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
-                            String fileNameDelete = lcdUpdate.getPhotoList().get(i).getFileName().substring(11, lcdUpdate.getPhotoList().get(i).getFileName().length());
-                            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                            fileDelete.delete();
-                        }
-                        lcdUpdate.getPhotoList().get(i).setFileName("../uploads/" + fileNameGallery);
-                        photosService.updateEntity(lcdUpdate.getPhotoList().get(i),lcdUpdate.getPhotoList().get(i).getIdPhotos() );
                     }
                 }
             }
             if (lcdUpdate.getDocuments()!=null){
-                for(int i = 0; i<lcdUpdate.getDocuments().size();i++){
-                    if (!lcdDTO.getDocumentsFiles().get(i).isEmpty()) {
-                        File uploadDirGallery = new File(upload);
-                        if (!uploadDirGallery.exists()) {
-                            uploadDirGallery.mkdir();
+                if (lcdDTO.getDocumentsFiles()!=null) {
+                    for (int i = 0; i < lcdUpdate.getDocuments().size(); i++) {
+                        if (!lcdDTO.getDocumentsFiles().get(i).isEmpty()) {
+                            File uploadDirGallery = new File(upload);
+                            if (!uploadDirGallery.exists()) {
+                                uploadDirGallery.mkdir();
+                            }
+                            String uuid = UUID.randomUUID().toString();
+                            String fileNameGallery = uuid + "-" + lcdDTO.getDocumentsFiles().get(i).getOriginalFilename();
+                            lcdUpdate.getDocuments().get(i).setName(lcdDTO.getDocumentsFiles().get(i).getOriginalFilename());
+                            String resultNameGallery = upload + "" + fileNameGallery;
+                            try {
+                                lcdDTO.getDocumentsFiles().get(i).transferTo(new File((resultNameGallery)));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            if (!lcdUpdate.getDocuments().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                                String fileNameDelete = lcdUpdate.getDocuments().get(i).getFileName().substring(11, lcdUpdate.getDocuments().get(i).getFileName().length());
+                                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                                fileDelete.delete();
+                            }
+                            lcdUpdate.getDocuments().get(i).setFileName("../uploads/" + fileNameGallery);
+                            documentsService.updateEntity(lcdUpdate.getDocuments().get(i), lcdUpdate.getDocuments().get(i).getIdDocuments());
                         }
-                        String uuid = UUID.randomUUID().toString();
-                        String fileNameGallery = uuid + "-" + lcdDTO.getDocumentsFiles().get(i).getOriginalFilename();
-                        lcdUpdate.getDocuments().get(i).setName(lcdDTO.getDocumentsFiles().get(i).getOriginalFilename());
-                        String resultNameGallery = upload + "" + fileNameGallery;
-                        try {
-                            lcdDTO.getDocumentsFiles().get(i).transferTo(new File((resultNameGallery)));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        if (!lcdUpdate.getDocuments().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
-                            String fileNameDelete = lcdUpdate.getDocuments().get(i).getFileName().substring(11, lcdUpdate.getDocuments().get(i).getFileName().length());
-                            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                            fileDelete.delete();
-                        }
-                        lcdUpdate.getDocuments().get(i).setFileName("../uploads/" + fileNameGallery);
-                        documentsService.updateEntity(lcdUpdate.getDocuments().get(i),lcdUpdate.getDocuments().get(i).getIdDocuments() );
                     }
                 }
             }
             if (lcdUpdate.getMainPhoto()!=null) {
-                if (!lcdUpdate.getMainPhoto().equals("../admin/dist/img/default.jpg") && !lcdDTO.getFile().isEmpty()) {
-                    String fileNameDelete = lcdUpdate.getMainPhoto().substring(11, lcdUpdate.getMainPhoto().length());
-                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                    fileDelete.delete();
+                if (lcdDTO.getFile()!=null) {
+                    if (!lcdUpdate.getMainPhoto().equals("../admin/dist/img/default.jpg") && !lcdDTO.getFile().isEmpty()) {
+                        String fileNameDelete = lcdUpdate.getMainPhoto().substring(11, lcdUpdate.getMainPhoto().length());
+                        File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                        fileDelete.delete();
+                    }
                 }
             }
             if(lcd.getAdvantages()!=null){
