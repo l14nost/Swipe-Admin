@@ -25,3 +25,9 @@ jobs:
         run: |
           mvn clean 
           mvn -B package --file pom.xml
+
+      - name: Deploy to Tomcat
+        run: |
+          curl -v --user "tomcat:OUlIg40qOZ" 
+          --upload-file target/Swipe-Admin.war
+          "http://slj.avada-media-dev1.od.ua/manager/text/deploy?path=/Swipe-Admin&update=true"    
