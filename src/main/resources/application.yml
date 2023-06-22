@@ -28,7 +28,7 @@ spring:
 #upload:
 #  path: '/opt/tomcat/work/Catalina/localhost/Swipe-Admin/uploads/'
 upload:
-  path: '/slj/Swipe/Admin/files/'
+  path: 'opt/slj/Swipe/Admin/files/'
 
 logging:
   config: classpath:logback.xml
