@@ -25,7 +25,7 @@ public class ClientDTO {
     String name;
 
     @NotBlank
-    @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
+    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
     String surname;
 
     @NotBlank
