@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Spring Security Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style th:replace="~{/admin.shared/style}"></style>
+
+<body>
+<div class="wrapper">
+  <div th:insert="admin.shared/header::header"></div>
+  <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
+
+  <div class="content-wrapper" style="padding-left: 50px">
+    <div class="col-md-7 col-lg-8">
+      <h4 class="mb-3">Админ</h4>
+      <form class="needs-validation" method="post" th:action="@{/profile}" th:object="${user}">
+        <input type="hidden" name="idUser" th:value="${user.getIdUser()}">
+        <div class="row g-3">
+          <div class="col-sm-12">
+            <label  class="form-label">Почта</label>
+            <input type="text" class="form-control" name="mail"  placeholder="Введите имя..." th:value="${user.getMail()}" required="">
+            <div th:if="${#fields.hasErrors('mail')}">
+              <div class="text-danger">
+                <p th:errors="*{mail}"></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Пароль</label>
+            <input type="text" class="form-control" name="password"  placeholder="Введите имя...">
+            <div th:if="${#fields.hasErrors('password')}">
+              <div class="text-danger">
+                <p th:errors="*{password}"></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label  class="form-label">Повторный пароль</label>
+            <input type="text" class="form-control" name="confirmPassword"  placeholder="Введите имя...">
+            <div th:if="${#fields.hasErrors('password')}">
+              <div class="text-danger">
+                <p th:errors="*{password}"></p>
+              </div>
+            </div>
+          </div>
+
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+
+        </div>
+      </form>
+
+
+    </div>
+  </div>
+
+</div>
+<div th:insert="admin.shared/footer::footer"></div>
+<div th:replace="~{/admin.shared/script}"></div>
+
+
+</body>
+
+</html>

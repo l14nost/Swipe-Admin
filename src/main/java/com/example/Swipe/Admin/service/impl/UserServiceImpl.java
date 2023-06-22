@@ -1,18 +1,18 @@
 package com.example.Swipe.Admin.service.impl;
 
 //import com.example.Swipe.Admin.entity.Contractor;
+import com.example.Swipe.Admin.dto.AdminDto;
 import com.example.Swipe.Admin.dto.BlackListDTO;
 import com.example.Swipe.Admin.dto.ClientDTO;
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.enums.TypeUser;
+import com.example.Swipe.Admin.mapper.AdminMapper;
 import com.example.Swipe.Admin.mapper.BlackLIstMapper;
 import com.example.Swipe.Admin.mapper.ClientMapper;
 import com.example.Swipe.Admin.repository.UserRepo;
 import com.example.Swipe.Admin.service.UserService;
 import com.example.Swipe.Admin.specification.BlackListSpecification;
 import com.example.Swipe.Admin.specification.UserSpecification;
-import com.example.Swipe.Admin.validation.UniqueEmail;
-import com.example.Swipe.Admin.validation.UniqueEmailValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -20,6 +20,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -39,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     @Value("${upload.path}")
     private String upload;
+
 
 
     public List<User> findAllByType(TypeUser typeUser){
@@ -287,4 +292,27 @@ public class UserServiceImpl implements UserService {
             userRepo.saveAndFlush(updateUser);
         }
     }
+
+    public AdminDto getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return AdminMapper.apply(userRepo.findByMail(authentication.getName()).get());
+    }
+
+    public void updateAdmin(AdminDto adminDto) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        User user = AdminMapper.toEntity(adminDto);
+        Optional<User> userOptional = userRepo.findById(adminDto.getIdUser());
+        if (userOptional.isPresent()){
+            User userUpdate = userOptional.get();
+            if (user.getMail()!=null){
+                userUpdate.setMail(user.getMail());
+            }
+            if (adminDto.getPassword()!=null){
+                userUpdate.setPassword(passwordEncoder.encode(adminDto.getPassword()));
+            }
+            System.out.println(userUpdate.getPassword());
+            userRepo.saveAndFlush(userUpdate);
+        }
+    }
+
 }

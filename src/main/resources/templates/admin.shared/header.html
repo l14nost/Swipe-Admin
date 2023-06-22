@@ -28,9 +28,9 @@
     padding-right: 0px;
 ">
                 <i class="fa-solid fa-user fa-xl d-sm-flex d-j" style="align-items: center;"></i>
-                <a href="#" class="nav-link" style="
+                <a th:href="@{/profile}" class="nav-link" style="
     padding-right: 10px;
-">Мой кабинет</a>
+" th:text="${T(com.example.Swipe.Admin.controller.AdminController).adminMail()}"></a>
                 <form  th:action="@{/logout}" method="post">
                     <button type="submit" class="btn btn-outline-danger" value="Sign out" style="height: 100%">
                         <i class="fa-solid fa-power-off fa-xl d-sm-flex d-j" style="align-items: center;"></i>
