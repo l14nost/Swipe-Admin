@@ -28,7 +28,7 @@ spring:
 #upload:
 #  path: '/opt/tomcat/work/Catalina/localhost/Swipe-Admin/uploads/'
 upload:
-  path: '/home/avada/web/slj.avada-media-dev1.od.ua/slj/Swipe/Admin/'
+  path: '/home/avada/web/slj.avada-media-dev1.od.ua/slj/Swipe/Admin/files/'
 
 logging:
   config: classpath:logback.xml
