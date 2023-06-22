@@ -82,7 +82,7 @@
               <p th:errors="*{file}"></p>
             </div>
           </div>
-          <div class="form-group" style="display: flex">
+          <div class="form-group" style="display: flex" id="imgDiv">
 
             <div class="form-group" style="display: flex">
 
@@ -262,5 +262,28 @@
 
 
 </body>
+<script>
+  document.querySelector('form.needs-validation').addEventListener('submit', function(event) {
+    event.preventDefault(); // Отменяем отправку формы
+    var formData = new FormData(this); // Создаем объект FormData с данными формы
+    var xhr = new XMLHttpRequest(); // Создаем объект XMLHttpRequest
+    xhr.open('POST', this.getAttribute('action')); // Устанавливаем метод и адрес запроса
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        // Обработка успешного ответа
+        var response = xhr.responseText;
+        // Обновление страницы, кроме элемента с id "imgDiv"
+        var imgDiv = document.getElementById('imgDiv');
+        var imgDivHTML = imgDiv.innerHTML;
+        document.body.innerHTML = response;
+        document.getElementById('imgDiv').innerHTML = imgDivHTML;
+      } else {
+        // Обработка ошибки
+        console.error('Ошибка при выполнении запроса');
+      }
+    };
+    xhr.send(formData); // Отправляем запрос с данными формы
+  });
+</script>
 
 </html>

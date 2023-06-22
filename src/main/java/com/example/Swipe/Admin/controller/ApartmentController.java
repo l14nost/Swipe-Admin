@@ -32,9 +32,7 @@ public class ApartmentController {
     private String upload;
     private final ApartmentServiceImpl apartmentServiceImpl;
     private final LCDServiceImpl lcdService;
-    private final PhotosServiceImpl photosService;
     private final UserServiceImpl userService;
-    private final FrameServiceImpl frameService;
 
     @PostMapping("/delete_apartment")
     public String deleteApartment(@RequestParam int idApartment){
