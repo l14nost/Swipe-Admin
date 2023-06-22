@@ -19,6 +19,8 @@ spring:
     username: 'avada_slj_swipe'
     password: 'zenIvTZqu6'
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+
 #  sql:
 #    init:
 #      mode: always

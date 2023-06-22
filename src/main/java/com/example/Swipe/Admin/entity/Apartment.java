@@ -74,7 +74,7 @@ public class Apartment {
     @JoinColumn(name = "id_frame")
     private Frame frame;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_client")
     private User user;
 
