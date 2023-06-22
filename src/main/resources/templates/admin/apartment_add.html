@@ -13,7 +13,7 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/mixed" th:action="@{/add_apartment}" th:object="${apartment}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_apartment}" th:object="${apartment}">
     <div style="display: flex; justify-content: space-between">
       <h4 class="mb-3">Квартира не от застройщика</h4>
     </div>
