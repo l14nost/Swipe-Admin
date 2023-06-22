@@ -307,7 +307,8 @@ public class UserServiceImpl implements UserService {
             if (user.getMail()!=null){
                 userUpdate.setMail(user.getMail());
             }
-            if (adminDto.getPassword()!=null){
+            System.out.println(adminDto.getPassword().isEmpty());
+            if (adminDto.getPassword()!=null&& !adminDto.getPassword().isEmpty()){
                 userUpdate.setPassword(passwordEncoder.encode(adminDto.getPassword()));
             }
             System.out.println(userUpdate.getPassword());
