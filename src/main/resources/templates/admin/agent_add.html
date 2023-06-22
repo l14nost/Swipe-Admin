@@ -14,7 +14,8 @@
 
   <div class="content-wrapper" style="padding-left: 50px">
     <div class="col-md-7 col-lg-8">
-      <h4 class="mb-3">Агент</h4>
+      <h4 class="mb-3" th:if="${typeUser.name() == 'CLIENT'}">Агент</h4>
+      <h4 class="mb-3" th:if="${typeUser.name() == 'CONTRACTOR'}">Отдел продаж</h4>
       <form class="needs-validation" method="post" enctype="application/x-www-form-urlencoded" th:action="@{/agent_add/{idUser}(idUser = ${idUser})}" th:object="${agent}">
         <input type="hidden" name="idAgent" value="0"/>
         <div class="row g-3">

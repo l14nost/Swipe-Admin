@@ -1,6 +1,7 @@
 package com.example.Swipe.Admin.controller;
 
 import com.example.Swipe.Admin.dto.AgentDTO;
+import com.example.Swipe.Admin.entity.Agent;
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.enums.TypeAgent;
 import com.example.Swipe.Admin.enums.TypeUser;
@@ -27,6 +28,7 @@ public class AgentController {
     public String addAgent(@PathVariable int idUser, Model model){
         model.addAttribute("idUser", idUser);
         model.addAttribute("agent",AgentDTO.builder().build());
+        model.addAttribute("typeUser", userService.findById(idUser).getTypeUser());
 
         return "admin/agent_add";
     }
@@ -58,6 +60,7 @@ public class AgentController {
             System.out.println(result.getAllErrors());
             model.addAttribute("idUser", idUser);
             model.addAttribute("agent", agentDTO);
+            model.addAttribute("typeUser", user.getTypeUser());
             return "admin/agent_add";
         }
         else {
@@ -76,8 +79,10 @@ public class AgentController {
     @GetMapping("/agent_edit/{idAgent}")
     public String agentEdit( @PathVariable int idAgent, Model model){
 //        String[] idList = id.split("_");
-        model.addAttribute("agent",agentServiceImpl.findById(idAgent));
-        model.addAttribute("idUser", agentServiceImpl.findById(idAgent).getUsers().get(0).getIdUser());
+        Agent agent = agentServiceImpl.findById(idAgent);
+        model.addAttribute("agent",agent);
+        model.addAttribute("idUser", agent.getUsers().get(0).getIdUser());
+        model.addAttribute("typeUser",agent.getUsers().get(0).getTypeUser());
         return "admin/agent_edit";
     }
 //    @PostMapping("/agent_update/{id}")
@@ -93,6 +98,7 @@ public class AgentController {
             System.out.println(agentDTO);
             model.addAttribute("agent", agentDTO);
             model.addAttribute("idUser", agentDTO.getIdUser());
+            model.addAttribute("typeUser", userService.findById(agentDTO.getIdUser()).getTypeUser());
             return "admin/agent_edit";
         }
         agentServiceImpl.updateDTO(agentDTO,id);

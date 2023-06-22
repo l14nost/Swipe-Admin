@@ -12,11 +12,11 @@ public class AgentDTO {
     int idAgent;
     int idUser;
     @NotBlank
-    @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "Имя должно содержать только буквы и начинаться с заглавной буквы")
+    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Имя должно содержать только буквы и начинаться с заглавной буквы")
     @Size(min = 2, max = 50)
     String name;
     @NotBlank
-    @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
+    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
     @Size(min = 2, max = 50)
     String surname;
     @NotBlank
