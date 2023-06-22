@@ -4,6 +4,8 @@ import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.validation.FileExtension;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,8 +19,10 @@ public class RequestLcdDto {
     MultipartFile file;
     @NotBlank
     @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Имя должно содержать только буквы и начинаться с заглавной буквы")
+    @Size(min = 2, max = 50)
     String name;
     @NotBlank
+    @Size(min = 2, max = 255)
     String description;
     StatusLCDType status;
     ClassType lcdClass;

@@ -20,9 +20,10 @@ public class LcdDTO {
     MultipartFile file;
     @NotBlank
     @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Имя должно содержать только буквы и начинаться с заглавной буквы")
+    @Size(min = 2, max = 50)
     String name;
     @NotBlank
-    @Size(min = 5, max = 1000)
+    @Size(min = 5, max = 255)
     String description;
     StatusLCDType status;
     ClassType lcdClass;
@@ -32,6 +33,7 @@ public class LcdDTO {
     @NotBlank
     @NotEmpty
     @Pattern(message = "г.Город, р.Район, вул.Вулиця,1",regexp = "г\\.[A-Za-zА-Яа-я]+, р\\.[A-Za-zА-Яа-я]+, вул\\.[A-Za-zА-Яа-я]+,\\d+")
+    @Size(min = 2, max = 50)
     String address;
     @Min(5)
     @Max(150)

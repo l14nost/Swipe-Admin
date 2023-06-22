@@ -13,13 +13,16 @@ public class AgentDTO {
     int idUser;
     @NotBlank
     @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "Имя должно содержать только буквы и начинаться с заглавной буквы")
+    @Size(min = 2, max = 50)
     String name;
     @NotBlank
     @Pattern(regexp = "^[A-Z][a-zA-Z]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
+    @Size(min = 2, max = 50)
     String surname;
     @NotBlank
     @Email(message = "Не правильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
 //    @UniqueEmailAgent
+    @Size(min = 2, max = 50)
     String mail;
     @NotBlank
     @Pattern(regexp = "^[0-9]*$", message = "Номер должен содержать 9 цифр")

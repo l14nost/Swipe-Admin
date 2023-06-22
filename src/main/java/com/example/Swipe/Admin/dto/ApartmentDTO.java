@@ -19,7 +19,7 @@ public class ApartmentDTO {
     int number;
     String mainPhoto;
     @NotBlank
-    @Size(min = 5, max = 1000)
+    @Size(min = 5, max = 255)
     String description;
     @Min(100000)
     @Max(1000000)
@@ -45,6 +45,7 @@ public class ApartmentDTO {
     @NotBlank
     @NotEmpty
     @Pattern(message = "г.Город, р.Район, вул.Вулиця,1",regexp = "г\\.[A-Za-zА-Яа-я]+, р\\.[A-Za-zА-Яа-я]+, вул\\.[A-Za-zА-Яа-я]+,\\d+")
+    @Size(min = 2, max = 50)
     String address;
     @Min(30)
     @Max(150)

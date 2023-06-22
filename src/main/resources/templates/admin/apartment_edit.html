@@ -344,7 +344,7 @@
                   <script>
                       function deleteData(idPhoto, idApartment) {
                         $.ajax({
-                          url: "/delete_photo_apartment",
+                          url: "/Swipe-Admin/delete_photo_apartment",
                           method: "POST",
                           data: {
                             idPhoto: idPhoto,
@@ -363,7 +363,7 @@
                     }
                       function addPhoto(idApartment) {
                         $.ajax({
-                          url: "/add_photo/"+idApartment,
+                          url: "/Swipe-Admin/add_photo/"+idApartment,
                           method: "GET",
 
                           success: function(response) {

@@ -15,9 +15,10 @@ public class NewsDTO {
 
     int idNews;
     @NotBlank
+    @Size(min = 2, max = 50)
     String title;
     @NotBlank
-    @Size(min = 5, max = 1000)
+    @Size(min = 5, max = 255)
     String description;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate date;

@@ -22,15 +22,18 @@ public class ClientDTO {
 
     @NotBlank
     @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Имя должно содержать только буквы и начинаться с заглавной буквы")
+    @Size(min = 2, max = 50)
     String name;
 
     @NotBlank
     @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$", message = "Фамилия должно содержать только буквы и начинаться с заглавной буквы")
+    @Size(min = 2, max = 50)
     String surname;
 
     @NotBlank
     @Email(message = "Не рправильный формат почты (Ex:you@example.com)", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]*.[a-z]$")
 //    @UniqueEmail
+    @Size(min = 2, max = 50)
     String mail;
 
 

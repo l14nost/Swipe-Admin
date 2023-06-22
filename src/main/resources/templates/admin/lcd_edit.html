@@ -471,7 +471,7 @@
 <script>
   function addPhoto () {
     $.ajax({
-      url:  '/add_photo_lcd/'+[[${lcd.getIdLcd}]],
+      url:  '/Swipe-Admin/add_photo_lcd/'+[[${lcd.getIdLcd}]],
       type: 'GET',
       success: function (data) {
         var galleryHtml = $(data).find('#galleryDiv').html();
@@ -485,7 +485,7 @@
   }
   function addDocument () {
     $.ajax({
-      url:  '/add_document/'+[[${lcd.getIdLcd}]],
+      url:  '/Swipe-Admin/add_document/'+[[${lcd.getIdLcd}]],
       type: 'GET',
       success: function (data) {
         var galleryHtml = $(data).find('#documentDiv').html();
@@ -500,7 +500,7 @@
   function editFrame(idFrame) {
 
     $.ajax({
-      url: "/edit_frame/" + idFrame,
+      url: "/Swipe-Admin/edit_frame/" + idFrame,
       method: "GET",
       success: function (response) {
         window.location.href = "/edit_frame/" + idFrame;
@@ -514,7 +514,7 @@
   function addFrame() {
 
     $.ajax({
-      url: "/add_frame/" + [[${lcd.getIdLcd}]],
+      url: "/Swipe-Admin/add_frame/" + [[${lcd.getIdLcd}]],
       method: "GET",
       success: function (response) {
         var galleryHtml = $(response).find('#frameDiv').html();
@@ -530,7 +530,7 @@
   function deleteData(idPhoto, idLcd) {
 
     $.ajax({
-      url: "/delete_photo_lcd",
+      url: "/Swipe-Admin/delete_photo_lcd",
       method: "POST",
       data: {
         idPhoto: idPhoto,
@@ -549,7 +549,7 @@
   function deleteFrame(idFrame, idLcd) {
 
     $.ajax({
-      url: "/delete_frame",
+      url: "/Swipe-Admin/delete_frame",
       method: "POST",
       data: {
         idFrame: idFrame,
@@ -569,7 +569,7 @@
   function deleteDocument(idDocument, idLcd) {
 
     $.ajax({
-      url: "/delete_document",
+      url: "/Swipe-Admin/delete_document",
       method: "POST",
       data: {
         idDocument: idDocument,
@@ -589,7 +589,7 @@
   function deleteNews(idNews, idLcd) {
 
     $.ajax({
-      url: "/delete_news",
+      url: "/Swipe-Admin/delete_news",
       method: "POST",
       data: {
         idNews: idNews,

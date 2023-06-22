@@ -260,7 +260,7 @@ public class ApartmentController {
             System.out.println(result.getAllErrors());
             model.addAttribute("lcds", lcdService.findAll());
             model.addAttribute("users", userService.findAllByType(TypeUser.CLIENT));
-//            model.addAttribute("apartment", apartmentDTO);
+            model.addAttribute("apartment", apartmentDTO);
             return "admin/apartment_add";
         }
         apartmentServiceImpl.saveDTO(apartmentDTO);
