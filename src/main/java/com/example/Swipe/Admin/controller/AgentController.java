@@ -78,7 +78,6 @@ public class AgentController {
     }
     @GetMapping("/agent_edit/{idAgent}")
     public String agentEdit( @PathVariable int idAgent, Model model){
-//        String[] idList = id.split("_");
         Agent agent = agentServiceImpl.findById(idAgent);
         model.addAttribute("agent",agent);
         model.addAttribute("idUser", agent.getUsers().get(0).getIdUser());
