@@ -153,7 +153,6 @@ public class UserServiceImpl implements UserService {
             result.addError(new FieldError("user", "mail", "Email already exists"));
             return result;
         }
-
         else return result;
     }
 //    public BindingResult userByMail(String email, int id, BindingResult result){

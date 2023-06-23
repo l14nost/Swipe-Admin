@@ -352,4 +352,10 @@ class LCDServiceImplTest {
                 .build();
         verify(lcdRepo).saveAndFlush(lcdSave);
     }
+
+    @Test
+    public void count(){
+        when(lcdRepo.count()).thenReturn(3L);
+        assertEquals(3,lcdService.count());
+    }
 }

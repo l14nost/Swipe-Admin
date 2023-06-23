@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
+import com.example.Swipe.Admin.dto.AdminDto;
 import com.example.Swipe.Admin.dto.BlackListDTO;
 import com.example.Swipe.Admin.dto.ClientDTO;
 import com.example.Swipe.Admin.entity.User;
@@ -21,7 +22,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.MapBindingResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,13 +38,14 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
     @Mock
     private UserRepo userRepo;
+    @Mock
+    private SecurityContext securityContext;
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -116,6 +124,33 @@ class UserServiceImplTest {
         when(userRepo.findAll(blackListSpecification,pageable)).thenReturn(new PageImpl<>(client));
         Page<BlackListDTO> users = userService.blackList(pageable,"null", "surname");
         assertEquals(5,users.getContent().size());
+    }
+
+    @Test
+    void blackListNotNull() {
+        List<User> client = Arrays.asList(
+                User.builder().typeUser(TypeUser.CLIENT).build(),
+                User.builder().typeUser(TypeUser.CLIENT).build(),
+                User.builder().typeUser(TypeUser.CLIENT).build(),
+                User.builder().typeUser(TypeUser.CLIENT).build(),
+                User.builder().typeUser(TypeUser.CLIENT).build()
+        );
+        Pageable pageable = PageRequest.of(0,3);
+        BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord("1").sortedBy("surname").build();
+        when(userRepo.findAll(blackListSpecification,pageable)).thenReturn(new PageImpl<>(client));
+        Page<BlackListDTO> users = userService.blackList(pageable,"1", "surname");
+        assertEquals(5,users.getContent().size());
+    }
+
+    @Test
+    void countBlackList(){
+        when(userRepo.countByBlackListTrue()).thenReturn(3);
+        assertEquals(3,userService.countBlackList());
+    }
+    @Test
+    void countByTypeUser(){
+        when(userRepo.countByTypeUserAndBlackListFalse(TypeUser.CLIENT)).thenReturn(3);
+        assertEquals(3,userService.countByTypeUser(TypeUser.CLIENT));
     }
 
     @Test
@@ -321,5 +356,75 @@ class UserServiceImplTest {
                 .build();
 
         verify(userRepo).saveAndFlush(userSave);
+    }
+
+    @Test
+    void getCurrentUser(){
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+        when(userRepo.findByMail("mail@gmail.com")).thenReturn(Optional.of(User.builder().idUser(1).mail("mail@gmail.com").role(Role.ADMIN).password("$2a$10$OEvncNwlcRA3hVRVe.bW/uJ00wxEIR4/pziDkbxnkv73kDp83rBUy").build()));
+        assertEquals(AdminDto.builder().idUser(1).mail("mail@gmail.com").password("$2a$10$OEvncNwlcRA3hVRVe.bW/uJ00wxEIR4/pziDkbxnkv73kDp83rBUy").build(),userService.getCurrentUser());
+    }
+
+    @Test
+    void updateAdmin(){
+        AdminDto adminDto = AdminDto.builder().idUser(1).mail("admin1@gmail.com").password("pass1").confirmPassword("pass1").build();
+        when(userRepo.findById(1)).thenReturn(Optional.of(User.builder().idUser(1).mail("admin@gmail.com").password("$2a$10$OEvncNwlcRA3hVRVe.bW/uJ00wxEIR4/pziDkbxnkv73kDp83rBUy").role(Role.ADMIN).blackList(false).build()));
+        User userSave = User.builder().idUser(1).mail("admin1@gmail.com").password("$2a$10$bIeMStkhbWMjR9AXTgIGT.TvVK0BA2uDeJOynFwVjxq84SICDfzLu").role(Role.ADMIN).blackList(false).build();
+
+        userService.updateAdmin(adminDto);
+
+        verify(userRepo).saveAndFlush(userSave);
+
+    }
+
+
+    @Test
+    void uniqueMailNull(){
+        when(userRepo.findAllByMail("mail@gmail.com")).thenReturn(List.of(User.builder().build(), User.builder().build()));
+        BindingResult result = mock(BindingResult.class);
+        BindingResult result1 = userService.uniqueMail("mail@gmail.com",result,0,"add");
+
+        assertEquals(result1,result);
+        verify(result, times(1)).addError(any(FieldError.class));
+    }
+
+    @Test
+    void uniqueMailUpdate(){
+        when(userRepo.findAllByMail("mail@gmail.com")).thenReturn(List.of(User.builder().idUser(1).build()));
+        BindingResult result = mock(BindingResult.class);
+        BindingResult result1 = userService.uniqueMail("mail@gmail.com",result,1,"update");
+
+        assertEquals(result1,result);
+        verify(result, never()).addError(any(FieldError.class));
+    }
+
+    @Test
+    void uniqueMailUpdateError(){
+        when(userRepo.findAllByMail("mail@gmail.com")).thenReturn(List.of(User.builder().idUser(1).build()));
+        BindingResult result = mock(BindingResult.class);
+        BindingResult result1 = userService.uniqueMail("mail@gmail.com",result,2,"update");
+        assertEquals(result1,result);
+        verify(result, times(1)).addError(any(FieldError.class));
+    }
+
+    @Test
+    void uniqueMailAddError(){
+        when(userRepo.findAllByMail("mail@gmail.com")).thenReturn(List.of(User.builder().build()));
+        BindingResult result = mock(BindingResult.class);
+        BindingResult result1 = userService.uniqueMail("mail@gmail.com",result,2,"add");
+        assertEquals(result1,result);
+        verify(result, times(1)).addError(any(FieldError.class));
+    }
+
+    @Test
+    void uniqueMailSuccess(){
+        when(userRepo.findAllByMail("mail@gmail.com")).thenReturn(List.of());
+        BindingResult result = mock(BindingResult.class);
+        BindingResult result1 = userService.uniqueMail("mail@gmail.com",result,1,"add");
+        assertEquals(result1,result);
+        verify(result, never()).addError(any(FieldError.class));
     }
 }
