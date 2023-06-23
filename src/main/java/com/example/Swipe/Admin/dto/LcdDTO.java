@@ -32,7 +32,7 @@ public class LcdDTO {
     TerritoryType territory;
     @NotBlank
     @NotEmpty
-    @Pattern(message = "г.Город, р.Район, вул.Вулиця,1",regexp = "г\\.[A-Za-zА-Яа-я]+, р\\.[A-Za-zА-Яа-я]+, вул\\.[A-Za-zА-Яа-я]+,\\d+")
+    @Pattern(message = "г.Город, р.Район, ул.Улица,1",regexp = "г\\.[A-Za-zА-Яа-я]+, р\\.[A-Za-zА-Яа-я]+, ул\\.[A-Za-zА-Яа-я]+,\\d+")
     @Size(min = 2, max = 50)
     String address;
     @Min(5)

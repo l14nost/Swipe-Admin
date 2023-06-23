@@ -42,7 +42,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" placeholder="Введите адрес... (г.Город, р.Район, вул.Вулиця,1)" >
+            <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" placeholder="Введите адрес... (г.Город, р.Район, ул.Улица,1)" >
             <div th:if="${#fields.hasErrors('address')}">
               <div class="text-danger">
                 <p th:errors="*{address}"></p>
