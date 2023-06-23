@@ -21,7 +21,7 @@
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Заголовок</label>
-            <input type="text" class="form-control" name="title" id="firstName" placeholder="Введите имя..." th:value="${news.getTitle()}" required="">
+            <input type="text" class="form-control" name="title" id="firstName" placeholder="Введите заголовок..." th:value="${news.getTitle()}" required="">
             <div th:if="${#fields.hasErrors('title')}">
               <div class="text-danger">
                 <p th:errors="*{title}"></p>
@@ -31,7 +31,7 @@
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Описание</label>
-            <textarea class="form-control" name="description" th:field="*{description}" id="lastName" placeholder="Введите фамилию..." th:value="${news.getDescription()}" th:placeholder="${news.getDescription()}" ></textarea>
+            <textarea class="form-control" name="description" th:field="*{description}" id="lastName" placeholder="Введите описание..." th:value="${news.getDescription()}" th:placeholder="${news.getDescription()}" ></textarea>
             <div th:if="${#fields.hasErrors('description')}">
               <div class="text-danger">
                 <p th:errors="*{description}"></p>
@@ -47,7 +47,7 @@
               </div>
             </div>
           </div>
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
 
         </div>
       </form>

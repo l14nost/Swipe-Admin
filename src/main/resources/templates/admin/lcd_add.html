@@ -22,7 +22,7 @@
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Название</label>
-            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..." th:value="${lcd.getName()}" required="">
+            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите название..." th:value="${lcd.getName()}" required="">
             <div th:if="${#fields.hasErrors('name')}">
               <div class="text-danger">
                 <p th:errors="*{name}"></p>
@@ -32,7 +32,7 @@
 
           <div class="col-sm-12">
             <label for="floatingTextarea">Описание</label>
-            <textarea class="form-control"  id="floatingTextarea" name="description" th:field="*{description}" th:value="${lcd.getDescription()}"></textarea>
+            <textarea class="form-control"  id="floatingTextarea" name="description" placeholder="Введите описание..." th:field="*{description}" th:value="${lcd.getDescription()}"></textarea>
             <div th:if="${#fields.hasErrors('description')}">
               <div class="text-danger">
                 <p th:errors="*{description}"></p>
@@ -42,7 +42,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" placeholder="Введите имя..." >
+            <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" placeholder="Введите адрес... (г.Город, р.Район, вул.Вулиця,1)" >
             <div th:if="${#fields.hasErrors('address')}">
               <div class="text-danger">
                 <p th:errors="*{address}"></p>
@@ -51,7 +51,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Оформление</label>
-            <input type="text" class="form-control" name="formalization"  placeholder="Введите имя..."  required="" th:value="${lcd.getFormalization()}">
+            <input type="text" class="form-control" name="formalization"  placeholder="Введите оформление..."  required="" th:value="${lcd.getFormalization()}">
             <div th:if="${#fields.hasErrors('formalization')}">
               <div class="text-danger">
                 <p th:errors="*{formalization}"></p>
@@ -60,7 +60,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Варианты расчета</label>
-            <input type="text" class="form-control" name="typePayment"  placeholder="Введите имя..."th:value="${lcd.getTypePayment()}"  required="" >
+            <input type="text" class="form-control" name="typePayment"  placeholder="Введите варианты расчета..."th:value="${lcd.getTypePayment()}"  required="" >
             <div th:if="${#fields.hasErrors('typePayment')}">
               <div class="text-danger">
                 <p th:errors="*{typePayment}"></p>
@@ -69,7 +69,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Назначение</label>
-            <input type="text" class="form-control" name="appointment"  placeholder="Введите имя..." th:value="${lcd.getAppointment()}" required="" >
+            <input type="text" class="form-control" name="appointment"  placeholder="Введите назначение..." th:value="${lcd.getAppointment()}" required="" >
             <div th:if="${#fields.hasErrors('appointment')}">
               <div class="text-danger">
                 <p th:errors="*{appointment}"></p>
@@ -78,7 +78,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Сумма в договоре</label>
-            <input type="text" class="form-control" name="sumContract"  placeholder="Введите имя..." th:value="${lcd.getSumContract()}" required="" >
+            <input type="text" class="form-control" name="sumContract"  placeholder="Введите тип суммы в договоре..." th:value="${lcd.getSumContract()}" required="" >
             <div th:if="${#fields.hasErrors('sumContract')}">
               <div class="text-danger">
                 <p th:errors="*{sumContract}"></p>
@@ -306,7 +306,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Высота потолков</label>
-            <input type="text" class="form-control" name="height"  placeholder="Введите имя..."  required="" th:value="${lcd.getHeight()}">
+            <input type="text" class="form-control" name="height"  placeholder="Введите высоту потолков..."  required="" th:value="${lcd.getHeight()}">
             <div th:if="${#fields.hasErrors('height')}">
               <div class="text-danger">
                 <p th:errors="*{height}"></p>
@@ -315,7 +315,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Расстояние до моря</label>
-            <input type="text" class="form-control" name="distanceSea"  placeholder="Введите имя..."  required="" th:value="${lcd.getDistanceSea()}">
+            <input type="text" class="form-control" name="distanceSea"  placeholder="Введите расстояние до моря..."  required="" th:value="${lcd.getDistanceSea()}">
             <div th:if="${#fields.hasErrors('distanceSea')}">
               <div class="text-danger">
                 <p th:errors="*{distanceSea}"></p>
@@ -401,7 +401,7 @@
 <!--              </tbody>-->
 <!--            </table>-->
 <!--          </div>-->
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
 
         </div>
       </div>

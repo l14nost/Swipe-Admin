@@ -285,6 +285,13 @@ public class UserServiceImpl implements UserService {
             if (user.getNumber() != null) {
                 updateUser.setNumber(user.getNumber());
             }
+            if (user.getUserAddInfo().getTypeNotification()!=null){
+                updateUser.getUserAddInfo().setTypeNotification(user.getUserAddInfo().getTypeNotification());
+            }
+            if (user.getUserAddInfo().getDateSub()!=null){
+                updateUser.getUserAddInfo().setDateSub(user.getUserAddInfo().getDateSub());
+            }
+            updateUser.getUserAddInfo().setCallSms(user.getUserAddInfo().isCallSms());
             updateUser.setBlackList(user.isBlackList());
 
 
