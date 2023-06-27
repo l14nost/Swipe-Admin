@@ -5,10 +5,8 @@ import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.service.impl.ApartmentServiceImpl;
 import com.example.Swipe.Admin.service.impl.FrameServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
-import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

@@ -3,7 +3,6 @@ package com.example.Swipe.Admin.controller;
 import com.example.Swipe.Admin.dto.NewsDTO;
 import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.entity.News;
-import com.example.Swipe.Admin.mapper.NewsMapper;
 import com.example.Swipe.Admin.service.impl.NewsServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,6 @@ import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

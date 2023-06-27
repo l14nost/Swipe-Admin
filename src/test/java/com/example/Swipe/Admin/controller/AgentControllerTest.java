@@ -2,7 +2,6 @@ package com.example.Swipe.Admin.controller;
 
 import com.example.Swipe.Admin.dto.AgentDTO;
 import com.example.Swipe.Admin.entity.User;
-import com.example.Swipe.Admin.enums.TypeAgent;
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.service.impl.AgentServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
@@ -18,14 +17,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;

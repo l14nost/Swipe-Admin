@@ -5,7 +5,6 @@ import com.example.Swipe.Admin.dto.PhotoDTO;
 import com.example.Swipe.Admin.entity.Apartment;
 import com.example.Swipe.Admin.entity.Frame;
 import com.example.Swipe.Admin.enums.*;
-import com.example.Swipe.Admin.mapper.RequestToDtoApartment;
 import com.example.Swipe.Admin.service.impl.ApartmentServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
@@ -21,16 +20,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.ui.Model;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

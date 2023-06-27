@@ -3,7 +3,6 @@ package com.example.Swipe.Admin.controller;
 import com.example.Swipe.Admin.dto.AgentDTO;
 import com.example.Swipe.Admin.dto.ClientDTO;
 import com.example.Swipe.Admin.dto.UserAddInfoDTO;
-import com.example.Swipe.Admin.enums.Role;
 import com.example.Swipe.Admin.enums.TypeNotification;
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
@@ -25,9 +24,7 @@ import org.springframework.validation.FieldError;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

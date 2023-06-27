@@ -1,6 +1,5 @@
 package com.example.Swipe.Admin.controller;
 
-import com.example.Swipe.Admin.dto.ClientDTO;
 import com.example.Swipe.Admin.dto.LcdDTO;
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.enums.*;
@@ -23,7 +22,6 @@ import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
