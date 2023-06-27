@@ -35,11 +35,9 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class LCDController {
     private Logger log = LoggerFactory.getLogger(LCDController.class);
-    @Value("${upload.path}")
-    private String upload;
+//    @Value("${upload.path}")
+//    private String upload;
     private final LCDServiceImpl lcdServiceImpl;
-    private final PhotosServiceImpl photosService;
-    private final DocumentsServiceImpl documentsService;
     private final UserServiceImpl userService;
     @GetMapping("/lcd_edit/{id}")
     public String lcdEdit(@PathVariable int id, Model model){
@@ -148,11 +146,8 @@ public class LCDController {
     public String lcdUpdate(@PathVariable int id,
                             @ModelAttribute(name = "lcd") @Valid LcdDTO lcdDTO,
                             BindingResult bindingResult,
-                            Model model) throws IOException {
-        System.out.println(lcdDTO.getContractor());
-        System.out.println(lcdDTO.getAdvantages()+"+");
+                            Model model) {
        if (bindingResult.hasErrors()){
-           System.out.println("\n"+bindingResult.getAllErrors()+"\n");
            if (lcdDTO.getAdvantages()!=null) {
                List<String> advantages = List.of(lcdDTO.getAdvantages().split(","));
                model.addAttribute("advantages", advantages);
@@ -302,46 +297,49 @@ public class LCDController {
 //        return "redirect:/houses";
 //
 //    }
+
+    //        LCD lcd = lcdServiceImpl.findById(idLcd);
+//        if (!lcd.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+//            String fileNameDelete = lcd.getMainPhoto().substring(11, lcd.getMainPhoto().length());
+//            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//            fileDelete.delete();
+//        }
+//        for(int i = 0; i< lcd.getPhotoList().size();i++){
+//            if (!lcd.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+//                String fileNameDelete = lcd.getPhotoList().get(i).getFileName().substring(11, lcd.getPhotoList().get(i).getFileName().length());
+//                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                fileDelete.delete();
+//            }
+//        }
+//        for(int i = 0; i< lcd.getDocuments().size();i++){
+//            if (!lcd.getDocuments().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+//                String fileNameDelete = lcd.getDocuments().get(i).getFileName().substring(11, lcd.getDocuments().get(i).getFileName().length());
+//                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                fileDelete.delete();
+//            }
+//        }
+//
+//        for (int i = 0; i<lcd.getFrames().size();i++){
+//            for(int j = 0;j<lcd.getFrames().get(i).getApartmentList().size();j++){
+//                if (!lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+//                    String fileNameDelete = lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().substring(11, lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().length());
+//                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                    fileDelete.delete();
+//                }
+//                for (int k = 0; k < lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().size(); k++) {
+//                    if (!lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().equals("../admin/dist/img/default.jpg")) {
+//                        String fileNameDelete = lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().substring(11, lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().length());
+//                        File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                        fileDelete.delete();
+//                    }
+//
+//                }
+//            }
+//        }
+
     @PostMapping("/delete_lcd")
-    public String deleteLcd(int idLcd, Model model){
-        LCD lcd = lcdServiceImpl.findById(idLcd);
-        if (!lcd.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
-            String fileNameDelete = lcd.getMainPhoto().substring(11, lcd.getMainPhoto().length());
-            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-            fileDelete.delete();
-        }
-        for(int i = 0; i< lcd.getPhotoList().size();i++){
-            if (!lcd.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
-                String fileNameDelete = lcd.getPhotoList().get(i).getFileName().substring(11, lcd.getPhotoList().get(i).getFileName().length());
-                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                fileDelete.delete();
-            }
-        }
-        for(int i = 0; i< lcd.getDocuments().size();i++){
-            if (!lcd.getDocuments().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
-                String fileNameDelete = lcd.getDocuments().get(i).getFileName().substring(11, lcd.getDocuments().get(i).getFileName().length());
-                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                fileDelete.delete();
-            }
-        }
+    public String deleteLcd(@RequestParam int idLcd, Model model){
 
-        for (int i = 0; i<lcd.getFrames().size();i++){
-            for(int j = 0;j<lcd.getFrames().get(i).getApartmentList().size();j++){
-                if (!lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().equals("../admin/dist/img/default.jpg")) {
-                    String fileNameDelete = lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().substring(11, lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().length());
-                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                    fileDelete.delete();
-                }
-                for (int k = 0; k < lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().size(); k++) {
-                    if (!lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().equals("../admin/dist/img/default.jpg")) {
-                        String fileNameDelete = lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().substring(11, lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().length());
-                        File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                        fileDelete.delete();
-                    }
-
-                }
-            }
-        }
         lcdServiceImpl.deleteById(idLcd);
         log.info("Lcd id:"+idLcd+", was delete");
         return "redirect:/houses";

@@ -54,7 +54,6 @@ public class AgentController {
     @PostMapping("/agent_add/{idUser}")
     public String saveAgent(@PathVariable int idUser,@Valid @ModelAttribute(name = "agent") AgentDTO agentDTO, BindingResult result,Model model){
         User user = userService.findById(idUser);
-        System.out.println(agentDTO);
         result = agentServiceImpl.uniqueEmail(agentDTO.getMail(),result,0,"add");
         if (result.hasErrors()){
             System.out.println(result.getAllErrors());
@@ -63,10 +62,7 @@ public class AgentController {
             model.addAttribute("typeUser", user.getTypeUser());
             return "admin/agent_add";
         }
-        else {
-            System.out.println(result.hasErrors());
-        }
-        if(userService.findById(agentDTO.getIdUser()).getTypeUser().equals(TypeUser.CLIENT)){
+        if(user.getTypeUser().equals(TypeUser.CLIENT)){
             agentDTO.setType(TypeAgent.AGENT);
         }
         else {
@@ -94,7 +90,6 @@ public class AgentController {
     public String agentUpdate(@PathVariable int id,@Valid @ModelAttribute(name = "agent") AgentDTO agentDTO,BindingResult result, Model model){
         result = agentServiceImpl.uniqueEmail(agentDTO.getMail(),result,id,"update");
         if (result.hasErrors()){
-            System.out.println(agentDTO);
             model.addAttribute("agent", agentDTO);
             model.addAttribute("idUser", agentDTO.getIdUser());
             model.addAttribute("typeUser", userService.findById(agentDTO.getIdUser()).getTypeUser());

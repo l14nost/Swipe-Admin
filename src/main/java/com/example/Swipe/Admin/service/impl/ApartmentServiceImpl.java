@@ -120,6 +120,23 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void deleteById(int id) {
+        Apartment apartment = findById(1);
+        if (apartment.getMainPhoto()!=null) {
+            if (!apartment.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+                String fileNameDelete = apartment.getMainPhoto().substring(11, apartment.getMainPhoto().length());
+                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                fileDelete.delete();
+            }
+        }
+        if (apartment.getPhotoList()!=null) {
+            for (int i = 0; i < apartment.getPhotoList().size(); i++) {
+                if (!apartment.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                    String fileNameDelete = apartment.getPhotoList().get(i).getFileName().substring(11, apartment.getPhotoList().get(i).getFileName().length());
+                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                    fileDelete.delete();
+                }
+            }
+        }
         apartmentRepo.deleteById(id);
     }
 

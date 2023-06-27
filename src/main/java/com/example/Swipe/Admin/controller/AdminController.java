@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
+
 @Controller
 @RequiredArgsConstructor
 public class AdminController {
@@ -34,8 +36,6 @@ public class AdminController {
                 result.addError(new FieldError("user", "password", "Пароль уже используеться"));
             }
         }
-        System.out.println(result.getFieldError("password"));
-        System.out.println(result.getFieldError("mail"));
         if (result.hasErrors()){
             model.addAttribute("user",adminDto);
             return "admin/admin_profile";

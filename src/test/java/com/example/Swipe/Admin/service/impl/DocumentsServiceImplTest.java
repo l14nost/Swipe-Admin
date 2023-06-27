@@ -76,6 +76,8 @@ class DocumentsServiceImplTest {
 
     @Test
     void deleteById() {
+        documentsService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
+        when(documentsRepo.findById(5)).thenReturn(Optional.of(Documents.builder().fileName("../uploads/123").build()));
         documentsService.deleteById(5);
         verify(documentsRepo).deleteById(5);
     }

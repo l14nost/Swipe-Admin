@@ -3,10 +3,7 @@ package com.example.Swipe.Admin.service.impl;
 import com.example.Swipe.Admin.dto.DocumentDTO;
 import com.example.Swipe.Admin.dto.LcdDTO;
 import com.example.Swipe.Admin.dto.PhotoDTO;
-import com.example.Swipe.Admin.entity.Documents;
-import com.example.Swipe.Admin.entity.LCD;
-import com.example.Swipe.Admin.entity.Photo;
-import com.example.Swipe.Admin.entity.User;
+import com.example.Swipe.Admin.entity.*;
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.repository.LCDRepo;
 import com.example.Swipe.Admin.specification.LcdSpecification;
@@ -212,6 +209,8 @@ class LCDServiceImplTest {
 
     @Test
     void deleteById() {
+        lcdService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
+        when(lcdRepo.findById(1)).thenReturn(Optional.of(LCD.builder().mainPhoto("../uploads/123").frames(List.of(Frame.builder().apartmentList(List.of(Apartment.builder().mainPhoto("../uploads/123").photoList(List.of(Photo.builder().fileName("../uploads/123").build())).build())).build())).photoList(List.of(Photo.builder().fileName("../uploads/123").build())).documents(List.of(Documents.builder().fileName("../uploads/123").build())).build()));
         lcdService.deleteById(1);
         verify(lcdRepo).deleteById(1);
     }

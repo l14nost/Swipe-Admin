@@ -208,6 +208,8 @@ class ApartmentServiceImplTest {
 
     @Test
     void deleteById() {
+        apartmentService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
+        when(apartmentRepo.findById(1)).thenReturn(Optional.of(Apartment.builder().photoList(List.of(Photo.builder().fileName("../uploads/123").build())).mainPhoto("../uploads/123").build()));
         apartmentService.deleteById(1);
         verify(apartmentRepo).deleteById(1);
     }

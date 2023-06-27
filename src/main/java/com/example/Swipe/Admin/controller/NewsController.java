@@ -21,7 +21,6 @@ import java.time.LocalDate;
 public class NewsController {
     private Logger log = LoggerFactory.getLogger(NewsController.class);
     private final NewsServiceImpl newsServiceImpl;
-    private final LCDServiceImpl lcdService;
 
 
     @GetMapping("/edit_news/{idNews}")

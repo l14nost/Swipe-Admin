@@ -3,17 +3,25 @@ package com.example.Swipe.Admin.service.impl;
 import com.example.Swipe.Admin.entity.Documents;
 import com.example.Swipe.Admin.repository.DocumentsRepo;
 import com.example.Swipe.Admin.service.DocumentsService;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@Setter
 public class DocumentsServiceImpl implements DocumentsService {
     private Logger log = LoggerFactory.getLogger(DocumentsServiceImpl.class);
     private final DocumentsRepo documentsRepo;
+    @Value("${upload.path}")
+    private String upload;
 
     public DocumentsServiceImpl(DocumentsRepo documentsRepo) {
         this.documentsRepo = documentsRepo;
@@ -42,6 +50,12 @@ public class DocumentsServiceImpl implements DocumentsService {
 
     @Override
     public void deleteById(int id) {
+        Documents documents = findById(id);
+        if (!documents.getFileName().equals("../admin/dist/img/document.jpg")) {
+            String fileNameDelete = documents.getFileName().substring(11, documents.getFileName().length());
+            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+            fileDelete.delete();
+        }
         documentsRepo.deleteById(id);
     }
 

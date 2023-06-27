@@ -37,19 +37,19 @@ public class ApartmentController {
     @PostMapping("/delete_apartment")
     public String deleteApartment(@RequestParam int idApartment){
         Apartment apartment = apartmentServiceImpl.findById(idApartment);
-        if (!apartment.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
-            String fileNameDelete = apartment.getMainPhoto().substring(11, apartment.getMainPhoto().length());
-            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-            fileDelete.delete();
-        }
-        for(int i = 0; i< apartment.getPhotoList().size();i++){
-            if (!apartment.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
-                String fileNameDelete = apartment.getPhotoList().get(i).getFileName().substring(11, apartment.getPhotoList().get(i).getFileName().length());
-                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                fileDelete.delete();
-            }
-//            photosService.deleteById(apartment.getPhotoList().get(i).getIdPhotos());
-        }
+//        if (!apartment.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+//            String fileNameDelete = apartment.getMainPhoto().substring(11, apartment.getMainPhoto().length());
+//            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//            fileDelete.delete();
+//        }
+//        for(int i = 0; i< apartment.getPhotoList().size();i++){
+//            if (!apartment.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+//                String fileNameDelete = apartment.getPhotoList().get(i).getFileName().substring(11, apartment.getPhotoList().get(i).getFileName().length());
+//                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+//                fileDelete.delete();
+//            }
+////            photosService.deleteById(apartment.getPhotoList().get(i).getIdPhotos());
+//        }
         apartmentServiceImpl.deleteById(idApartment);
         log.info("Apartment id:"+ idApartment+", was delete");
         if(apartment.getFrame()!=null){
@@ -73,7 +73,7 @@ public class ApartmentController {
                                   BindingResult result
             , Model model) throws IOException {
         if (result.hasErrors()){
-            System.out.println("\n"+result.getAllErrors()+"\n");
+            System.out.println(result.getAllErrors());
             model.addAttribute("apartment", RequestToDtoApartment.toDto(apartmentDTO,apartmentServiceImpl.findByIdDTO(id)));
             model.addAttribute("lcds", lcdService.findAll());
             model.addAttribute("foundingDocument", FoundingDocument.values());

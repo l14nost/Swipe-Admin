@@ -1,7 +1,9 @@
 package com.example.Swipe.Admin.service.impl;
 
+import com.example.Swipe.Admin.entity.Apartment;
 import com.example.Swipe.Admin.entity.Frame;
 import com.example.Swipe.Admin.entity.LCD;
+import com.example.Swipe.Admin.entity.Photo;
 import com.example.Swipe.Admin.repository.FrameRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,6 +81,8 @@ class FrameServiceImplTest {
 
     @Test
     void deleteById() {
+        frameService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
+        when(frameRepo.findById(1)).thenReturn(Optional.of(Frame.builder().apartmentList(List.of(Apartment.builder().mainPhoto("../uploads/123").photoList(List.of(Photo.builder().fileName("../uploads/123").build())).build())).build()));
         frameService.deleteById(1);
         verify(frameRepo).deleteById(1);
     }

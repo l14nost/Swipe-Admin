@@ -99,6 +99,44 @@ public class LCDServiceImpl implements LCDService {
 
     @Override
     public void deleteById(int id) {
+        LCD lcd = findById(id);
+        if (!lcd.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+            String fileNameDelete = lcd.getMainPhoto().substring(11, lcd.getMainPhoto().length());
+            File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+            fileDelete.delete();
+        }
+        for(int i = 0; i< lcd.getPhotoList().size();i++){
+            if (!lcd.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                String fileNameDelete = lcd.getPhotoList().get(i).getFileName().substring(11, lcd.getPhotoList().get(i).getFileName().length());
+                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                fileDelete.delete();
+            }
+        }
+        for(int i = 0; i< lcd.getDocuments().size();i++){
+            if (!lcd.getDocuments().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                String fileNameDelete = lcd.getDocuments().get(i).getFileName().substring(11, lcd.getDocuments().get(i).getFileName().length());
+                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                fileDelete.delete();
+            }
+        }
+
+        for (int i = 0; i<lcd.getFrames().size();i++){
+            for(int j = 0;j<lcd.getFrames().get(i).getApartmentList().size();j++){
+                if (!lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().equals("../admin/dist/img/default.jpg")) {
+                    String fileNameDelete = lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().substring(11, lcd.getFrames().get(i).getApartmentList().get(j).getMainPhoto().length());
+                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                    fileDelete.delete();
+                }
+                for (int k = 0; k < lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().size(); k++) {
+                    if (!lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().equals("../admin/dist/img/default.jpg")) {
+                        String fileNameDelete = lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().substring(11, lcd.getFrames().get(i).getApartmentList().get(j).getPhotoList().get(k).getFileName().length());
+                        File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                        fileDelete.delete();
+                    }
+
+                }
+            }
+        }
         lcdRepo.deleteById(id);
     }
 
@@ -254,7 +292,7 @@ public class LCDServiceImpl implements LCDService {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                            if (!lcdUpdate.getDocuments().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                            if (!lcdUpdate.getDocuments().get(i).getFileName().equals("../admin/dist/img/document.jpg")) {
                                 String fileNameDelete = lcdUpdate.getDocuments().get(i).getFileName().substring(11, lcdUpdate.getDocuments().get(i).getFileName().length());
                                 File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
                                 fileDelete.delete();

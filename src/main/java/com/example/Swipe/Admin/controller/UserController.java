@@ -33,11 +33,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
     private Logger log = LoggerFactory.getLogger(UserController.class);
-    @Value("${upload.path}")
-    private String upload;
     private TypeNotification typeNotification;
     private final UserServiceImpl userServiceImpl;
-    private final UserAddInfoServiceImpl userAddInfoService;
+
 
 
 
@@ -213,7 +211,6 @@ public class UserController {
 //    }
     @PostMapping("/user_edit/{id}")
     public String userUpdate(@PathVariable int id, @Valid @ModelAttribute(name = "user") ClientDTO clientDTO,BindingResult result, Model model) {
-        System.out.println(result.getFieldError("mail"));
         result = userServiceImpl.uniqueMail(clientDTO.getMail(),result,id,"update");
         if (result.hasErrors()){
             System.out.println(result);
@@ -231,14 +228,7 @@ public class UserController {
 
     @PostMapping("/delete_user/{id}")
     public String deleteUser(@PathVariable int id, Model model){
-//        User user = userServiceImpl.findById(id);
-//        if(user.getFilename()!=null) {
-//            if (!user.getFilename().equals("../admin/dist/img/default.jpg")) {
-//                String fileNameDelete = user.getFilename().substring(11, user.getFilename().length());
-//                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-//                fileDelete.delete();
-//            }
-//        }
+
         userServiceImpl.deleteById(id);
         log.info("User id "+id+", was delete");
         return "redirect:/users";
