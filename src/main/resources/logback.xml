@@ -4,15 +4,15 @@
             <pattern>%date %-5level [%thread] %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/home/avada/web/slj.avada-media-dev1.od.ua/slj/Swipe/Admin/files/logAdmin.log</file>
-        <encoder>
-            <pattern>%date %-5level [%thread] %logger{35} - %msg%n</pattern>
-        </encoder>
-    </appender>
+<!--    <appender name="FILE" class="ch.qos.logback.core.FileAppender">-->
+<!--        <file>/home/avada/web/slj.avada-media-dev1.od.ua/slj/Swipe/Admin/files/logAdmin.log</file>-->
+<!--        <encoder>-->
+<!--            <pattern>%date %-5level [%thread] %logger{35} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
     <root level="info">
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
+<!--        <appender-ref ref="FILE" />-->
     </root>
 </configuration>
