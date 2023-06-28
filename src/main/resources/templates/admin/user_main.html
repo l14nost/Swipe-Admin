@@ -355,8 +355,8 @@
           <li class="page-item" th:each="p: ${#numbers.sequence(1, pageNotary.getTotalPages()-1)}" th:if="${pageNotary.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
 
         </ul>
-        <ul class="pagination" id="nextNotary" th:if="${pageNotary.getTotalPages()>1}">
-          <li class="page-item" th:hidden="${pageNotary.getNumber()==pageNotary.getTotalPages()-1}">
+        <ul class="pagination" id="nextNotary" >
+          <li class="page-item" th:hidden="${pageNotary.getNumber()==pageNotary.getTotalPages()-1}" th:if="${pageNotary.getTotalPages()>1}">
             <input type="hidden" id="pageNumberNotaryNext" th:value="${pageNotary.getNumber()+1}">
             <a class="page-link" href="#" aria-label="Next" th:value="${pageNotary.getTotalPages()}">
               <span aria-hidden="true">&raquo;</span>
