@@ -25,7 +25,9 @@
 <main class="container d-flex justify-content-center " style="margin-top: 250px;width: 650px">
 
   <form th:action="@{/login}" method="post">
-
+    <div>
+      <img th:src="@{/admin/dist/img/loginLogo.png}" width="250px">
+    </div>
     <div class="form-floating">
       <input type="text" class="form-control" name="username" id="username" placeholder="name@example.com">
       <label for="username">Login</label>
