@@ -36,7 +36,7 @@ public class WebSecurityConfig {
         http.
                 cors().and().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/login","/Swipe-Admin/admin/dist/img/**").permitAll()
+                        .antMatchers("/login","/admin/dist/img/**").permitAll()
                         .anyRequest().hasAuthority("ADMIN")
                 )
                 .formLogin((form) -> form
