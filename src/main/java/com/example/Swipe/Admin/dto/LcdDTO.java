@@ -48,16 +48,16 @@ public class LcdDTO {
     HeatingType waterSupply;
     @NotBlank
     String advantages;
-    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$" )
+    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$",message = "Должно содержать только буквы")
     @Size(min = 1,max = 255)
     String typePayment;
-    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$" )
+    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$",message = "Должно содержать только буквы")
     @Size(min = 1,max = 255)
     String appointment;
-    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$")
+    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$",message = "Должно содержать только буквы")
     @Size(min = 1,max = 255)
     String sumContract;
-    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$")
+    @Pattern(regexp = "^[А-ЯЁA-Z][а-яёa-zA-Z]*$",message = "Должно содержать только буквы")
     @Size(min = 1,max = 255)
     String formalization;
     int contractor;
