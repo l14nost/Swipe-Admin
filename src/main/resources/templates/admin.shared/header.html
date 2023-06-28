@@ -32,7 +32,7 @@
     padding-right: 10px;
 " th:text="${T(com.example.Swipe.Admin.controller.AdminController).adminMail()}"></a>
                 <form  th:action="@{/logout}" method="post">
-                    <button type="submit" class="btn btn-outline-danger" value="Sign out" style="height: 100%">
+                    <button type="submit" class="btn btn-outline-danger" value="Sign out" style="height: 100%" data-toggle="tooltip" data-placement="top" title="Logout">
                         <i class="fa-solid fa-power-off fa-xl d-sm-flex d-j" style="align-items: center;"></i>
                     </button>
                 </form>

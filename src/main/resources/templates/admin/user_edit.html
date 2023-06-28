@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>User Edit</title>
+  <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
@@ -19,10 +20,10 @@
       <h4 class="mb-3">Пользователь</h4>
       <div class="form-check form-switch" style="display: flex; margin-right: 50px" th:if="${user.getUserAddInfoDTO()!=null}">
         <div>
-          <h6 for="flexSwitchCheckDefault" style="margin-right: 5px">Уведомление</h6>
+          <h4 for="flexSwitchCheckDefault" style="margin-right: 5px">Уведомление</h4>
         </div>
         <div>
-          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="userAddInfoDTO.callSms" th:checked="${user.getUserAddInfoDTO().isCallSms()}" style="margin-left: 5px" >
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="userAddInfoDTO.callSms" th:checked="${user.getUserAddInfoDTO().isCallSms()}" style="margin-left: 5px; margin-top: 7px; width: 35px;height: 20px" >
         </div>
       </div>
     </div>
@@ -63,7 +64,7 @@
             <label for="username" class="form-label">Номер</label>
             <div class="input-group has-validation">
               <span class="input-group-text">+380</span>
-              <input type="text" class="form-control" name ="number" id="username" placeholder="Введите номер..." th:value="${user.getNumber()}" required="">
+              <input type="number" class="form-control" name ="number" id="username" placeholder="Введите номер..." th:value="${user.getNumber()}" required="">
               <div th:if="${#fields.hasErrors('number')}">
                 <div class="text-danger">
                   <p th:errors="*{number}"></p>
@@ -88,8 +89,8 @@
               <div class="form-floating">
                 <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="userAddInfoDTO.typeNotification">
                   <option value="ME" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).ME)}">Мне</option>
-                  <option value="MEANDAGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}">Мне и агенту</option>
-                  <option value="AGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).AGENT)}">Агенту</option>
+                  <option value="MEANDAGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}" th:if="${user.getAgent()!=null}">Мне и агенту</option>
+                  <option value="AGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).AGENT)}" th:if="${user.getAgent()!=null}">Агенту</option>
                   <option value="OFF" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).OFF)}">Отключить</option>
                 </select>
                 <label for="floatingSelect" class="form-label">Тип уведомления</label>
@@ -132,7 +133,7 @@
 <!--                    th:href="@{/agent_edit/{id}(id = ${user.getAgent().getIdAgent()})/{idUser}(idUser = ${user.getIdUser()})}"-->
                     <div style="display: flex" th:if="${user.getAgent()!=null}">
                       <a th:href="@{/agent_edit/{id}(id = ${user.getAgent().getIdAgent()})}">
-                        <button type="button" class="btn btn-info btn-sm">
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit agent">
                           <i class="fas fa-pencil">
                           </i>
                         </button>
@@ -141,7 +142,7 @@
                     <div style="display: flex" th:if="${user.getAgent()==null}">
                       <a th:href="@{/agent_add/{idUser}(idUser = ${user.getIdUser()})}">
 <!--                        <button type="button" onclick="addAgent()" class="btn btn-secondary btn-sm">-->
-                         <button type="button" class="btn btn-secondary">
+                         <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Add agent">
                           <i class="fas fa-plus">
                           </i>
                          </button>

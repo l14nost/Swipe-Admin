@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>New Apartment</title>
+  <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
@@ -23,7 +24,7 @@
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
-            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}" required="">
+            <input type="number" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}" required="">
               <div th:if="${#fields.hasErrors('number')}">
                   <div class="text-danger">
                       <p th:errors="*{number}"></p>
@@ -51,7 +52,7 @@
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
-            <input type="text" class="form-control" name="price"  placeholder="Введите цену..." th:value="${apartment.getPrice()}" required="">
+            <input type="number" class="form-control" name="price"  placeholder="Введите цену..." th:value="${apartment.getPrice()}" required="">
               <div th:if="${#fields.hasErrors('price')}">
                   <div class="text-danger">
                       <p th:errors="*{price}"></p>
@@ -183,7 +184,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
-            <input type="text" class="form-control" name="totalArea"  placeholder="Введите общую площадь..." th:value="${apartment.getTotalArea()}"  required="">
+            <input type="number" class="form-control" name="totalArea"  placeholder="Введите общую площадь..." th:value="${apartment.getTotalArea()}"  required="">
               <div th:if="${#fields.hasErrors('totalArea')}">
                   <div class="text-danger">
                       <p th:errors="*{totalArea}"></p>
@@ -192,7 +193,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
-            <input type="text" class="form-control" name="kitchenArea"  placeholder="Введите площадь кухни..."  th:value="${apartment.getKitchenArea()}" required="">
+            <input type="number" class="form-control" name="kitchenArea"  placeholder="Введите площадь кухни..."  th:value="${apartment.getKitchenArea()}" required="">
               <div th:if="${#fields.hasErrors('kitchenArea')}">
                   <div class="text-danger">
                       <p th:errors="*{kitchenArea}"></p>
@@ -217,28 +218,6 @@
 
 
 </body>
-<script>
-  document.querySelector('form.needs-validation').addEventListener('submit', function(event) {
-    event.preventDefault(); // Отменяем отправку формы
-    var formData = new FormData(this); // Создаем объект FormData с данными формы
-    var xhr = new XMLHttpRequest(); // Создаем объект XMLHttpRequest
-    xhr.open('POST', this.getAttribute('action')); // Устанавливаем метод и адрес запроса
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        // Обработка успешного ответа
-        var response = xhr.responseText;
-        // Обновление страницы, кроме элемента с id "imgDiv"
-        var imgDiv = document.getElementById('imgDiv');
-        var imgDivHTML = imgDiv.innerHTML;
-        document.body.innerHTML = response;
-        document.getElementById('imgDiv').innerHTML = imgDivHTML;
-      } else {
-        // Обработка ошибки
-        console.error('Ошибка при выполнении запроса');
-      }
-    };
-    xhr.send(formData); // Отправляем запрос с данными формы
-  });
-</script>
+
 
 </html>

@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>New News</title>
+  <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
@@ -32,7 +33,7 @@
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Описание</label>
-            <textarea class="form-control" name="description" id="lastName" placeholder="Введите описание..."  th:value="${news.getDescription()}" required=""></textarea>
+            <textarea class="form-control" name="description" id="lastName" placeholder="Введите описание..." th:field="*{description}"  th:value="${news.getDescription()}" required="" th:placeholder="${news.getDescription()}"></textarea>
             <div th:if="${#fields.hasErrors('description')}">
               <div class="text-danger">
                 <p th:errors="*{description}"></p>

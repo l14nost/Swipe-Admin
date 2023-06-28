@@ -26,7 +26,7 @@ public class AdminController {
         return "admin/admin_profile";
     }
     @PostMapping("/profile")
-    public String updateProfile(@ModelAttribute("user") AdminDto adminDto, BindingResult result, Model model){
+    public String updateProfile(@ModelAttribute("user") @Valid AdminDto adminDto, BindingResult result, Model model){
         result = userService.uniqueMail(adminDto.getMail(), result, adminDto.getIdUser(),"update");
         if (!adminDto.getPassword().equals(adminDto.getConfirmPassword())){
            result.addError(new FieldError("user", "password", "Пароли не совпадают"));
@@ -39,6 +39,9 @@ public class AdminController {
         if (result.hasErrors()){
             model.addAttribute("user",adminDto);
             return "admin/admin_profile";
+        }
+        if (adminDto.getMail().equals( adminMail())){
+            return "redirect:/main";
         }
         userService.updateAdmin(adminDto);
         return "redirect:/logout";

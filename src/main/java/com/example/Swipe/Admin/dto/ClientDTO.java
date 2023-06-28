@@ -41,7 +41,7 @@ public class ClientDTO {
     @FileExtension(value = {"jpg", "png"}, message = "Формат не корректный (.jpg,.png)")
     MultipartFile filename;
     @NotBlank
-    @Pattern(regexp = "^[0-9]*$")
+    @Pattern(regexp = "^[0-9]*$", message = "Номер должен содержать 9 цифр")
     @Size(max = 9, min = 9)
     String number;
     String photo;

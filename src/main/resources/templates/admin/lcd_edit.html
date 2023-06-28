@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>LCD Edit</title>
+    <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
@@ -342,7 +343,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Высота потолков</label>
-            <input type="text" class="form-control" name="height"  placeholder="Введите высоту потолков..." th:value="${lcd.getHeight()}" required="">
+            <input type="number" class="form-control" name="height"  placeholder="Введите высоту потолков..." th:value="${lcd.getHeight()}" required="">
               <div th:if="${#fields.hasErrors('height')}">
                   <div class="text-danger">
                       <p th:errors="*{height}"></p>
@@ -351,7 +352,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Расстояние до моря</label>
-            <input type="text" class="form-control" name="distanceSea"  placeholder="Введите расстояние до моря..." th:value="${lcd.getDistanceSea()}" required="">
+            <input type="number" class="form-control" name="distanceSea"  placeholder="Введите расстояние до моря..." th:value="${lcd.getDistanceSea()}" required="">
               <div th:if="${#fields.hasErrors('distanceSea')}">
                   <div class="text-danger">
                       <p th:errors="*{distanceSea}"></p>
@@ -380,13 +381,13 @@
                 <td><p th:text="${frame.getApartmentList().size()}"></p></td>
                 <td>
                   <div style="display: flex">
-                      <button type="button" class="btn btn-info btn-sm" th:attr="onclick='editFrame('+${frame.getIdFrame()}+')'" >
+                      <button type="button" class="btn btn-info btn-sm" th:attr="onclick='editFrame('+${frame.getIdFrame()}+')'" data-toggle="tooltip" data-placement="top" title="Edit frame">
                         <i class="fas fa-pencil">
                         </i>
                       </button>
 
                       <input type="hidden" name="id" th:value="${frame.getIdFrame()}" />
-                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px" th:attr="onclick='deleteFrame('+${frame.getIdFrame()}+','+${lcd.getIdLcd()}+')'">
+                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px" th:attr="onclick='deleteFrame('+${frame.getIdFrame()}+','+${lcd.getIdLcd()}+')'" data-toggle="tooltip" data-placement="top" title="Delete frame">
                         <i class="fas fa-trash">
                         </i>
                       </button>
@@ -419,12 +420,12 @@
                 <td><p th:text="${news.getDate()}"></p></td>
                 <td>
                   <div style="display: flex">
-                      <a th:href="@{/edit_news/{idNews}(idNews = ${news.getIdNews()})}" class="btn btn-info btn-sm">
+                      <a th:href="@{/edit_news/{idNews}(idNews = ${news.getIdNews()})}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit news">
                         <i class="fas fa-pencil">
                         </i>
                       </a>
 
-                      <button type="button" th:attr="onclick='deleteNews('+${news.getIdNews()}+', '+${lcd.getIdLcd()}+')'" class="btn btn-danger btn-sm" style="margin-left: 10px">
+                      <button type="button" th:attr="onclick='deleteNews('+${news.getIdNews()}+', '+${lcd.getIdLcd()}+')'" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Delete news">
                         <i class="fas fa-trash">
                         </i>
                       </button>

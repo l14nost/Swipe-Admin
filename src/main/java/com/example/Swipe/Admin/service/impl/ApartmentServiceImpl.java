@@ -41,6 +41,11 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepo.findAll();
     }
 
+    public void lcdIdToNull(Apartment apartment){
+        apartment.setLcd(null);
+        apartmentRepo.saveAndFlush(apartment);
+    }
+
 
     public Page<ApartmentDTO> findAllByFramePagination(Pageable pageable,int keyWord,String field){
         if(keyWord != 0){

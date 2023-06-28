@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>Profile</title>
+  <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
@@ -39,9 +40,9 @@
           <div class="col-sm-6">
             <label  class="form-label">Повторный пароль</label>
             <input type="password" class="form-control" name="confirmPassword"  placeholder="Введите пароль...">
-            <div th:if="${#fields.hasErrors('password')}">
+            <div th:if="${#fields.hasErrors('confirmPassword')}">
               <div class="text-danger">
-                <p th:errors="*{password}"></p>
+                <p th:errors="*{confirmPassword}"></p>
               </div>
             </div>
           </div>

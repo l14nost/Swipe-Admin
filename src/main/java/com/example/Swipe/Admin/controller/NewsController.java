@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -43,6 +44,9 @@ public class NewsController {
 //    }
     @PostMapping("/edit_news/{idNews}")
     public String updateNews(@PathVariable int idNews, @ModelAttribute(name = "news") @Valid NewsDTO newsDTO,BindingResult result, Model model){
+        if (LocalDate.now().isBefore(newsDTO.getDate())){
+            result.addError(new FieldError("news", "date", "Некоректная дата"));
+        }
         if (result.hasErrors()){
             System.out.println(result.getAllErrors());
             model.addAttribute("news", newsDTO);
@@ -70,6 +74,9 @@ public class NewsController {
 //    }
     @PostMapping("/add_news/{idLcd}")
     public String saveNews(@PathVariable int idLcd,@ModelAttribute(name = "news") @Valid NewsDTO newsDTO, BindingResult bindingResult, Model model){
+        if (LocalDate.now().isBefore(newsDTO.getDate())){
+            bindingResult.addError(new FieldError("news", "date", "Некоректная дата"));
+        }
         if (bindingResult.hasErrors()){
             System.out.println(bindingResult.getAllErrors());
             model.addAttribute("idLcd",newsDTO.getIdLcd());

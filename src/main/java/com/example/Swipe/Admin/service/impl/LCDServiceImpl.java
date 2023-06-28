@@ -33,6 +33,7 @@ public class LCDServiceImpl implements LCDService {
     private final PhotosServiceImpl photosService;
     private final DocumentsServiceImpl documentsService;
     private final UserServiceImpl userService;
+    private final ApartmentServiceImpl apartmentService;
 
     public Page<LcdDTO> findAllPagination(Pageable pageable,String keyWord,String sort){
         if(!keyWord.equals("null")){
@@ -137,6 +138,12 @@ public class LCDServiceImpl implements LCDService {
                 }
             }
         }
+        if (lcd.getApartmentList()!=null){
+            for (int i =0;i<lcd.getApartmentList().size();i++){
+                apartmentService.lcdIdToNull(lcd.getApartmentList().get(i));
+            }
+        }
+
         lcdRepo.deleteById(id);
     }
 

@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>Users</title>
+  <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -64,7 +65,7 @@
           <th scope="col">
             <form method="get" th:action="@{/add_user}">
               <input type="hidden" name="type" th:value="${typeClient}">
-                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
+                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add client">
                 <i class="fas fa-plus">
                 </i>
               </button>
@@ -79,12 +80,12 @@
             <td>
               <div style="display: flex">
               <form th:action="@{/user_edit/{id}(id=${user.getIdUser()})}"  method="get" >
-                <button type="submit" class="btn btn-info btn-sm">
+                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit client">
                   <i class="fas fa-pencil">
                   </i>
                 </button>
               </form>
-              <form th:action="@{/delete_user/{id}(id = ${user.getIdUser()})}"  method="post" >
+              <form th:action="@{/delete_user/{id}(id = ${user.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Delete client">
                 <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                   <i class="fas fa-trash">
                   </i>
@@ -93,7 +94,7 @@
               </form>
                 <form th:action="@{/add_to_black_list}"  method="post" >
                   <input type="hidden" name="idUser" th:value="${user.getIdUser()}" />
-                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px">
+                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add to blacklist">
                     <i class="nav-icon fas fa-calendar-minus"></i>
                   </button>
 
@@ -108,8 +109,10 @@
 <!--      </div>-->
     </div>
       <div style="display: flex; justify-content: space-between">
+        <div id="textClient">
         <div style="margin-left: 10px" th:if="${pageUser.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
-      <div id="textClient" style="margin-left: 10px" th:if="${pageUser.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${pageUser.getContent().size()} + ' из '+${sizeClient}+' записей'" ></h6></div>
+      <div  style="margin-left: 10px" th:if="${pageUser.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${pageUser.getContent().size()} + ' из '+${sizeClient}+' записей'" ></h6></div>
+      </div>
       <nav aria-label="Page navigation example" style="display: flex; justify-content: right ">
         <ul class="pagination" id="previousClient">
           <li class="page-item" th:hidden="${pageUser.getNumber()==0}">
@@ -181,7 +184,7 @@
             <th scope="col">
               <form method="get" th:action="@{/add_user}">
                 <input type="hidden" name="type" th:value="${typeContractor}">
-                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
+                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add contractor">
                   <i class="fas fa-plus">
                   </i>
                 </button>
@@ -197,14 +200,14 @@
             <td>
               <div style="display: flex">
                 <form th:action="@{/user_edit/{id}(id=${contractor.getIdUser()})}"  method="get" >
-                  <button type="submit" class="btn btn-info btn-sm">
+                  <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit contractor">
                     <i class="fas fa-pencil">
                     </i>
                   </button>
                 </form>
                 <form th:action="@{/delete_user/{id}(id = ${contractor.getIdUser()})}" method="post" >
                   <input type="hidden" name="id" th:value="${contractor.getIdUser()}" />
-                  <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
+                  <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Delete contractor">
                     <i class="fas fa-trash">
                     </i>
                   </button>
@@ -212,7 +215,7 @@
                 </form>
                 <form th:action="@{/add_to_black_list}"  method="post" >
                   <input type="hidden" name="idUser" th:value="${contractor.getIdUser()}" />
-                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px">
+                  <button type="submit" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Add to blacklist" style="margin-left: 10px">
                     <i class="nav-icon fas fa-calendar-minus"></i>
                   </button>
 
@@ -225,9 +228,11 @@
         </table>
       </div>
       <div style="display: flex; justify-content: space-between">
+        <div id="textContractor">
         <div style="margin-left: 10px" th:if="${pageContractor.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
-      <div id="textContractor" style="margin-left: 10px" th:if="${pageContractor.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${pageContractor.getContent().size()} + ' из '+${sizeContractor}+' записей'" ></h6></div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: right ">
+      <div style="margin-left: 10px" th:if="${pageContractor.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${pageContractor.getContent().size()} + ' из '+${sizeContractor}+' записей'" ></h6></div>
+        </div>
+        <nav aria-label="Page navigation example" style="display: flex; justify-content: right ">
         <ul class="pagination" id="previousContractor">
           <li class="page-item" th:hidden="${pageContractor.getNumber()==0}">
             <input type="hidden" id="pageNumberContractorPr" th:value="${pageContractor.getNumber()-1}">
@@ -298,7 +303,7 @@
             </th>
             <th scope="col"><form method="get" th:action="@{/add_user}">
               <input type="hidden" name="type" th:value="${typeNotary}">
-              <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">
+              <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add notary">
                 <i class="fas fa-plus">
                 </i>
               </button>
@@ -312,13 +317,13 @@
             <td><p th:text="${notary.getMail()}"></p></td>
             <td>
               <div style="display: flex">
-                <form th:action="@{/user_edit/{id}(id=${notary.getIdUser()})}"  method="get" >
+                <form th:action="@{/user_edit/{id}(id=${notary.getIdUser()})}"  method="get" data-toggle="tooltip" data-placement="top" title="Edit notary">
                   <button type="submit" class="btn btn-info btn-sm">
                     <i class="fas fa-pencil">
                     </i>
                   </button>
                 </form>
-                <form th:action="@{/delete_user/{id}(id = ${notary.getIdUser()})}"  method="post" >
+                <form th:action="@{/delete_user/{id}(id = ${notary.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Delete notary">
                   <input type="hidden" name="id" th:value="${notary.getIdUser()}" />
                   <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
                     <i class="fas fa-trash">
@@ -333,8 +338,10 @@
         </table>
       </div>
       <div style="display: flex; justify-content: space-between">
+        <div id="textNotary">
         <div style="margin-left: 10px" th:if="${pageNotary.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
-      <div id="textNotary" style="margin-left: 10px" th:if="${pageNotary.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${pageNotary.getContent().size()} + ' из '+${sizeNotary}+' записей'" ></h6></div>
+      <div  style="margin-left: 10px" th:if="${pageNotary.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${pageNotary.getContent().size()} + ' из '+${sizeNotary}+' записей'" ></h6></div>
+      </div>
       <nav aria-label="Page navigation example" style="display: flex; justify-content: right " >
         <ul class="pagination" id="previousNotary">
           <li class="page-item" th:hidden="${pageNotary.getNumber()==0}">
@@ -377,7 +384,8 @@
 <div th:replace="~{/admin.shared/script}"></div>
 <div th:fragment="script"></div>
 <script>
-  let url = '/Swipe-Admin/users';
+  // let url = '/Swipe-Admin/users';
+  let url = '/users';
   function searchClient () {
     var selectedSize = localStorage.getItem('selectedUserSize');
     // e.preventDefault();

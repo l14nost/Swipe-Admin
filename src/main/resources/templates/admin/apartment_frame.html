@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>New Apartment</title>
+  <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
@@ -56,7 +57,7 @@
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
-            <input type="text" class="form-control" name="price"  placeholder="Введите цену..."  th:value="${apartment.getPrice()}" required="">
+            <input type="number" class="form-control" name="price"  placeholder="Введите цену..."  th:value="${apartment.getPrice()}" required="">
             <div th:if="${#fields.hasErrors('price')}">
               <div class="text-danger">
                 <p th:errors="*{price}"></p>
@@ -215,7 +216,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
-            <input type="text" class="form-control" name="totalArea" th:value="${apartment.getTotalArea()}"  placeholder="Введите общую площадь..."  required="">
+            <input type="number" class="form-control" name="totalArea" th:value="${apartment.getTotalArea()}"  placeholder="Введите общую площадь..."  required="">
             <div th:if="${#fields.hasErrors('totalArea')}">
               <div class="text-danger">
                 <p th:errors="*{totalArea}"></p>
@@ -224,7 +225,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
-            <input type="text" class="form-control" name="kitchenArea"  th:value="${apartment.getKitchenArea()}" placeholder="Введите площадь кухни..."  required="">
+            <input type="number" class="form-control" name="kitchenArea"  th:value="${apartment.getKitchenArea()}" placeholder="Введите площадь кухни..."  required="">
             <div th:if="${#fields.hasErrors('kitchenArea')}">
               <div class="text-danger">
                 <p th:errors="*{kitchenArea}"></p>

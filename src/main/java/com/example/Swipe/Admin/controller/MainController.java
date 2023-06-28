@@ -19,6 +19,7 @@ public class MainController {
     private Logger log = LoggerFactory.getLogger(MainController.class);
     private final UserServiceImpl userService;
     private final NewsServiceImpl newsService;
+    private final UserAddInfoServiceImpl userAddInfoService;
 
     @GetMapping("/main")
     public String main(Model model){
@@ -30,6 +31,12 @@ public class MainController {
             monthlyNews.add(newsService.countNews(i));
         }
         model.addAttribute("newsData",monthlyNews);
+        List<Integer> monthlySub = new ArrayList<>();
+        for (int i = 1;i<13;i++){
+            monthlySub.add(userAddInfoService.countSub(i));
+        }
+
+        model.addAttribute("subData",monthlySub);
         List<String> month = new ArrayList<>();
         month.add("January");
         month.add("February");

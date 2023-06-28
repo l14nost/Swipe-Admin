@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example</title>
+    <title>Main</title>
+    <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style th:replace="~{/admin.shared/style}"></style>
@@ -110,7 +111,7 @@
             <div class="card-header ui-sortable-handle" style="cursor: move;">
                 <h3 class="card-title">
                     <i class="fas fa-chart-pie mr-1"></i>
-                    News
+                    Subs
                 </h3>
                 <div class="card-tools">
                     <ul class="nav nav-pills ml-auto">
@@ -173,7 +174,8 @@
     }
     var pieOptions = {
         legend: {
-            display: false
+            display: true,
+            position: 'bottom'
         },
         maintainAspectRatio: false,
         responsive: true
@@ -271,7 +273,7 @@
                 pointStrokeColor: 'rgba(60,141,188,1)',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: [[${newsData}]]
+                data: [[${subData}]]
             },
         ]
     }

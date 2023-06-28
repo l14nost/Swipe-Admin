@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>Frame Edit</title>
+    <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
@@ -22,7 +23,7 @@
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
-            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${frame.getNum()}">
+            <input type="number" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${frame.getNum()}">
             <div class="invalid-feedback">
               Введите имя...
             </div>
@@ -59,7 +60,7 @@
                       <button class="btn btn-outline-info" type="button" onclick="sortedApartment('number')">Номер</button>
                   </th>
                 <th scope="col">
-                  <button type="button" th:onclick="'addApartment('+${frame.getIdFrame()}+')'" class="btn btn-secondary btn-sm" style="margin-left: 10px">
+                  <button type="button" th:onclick="'addApartment('+${frame.getIdFrame()}+')'" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add apartment">
                     <i class="fas fa-plus">
                     </i>
                   </button>
@@ -73,12 +74,12 @@
                 <td>
                   <div style="display: flex">
 <!--                    <form th:action="@{/apartment_update/{idApartment}(idApartment = ${apartment.getIdApartment()})}"  method="post" >-->
-                      <button type="button" th:onclick="'editApartment('+${apartment.getIdApartment()}+')'" class="btn btn-info btn-sm">
+                      <button type="button" th:onclick="'editApartment('+${apartment.getIdApartment()}+')'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit apartment">
                         <i class="fas fa-pencil">
                         </i>
                       </button>
 
-                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px"  th:onclick="'deleteApartment('+${apartment.getIdApartment()}+', ' +${frame.getIdFrame()}+ ')'">
+                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px"  th:onclick="'deleteApartment('+${apartment.getIdApartment()}+', ' +${frame.getIdFrame()}+ ')'" data-toggle="tooltip" data-placement="top" title="Delete apartment">
                         <i class="fas fa-trash">
                         </i>
                       </button>
@@ -93,9 +94,11 @@
             <!--        </div>-->
           </div>
             <div style="display: flex; justify-content: space-between" >
+                <div id="textApartment">
                 <div style="margin-left: 10px" th:if="${apartments.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
-                <div id="textApartment" style="margin-left: 10px" th:if="${apartments.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${apartments.getContent().size()} + ' из '+${sizeApartment}+' записей'" ></h6></div>
-                <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+                <div  style="margin-left: 10px" th:if="${apartments.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${apartments.getContent().size()} + ' из '+${sizeApartment}+' записей'" ></h6></div>
+                </div>
+                    <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
                 <ul class="pagination" id="previousApartment">
                     <li class="page-item" th:hidden="${apartments.getNumber()==0}">
                         <input type="hidden" id="pageNumberApartmentPr" th:value="${apartments.getNumber()-1}">

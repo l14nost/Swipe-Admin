@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+  <title>Apartment Edit</title>
+    <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style th:replace="~{/admin.shared/style}"></style>
@@ -30,7 +31,7 @@
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
-            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}" required="">
+            <input type="number" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}" required="">
               <div th:if="${#fields.hasErrors('number')}">
                   <div class="text-danger">
                       <p th:errors="*{number}"></p>
@@ -61,7 +62,7 @@
             </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
-            <input type="text" class="form-control" name="price"  placeholder="Введите цену..." th:value="${apartment.getPrice()}" required="">
+            <input type="number" class="form-control" name="price"  placeholder="Введите цену..." th:value="${apartment.getPrice()}" required="">
               <div th:if="${#fields.hasErrors('price')}">
                   <div class="text-danger">
                       <p th:errors="*{price}"></p>
@@ -284,7 +285,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
-            <input type="text" class="form-control" name="totalArea"  placeholder="Введите общую площадь..." th:value="${apartment.getTotalArea()}" required="">
+            <input type="number" class="form-control" name="totalArea"  placeholder="Введите общую площадь..." th:value="${apartment.getTotalArea()}" required="">
               <div th:if="${#fields.hasErrors('totalArea')}">
                   <div class="text-danger">
                       <p th:errors="*{totalArea}"></p>
@@ -293,7 +294,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
-            <input type="text" class="form-control" name="kitchenArea"  placeholder="Введите площадь кухни..." th:value="${apartment.getKitchenArea()}" required="">
+            <input type="number" class="form-control" name="kitchenArea"  placeholder="Введите площадь кухни..." th:value="${apartment.getKitchenArea()}" required="">
               <div th:if="${#fields.hasErrors('kitchenArea')}">
                   <div class="text-danger">
                       <p th:errors="*{kitchenArea}"></p>

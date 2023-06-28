@@ -1,6 +1,7 @@
 package com.example.Swipe.Admin.service.impl;
 
 //import com.example.Swipe.Admin.entity.SalesDepartment;
+import com.example.Swipe.Admin.entity.News;
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.entity.UserAddInfo;
 //import com.example.Swipe.Admin.repository.SalesDepartmentRepo;
@@ -20,7 +21,17 @@ public class UserAddInfoServiceImpl implements UserAddInfoService {
     private Logger log = LoggerFactory.getLogger(UserAddInfoServiceImpl.class);
     private final UserAddInfoRepo userAddInfoRepo;
 
-
+    public int countSub(int monthNum){
+        int count = 0;
+        List<UserAddInfo> userAddInfos = userAddInfoRepo.findAll();
+        for (UserAddInfo userAddInfo : userAddInfos
+        ) {
+            if(userAddInfo.getDateSub().getMonthValue() == monthNum){
+                count++;
+            }
+        }
+        return count;
+    }
     @Override
     public List<UserAddInfo> findAll() {
         return userAddInfoRepo.findAll();

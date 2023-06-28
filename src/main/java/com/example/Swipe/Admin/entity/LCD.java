@@ -117,7 +117,7 @@ public class LCD {
         if (!Objects.equals(user, lcd.user)) return false;
         if (!Objects.equals(newsList, lcd.newsList)) return false;
         if (!Objects.equals(photoList, lcd.photoList)) return false;
-        if (!Objects.equals(apartmentList, lcd.apartmentList)) return false;
+//        if (!Objects.equals(apartmentList, lcd.apartmentList)) return false;
         if (!Objects.equals(documents, lcd.documents)) return false;
         return Objects.equals(frames, lcd.frames);
     }
@@ -147,7 +147,7 @@ public class LCD {
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (newsList != null ? newsList.hashCode() : 0);
         result = 31 * result + (photoList != null ? photoList.hashCode() : 0);
-        result = 31 * result + (apartmentList != null ? apartmentList.hashCode() : 0);
+//        result = 31 * result + (apartmentList != null ? apartmentList.hashCode() : 0);
         result = 31 * result + (documents != null ? documents.hashCode() : 0);
         result = 31 * result + (frames != null ? frames.hashCode() : 0);
         return result;
