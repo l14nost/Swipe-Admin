@@ -243,8 +243,11 @@ public class UserServiceImpl implements UserService {
 
     public void updateDTO(ClientDTO clientDTO, int id) {
         User user = ClientMapper.toEntity(clientDTO);
+        System.out.println("-"+clientDTO.getFilename().getOriginalFilename());
+        System.out.println(clientDTO.getFilename()!=null);
         if (clientDTO.getFilename()!=null) {
             if (!clientDTO.getFilename().isEmpty()) {
+                System.out.println("-+"+clientDTO.getFilename().getOriginalFilename());
                 File uploadDirGallery = new File(upload);
                 if (!uploadDirGallery.exists()) {
                     uploadDirGallery.mkdir();

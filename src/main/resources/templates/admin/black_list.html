@@ -123,6 +123,7 @@
 <div th:replace="~{/admin.shared/script}"></div>
 <!--<div th:fragment="script"></div>-->
 <script>
+    let url = '/black_list';
     // var searchBlack = localStorage.getItem('search');
 
 
@@ -150,7 +151,7 @@
         // e.preventDefault();
         var searchVal = document.getElementById('searchInput').value;
         var sortVal = localStorage.getItem('sortVal');
-        var url = '/Swipe-Admin/black_list';
+        // var url = '/Swipe-Admin/black_list';
 
         if(selectedSize == null){
             selectedSize = '3';
@@ -188,7 +189,7 @@
         var search = localStorage.getItem('search');
         // e.preventDefault();
         var sortVal = document.getElementById('sortedInput').value;
-        var url = '/Swipe-Admin/black_list';
+        // var url = '/Swipe-Admin/black_list';
         if(selectedSize == null){
             selectedSize = '3';
 
@@ -230,7 +231,7 @@
         // var selectedSize = localStorage.getItem('selectedSize');
         // e.preventDefault();
         var sortVal = document.getElementById('sortedInput1').value;
-        var url = '/Swipe-Admin/black_list';
+        // var url = '/Swipe-Admin/black_list';
         if(selectedSize == null){
             selectedSize = '3';
 
@@ -271,7 +272,7 @@
         // var selectedSize = localStorage.getItem('selectedSize');
         // e.preventDefault();
         var sortVal = document.getElementById('sortedInput2').value;
-        var url = '/Swipe-Admin/black_list';
+        // var url = '/Swipe-Admin/black_list';
         if(selectedSize == null){
             selectedSize = '3';
         }
@@ -312,7 +313,7 @@
         // var selectedSize = localStorage.getItem('selectedSize');
         // e.preventDefault();
         var searchVal = 'null';
-        var url = '/Swipe-Admin/black_list';
+        // var url = '/Swipe-Admin/black_list';
         if(selectedSize == null){
             selectedSize = '3';
         }
@@ -361,7 +362,7 @@
 
           var pageNumber = $('#pageNumberPr').val();
 
-          var url = '/Swipe-Admin/black_list';
+          // var url = '/Swipe-Admin/black_list';
 
           // pageNumber -= 1;
           $.ajax({
@@ -409,7 +410,7 @@
 
           // $('#next li').removeClass('active');
           // $(this).addClass('active');
-          var url = '/Swipe-Admin/black_list';
+          // var url = '/Swipe-Admin/black_list';
 
           // pageNumber -= 1;
           $.ajax({
@@ -453,7 +454,7 @@
         var searchBlack = localStorage.getItem('search');
         var sortedBlack = localStorage.getItem('sortVal');
       selectedSize = $(this).val();
-      var url = '/Swipe-Admin/black_list';
+      // var url = '/Swipe-Admin/black_list';
       // alert(page);
       $.ajax({
         url: url+'?sizeBlackList='+selectedSize,
@@ -497,7 +498,7 @@
       var pageNumber = $(this).text();
         $('#paginationList li').removeClass('active');
         $(this).addClass('active');
-      var url = '/Swipe-Admin/black_list';
+      // var url = '/Swipe-Admin/black_list';
 
       pageNumber -= 1;
       $.ajax({

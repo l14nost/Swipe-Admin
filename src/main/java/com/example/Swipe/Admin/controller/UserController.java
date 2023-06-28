@@ -23,6 +23,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -220,6 +222,7 @@ public class UserController {
             model.addAttribute("type",typeNotification);
             return "admin/user_edit";
         }
+
         clientDTO.setIdUser(id);
         userServiceImpl.updateDTO(clientDTO,id);
         log.info("User id "+id+", was update");

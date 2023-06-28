@@ -13,7 +13,7 @@
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
   <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/user_edit/{id}(id=${id})}" th:object="${user}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/user_edit/{id}(id=${id})}" th:object="${user}" onsubmit="saveFile()">
       <input type="hidden" name="type" th:value="${user.getType()}">
     <div style="display: flex; justify-content: space-between">
       <h4 class="mb-3">Пользователь</h4>
@@ -96,7 +96,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="photoDiv">
             <div> <h6>Фото на аватарку</h6> </div>
             <div class="form-group" style="display: flex">
 
@@ -168,6 +168,36 @@
 <div th:insert="admin.shared/footer::footer"></div>
 <div th:replace="~{/admin.shared/script}"></div>
 <!--<script>-->
+<!--  // Сохранение выбранного файла в LocalStorage-->
+<!--  function saveFile() {-->
+<!--    const fileInput = document.getElementById('inputImg');-->
+<!--    const selectedFile = fileInput.files[0];-->
+
+<!--    if (selectedFile) {-->
+<!--      const reader = new FileReader();-->
+<!--      reader.readAsDataURL(selectedFile);-->
+<!--      reader.onload = function(event) {-->
+<!--        const fileData = event.target.result;-->
+<!--        localStorage.setItem('selectedFile', fileData);-->
+<!--      };-->
+<!--    }-->
+<!--  }-->
+
+<!--  // Восстановление выбранного файла из LocalStorage-->
+<!--  function restoreFile() {-->
+<!--    const fileData = localStorage.getItem('selectedFile');-->
+<!--    if (fileData) {-->
+<!--      const fileInput = document.getElementById('inputImg');-->
+<!--      fileInput.value = ''; // Сброс значения input для корректной работы валидации-->
+<!--      const imgElement = document.getElementById('img');-->
+<!--      imgElement.src = fileData;-->
+<!--    }-->
+<!--  }-->
+
+<!--  // Вызов функции восстановления файла при загрузке страницы-->
+<!--  window.onload = restoreFile;-->
+<!--</script>-->
+<!--<script>-->
 <!--  function addAgent () {-->
 <!--    $.ajax({-->
 <!--      url:  '/agent_add/'+[[${user.getIdUser()}]],-->
@@ -183,7 +213,34 @@
 <!--    });-->
 <!--  }-->
 <!--</script>-->
+<!--<script>-->
+<!--  function saveFile() {-->
+<!--    // Сохранение выбранного файла в LocalStorage-->
+<!--    const fileInput = document.getElementById('inputImg');-->
+<!--    const selectedFile = fileInput.files[0];-->
 
+<!--    if (selectedFile) {-->
+<!--      const reader = new FileReader();-->
+<!--      reader.readAsDataURL(selectedFile);-->
+<!--      reader.onload = function(event) {-->
+<!--        const fileData = event.target.result;-->
+<!--        localStorage.setItem('selectedFile', fileData);-->
+<!--      };-->
+<!--    }-->
+<!--  }-->
+<!--</script>-->
+<!--<script>-->
+<!--  function restoreFile() {-->
+<!--    // Восстановление выбранного файла из LocalStorage-->
+<!--    const fileData = localStorage.getItem('selectedFile');-->
+<!--    if (fileData) {-->
+<!--      const imgElement = document.getElementById('img');-->
+<!--      imgElement.src = fileData;-->
+<!--    }-->
+<!--  }-->
+
+<!--  window.onload = restoreFile;-->
+<!--</script>-->
 </body>
 
 </html>
