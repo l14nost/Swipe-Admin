@@ -48,8 +48,12 @@ class AdminControllerTest {
                 .build();
 
         given(userService.uniqueMail(anyString(), any(BindingResult.class), anyInt(), anyString())).willReturn(new BeanPropertyBindingResult(adminDto, "user"));
-        when(userService.getCurrentUser()).thenReturn(AdminDto.builder().idUser(1).password(new BCryptPasswordEncoder().encode("pass1")).mail("admin@gmail.com").build());
+        when(userService.getCurrentUser()).thenReturn(AdminDto.builder().idUser(1).password(new BCryptPasswordEncoder().encode("pass1")).mail("admin1@gmail.com").build());
 
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
 
         mockMvc.perform(post("/profile")
                         .flashAttr("user", adminDto))
