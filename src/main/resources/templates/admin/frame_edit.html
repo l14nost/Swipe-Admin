@@ -108,8 +108,8 @@
                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
                     <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
                 </ul>
-                <ul class="pagination" id="nextApartment" th:if="${apartments.getTotalPages()>1}">
-                    <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}">
+                <ul class="pagination" id="nextApartment">
+                    <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}" th:if="${apartments.getTotalPages()>1}">
                         <input type="hidden" id="pageNumberApartmentNext" th:value="${apartments.getNumber()+1}">
                         <a class="page-link" href="#" aria-label="Next" th:value="${apartments.getTotalPages()}">
                             <span aria-hidden="true">&raquo;</span>

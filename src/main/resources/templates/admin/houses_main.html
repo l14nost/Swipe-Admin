@@ -114,8 +114,8 @@
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
           <li class="page-item"  th:each="p: ${#numbers.sequence(1, lcds.getTotalPages()-1)}" th:value="${p}" th:if="${lcds.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
         </ul>
-        <ul class="pagination" id="nextLcd" th:if="${lcds.getTotalPages()>1}">
-          <li class="page-item" th:hidden="${lcds.getNumber()==lcds.getTotalPages()-1}">
+        <ul class="pagination" id="nextLcd">
+          <li class="page-item" th:hidden="${lcds.getNumber()==lcds.getTotalPages()-1}" th:if="${lcds.getTotalPages()>1}">
             <input type="hidden" id="pageNumberLcdNext" th:value="${lcds.getNumber()+1}">
             <a class="page-link" href="#" aria-label="Next" th:value="${lcds.getTotalPages()}">
               <span aria-hidden="true">&raquo;</span>
@@ -223,8 +223,8 @@
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
           <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
         </ul>
-        <ul class="pagination" id="nextApartment" th:if="${apartments.getTotalPages()>1}">
-          <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}">
+        <ul class="pagination" id="nextApartment">
+          <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}" th:if="${apartments.getTotalPages()>1}">
             <input type="hidden" id="pageNumberApartmentNext" th:value="${apartments.getNumber()+1}">
             <a class="page-link" href="#" aria-label="Next" th:value="${apartments.getTotalPages()}">
               <span aria-hidden="true">&raquo;</span>
@@ -251,12 +251,12 @@
 <div th:replace="~{/admin.shared/script}"></div>
 <div th:fragment="script"></div>
 <script>
-
+  let url = '/Swipe-Admin/houses';
   function searchLcd () {
     var selectedSize = localStorage.getItem('selectedLcdSize');
     // e.preventDefault();
     var searchVal = document.getElementById('searchInputLcd').value;
-    var url = '/Swipe-Admin/houses';
+    // var url = '/Swipe-Admin/houses';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -294,7 +294,7 @@
   function sortedLcd (field) {
     var selectedSize = localStorage.getItem('selectedLcdSize');
     var searchVal = localStorage.getItem('searchLcd');
-    var url = '/Swipe-Admin/houses';
+    // var url = '/Swipe-Admin/houses';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -333,7 +333,7 @@
     var selectedSize = localStorage.getItem('selectedLcdSize');
     // e.preventDefault();
     var searchVal = 'null';
-    var url = '/Swipe-Admin/houses';
+    // var url = '/Swipe-Admin/houses';
     if(selectedSize == null){
       selectedSize = '3';
     }
@@ -385,7 +385,7 @@
 
       var pageNumber = $('#pageNumberLcdPr').val();
 
-      var url = '/Swipe-Admin/houses';
+      // var url = '/Swipe-Admin/houses';
 
       // pageNumber -= 1;
       $.ajax({
@@ -424,7 +424,7 @@
       var searchBlack = localStorage.getItem('searchLcd');
       e.preventDefault();
       var pageNumber = $('#pageNumberLcdNext').val();
-      var url = '/Swipe-Admin/houses';
+      // var url = '/Swipe-Admin/houses';
 
 
       $.ajax({
@@ -461,7 +461,7 @@
       var sortVal = localStorage.getItem('sortedLcd');
       var search = localStorage.getItem('searchLcd');
       selectedSize = $(this).val();
-      var url = '/Swipe-Admin/houses';
+      // var url = '/Swipe-Admin/houses';
 
       if (page == null) {
         page = '0';
@@ -503,7 +503,7 @@
       var pageNumber = $(this).text();
       $('#lcdPagination li').removeClass('active');
       $(this).addClass('active');
-      var url = '/Swipe-Admin/houses';
+      // var url = '/Swipe-Admin/houses';
 
       if (selectedSize == null) {
         selectedSize = '3';
@@ -551,7 +551,7 @@
     var selectedSize = localStorage.getItem('selectedApartmentSize');
     // e.preventDefault();
     var searchVal = document.getElementById('searchInputApartment').value;
-    var url = '/Swipe-Admin/houses';
+    // var url = '/Swipe-Admin/houses';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -588,7 +588,7 @@
   function sortedApartment (field) {
     var selectedSize = localStorage.getItem('selectedApartmentSize');
     var searchVal = localStorage.getItem('searchApartment');
-    var url = '/Swipe-Admin/houses';
+    // var url = '/Swipe-Admin/houses';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -627,7 +627,7 @@
     var selectedSize = localStorage.getItem('selectedApartmentSize');
     // e.preventDefault();
     var searchVal = '0';
-    var url = '/Swipe-Admin/houses';
+    // var url = '/Swipe-Admin/houses';
     if(selectedSize == null){
       selectedSize = '3';
     }
@@ -682,7 +682,7 @@
 
       var pageNumber = $('#pageNumberApartmentPr').val();
 
-      var url = '/Swipe-Admin/houses';
+      // var url = '/Swipe-Admin/houses';
 
       // pageNumber -= 1;
       $.ajax({
@@ -721,7 +721,7 @@
       var searchBlack = localStorage.getItem('searchApartment');
       e.preventDefault();
       var pageNumber = $('#pageNumberApartmentNext').val();
-      var url = '/Swipe-Admin/houses';
+      // var url = '/Swipe-Admin/houses';
 
 
       $.ajax({
@@ -760,7 +760,7 @@
       var sortedApartment = localStorage.getItem('sortedApartment');
       var search = localStorage.getItem('searchApartment');
       selectedSize = $(this).val();
-      var url = '/Swipe-Admin/houses';
+      // var url = '/Swipe-Admin/houses';
 
       if (page == null) {
         page = '0';
@@ -802,7 +802,7 @@
       var pageNumber = $(this).text();
       $('#apartmentPagination li').removeClass('active');
       $(this).addClass('active');
-      var url = '/Swipe-Admin/houses';
+      // var url = '/Swipe-Admin/houses';
 
       if (selectedSize == null) {
         selectedSize = '3';

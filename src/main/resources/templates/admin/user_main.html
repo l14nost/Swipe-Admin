@@ -129,8 +129,8 @@
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
           <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageUser.getTotalPages()-1)}" th:if="${pageUser.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
         </ul>
-        <ul class="pagination" id="nextClient" th:if="${pageUser.getTotalPages()>1}">
-          <li class="page-item" th:hidden="${pageUser.getNumber()==pageUser.getTotalPages()-1}">
+        <ul class="pagination" id="nextClient">
+          <li class="page-item" th:hidden="${pageUser.getNumber()==pageUser.getTotalPages()-1}" th:if="${pageUser.getTotalPages()>1}">
             <input type="hidden" id="pageNumberClientNext" th:value="${pageUser.getNumber()+1}">
             <a class="page-link" href="#" aria-label="Next" th:value="${pageUser.getTotalPages()}">
               <span aria-hidden="true">&raquo;</span>
@@ -247,8 +247,8 @@
           <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageContractor.getTotalPages()-1)}" th:if="${pageContractor.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
 
         </ul>
-        <ul class="pagination" id="nextContractor" th:if="${pageContractor.getTotalPages()>1}">
-          <li class="page-item" th:hidden="${pageContractor.getNumber()==pageContractor.getTotalPages()-1}">
+        <ul class="pagination" id="nextContractor">
+          <li class="page-item" th:hidden="${pageContractor.getNumber()==pageContractor.getTotalPages()-1}" th:if="${pageContractor.getTotalPages()>1}">
             <input type="hidden" id="pageNumberContractorNext" th:value="${pageContractor.getNumber()+1}">
             <a class="page-link" href="#" aria-label="Next" th:value="${pageContractor.getTotalPages()}">
               <span aria-hidden="true">&raquo;</span>
@@ -382,11 +382,12 @@
 <div th:replace="~{/admin.shared/script}"></div>
 <div th:fragment="script"></div>
 <script>
+  let url = '/Swipe-Admin/users';
   function searchClient () {
     var selectedSize = localStorage.getItem('selectedUserSize');
     // e.preventDefault();
     var searchVal = document.getElementById('searchInput').value;
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -423,7 +424,7 @@
   function sortedClient (field) {
     var selectedSize = localStorage.getItem('selectedUserSize');
     var searchVal = localStorage.getItem('searchClient');
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -463,7 +464,7 @@
     var sortVal = localStorage.getItem('sortedClient');
     // e.preventDefault();
     var searchVal = 'null';
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     if(selectedSize == null){
       selectedSize = '3';
     }
@@ -514,7 +515,7 @@
 
       var pageNumber = $('#pageNumberClientPr').val();
 
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       // pageNumber -= 1;
       $.ajax({
@@ -554,7 +555,7 @@
       var searchBlack = localStorage.getItem('searchClient');
       e.preventDefault();
       var pageNumber = $('#pageNumberClientNext').val();
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
 
       $.ajax({
@@ -593,7 +594,7 @@
       var sortVal = localStorage.getItem('sortedClient');
       var search = localStorage.getItem('searchClient');
       selectedSize = $(this).val();
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       if (page == null) {
         page = '0';
@@ -635,7 +636,7 @@
       var pageNumber = $(this).text();
       $('#userPagination li').removeClass('active');
       $(this).addClass('active');
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       if (selectedSize == null) {
         selectedSize = '3';
@@ -684,7 +685,7 @@
     var selectedSize = localStorage.getItem('selectedContractorSize');
     // e.preventDefault();
     var searchVal = document.getElementById('searchInputContractor').value;
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -723,7 +724,7 @@
   function sortedContractor (field) {
     var selectedSize = localStorage.getItem('selectedContractorSize');
     var searchVal = localStorage.getItem('searchContractor');
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -764,7 +765,7 @@
     var sortedVal = localStorage.getItem('sortedContractor');
     // e.preventDefault();
     var searchVal = 'null';
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     if(selectedSize == null){
       selectedSize = '3';
     }
@@ -816,7 +817,7 @@
 
       var pageNumber = $('#pageNumberContractorPr').val();
 
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       // pageNumber -= 1;
       $.ajax({
@@ -856,7 +857,7 @@
       var searchBlack = localStorage.getItem('searchContractor');
       e.preventDefault();
       var pageNumber = $('#pageNumberContractorNext').val();
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
 
       $.ajax({
@@ -894,7 +895,7 @@
       var sortedVal = localStorage.getItem('sortedContractor');
       var search = localStorage.getItem('searchContractor');
       selectedSize = $(this).val();
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       if (page == null) {
         page = '0';
@@ -937,7 +938,7 @@
       var pageNumber = $(this).text();
       $('#contractorPagination li').removeClass('active');
       $(this).addClass('active');
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       if (selectedSize == null) {
         selectedSize = '3';
@@ -989,7 +990,7 @@
     var selectedSize = localStorage.getItem('selectedNotarySize');
     // e.preventDefault();
     var searchVal = document.getElementById('searchInputNotary').value;
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -1026,7 +1027,7 @@
   function sortedNotary (field) {
     var selectedSize = localStorage.getItem('selectedNotarySize');
     var searchVal = localStorage.getItem('searchNotary');
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     // if(selectedSize == null){
     //   selectedSize = '3';
     // }
@@ -1066,7 +1067,7 @@
     var sortedVal = localStorage.getItem('sortedNotary');
     // e.preventDefault();
     var searchVal = 'null';
-    var url = '/Swipe-Admin/users';
+    // var url = '/Swipe-Admin/users';
     if(selectedSize == null){
       selectedSize = '3';
     }
@@ -1117,7 +1118,7 @@
 
       var pageNumber = $('#pageNumberNotaryPr').val();
 
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       // pageNumber -= 1;
       $.ajax({
@@ -1157,7 +1158,7 @@
       var searchBlack = localStorage.getItem('searchNotary');
       e.preventDefault();
       var pageNumber = $('#pageNumberNotaryNext').val();
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
 
       $.ajax({
@@ -1195,7 +1196,7 @@
       var sortedVal = localStorage.getItem('sortedNotary');
       var search = localStorage.getItem('searchNotary');
       selectedSize = $(this).val();
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       if (page == null) {
         page = '0';
@@ -1237,7 +1238,7 @@
       var pageNumber = $(this).text();
       $('#notaryPagination li').removeClass('active');
       $(this).addClass('active');
-      var url = '/Swipe-Admin/users';
+      // var url = '/Swipe-Admin/users';
 
       if (selectedSize == null) {
         selectedSize = '3';

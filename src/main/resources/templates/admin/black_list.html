@@ -84,16 +84,21 @@
         <ul class="pagination" id="paginationList">
 
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
-<!--            <li style="margin-left: 5px; margin-right: 5px"><p>...</p></li>-->
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, blackList.getTotalPages()-1)}" th:if="${blackList.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+          <li style="margin-left: 5px; margin-right: 5px" th:if="${blackList.getNumber()>1 && blackList.getTotalPages()>6}"><p >...</p></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${blackList.getTotalPages()>6 && blackList.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
 
-<!--            <li style="margin-left: 5px; margin-right: 5px"><p>...</p></li>-->
-<!--            <li class="page-item"><a class="page-link" href="#" th:text="${blackList.getTotalPages()}"></a></li>-->
+          <li class="page-item"  th:each="p: ${#numbers.sequence(blackList.getNumber()-1, blackList.getNumber()+1)}" th:if="${blackList.getTotalPages()>6 && blackList.getNumber()>1 && blackList.getNumber()<blackList.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+            <li class="page-item"  th:each="p: ${#numbers.sequence(blackList.getTotalPages()-3, blackList.getTotalPages()-2)}" th:if="${blackList.getTotalPages()>6 && blackList.getNumber()>blackList.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+            <li style="margin-left: 5px; margin-right: 5px" th:if="${blackList.getNumber()<blackList.getTotalPages()-2 && blackList.getTotalPages()>6}"><p>...</p></li>
+            <li class="page-item"  th:each="p: ${#numbers.sequence(1, blackList.getTotalPages()-2)}" th:if="${blackList.getTotalPages()>2 && blackList.getTotalPages()<=6 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+            <li class="page-item"><a class="page-link" href="#" th:text="${blackList.getTotalPages()}" th:if="${blackList.getTotalPages()>1}"></a></li>
         </ul>
 
-          <ul class="pagination" id="next" th:if="${blackList.getTotalPages()>1}">
-              <li class="page-item" th:hidden="${blackList.getNumber()==blackList.getTotalPages()-1}">
+          <ul class="pagination" id="next">
+              <li class="page-item" th:hidden="${blackList.getNumber()==blackList.getTotalPages()-1}" th:if="${blackList.getTotalPages()>1}">
                   <input type="hidden" id="pageNumber" th:value="${blackList.getNumber()+1}">
                   <a class="page-link" href="#" aria-label="Next" th:value="${blackList.getTotalPages()}">
                       <span aria-hidden="true">&raquo;</span>
@@ -121,9 +126,10 @@
 
 
 <div th:replace="~{/admin.shared/script}"></div>
+
 <!--<div th:fragment="script"></div>-->
 <script>
-    let url = '/Swipe-Admin/black_list';
+    let url = '/black_list';
     // var searchBlack = localStorage.getItem('search');
 
 
@@ -362,6 +368,8 @@
 
           var pageNumber = $('#pageNumberPr').val();
 
+          var intPageNumber = parseInt(pageNumber);
+
           // var url = '/Swipe-Admin/black_list';
 
           // pageNumber -= 1;
@@ -386,8 +394,13 @@
                   var textPag = $(data).find('#textPagination').html();
                   $('#textPagination').html(textPag);
 
+                  var pagination = $(data).find('#paginationList').html();
+                  $('#paginationList').html(pagination);
+
                   $('#paginationList li').removeClass('active');
-                  $('#paginationList li').eq(pageNumber).addClass('active');
+                  $('#paginationList li').filter(function() {
+                      return $(this).text() === (intPageNumber+1).toString();
+                  }).addClass('active');
                   localStorage.setItem('page', pageNumber);
 
 
@@ -406,6 +419,7 @@
 
           // var pageNumber = $(this).val();
           var pageNumber = $('#pageNumber').val();
+          var intPageNumber = parseInt(pageNumber);
           // alert(pageNumber);
 
           // $('#next li').removeClass('active');
@@ -433,8 +447,13 @@
                   var textPag = $(data).find('#textPagination').html();
                   $('#textPagination').html(textPag);
 
+                  var pagination = $(data).find('#paginationList').html();
+                  $('#paginationList').html(pagination);
+
                   $('#paginationList li').removeClass('active');
-                  $('#paginationList li').eq(pageNumber).addClass('active');
+                  $('#paginationList li').filter(function() {
+                      return $(this).text() === (intPageNumber+1).toString();
+                  }).addClass('active');
                   localStorage.setItem('page', pageNumber);
 
 
@@ -518,8 +537,16 @@
             $('#previous').html(previous);
             var textPag = $(data).find('#textPagination').html();
             $('#textPagination').html(textPag);
+
             // var pagination = $(data).find('#paginationList').html();
             // $('#paginationList').html(pagination);
+
+            $('#paginationList li').removeClass('active');
+            $('#paginationList li').filter(function() {
+                return $(this).text() === (pageNumber+1).toString();
+            }).addClass('active');
+
+
 
           localStorage.setItem('page', pageNumber);
 
