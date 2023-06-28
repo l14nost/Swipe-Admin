@@ -120,7 +120,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void deleteById(int id) {
-        Apartment apartment = findById(1);
+        Apartment apartment = findById(id);
         if (apartment.getMainPhoto()!=null) {
             if (!apartment.getMainPhoto().equals("../admin/dist/img/default.jpg")) {
                 String fileNameDelete = apartment.getMainPhoto().substring(11, apartment.getMainPhoto().length());
