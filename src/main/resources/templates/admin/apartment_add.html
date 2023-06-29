@@ -43,12 +43,13 @@
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  th:value="${apartment.getAddress()}" placeholder="Введите адрес...(г.Город, р.Район, ул.Улица,1)" >
+            <input type="text" class="form-control" id="address" name="address"  th:value="${apartment.getAddress()}"  data-mask="address" placeholder="Введите адрес...(г.Город, р.Район, ул.Улица,1)" >
             <div th:if="${#fields.hasErrors('address')}">
               <div class="text-danger">
                 <p th:errors="*{address}"></p>
               </div>
             </div>
+
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
@@ -215,8 +216,247 @@
 </div>
 <div th:insert="admin.shared/footer::footer"></div>
 <div th:replace="~{/admin.shared/script}"></div>
+<script src="https://unpkg.com/imask"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.6/jquery.inputmask.min.js"></script>-->
+<script>
+  // document.addEventListener('DOMContentLoaded', () => {
+  //
+  //   const mask = (dataValue, options) => {
+  //     const elements = document.querySelectorAll(`[data-mask="${dataValue}"]`)
+  //     if (!elements) return
+  //
+  //     elements.forEach(el => { // для каждого из полей ввода
+  //       IMask(el, options) // инициализируем плагин imask для необходимых полей ввода с переданными параметрами маски
+  //     })
+  //   };
+  //
+  //   mask('address', {
+  //     mask: 'г., р., ул.*********,000', // Здесь "*" обозначает любую букву или цифру, "9" обозначает цифру, а "A" обозначает букву.
+  //   })
+  //   // mask('address', {
+  //   //   mask: 'г.********', // Здесь "*" обозначает любую букву или цифру, "9" обозначает цифру, а "A" обозначает букву.
+  //   // })
+  //   // mask('address', {
+  //   //   mask: 'г., р., ул.*********,0',
+  //   //   blocks: ['г.', 'р.', 'ул.', '0'] // Добавляем блоки вручную без использования "*", чтобы обработать переход при вводе запятой
+  //   // })
+  // })
 
 
+
+
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const mask = (dataValue, options) => {
+  //     const elements = document.querySelectorAll(`[data-mask="${dataValue}"]`)
+  //     if (!elements) return
+  //
+  //     elements.forEach((el, index) => { // для каждого из полей ввода
+  //       const inputOptions = Object.assign({}, options)
+  //       inputOptions.lazy = false // отключаем отложенную инициализацию маски
+  //
+  //       const input = IMask(el, inputOptions) // инициализируем плагин imask для необходимых полей ввода с переданными параметрами маски
+  //       input.on("accept", () => { // при принятии ввода каждого символа
+  //         const inputValue = input.unmaskedValue // получаем текущее значение поля ввода без маски
+  //
+  //         if (inputValue.endsWith(",")) { // если введена запятая
+  //           const nextIndex = index + 1 // получаем индекс следующего блока маски
+  //
+  //           if (nextIndex < elements.length) { // если следующий блок маски существует
+  //             const nextInput = elements[nextIndex] // получаем следующее поле ввода
+  //             nextInput.focus() // устанавливаем фокус на следующее поле ввода
+  //           }
+  //         }
+  //       })
+  //     })
+  //   }
+  //
+  //   mask('address', {
+  //     mask: [
+  //       {
+  //         mask: 'г.*********', // префикс для города
+  //         lazy: true // включаем отложенную инициализацию маски
+  //       },
+  //       {
+  //         mask: ' р.*********', // префикс для района
+  //         lazy: true // включаем отложенную инициализацию маски
+  //       },
+  //       {
+  //         mask: ' ул.*********', // префикс для улицы
+  //         lazy: true // включаем отложенную инициализацию маски
+  //       },
+  //       '000' // номер дома
+  //     ],
+  //     lazy: true // включаем отложенную инициализацию маски
+  //   })
+  // })
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    const mask = (dataValue, options) => {
+      const elements = document.querySelectorAll(`[data-mask="${dataValue}"]`)
+      if (!elements) return
+
+      elements.forEach(el => {
+        const maskOptions = { ...options } // создаем копию объекта options
+
+        if (dataValue === 'address') {
+          const delimiter = ', ' // разделитель после запятой
+          const delimiter1 = ',' // разделитель после запятой
+          const area = ' р.' // текст, который добавляется после запятой
+          const street = ' ул.'
+          var count = 0;
+
+          // Добавляем обработчик события ввода для поля адреса
+          el.addEventListener('input', e => {
+            const value = e.target.value // получаем текущее значение поля
+
+            if (value.includes(',')) {
+              const parts = value.split(',')
+              console.log(parts.length)
+              if (count === 0) {
+                 // разделяем значение на части
+                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                const updatedValue = `${city}${delimiter}${area}` // формируем обновленное значение
+                count++;
+
+                el.value = updatedValue // обновляем значение поля
+
+                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                if (nextInput) {
+                  nextInput.focus() // устанавливаем фокус на следующее поле
+                }
+              }
+              else if (count === 1 && parts.length===3) {
+                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                const area1 = parts[1].trim() // извлекаем город и удаляем пробелы
+                const updatedValue = `${city}${delimiter}${area1}${delimiter}${street}` // формируем обновленное значение
+                count++;
+
+                el.value = updatedValue // обновляем значение поля
+
+                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                if (nextInput) {
+                  nextInput.focus() // устанавливаем фокус на следующее поле
+                }
+              }
+              else if (count === 2 && parts.length===4) {
+                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                const area1 = parts[1].trim() // извлекаем город и удаляем пробелы
+                const street1 = parts[2].trim() // извлекаем город и удаляем пробелы
+                const updatedValue = `${city}${delimiter}${area1}${delimiter}${street1}${delimiter1}` // формируем обновленное значение
+                count++;
+
+                el.value = updatedValue // обновляем значение поля
+
+                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                if (nextInput) {
+                  nextInput.focus() // устанавливаем фокус на следующее поле
+                }
+              }
+            }
+          })
+        }
+
+        IMask(el, maskOptions)
+      })
+    };
+
+
+    mask('address', {
+      mask: [
+        {
+          mask: 'г.**********************************************************************************************************************************************************************************************************************************************************', // префикс для города
+          lazy: true // включаем отложенную инициализацию маски
+        },
+        {
+          mask: ' р.*********', // префикс для района
+          lazy: true // включаем отложенную инициализацию маски
+        },
+        {
+          mask: ' ул.*********', // префикс для улицы
+          lazy: true // включаем отложенную инициализацию маски
+        },
+        '000' // номер дома
+      ],
+      lazy: true // включаем отложенную инициализацию маски
+    })
+  })
+
+
+
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const mask = (dataValue, options) => {
+  //     const elements = document.querySelectorAll(`[data-mask="${dataValue}"]`)
+  //     if (!elements) return
+  //
+  //     elements.forEach(el => {
+  //       const maskOptions = { ...options }
+  //
+  //       if (dataValue === 'address') {
+  //         const delimiter = ', '
+  //         const suffix = ' р.'
+  //
+  //         el.addEventListener('input', e => {
+  //           const value = e.target.value
+  //
+  //           if (value.includes(',')) {
+  //             const parts = value.split(',')
+  //             const city = parts[0].trim()
+  //             const updatedValue = `${city}${delimiter}${suffix}`
+  //
+  //             el.value = updatedValue
+  //
+  //             const nextInput = el.nextElementSibling
+  //             if (nextInput) {
+  //               const nextMask = nextInput.dataset.mask
+  //               const nextMaskOptions = options[nextMask]
+  //               const nextMaskLength = nextMaskOptions.mask.length
+  //
+  //               // Проверяем, если следующий блок маски существует и не достигнут конец массива масок
+  //               if (nextMask && nextMaskLength > 0) {
+  //                 const nextMaskPrefix = nextMaskOptions.mask[nextMaskLength - 1]
+  //                 const prefixLength = nextMaskPrefix.length
+  //
+  //                 nextInput.setSelectionRange(prefixLength, prefixLength)
+  //                 nextInput.focus()
+  //               }
+  //             }
+  //           }
+  //         })
+  //       }
+  //
+  //       IMask(el, maskOptions)
+  //     })
+  //   };
+  //
+  //   mask('address', {
+  //     mask: [
+  //       {
+  //         mask: 'г.*********',
+  //         lazy: true
+  //       },
+  //       {
+  //         mask: ' р.*********',
+  //         lazy: true
+  //       },
+  //       {
+  //         mask: ' ул.*********',
+  //         lazy: true
+  //       },
+  //       '000'
+  //     ],
+  //     lazy: true
+  //   })
+  // })
+
+
+
+
+
+
+
+</script>
 </body>
 
 

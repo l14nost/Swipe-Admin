@@ -43,7 +43,7 @@
           </div>
             <div class="col-sm-6">
                 <label  class="form-label">Адрес</label>
-                <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" placeholder="Введите адрес... (г.Город, р.Район, ул.Улица,1)" >
+                <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" data-mask="address" placeholder="Введите адрес... (г.Город, р.Район, ул.Улица,1)" >
                 <div th:if="${#fields.hasErrors('address')}">
                     <div class="text-danger">
                         <p th:errors="*{address}"></p>
@@ -450,6 +450,100 @@
 </div>
 <div th:insert="admin.shared/footer::footer"></div>
 <div th:replace="~{/admin.shared/script}"></div>
+<script src="https://unpkg.com/imask"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const mask = (dataValue, options) => {
+            const elements = document.querySelectorAll(`[data-mask="${dataValue}"]`)
+            if (!elements) return
+
+            elements.forEach(el => {
+                const maskOptions = { ...options } // создаем копию объекта options
+
+                if (dataValue === 'address') {
+                    const delimiter = ', ' // разделитель после запятой
+                    const delimiter1 = ',' // разделитель после запятой
+                    const area = ' р.' // текст, который добавляется после запятой
+                    const street = ' ул.'
+                    var count = 0;
+
+                    // Добавляем обработчик события ввода для поля адреса
+                    el.addEventListener('input', e => {
+                        const value = e.target.value // получаем текущее значение поля
+
+                        if (value.includes(',')) {
+                            const parts = value.split(',')
+                            console.log(parts.length)
+                            if (count === 0) {
+                                // разделяем значение на части
+                                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                                const updatedValue = `${city}${delimiter}${area}` // формируем обновленное значение
+                                count++;
+
+                                el.value = updatedValue // обновляем значение поля
+
+                                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                                if (nextInput) {
+                                    nextInput.focus() // устанавливаем фокус на следующее поле
+                                }
+                            }
+                            else if (count === 1 && parts.length===3) {
+                                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                                const area1 = parts[1].trim() // извлекаем город и удаляем пробелы
+                                const updatedValue = `${city}${delimiter}${area1}${delimiter}${street}` // формируем обновленное значение
+                                count++;
+
+                                el.value = updatedValue // обновляем значение поля
+
+                                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                                if (nextInput) {
+                                    nextInput.focus() // устанавливаем фокус на следующее поле
+                                }
+                            }
+                            else if (count === 2 && parts.length===4) {
+                                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                                const area1 = parts[1].trim() // извлекаем город и удаляем пробелы
+                                const street1 = parts[2].trim() // извлекаем город и удаляем пробелы
+                                const updatedValue = `${city}${delimiter}${area1}${delimiter}${street1}${delimiter1}` // формируем обновленное значение
+                                count++;
+
+                                el.value = updatedValue // обновляем значение поля
+
+                                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                                if (nextInput) {
+                                    nextInput.focus() // устанавливаем фокус на следующее поле
+                                }
+                            }
+                        }
+                    })
+                }
+
+                IMask(el, maskOptions)
+            })
+        };
+
+
+        mask('address', {
+            mask: [
+                {
+                    mask: 'г.**********************************************************************************************************************************************************************************************************************************************************', // префикс для города
+                    lazy: true // включаем отложенную инициализацию маски
+                },
+                {
+                    mask: ' р.*********', // префикс для района
+                    lazy: true // включаем отложенную инициализацию маски
+                },
+                {
+                    mask: ' ул.*********', // префикс для улицы
+                    lazy: true // включаем отложенную инициализацию маски
+                },
+                '000' // номер дома
+            ],
+            lazy: true // включаем отложенную инициализацию маски
+        })
+    })
+</script>
 <!--<script>-->
 <!--  function addFrame(idLcd) {-->
 
