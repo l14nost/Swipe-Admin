@@ -21,7 +21,7 @@
         <div class="row g-3">
           <div class="col-sm-12">
             <label  class="form-label">Почта</label>
-            <input type="text" class="form-control" name="mail"  placeholder="you@example.com" th:value="${user.getMail()}" required="">
+            <input type="email" class="form-control" name="mail"  placeholder="you@example.com" th:value="${user.getMail()}" required="">
             <div th:if="${#fields.hasErrors('mail')}">
               <div class="text-danger">
                 <p th:errors="*{mail}"></p>
