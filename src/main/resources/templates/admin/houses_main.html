@@ -296,8 +296,22 @@
       }
     });
   }
-
+  var clickLcd = 1;
   function sortedLcd (field) {
+    if (field === localStorage.getItem("sortedLcd")){
+      clickLcd++;
+      if (clickLcd>2){
+        clickLcd = 1;
+      }
+    }
+    else if (localStorage.getItem("sortedLcd") === null && field === 'idLcd' && clickLcd===1){
+      clickLcd = 2;
+    }
+    else {
+      if (clickLcd===2){
+        clickLcd = 1;
+      }
+    }
     var selectedSize = localStorage.getItem('selectedLcdSize');
     var searchVal = localStorage.getItem('searchLcd');
     // var url = '/Swipe-Admin/houses';
@@ -309,7 +323,8 @@
       type: 'GET',
       data: {
         lcdSize: selectedSize,
-        searchLcd: searchVal
+        searchLcd: searchVal,
+        orderLcd: clickLcd
         // search: searchVal
       },
       success: function (data) {
@@ -326,6 +341,7 @@
         $('#textLcd').html(textHouses);
         // $('#blackListTable').html(data);
         localStorage.setItem('sortedLcd', field);
+        localStorage.setItem('orderLcd', clickLcd);
 
 
       },
@@ -387,6 +403,7 @@
     $('#previousLcd').on('click','li',function(e) {
       var sortVal = localStorage.getItem('sortedLcd');
       var searchBlack = localStorage.getItem('searchLcd');
+      var order = localStorage.getItem('orderLcd');
       e.preventDefault();
 
       var pageNumber = $('#pageNumberLcdPr').val();
@@ -400,7 +417,8 @@
         data:{
           lcdSize: selectedSize,
           searchLcd: searchBlack,
-          sortedLcd: sortVal
+          sortedLcd: sortVal,
+          orderLcd: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#lcdTable').html();
@@ -428,6 +446,8 @@
     $('#nextLcd').on('click','li',function(e) {
       var sortVal = localStorage.getItem('sortedLcd');
       var searchBlack = localStorage.getItem('searchLcd');
+      var order = localStorage.getItem('orderLcd');
+
       e.preventDefault();
       var pageNumber = $('#pageNumberLcdNext').val();
       // var url = '/Swipe-Admin/houses';
@@ -439,7 +459,8 @@
         data:{
           lcdSize: selectedSize,
           searchLcd: searchBlack,
-          sortedLcd:sortVal
+          sortedLcd:sortVal,
+          orderLcd: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#lcdTable').html();
@@ -465,6 +486,7 @@
     });
     $('#sizeLcd').on('change', function() {
       var sortVal = localStorage.getItem('sortedLcd');
+      var order = localStorage.getItem('orderLcd');
       var search = localStorage.getItem('searchLcd');
       selectedSize = $(this).val();
       // var url = '/Swipe-Admin/houses';
@@ -480,7 +502,8 @@
           lcdSize: selectedSize,
           lcdPage: page,
           searchLcd:search,
-          sortedLcd:sortVal
+          sortedLcd:sortVal,
+          orderLcd: order
         },
         contentType: "application/json"
       })
@@ -504,6 +527,7 @@
 
     $('#lcdPagination').on('click', 'li', function(e) {
       var sortVal = localStorage.getItem('sortedLcd');
+      var order = localStorage.getItem('orderLcd');
       var search = localStorage.getItem('searchLcd');
       e.preventDefault();
       var pageNumber = $(this).text();
@@ -523,7 +547,8 @@
           lcdSize: selectedSize,
           lcdPage: pageNumber,
           searchLcd:search,
-          sortedLcd: sortVal
+          sortedLcd: sortVal,
+          orderLcd: order
         }
       })
               .done(function(data) {
@@ -544,6 +569,8 @@
     $(window).on('beforeunload', function() {
       localStorage.removeItem('selectedLcdSize');
       localStorage.removeItem('pageLcd');
+      localStorage.removeItem('sortedLcd');
+      localStorage.removeItem('orderLcd');
     });
 
   });
@@ -591,7 +618,22 @@
       }
     });
   }
+  var clickApartment = 1;
   function sortedApartment (field) {
+    if (field === localStorage.getItem("sortedApartment")){
+      clickApartment++;
+      if (clickApartment>2){
+        clickApartment = 1;
+      }
+    }
+    else if (localStorage.getItem("sortedApartment") === null && field === 'idApartment' && clickApartment===1){
+      clickApartment = 2;
+    }
+    else {
+      if (clickApartment===2){
+        clickApartment = 1;
+      }
+    }
     var selectedSize = localStorage.getItem('selectedApartmentSize');
     var searchVal = localStorage.getItem('searchApartment');
     // var url = '/Swipe-Admin/houses';
@@ -603,7 +645,8 @@
       type: 'GET',
       data: {
         apartmentSize: selectedSize,
-        searchApartment: searchVal
+        searchApartment: searchVal,
+        orderApartment: clickApartment
         // search: searchVal
       },
       success: function (data) {
@@ -620,6 +663,7 @@
         $('#textApartment').html(textHouses);
         // $('#blackListTable').html(data);
         localStorage.setItem('sortedApartment', field);
+        localStorage.setItem('orderApartment', clickApartment);
 
 
       },
@@ -683,6 +727,7 @@
 
     $('#previousApartment').on('click','li',function(e) {
       var sortedApartment = localStorage.getItem('sortedApartment');
+      var order = localStorage.getItem('orderApartment');
       var searchBlack = localStorage.getItem('searchApartment');
       e.preventDefault();
 
@@ -697,7 +742,8 @@
         data:{
           apartmentSize: selectedSize,
           searchApartment: searchBlack,
-          sortedApartment: sortedApartment
+          sortedApartment: sortedApartment,
+          orderApartment: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#apartmentTable').html();
@@ -724,6 +770,7 @@
 
     $('#nextApartment').on('click','li',function(e) {
       var sortedApartment = localStorage.getItem('sortedApartment');
+      var order = localStorage.getItem('orderApartment');
       var searchBlack = localStorage.getItem('searchApartment');
       e.preventDefault();
       var pageNumber = $('#pageNumberApartmentNext').val();
@@ -736,7 +783,8 @@
         data:{
           apartmentSize: selectedSize,
           searchApartment: searchBlack,
-          sortedApartment: sortedApartment
+          sortedApartment: sortedApartment,
+          orderApartment: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#apartmentTable').html();
@@ -764,6 +812,7 @@
 
     $('#sizeApartment').on('change', function() {
       var sortedApartment = localStorage.getItem('sortedApartment');
+      var order = localStorage.getItem('orderApartment');
       var search = localStorage.getItem('searchApartment');
       selectedSize = $(this).val();
       // var url = '/Swipe-Admin/houses';
@@ -779,7 +828,8 @@
           apartmentSize: selectedSize,
           apartmentPage: page,
           searchApartment:search,
-          sortedApartment: sortedApartment
+          sortedApartment: sortedApartment,
+          orderApartment: order
         },
         contentType: "application/json"
       })
@@ -803,6 +853,7 @@
 
     $('#apartmentPagination').on('click', 'li', function(e) {
       var sortedApartment = localStorage.getItem('sortedApartment');
+      var order = localStorage.getItem('orderApartment');
       var search = localStorage.getItem('searchApartment');
       e.preventDefault();
       var pageNumber = $(this).text();
@@ -822,7 +873,8 @@
           apartmentSize: selectedSize,
           apartmentPage: pageNumber,
           searchApartment:search,
-          sortedApartment: sortedApartment
+          sortedApartment: sortedApartment,
+          orderApartment: order
         }
       })
               .done(function(data) {
@@ -844,6 +896,7 @@
       localStorage.removeItem('selectedApartmentSize');
       localStorage.removeItem('pageApartment');
       localStorage.removeItem('sortedApartment');
+      localStorage.removeItem('orderApartment');
     });
 
   });

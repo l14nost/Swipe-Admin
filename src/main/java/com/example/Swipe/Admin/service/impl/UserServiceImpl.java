@@ -61,6 +61,14 @@ public class UserServiceImpl implements UserService {
         UserSpecification blackListSpecification = UserSpecification.builder().typeUser(typeUser).sort(sort).build();
         return userRepo.findAll(blackListSpecification,pageable).map(ClientMapper::apply);
     }
+    public Page<ClientDTO> findAllByTypePagination(TypeUser typeUser, Pageable pageable,String keyWord,String sort,int order){
+        if (!keyWord.equals("null")) {
+            UserSpecification blackListSpecification = UserSpecification.builder().keyWord(keyWord).typeUser(typeUser).sort(sort).order(order).build();
+            return userRepo.findAll(blackListSpecification, pageable).map(ClientMapper::apply);
+        }
+        UserSpecification blackListSpecification = UserSpecification.builder().typeUser(typeUser).sort(sort).order(order).build();
+        return userRepo.findAll(blackListSpecification,pageable).map(ClientMapper::apply);
+    }
     public Page<BlackListDTO> blackList(Pageable pageable, String keyWord,String sortedBy){
         if (!keyWord.equals("null")) {
             BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).build();
@@ -68,6 +76,17 @@ public class UserServiceImpl implements UserService {
         }
         else {
             BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).build();
+            return userRepo.findAll(blackListSpecification, pageable).map(BlackLIstMapper::apply);
+
+        }
+    }
+    public Page<BlackListDTO> blackList(Pageable pageable, String keyWord,String sortedBy,int order){
+        if (!keyWord.equals("null")) {
+            BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).order(order).build();
+            return userRepo.findAll(blackListSpecification, pageable).map(BlackLIstMapper::apply);
+        }
+        else {
+            BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).order(order).build();
             return userRepo.findAll(blackListSpecification, pageable).map(BlackLIstMapper::apply);
 
         }

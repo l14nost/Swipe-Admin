@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class UserSpecification implements Specification<User> {
     private String keyWord;
     private TypeUser typeUser;
+    private int order;
 
     private String sort;
 
@@ -35,7 +36,12 @@ public class UserSpecification implements Specification<User> {
                     criteriaBuilder.isFalse(root.get("blackList")),
                     criteriaBuilder.equal(root.get("typeUser"), typeUser));
         }
-        query.orderBy(criteriaBuilder.asc(root.get(sort)));
+        if (order == 1) {
+            query.orderBy(criteriaBuilder.asc(root.get(sort)));
+        }
+        else if (order==2){
+            query.orderBy(criteriaBuilder.desc(root.get(sort)));
+        }
 
         return predicate;
 

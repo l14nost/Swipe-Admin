@@ -26,6 +26,7 @@ public class BlackListController {
             @RequestParam(name = "sizeBlackList", defaultValue = "3", required = false)int sizeBlackList,
             @RequestParam(name = "search", required = false, defaultValue = "null") String keyWord,
             @RequestParam(name = "sortedBy", required = false, defaultValue = "idUser") String sortedBy,
+            @RequestParam(name = "order", required = false, defaultValue = "1") int order,
             Model model){
         System.out.println(keyWord);
         System.out.println(sortedBy);
@@ -33,10 +34,11 @@ public class BlackListController {
         Pageable pageable = PageRequest.of(pageBlackList,sizeBlackList);
         System.out.println(userService.blackList(pageable,keyWord,sortedBy).getTotalPages());
         model.addAttribute("searchV", keyWord);
-        model.addAttribute("blackList", userService.blackList(pageable,keyWord,sortedBy));
+        model.addAttribute("blackList", userService.blackList(pageable,keyWord,sortedBy,order));
         model.addAttribute("size", sizeBlackList);
         model.addAttribute("allSize",userService.countBlackList());
         model.addAttribute("currentPage",pageBlackList);
+        model.addAttribute("sort",sortedBy);
         return "admin/black_list";
     }
 //    @GetMapping("/black_list/search/{name}")

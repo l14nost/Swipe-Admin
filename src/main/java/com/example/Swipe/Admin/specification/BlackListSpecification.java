@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class BlackListSpecification implements Specification<User> {
     private String keyWord;
     private String sortedBy;
+    private int order;
 
     @Override
     public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -26,14 +27,23 @@ public class BlackListSpecification implements Specification<User> {
 
                     )
             );
-            query.orderBy(criteriaBuilder.asc(root.get(sortedBy)));
+            if (order == 1) {
+                query.orderBy(criteriaBuilder.asc(root.get(sortedBy)));
+            }
+            else if (order==2){
+                query.orderBy(criteriaBuilder.desc(root.get(sortedBy)));
+            }
             return predicate;
         }
         else {
             Predicate predicate =
                     criteriaBuilder.isTrue(root.get("blackList"));
-
-            query.orderBy(criteriaBuilder.asc(root.get(sortedBy)));
+            if (order == 1) {
+                query.orderBy(criteriaBuilder.asc(root.get(sortedBy)));
+            }
+            else if (order==2){
+                query.orderBy(criteriaBuilder.desc(root.get(sortedBy)));
+            }
             return predicate;
         }
 

@@ -43,6 +43,14 @@ public class LCDServiceImpl implements LCDService {
         LcdSpecification lcdSpecification = LcdSpecification.builder().sort(sort).build();
         return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
     }
+    public Page<LcdDTO> findAllPagination(Pageable pageable,String keyWord,String sort,int order){
+        if(!keyWord.equals("null")){
+            LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord(keyWord).sort(sort).order(order).build();
+            return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
+        }
+        LcdSpecification lcdSpecification = LcdSpecification.builder().sort(sort).order(order).build();
+        return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
+    }
 
     public int count(){
         return (int) lcdRepo.count();

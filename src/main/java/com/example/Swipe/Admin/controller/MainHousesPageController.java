@@ -29,11 +29,13 @@ public class MainHousesPageController {
                              @RequestParam(name = "searchApartment",required = false,defaultValue = "0") int keyWordApartment,
                              @RequestParam(name = "sortedLcd",required = false,defaultValue = "idLcd") String fieldLcd,
                              @RequestParam(name = "sortedApartment",required = false,defaultValue = "idApartment") String fieldApartment,
+                             @RequestParam(name = "orderLcd",required = false,defaultValue = "1") int orderLcd,
+                             @RequestParam(name = "orderApartment",required = false,defaultValue = "1") int orderApartment,
                              Model model) {
         Pageable lcdPageable = PageRequest.of(lcdPage,lcdSize);
         Pageable apartmentPageable = PageRequest.of(apartmentPage,apartmentSize);
-        model.addAttribute("lcds",lcdService.findAllPagination(lcdPageable,keyWordLcd,fieldLcd));
-        model.addAttribute("apartments", apartmentService.findAllByFramePagination(apartmentPageable,keyWordApartment,fieldApartment));
+        model.addAttribute("lcds",lcdService.findAllPagination(lcdPageable,keyWordLcd,fieldLcd,orderLcd));
+        model.addAttribute("apartments", apartmentService.findAllByFramePagination(apartmentPageable,keyWordApartment,fieldApartment,orderApartment));
 
         model.addAttribute("searchLcd",keyWordLcd);
         model.addAttribute("searchApartment",keyWordApartment);

@@ -14,6 +14,7 @@ public class LcdSpecification implements Specification<LCD> {
     private String keyWord;
 
     private String sort;
+    private int order;
 
     @Override
     public Predicate toPredicate(Root<LCD> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -33,7 +34,12 @@ public class LcdSpecification implements Specification<LCD> {
             );
         }
 
-        query.orderBy(criteriaBuilder.asc(root.get(sort)));
+        if (order == 1) {
+            query.orderBy(criteriaBuilder.asc(root.get(sort)));
+        }
+        else if (order==2){
+            query.orderBy(criteriaBuilder.desc(root.get(sort)));
+        }
         return predicate;
 
 

@@ -424,7 +424,22 @@
       }
     });
   }
+  var clickClient = 1;
   function sortedClient (field) {
+    if (field === localStorage.getItem("sortedClient")){
+      clickClient++;
+      if (clickClient>2){
+        clickClient = 1;
+      }
+    }
+    else if (localStorage.getItem("sortedClient") === null && field === 'idUser' && clickClient===1){
+      clickClient = 2;
+    }
+    else {
+      if (clickClient===2){
+        clickClient = 1;
+      }
+    }
     var selectedSize = localStorage.getItem('selectedUserSize');
     var searchVal = localStorage.getItem('searchClient');
     // var url = '/Swipe-Admin/users';
@@ -436,7 +451,8 @@
       type: 'GET',
       data: {
         sizeUserPage: selectedSize,
-        searchClient: searchVal
+        searchClient: searchVal,
+        orderClient: clickClient
         // search: searchVal
       },
       success: function (data) {
@@ -453,6 +469,7 @@
         $('#textClient').html(textClient);
         // $('#blackListTable').html(data);
         localStorage.setItem('sortedClient', field);
+        localStorage.setItem('orderClient', clickClient);
 
 
       },
@@ -465,6 +482,7 @@
   function closeClient () {
     var selectedSize = localStorage.getItem('selectedUserSize');
     var sortVal = localStorage.getItem('sortedClient');
+    var order = localStorage.getItem('orderClient');
     // e.preventDefault();
     var searchVal = 'null';
     // var url = '/Swipe-Admin/users';
@@ -476,7 +494,8 @@
       type: 'GET',
       data: {
         sizeUserPage: selectedSize,
-        sortedClient: sortVal
+        sortedClient: sortVal,
+        orderClient: order
         // search: searchVal
       },
       success: function (data) {
@@ -508,12 +527,15 @@
     var selectedSize = localStorage.getItem('selectedUserSize');
     var page = localStorage.getItem('pageUser');
 
+
     if (selectedSize) {
       $('#sizeUserPage').val(selectedSize);
     }
     $('#previousClient').on('click','li',function(e) {
       var sortVal = localStorage.getItem('sortedClient');
       var searchBlack = localStorage.getItem('searchClient');
+      var order = localStorage.getItem('orderClient');
+
       e.preventDefault();
 
       var pageNumber = $('#pageNumberClientPr').val();
@@ -527,7 +549,8 @@
         data:{
           sizeUserPage: selectedSize,
           searchClient: searchBlack,
-          sortedClient: sortVal
+          sortedClient: sortVal,
+          orderClient: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#userTable').html();
@@ -556,6 +579,7 @@
     $('#nextClient').on('click','li',function(e) {
       var sortVal = localStorage.getItem('sortedClient');
       var searchBlack = localStorage.getItem('searchClient');
+      var order = localStorage.getItem('orderClient');
       e.preventDefault();
       var pageNumber = $('#pageNumberClientNext').val();
       // var url = '/Swipe-Admin/users';
@@ -567,7 +591,8 @@
         data:{
           sizeUserPage: selectedSize,
           searchClient: searchBlack,
-          sortedClient: sortVal
+          sortedClient: sortVal,
+          orderClient: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#userTable').html();
@@ -596,6 +621,8 @@
     $('#sizeUserPage').on('change', function() {
       var sortVal = localStorage.getItem('sortedClient');
       var search = localStorage.getItem('searchClient');
+      var order = localStorage.getItem('orderClient');
+
       selectedSize = $(this).val();
       // var url = '/Swipe-Admin/users';
 
@@ -610,7 +637,8 @@
           sizeUserPage: selectedSize,
           page: page,
           searchClient:search,
-          sortedClient: sortVal
+          sortedClient: sortVal,
+          orderClient: order
         },
         contentType: "application/json"
       })
@@ -635,6 +663,7 @@
     $('#userPagination').on('click', 'li', function(e) {
       var sortVal = localStorage.getItem('sortedClient');
       var search = localStorage.getItem('searchClient');
+      var order = localStorage.getItem('orderClient');
       e.preventDefault();
       var pageNumber = $(this).text();
       $('#userPagination li').removeClass('active');
@@ -653,7 +682,8 @@
           sizeUserPage: selectedSize,
           page: pageNumber,
           searchClient:search,
-          sortedClient: sortVal
+          sortedClient: sortVal,
+          orderClient: order
         }
       })
       .done(function(data) {
@@ -675,6 +705,7 @@
       localStorage.removeItem('selectedUserSize');
       localStorage.removeItem('pageUser');
       localStorage.removeItem('sortedClient');
+      localStorage.removeItem('orderClient');
     });
 
   });
@@ -723,8 +754,22 @@
       }
     });
   }
-
+  var clickContractor = 1;
   function sortedContractor (field) {
+    if (field === localStorage.getItem("sortedContractor")){
+      clickContractor++;
+      if (clickContractor>2){
+        clickContractor = 1;
+      }
+    }
+    else if (localStorage.getItem("sortedContractor") === null && field === 'idUser' && clickContractor===1){
+      clickContractor = 2;
+    }
+    else {
+      if (clickContractor===2){
+        clickContractor = 1;
+      }
+    }
     var selectedSize = localStorage.getItem('selectedContractorSize');
     var searchVal = localStorage.getItem('searchContractor');
     // var url = '/Swipe-Admin/users';
@@ -736,7 +781,8 @@
       type: 'GET',
       data: {
         sizeContractorPage: selectedSize,
-        searchContractor: searchVal
+        searchContractor: searchVal,
+        orderContractor: clickContractor
         // search: searchVal
       },
       success: function (data) {
@@ -754,6 +800,7 @@
         $('#textContractor').html(textContractor);
         // $('#blackListTable').html(data);
         localStorage.setItem('sortedContractor', field);
+        localStorage.setItem('orderContractor', clickContractor);
 
 
       },
@@ -766,6 +813,7 @@
   function closeContractor () {
     var selectedSize = localStorage.getItem('selectedContractorSize');
     var sortedVal = localStorage.getItem('sortedContractor');
+    var order = localStorage.getItem('orderContractor');
     // e.preventDefault();
     var searchVal = 'null';
     // var url = '/Swipe-Admin/users';
@@ -777,7 +825,8 @@
       type: 'GET',
       data: {
         sizeContractorPage: selectedSize,
-        sortedContractor: sortedVal
+        sortedContractor: sortedVal,
+        orderContractor: order
         // search: searchVal
       },
       success: function (data) {
@@ -816,6 +865,7 @@
     $('#previousContractor').on('click','li',function(e) {
       var sortedVal = localStorage.getItem('sortedContractor');
       var searchBlack = localStorage.getItem('searchContractor');
+      var order = localStorage.getItem('orderContractor');
       e.preventDefault();
 
       var pageNumber = $('#pageNumberContractorPr').val();
@@ -829,7 +879,8 @@
         data:{
           sizeContractorPage: selectedSize,
           searchContractor: searchBlack,
-          sortedContractor: sortedVal
+          sortedContractor: sortedVal,
+          orderContractor: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#contractorTable').html();
@@ -857,6 +908,7 @@
 
     $('#nextContractor').on('click','li',function(e) {
       var sortedVal = localStorage.getItem('sortedContractor');
+      var order = localStorage.getItem('orderContractor');
       var searchBlack = localStorage.getItem('searchContractor');
       e.preventDefault();
       var pageNumber = $('#pageNumberContractorNext').val();
@@ -869,7 +921,8 @@
         data:{
           sizeContractorPage: selectedSize,
           searchContractor: searchBlack,
-          sortedContractor: sortedVal
+          sortedContractor: sortedVal,
+          orderContractor: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#contractorTable').html();
@@ -896,6 +949,7 @@
     });
     $('#sizeContractorPage').on('change', function() {
       var sortedVal = localStorage.getItem('sortedContractor');
+      var order = localStorage.getItem('orderContractor');
       var search = localStorage.getItem('searchContractor');
       selectedSize = $(this).val();
       // var url = '/Swipe-Admin/users';
@@ -911,7 +965,8 @@
           sizeContractorPage: selectedSize,
           pageContractor: page,
           searchContractor:search,
-          sortedContractor: sortedVal
+          sortedContractor: sortedVal,
+          orderContractor: order
         },
         contentType: "application/json"
       })
@@ -936,6 +991,7 @@
     $('#contractorPagination').on('click', 'li', function(e) {
       var selectedSize = localStorage.getItem('selectedContractorSize');
       var sortedVal = localStorage.getItem('sortedContractor');
+      var order = localStorage.getItem('orderContractor');
       var search = localStorage.getItem('searchContractor');
       e.preventDefault();
       var pageNumber = $(this).text();
@@ -955,7 +1011,8 @@
           sizeContractorPage: selectedSize,
           pageContractor: pageNumber,
           searchContractor:search,
-          sortedContractor: sortedVal
+          sortedContractor: sortedVal,
+          orderContractor: order
         }
       })
               .done(function(data) {
@@ -977,6 +1034,7 @@
       localStorage.removeItem('selectedContractorSize');
       localStorage.removeItem('pageContractor');
       localStorage.removeItem('sortedContractor');
+      localStorage.removeItem('orderContractor');
     });
 
   });
@@ -1027,7 +1085,23 @@
       }
     });
   }
+  var clickNotary = 1;
   function sortedNotary (field) {
+
+    if (field === localStorage.getItem("sortedNotary")){
+      clickNotary++;
+      if (clickNotary>2){
+        clickNotary = 1;
+      }
+    }
+    else if (localStorage.getItem("sortedNotary") === null && field === 'idUser' && clickNotary===1){
+      clickNotary = 2;
+    }
+    else {
+      if (clickNotary===2){
+        clickNotary = 1;
+      }
+    }
     var selectedSize = localStorage.getItem('selectedNotarySize');
     var searchVal = localStorage.getItem('searchNotary');
     // var url = '/Swipe-Admin/users';
@@ -1056,6 +1130,7 @@
         $('#textNotary').html(textNotary);
         // $('#blackListTable').html(data);
         localStorage.setItem('sortedNotary', field);
+        localStorage.setItem('orderNotary', clickNotary);
 
 
       },
@@ -1068,6 +1143,7 @@
   function closeNotary () {
     var selectedSize = localStorage.getItem('selectedNotarySize');
     var sortedVal = localStorage.getItem('sortedNotary');
+    var order = localStorage.getItem('orderNotary');
     // e.preventDefault();
     var searchVal = 'null';
     // var url = '/Swipe-Admin/users';
@@ -1079,7 +1155,8 @@
       type: 'GET',
       data: {
         sizeNotaryPage: selectedSize,
-        sortedNotary:sortedVal
+        sortedNotary:sortedVal,
+        orderNotary: order
         // search: searchVal
       },
       success: function (data) {
@@ -1116,6 +1193,7 @@
     }
     $('#previousNotary').on('click','li',function(e) {
       var sortedVal = localStorage.getItem('sortedNotary');
+      var order = localStorage.getItem('orderNotary');
       var searchBlack = localStorage.getItem('searchNotary');
       e.preventDefault();
 
@@ -1130,7 +1208,8 @@
         data:{
           sizeNotaryPage: selectedSize,
           searchNotary: searchBlack,
-          sortedNotary:sortedVal
+          sortedNotary:sortedVal,
+          orderNotary: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#notaryTable').html();
@@ -1158,6 +1237,7 @@
 
     $('#nextNotary').on('click','li',function(e) {
       var sortedVal = localStorage.getItem('sortedNotary');
+      var order = localStorage.getItem('orderNotary');
       var searchBlack = localStorage.getItem('searchNotary');
       e.preventDefault();
       var pageNumber = $('#pageNumberNotaryNext').val();
@@ -1170,7 +1250,8 @@
         data:{
           sizeNotaryPage: selectedSize,
           searchNotary: searchBlack,
-          sortedNotary: sortedVal
+          sortedNotary: sortedVal,
+          orderNotary: order
         },
         success: function(data) {
           var tableHtml = $(data).find('#notaryTable').html();
@@ -1197,6 +1278,7 @@
     });
     $('#sizeNotaryPage').on('change', function() {
       var sortedVal = localStorage.getItem('sortedNotary');
+      var order = localStorage.getItem('orderNotary');
       var search = localStorage.getItem('searchNotary');
       selectedSize = $(this).val();
       // var url = '/Swipe-Admin/users';
@@ -1212,7 +1294,8 @@
           sizeNotaryPage: selectedSize,
           pageNotary: page,
           searchNotary:search,
-          sortedNotary: sortedVal
+          sortedNotary: sortedVal,
+          orderNotary: order
         },
         contentType: "application/json"
       })
@@ -1236,6 +1319,7 @@
 
     $('#notaryPagination').on('click', 'li', function(e) {
       var sortedVal = localStorage.getItem('sortedNotary');
+      var order = localStorage.getItem('orderNotary');
       var search = localStorage.getItem('searchNotary');
       e.preventDefault();
       var pageNumber = $(this).text();
@@ -1255,7 +1339,8 @@
           sizeNotaryPage: selectedSize,
           pageNotary: pageNumber,
           searchNotary:search,
-          sortedNotary: sortedVal
+          sortedNotary: sortedVal,
+          orderNotary: order
         }
       })
               .done(function(data) {
@@ -1277,6 +1362,7 @@
       localStorage.removeItem('selectedNotarySize');
       localStorage.removeItem('pageNotary');
       localStorage.removeItem('sortedNotary');
+      localStorage.removeItem('orderNotary');
     });
 
   });

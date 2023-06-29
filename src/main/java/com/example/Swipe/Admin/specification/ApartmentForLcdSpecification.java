@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class ApartmentForLcdSpecification implements Specification<Apartment> {
     private int keyWord;
     private String sort;
+    private int order;
 
     private boolean isFrame;
 
@@ -32,7 +33,12 @@ public class ApartmentForLcdSpecification implements Specification<Apartment> {
                         )
                 );
             }
-            query.orderBy(criteriaBuilder.asc(root.get(sort)));
+            if (order == 1) {
+                query.orderBy(criteriaBuilder.asc(root.get(sort)));
+            }
+            else if (order==2){
+                query.orderBy(criteriaBuilder.desc(root.get(sort)));
+            }
         }
         return predicate;
 

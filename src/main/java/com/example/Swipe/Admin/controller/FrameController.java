@@ -49,12 +49,13 @@ public class FrameController {
             @RequestParam(name = "apartmentSize", required = false, defaultValue = "3") int apartmentSize,
             @RequestParam(name = "searchApartment", required = false, defaultValue = "0")int keyWord,
             @RequestParam(name = "sortedApartment", required = false, defaultValue = "idApartment")String field,
+            @RequestParam(name = "orderApartment", required = false, defaultValue = "1")int order,
             Model model){
         Pageable pageable = PageRequest.of(apartmentPage,apartmentSize);
         Frame frame = frameService.findById(idFrame);
         model.addAttribute("searchApartment", keyWord);
         model.addAttribute("frame", frame);
-        model.addAttribute("apartments", apartmentService.findAllForFramePagination(frame,pageable,keyWord,field ));
+        model.addAttribute("apartments", apartmentService.findAllForFramePagination(frame,pageable,keyWord,field,order ));
 
         model.addAttribute("sizeApartment", apartmentService.count(frame));
         return "admin/frame_edit";

@@ -40,16 +40,19 @@ public class MainUserPageController {
                             @RequestParam(name = "sortedClient", required = false,defaultValue = "idUser") String sortedClient,
                             @RequestParam(name = "sortedContractor", required = false,defaultValue = "idUser") String sortedContractor,
                             @RequestParam(name = "sortedNotary", required = false,defaultValue = "idUser") String sortedNotary,
+                            @RequestParam(name = "orderClient", required = false,defaultValue = "1") int orderClient,
+                            @RequestParam(name = "orderContractor", required = false,defaultValue = "1") int orderContractor,
+                            @RequestParam(name = "orderNotary", required = false,defaultValue = "1") int orderNotary,
                             Model model) {
         Pageable pageClient = PageRequest.of(page,sizePage);
         Pageable pageable = PageRequest.of(pageContractor,sizePageContractor);
         Pageable pageableNotary = PageRequest.of(pageNotary,sizePageNotary);
-        model.addAttribute("users", userServiceImpl.findAllByTypePagination(TypeUser.CLIENT, pageClient,keyWordClient,sortedClient).getContent());
-        model.addAttribute("pageUser", userServiceImpl.findAllByTypePagination(TypeUser.CLIENT, pageClient,keyWordClient,sortedClient));
-        model.addAttribute("contractors", userServiceImpl.findAllByTypePagination(TypeUser.CONTRACTOR, pageable,keyWordContractor,sortedContractor).getContent());
-        model.addAttribute("pageContractor", userServiceImpl.findAllByTypePagination(TypeUser.CONTRACTOR, pageable,keyWordContractor,sortedContractor));
-        model.addAttribute("notaries", userServiceImpl.findAllByTypePagination(TypeUser.NOTARY,pageableNotary,keyWordNotary,sortedNotary).getContent());
-        model.addAttribute("pageNotary", userServiceImpl.findAllByTypePagination(TypeUser.NOTARY,pageableNotary,keyWordNotary,sortedNotary));
+        model.addAttribute("users", userServiceImpl.findAllByTypePagination(TypeUser.CLIENT, pageClient,keyWordClient,sortedClient,orderClient).getContent());
+        model.addAttribute("pageUser", userServiceImpl.findAllByTypePagination(TypeUser.CLIENT, pageClient,keyWordClient,sortedClient,orderClient));
+        model.addAttribute("contractors", userServiceImpl.findAllByTypePagination(TypeUser.CONTRACTOR, pageable,keyWordContractor,sortedContractor,orderContractor).getContent());
+        model.addAttribute("pageContractor", userServiceImpl.findAllByTypePagination(TypeUser.CONTRACTOR, pageable,keyWordContractor,sortedContractor,orderContractor));
+        model.addAttribute("notaries", userServiceImpl.findAllByTypePagination(TypeUser.NOTARY,pageableNotary,keyWordNotary,sortedNotary,orderNotary).getContent());
+        model.addAttribute("pageNotary", userServiceImpl.findAllByTypePagination(TypeUser.NOTARY,pageableNotary,keyWordNotary,sortedNotary,orderContractor));
 
 
         model.addAttribute("typeClient", TypeUser.CLIENT );

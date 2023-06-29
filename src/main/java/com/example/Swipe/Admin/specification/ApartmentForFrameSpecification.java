@@ -13,6 +13,7 @@ public class ApartmentForFrameSpecification implements Specification<Apartment> 
     private int keyWord;
     private Frame frame;
     private String sort;
+    private int order;
 
     @Override
     public Predicate toPredicate(Root<Apartment> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -26,7 +27,12 @@ public class ApartmentForFrameSpecification implements Specification<Apartment> 
                        criteriaBuilder.equal(root.get("number"),keyWord)
                );
         }
-        query.orderBy(criteriaBuilder.asc(root.get(sort)));
+        if (order == 1) {
+            query.orderBy(criteriaBuilder.asc(root.get(sort)));
+        }
+        else if (order==2){
+            query.orderBy(criteriaBuilder.desc(root.get(sort)));
+        }
         return predicate;
 
 
