@@ -13,29 +13,45 @@
   <div th:insert="admin.shared/header::header"></div>
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
-  <div class="content-wrapper" style="padding-left: 50px">
+  <div class="content-wrapper">
+    <div class="content">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h4>Пользователь</h4>
+            </div>
+            <div class="col-sm-6 form-check form-switch">
+              <div class="breadcrumb float-sm-right" style="display: flex; margin-right: 50px">
+                  <div>
+                    <h4 for="flexSwitchCheckDefault" style="margin-right: 5px">Уведомление</h4>
+                  </div>
+                  <div>
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="userAddInfoDTO.callSms" style="margin-left: 5px; margin-top: 7px; width: 35px;height: 20px">
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </div>
+      <div class="card-body">
     <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_user}" th:object="${user}">
       <input type="hidden" name="type" th:value="${type}">
       <input type="hidden" name="idUser" value="0">
-    <div style="display: flex; justify-content: space-between">
-      <h4 class="mb-3">Пользователь</h4>
-      <div class="form-check form-switch" style="display: flex; margin-right: 50px" >
-        <div>
-          <h4 for="flexSwitchCheckDefault" style="margin-right: 5px">Уведомление</h4>
-        </div>
-        <div>
-          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="userAddInfoDTO.callSms"  style="margin-left: 5px; margin-top: 7px; width: 35px;height: 20px"  th:checked="${user.getUserAddInfoDTO().isCallSms()}">
-        </div>
-      </div>
-    </div>
-    <div class="col-md-7 col-lg-8">
+<!--    <div style="display: flex; justify-content: space-between">-->
+<!--      <h4 class="mb-3"></h4>-->
+<!--      <div class=""  >-->
+<!--        -->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="col-md-7 col-lg-8">-->
 
 
 
-        <div class="row g-3">
+        <div class="row">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Имя</label>
-            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..."  required="" th:value="${user.getName()}">
+            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..."   th:value="${user.getName()}">
             <div th:if="${#fields.hasErrors('name')}">
               <div class="text-danger">
                 <p th:errors="*{name}"></p>
@@ -45,7 +61,7 @@
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Фамилия</label>
-            <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..."  required="" th:value="${user.getSurname()}">
+            <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..."   th:value="${user.getSurname()}">
             <div th:if="${#fields.hasErrors('surname')}">
               <div class="text-danger">
                 <p th:errors="*{surname}"></p>
@@ -54,7 +70,7 @@
           </div>
           <div class="col-sm-6">
             <label for="mail" class="form-label">Почта</label>
-            <input type="text" class="form-control" name = "mail" id="mail" placeholder="you@example.com"  required="" th:value="${user.getMail()}">
+            <input type="email" class="form-control" name = "mail" id="mail" placeholder="you@example.com"   th:value="${user.getMail()}">
             <div th:if="${#fields.hasErrors('mail')}">
               <div class="text-danger">
                 <p th:errors="*{mail}"></p>
@@ -65,26 +81,30 @@
             <label for="username" class="form-label">Номер</label>
             <div class="input-group has-validation">
               <span class="input-group-text">+380</span>
-              <input type="number" class="form-control" name ="number" id="username" placeholder="Введите номер..."  required="" th:value="${user.getNumber()}">
-              <div th:if="${#fields.hasErrors('number')}">
-                <div class="text-danger">
-                  <p th:errors="*{number}"></p>
-                </div>
+              <input type="number" class="form-control" name ="number" id="username" placeholder="Введите номер..."  th:value="${user.getNumber()}">
+
+            </div>
+            <div th:if="${#fields.hasErrors('number')}">
+              <div class="text-danger">
+                <p th:errors="*{number}"></p>
               </div>
             </div>
           </div>
           <div class="col-sm-6">
             <label for="username" class="form-label">Подписка</label>
             <div class="input-group has-validation">
-              <input type="date" class="form-control" name ="userAddInfoDTO.dateSub" id="sub" placeholder="Введите номер..."  required="" th:value="${user.getUserAddInfoDTO().getDateSub()}">
-              <div class="invalid-feedback">
-                Введите номер...
+              <input type="date" class="form-control" name ="userAddInfoDTO.dateSub" id="sub" placeholder="Введите номер..."  th:value="${user.getUserAddInfoDTO().getDateSub()}">
+            </div>
+            <div th:if="${#fields.hasErrors('userAddInfoDTO.dateSub')}">
+              <div class="text-danger">
+                <p th:errors="*{userAddInfoDTO.dateSub}"></p>
               </div>
             </div>
           </div>
+
           <div class="col-sm-6">
 
-            <div class="form-floating">
+            <div class="form-floating" style="margin-top: 15px">
               <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="userAddInfoDTO.typeNotification">
                 <option value="ME" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).ME)}">Мне</option>
                 <option value="MEANDAGENT" th:selected="${user.getUserAddInfoDTO().getTypeNotification().equals(T(com.example.Swipe.Admin.enums.TypeNotification).MEANDAGENT)}" th:if="${user.getAgent()!=null}">Мне и агенту</option>
@@ -102,11 +122,6 @@
               <img th:src="@{/admin/dist/img/default.jpg}" id="img" style="width: 75px; height: 75px" alt="null">
 
             <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px" accept=".jpg,.jpeg,.png">
-              <div th:if="${#fields.hasErrors('filename')}">
-                <div class="text-danger">
-                  <p th:errors="*{filename}"></p>
-                </div>
-              </div>
             </div>
             <script>
               inputImg.onchange = evt => {
@@ -117,40 +132,75 @@
               }
             </script>
           </div>
-<!--            <div> <h6>Агент</h6> </div>-->
-<!--            <div>-->
-<!--              <table class="table table-striped" style="margin: 20px">-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                  <th scope="col"><p ></p></th>-->
-<!--                  <th scope="col"><p ></p></th>-->
-<!--                  <th scope="col">-->
-<!--&lt;!&ndash;                    th:href="@{/agent_edit/{id}(id = ${user.getAgent().getIdAgent()})/{idUser}(idUser = ${user.getIdUser()})}"&ndash;&gt;-->
-<!--                    <div style="display: flex">-->
-<!--                      <a >-->
-<!--                        <button type="button" name="idUser" class="btn btn-info btn-sm">-->
-<!--                          <i class="fas fa-pencil">-->
-<!--                          </i>-->
-<!--                        </button>-->
-<!--                      </a>-->
-<!--                    </div>-->
-<!--                  </th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--              </table>-->
-<!--          </div>-->
+          <div th:if="${#fields.hasErrors('filename')}">
+            <div class="text-danger">
+              <p th:errors="*{filename}"></p>
+            </div>
           </div>
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
+            <div> <h4>Агент</h4> </div>
+            <div>
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label for="firstName" class="form-label">Имя</label>
+                  <input type="text" class="form-control" name="agent.name" id="firstNameAgent" placeholder="Введите имя..."  th:value="${user.getAgent().getName()}">
+                  <div th:if="${#fields.hasErrors('agent.name')}">
+                    <div class="text-danger">
+                      <p th:errors="*{agent.name}"></p>
+                    </div>
+                  </div>
+                </div>
 
+                <div class="col-sm-6">
+                  <label for="lastName" class="form-label">Фамилия</label>
+                  <input type="text" class="form-control" name="agent.surname" id="lastNameAgent"  placeholder="Введите фамилию..." th:value="${user.getAgent().getSurname()}">
+                  <div th:if="${#fields.hasErrors('agent.surname')}">
+                    <div class="text-danger">
+                      <p th:errors="*{agent.surname}"></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <label for="mail" class="form-label">Почта</label>
+                  <input type="text" class="form-control" name = "agent.mail" id="mailAgent" placeholder="you@example.com"  th:value="${user.getAgent().getMail()}">
+                  <!--            <p class="text-danger" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>-->
+                  <div th:if="${#fields.hasErrors('agent.mail')}">
+                    <div class="text-danger">
+                      <p th:errors="*{agent.mail}"></p>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-sm-6">
+                  <label for="username" class="form-label">Номер</label>
+                  <div class="input-group has-validation">
+                    <span class="input-group-text">+380</span>
+                    <input type="number" class="form-control" name ="agent.number" id="usernameAgent" placeholder="Введите номер..." th:value="${user.getAgent().getNumber()}">
+
+                  </div>
+                  <div th:if="${#fields.hasErrors('agent.number')}">
+                    <div class="text-danger">
+                      <p th:errors="*{agent.number}"></p>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          </div>
         </div>
+      <div style="display: flex; justify-content: center; margin-top: 20px">
+        <button class="w-50 btn btn-primary btn-lg" type="submit">Сохранить</button>
+      </div>
+<!--        </div>-->
       </form>
+      </div>
+    </div>
 
 
     </div>
+  <div th:insert="admin.shared/footer::footer"></div>
   </div>
 
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 
 

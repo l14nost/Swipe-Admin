@@ -8,6 +8,6 @@ public class RedirectController {
 
     @GetMapping("/")
     public String redirectToMain(){
-        return "redirect:/main";
+        return "redirect:/statistics";
     }
 }

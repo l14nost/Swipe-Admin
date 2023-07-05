@@ -20,7 +20,7 @@ public class MainHousesPageController {
     private final LCDServiceImpl lcdService;
     private final ApartmentServiceImpl apartmentService;
 
-    @GetMapping("/houses")
+    @GetMapping("/announcement")
     public String housesMain(@RequestParam(name = "lcdPage",required = false,defaultValue = "0") int lcdPage,
                              @RequestParam(name = "lcdSize",required = false,defaultValue = "3") int lcdSize,
                              @RequestParam(name = "apartmentPage",required = false,defaultValue = "0") int apartmentPage,

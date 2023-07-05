@@ -10,11 +10,11 @@ import javax.validation.constraints.Size;
 @Builder
 public class AdminDto {
     int idUser;
-    @Size(min = 5,max = 255)
-    @Pattern(message = "Неправильный формат почты (Ex:you@example.com)", regexp = "^((([0-9A-Za-z]{1}[-0-9A-z\\.]{0,30}[0-9A-Za-z]?)|([0-9А-Яа-я]{1}[-0-9А-я\\.]{0,30}[0-9А-Яа-я]?))@([-A-Za-z]{1,}\\.){1,}[-A-Za-z]{2,})$")
+    @Size(min = 5,max = 100, message = "Размер почты должен быть меньше 100 символов и больше 5")
+    @Pattern(message = "Неправильный формат почты (Ex:you@example.com)", regexp = "^((([0-9A-Za-z]{1}[-0-9A-z\\.]{0,30}[0-9A-Za-z]?))@([-A-Za-z]{1,}\\.){1,}[-A-Za-z]{2,})$")
     String mail;
-    @Size(max = 255)
+    @Size(max = 255, message = "Размер пароля должен быть меньше 255 символов")
     String password;
-    @Size(max = 255)
+    @Size(max = 255, message = "Размер пароля должен быть меньше 255 символов")
     String confirmPassword;
 }

@@ -47,14 +47,14 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
 
-    public Page<ApartmentDTO> findAllByFramePagination(Pageable pageable,int keyWord,String field){
-        if(keyWord != 0){
-            ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().isFrame(false).keyWord(keyWord).sort(field).build();
-            return apartmentRepo.findAll(apartmentForLcdSpecification,pageable).map(ApartmentMapper::apply);
-        }
-        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().isFrame(false).sort(field).build();
-        return apartmentRepo.findAll(apartmentForLcdSpecification,pageable).map(ApartmentMapper::apply);
-    }
+//    public Page<ApartmentDTO> findAllByFramePagination(Pageable pageable,int keyWord,String field){
+//        if(keyWord != 0){
+//            ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().isFrame(false).keyWord(keyWord).sort(field).build();
+//            return apartmentRepo.findAll(apartmentForLcdSpecification,pageable).map(ApartmentMapper::apply);
+//        }
+//        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().isFrame(false).sort(field).build();
+//        return apartmentRepo.findAll(apartmentForLcdSpecification,pageable).map(ApartmentMapper::apply);
+//    }
     public Page<ApartmentDTO> findAllByFramePagination(Pageable pageable,int keyWord,String field,int order){
         if(keyWord != 0){
             ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().isFrame(false).keyWord(keyWord).order(order).sort(field).build();
@@ -64,15 +64,15 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepo.findAll(apartmentForLcdSpecification,pageable).map(ApartmentMapper::apply);
     }
 
-    public Page<ApartmentDTO> findAllForFramePagination(Frame frame,Pageable pageable, int keyWord, String field){
-        if (keyWord!=0){
-            ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).sort(field).build();
-            return apartmentRepo.findAll(apartmentForFrameSpecification,pageable).map(ApartmentMapper::apply);
-        }
-        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).sort(field).build();
-        return apartmentRepo.findAll(apartmentForFrameSpecification,pageable).map(ApartmentMapper::apply);
-
-    }
+//    public Page<ApartmentDTO> findAllForFramePagination(Frame frame,Pageable pageable, int keyWord, String field){
+//        if (keyWord!=0){
+//            ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).sort(field).build();
+//            return apartmentRepo.findAll(apartmentForFrameSpecification,pageable).map(ApartmentMapper::apply);
+//        }
+//        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).sort(field).build();
+//        return apartmentRepo.findAll(apartmentForFrameSpecification,pageable).map(ApartmentMapper::apply);
+//
+//    }
     public Page<ApartmentDTO> findAllForFramePagination(Frame frame,Pageable pageable, int keyWord, String field,int order){
         if (keyWord!=0){
             ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(keyWord).frame(frame).sort(field).order(order).build();
@@ -347,6 +347,9 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     public int count() {
         return apartmentRepo.countByFrameIsNull();
+    }
+    public int countNotNull() {
+        return apartmentRepo.countByFrameIsNotNull();
     }
     public int count(Frame frame) {
         return apartmentRepo.countByFrame(frame);

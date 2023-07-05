@@ -35,6 +35,9 @@ public class ClientMapper{
             UserAddInfo userAddInfo = UserAddInfoMapper.toEntity(userDTO.getUserAddInfoDTO());
             user.setUserAddInfo(userAddInfo);
         }
+        if (userDTO.getAgent()!=null){
+            user.setAgent(AgentMapper.toEntity(userDTO.getAgent()));
+        }
 //        if (!userDTO.getFilename().isEmpty()) {
 //            File uploadDirGallery = new File(upload);
 //            if (!uploadDirGallery.exists()) {

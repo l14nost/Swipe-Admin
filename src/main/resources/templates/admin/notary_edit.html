@@ -21,7 +21,7 @@
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Имя</label>
-            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..." th:value="${notary.getName()}" required="">
+            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..." th:value="${notary.getName()}">
             <div class="invalid-feedback">
               Введите имя...
             </div>
@@ -29,14 +29,14 @@
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Фамилия</label>
-            <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..." th:value="${notary.getSurname()}" required="">
+            <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..." th:value="${notary.getSurname()}">
             <div class="invalid-feedback">
               Введите фамилию...
             </div>
           </div>
           <div class="col-sm-6">
             <label for="mail" class="form-label">Почта</label>
-            <input type="email" class="form-control" name = "mail" id="mail" placeholder="you@example.com" th:value="${notary.getMail()}" required="">
+            <input type="email" class="form-control" name = "mail" id="mail" placeholder="you@example.com" th:value="${notary.getMail()}">
             <div class="invalid-feedback">
               Введите почту...
             </div>
@@ -45,7 +45,7 @@
             <label for="username" class="form-label">Номер</label>
             <div class="input-group has-validation">
               <span class="input-group-text">+380</span>
-              <input type="number" class="form-control" name ="number" id="username" placeholder="Введите номер..." th:value="${notary.getNumber()}" required="">
+              <input type="number" class="form-control" name ="number" id="username" placeholder="Введите номер..." th:value="${notary.getNumber()}">
               <div class="invalid-feedback">
                 Введите номер...
               </div>
@@ -58,10 +58,11 @@
 
 
     </div>
+    <div th:insert="admin.shared/footer::footer"></div>
   </div>
 
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 
 

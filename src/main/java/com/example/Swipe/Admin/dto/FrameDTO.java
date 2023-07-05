@@ -5,6 +5,8 @@ import com.example.Swipe.Admin.entity.LCD;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 @Data
 @Builder

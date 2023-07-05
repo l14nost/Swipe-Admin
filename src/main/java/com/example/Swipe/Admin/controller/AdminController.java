@@ -20,6 +20,7 @@ import javax.validation.Valid;
 public class AdminController {
     private final UserServiceImpl userService;
 
+
     @GetMapping("/profile")
     public String profileAdmin(Model model){
         model.addAttribute("user",userService.getCurrentUser());
@@ -40,8 +41,8 @@ public class AdminController {
             model.addAttribute("user",adminDto);
             return "admin/admin_profile";
         }
-        if (adminDto.getMail().equals( adminMail())){
-            return "redirect:/main";
+        if (adminDto.getMail().equals( adminMail()) && (new BCryptPasswordEncoder().matches(adminDto.getPassword(), userService.getCurrentUser().getPassword()) || adminDto.getPassword().isEmpty())){
+            return "redirect:/statistics";
         }
         userService.updateAdmin(adminDto);
         return "redirect:/logout";

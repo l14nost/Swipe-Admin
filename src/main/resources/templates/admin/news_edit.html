@@ -13,16 +13,26 @@
   <div th:insert="admin.shared/header::header"></div>
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
-  <div class="content-wrapper" style="padding-left: 50px">
-    <div class="col-md-7 col-lg-8">
-      <h4 class="mb-3">Новость</h4>
+  <div class="content-wrapper">
+    <div class="content">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h4 class="m-0">Новость</h4>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <div class="card-body">
+<!--    <div class="col-md-7 col-lg-8">-->
       <form class="needs-validation" method="post" th:action="@{/edit_news/{idNews}(idNews = ${news.getIdNews()})}" th:object="${news}">
         <input type="hidden" name="idNews" th:value="${news.getIdNews()}">
         <input type="hidden" name="idLcd" th:value="${idLcd}">
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Заголовок</label>
-            <input type="text" class="form-control" name="title" id="firstName" placeholder="Введите заголовок..." th:value="${news.getTitle()}" required="">
+            <input type="text" class="form-control" name="title" id="firstName" placeholder="Введите заголовок..." th:value="${news.getTitle()}" >
             <div th:if="${#fields.hasErrors('title')}">
               <div class="text-danger">
                 <p th:errors="*{title}"></p>
@@ -30,7 +40,18 @@
             </div>
           </div>
 
+
           <div class="col-sm-6">
+            <label for="mail" class="form-label">Дата</label>
+            <input type="date" class="form-control" name = "date" id="mail" placeholder="you@example.com" th:value="${news.getDate()}">
+            <div th:if="${#fields.hasErrors('date')}">
+              <div class="text-danger">
+                <p th:errors="*{date}"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12">
             <label for="lastName" class="form-label">Описание</label>
             <textarea class="form-control" name="description" th:field="*{description}" id="lastName" placeholder="Введите описание..." th:value="${news.getDescription()}" th:placeholder="${news.getDescription()}" ></textarea>
             <div th:if="${#fields.hasErrors('description')}">
@@ -39,26 +60,20 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
-            <label for="mail" class="form-label">Дата</label>
-            <input type="date" class="form-control" name = "date" id="mail" placeholder="you@example.com" th:value="${news.getDate()}" required="">
-            <div th:if="${#fields.hasErrors('date')}">
-              <div class="text-danger">
-                <p th:errors="*{date}"></p>
-              </div>
-            </div>
+          <div class="d-flex justify-content-center">
+        <button class="w-50 btn btn-primary btn-lg" type="submit">Сохранить</button>
           </div>
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
-
         </div>
       </form>
+      </div>
+    </div>
 
 
     </div>
-  </div>
+    <div th:insert="admin.shared/footer::footer"></div>
 
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 
 

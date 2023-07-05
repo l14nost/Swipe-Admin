@@ -1,7 +1,9 @@
 package com.example.Swipe.Admin.service.impl;
 
 import com.example.Swipe.Admin.dto.LcdDTO;
+import com.example.Swipe.Admin.entity.Documents;
 import com.example.Swipe.Admin.entity.LCD;
+import com.example.Swipe.Admin.entity.Photo;
 import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.mapper.LcdMapper;
 import com.example.Swipe.Admin.repository.LCDRepo;
@@ -16,8 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,14 +39,14 @@ public class LCDServiceImpl implements LCDService {
     private final UserServiceImpl userService;
     private final ApartmentServiceImpl apartmentService;
 
-    public Page<LcdDTO> findAllPagination(Pageable pageable,String keyWord,String sort){
-        if(!keyWord.equals("null")){
-            LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord(keyWord).sort(sort).build();
-            return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
-        }
-        LcdSpecification lcdSpecification = LcdSpecification.builder().sort(sort).build();
-        return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
-    }
+//    public Page<LcdDTO> findAllPagination(Pageable pageable,String keyWord,String sort){
+//        if(!keyWord.equals("null")){
+//            LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord(keyWord).sort(sort).build();
+//            return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
+//        }
+//        LcdSpecification lcdSpecification = LcdSpecification.builder().sort(sort).build();
+//        return lcdRepo.findAll(lcdSpecification,pageable).map(LcdMapper::apply);
+//    }
     public Page<LcdDTO> findAllPagination(Pageable pageable,String keyWord,String sort,int order){
         if(!keyWord.equals("null")){
             LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord(keyWord).sort(sort).order(order).build();
@@ -99,6 +103,52 @@ public class LCDServiceImpl implements LCDService {
                 lcd.setMainPhoto("../uploads/" + fileNameGallery);
             } else lcd.setMainPhoto("../admin/dist/img/default.jpg");
         }else lcd.setMainPhoto("../admin/dist/img/default.jpg");
+
+        if (lcdDTO.getGallery()!=null){
+            List<Photo> photoList = new ArrayList<>();
+            for (int i =0; i< lcdDTO.getGallery().size();i++){
+                if (!lcdDTO.getGallery().get(i).isEmpty()) {
+                    File uploadDirGallery = new File(upload);
+                    if (!uploadDirGallery.exists()) {
+                        uploadDirGallery.mkdir();
+                    }
+                    String uuid = UUID.randomUUID().toString();
+                    String fileNameGallery = uuid + "-" + lcdDTO.getGallery().get(i).getOriginalFilename();
+                    String resultNameGallery = upload + "" + fileNameGallery;
+                    try {
+                        lcdDTO.getGallery().get(i).transferTo(new File((resultNameGallery)));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Photo photo = Photo.builder().fileName("../uploads/" + fileNameGallery).lcd(lcd).build();
+                    photoList.add(photo);
+                }
+            }
+            lcd.setPhotoList(photoList);
+        }
+
+        if (lcdDTO.getDocumentsFiles()!=null){
+            List<Documents> documentsList = new ArrayList<>();
+            for (int i =0; i< lcdDTO.getDocumentsFiles().size();i++){
+                if (!lcdDTO.getDocumentsFiles().get(i).isEmpty()) {
+                    File uploadDirGallery = new File(upload);
+                    if (!uploadDirGallery.exists()) {
+                        uploadDirGallery.mkdir();
+                    }
+                    String uuid = UUID.randomUUID().toString();
+                    String fileNameGallery = uuid + "-" + lcdDTO.getDocumentsFiles().get(i).getOriginalFilename();
+                    String resultNameGallery = upload + "" + fileNameGallery;
+                    try {
+                        lcdDTO.getDocumentsFiles().get(i).transferTo(new File((resultNameGallery)));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Documents documents = Documents.builder().fileName("../uploads/" + fileNameGallery).name(lcdDTO.getDocumentsFiles().get(i).getOriginalFilename()).lcd(lcd).build();
+                   documentsList.add(documents);
+                }
+            }
+            lcd.setDocuments(documentsList);
+        }
         lcdRepo.save(lcd);
     }
     @Override

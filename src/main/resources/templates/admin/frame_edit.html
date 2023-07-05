@@ -13,9 +13,19 @@
   <div th:insert="admin.shared/header::header"></div>
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
-  <div class="content-wrapper" style="padding-left: 50px">
-    <div class="col-md-7 col-lg-8">
-      <h5 class="mb-3">Корпус</h5>
+  <div class="content-wrapper">
+
+              <div class="content">
+                  <div class="content-header">
+                      <div class="container-fluid">
+                          <div class="row mb-2">
+                              <div class="col-sm-6">
+                                  <h4 class="m-0">Корпус</h4>
+                              </div><!-- /.col -->
+                          </div><!-- /.row -->
+                      </div><!-- /.container-fluid -->
+                  </div>
+                  <div class="card-body">
       <form class="needs-validation" method="post" th:action = "@{/frame_update}">
 
           <input type="hidden" name = "idFrame" th:value="${frame.getIdFrame()}">
@@ -30,25 +40,27 @@
           </div>
         </div>
         <div>
-          <div style="text-align: center">
-            <h3>Список квартир от застройщика</h3>
+            <div style="display: flex; justify-content: space-between">
+          <div style="margin-top: 10px">
+            <h5>Список квартир от застройщика</h5>
           </div>
-            <div style="display: flex; justify-content: right">
+            <div>
                 <nav class="navbar bg-body-tertiary" id="apartmentSearch">
                     <div class="container-fluid ">
                         <div style="display: flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputApartment" name="search">
+                            <input class="form-control me-2" type="search" placeholder="Поиск по номеру" aria-label="Search" id="searchInputApartment" name="search">
                             <button class="btn btn-outline-info" type="button" onclick="searchApartment()">Search</button>
                         </div>
                     </div>
                 </nav>
             </div>
+            </div>
           <div id="tableApartment">
-              <div id="closeApartment" th:if="${searchApartment!=0}" style="margin-left: 20px">
+              <div id="closeApartment" th:if="${searchApartment!=0}">
                   <i th:text="'Результат поиска по значению:'+${searchApartment}"></i>
                   <a onclick="closeApartment()"><i class="fas fa-times"></i></a>
               </div>
-            <table class="table table-striped" style="margin: 20px" id="apartmentTable">
+            <table class="table table-striped" id="apartmentTable">
               <thead>
               <tr>
                   <th scope="col">
@@ -134,15 +146,19 @@
 
 
         </div>
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
+          <div class="d-flex justify-content-center">
+        <button class="w-50 btn btn-primary btn-lg" type="submit">Сохранить</button>
+          </div>
       </form>
-
+          </div>
+      </div>
 
     </div>
+      <div th:insert="admin.shared/footer::footer"></div>
   </div>
 
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 <script>
   function addApartment(idFrame){

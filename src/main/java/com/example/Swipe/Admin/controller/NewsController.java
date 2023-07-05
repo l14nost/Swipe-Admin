@@ -74,8 +74,10 @@ public class NewsController {
 //    }
     @PostMapping("/add_news/{idLcd}")
     public String saveNews(@PathVariable int idLcd,@ModelAttribute(name = "news") @Valid NewsDTO newsDTO, BindingResult bindingResult, Model model){
-        if (LocalDate.now().isBefore(newsDTO.getDate())){
-            bindingResult.addError(new FieldError("news", "date", "Некоректная дата"));
+        if (newsDTO.getDate()!=null) {
+            if (LocalDate.now().isBefore(newsDTO.getDate())) {
+                bindingResult.addError(new FieldError("news", "date", "Некоректная дата"));
+            }
         }
         if (bindingResult.hasErrors()){
             System.out.println(bindingResult.getAllErrors());

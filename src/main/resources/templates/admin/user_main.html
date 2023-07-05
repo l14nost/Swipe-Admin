@@ -28,15 +28,17 @@
   <div th:replace="~{/admin.shared/left_sidebar}"></div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+    <section class="content">
+      <div class="card-body">
     <div id="allUserContent">
-    <div style="text-align: center">
+    <div style="margin-left: 20px">
       <h3>Список клиентов</h3>
     </div>
       <div style="display: flex; justify-content: right">
         <nav class="navbar bg-body-tertiary" id="clientSearch">
           <div class="container-fluid ">
             <div style="display: flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInput" name="search">
+              <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInput" name="search">
               <button class="btn btn-outline-info" type="button" onclick="searchClient()">Search</button>
             </div>
           </div>
@@ -65,9 +67,8 @@
           <th scope="col">
             <form method="get" th:action="@{/add_user}">
               <input type="hidden" name="type" th:value="${typeClient}">
-                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add client">
-                <i class="fas fa-plus">
-                </i>
+                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить клиента">
+                  Добавить
               </button>
             </form></th>
         </tr>
@@ -80,21 +81,42 @@
             <td>
               <div style="display: flex">
               <form th:action="@{/user_edit/{id}(id=${user.getIdUser()})}"  method="get" >
-                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit client">
+                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать клиента">
                   <i class="fas fa-pencil">
                   </i>
                 </button>
               </form>
-              <form th:action="@{/delete_user/{id}(id = ${user.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Delete client">
-                <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
-                  <i class="fas fa-trash">
-                  </i>
+<!--              <form th:action="@{/delete_user/{id}(id = ${user.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Удалить клиента">-->
+                <button type="button" class="btn btn-danger btn-sm deleteUser" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteUser" th:data-id="${user.getIdUser()}">
+                  <i class="fas fa-trash"></i>
                 </button>
 
-              </form>
+                <div class="modal fade" id="confirmDeleteUser" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Удаление пользователя</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Вы уверены, что хотите удалить этого пользователя?
+                      </div>
+                      <div class="modal-footer">
+                        <!-- Закрываем модальное окно, если пользователь передумал -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
+                        <button type="submit" class="btn btn-danger" onclick="deleteUser()">Удалить</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+<!--              </form>-->
                 <form th:action="@{/add_to_black_list}"  method="post" >
                   <input type="hidden" name="idUser" th:value="${user.getIdUser()}" />
-                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add to blacklist">
+                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить в черный список">
                     <i class="nav-icon fas fa-calendar-minus"></i>
                   </button>
 
@@ -125,7 +147,17 @@
         <ul class="pagination" id="userPagination">
 
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageUser.getTotalPages()-1)}" th:if="${pageUser.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+          <li style="margin-left: 5px; margin-right: 5px" th:if="${pageUser.getNumber()>1 && pageUser.getTotalPages()>6}"><p >...</p></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li class="page-item"  th:each="p: ${#numbers.sequence(pageUser.getNumber()-1, pageUser.getNumber()+1)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()>1 && pageUser.getNumber()<pageUser.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+          <!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+          <li class="page-item"  th:each="p: ${#numbers.sequence(pageUser.getTotalPages()-3, pageUser.getTotalPages()-2)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()>pageUser.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li style="margin-left: 5px; margin-right: 5px" th:if="${pageUser.getNumber()<pageUser.getTotalPages()-2 && pageUser.getTotalPages()>6}"><p>...</p></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageUser.getTotalPages()-2)}" th:if="${pageUser.getTotalPages()>2 && pageUser.getTotalPages()<=6 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li class="page-item"><a class="page-link" href="#" th:text="${pageUser.getTotalPages()}" th:if="${pageUser.getTotalPages()>1}"></a></li>
         </ul>
         <ul class="pagination" id="nextClient">
           <li class="page-item" th:hidden="${pageUser.getNumber()==pageUser.getTotalPages()-1}" th:if="${pageUser.getTotalPages()>1}">
@@ -148,14 +180,14 @@
       </div>
   </div>
     <div>
-      <div style="text-align: center">
+      <div style="margin-left: 20px">
         <h3>Список застройщик</h3>
       </div>
       <div style="display: flex; justify-content: right">
         <nav class="navbar bg-body-tertiary" id="contractorSearch">
           <div class="container-fluid ">
             <div style="display: flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputContractor" name="search">
+              <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInputContractor" name="search">
               <button class="btn btn-outline-info" type="button" onclick="searchContractor()">Search</button>
             </div>
           </div>
@@ -184,9 +216,8 @@
             <th scope="col">
               <form method="get" th:action="@{/add_user}">
                 <input type="hidden" name="type" th:value="${typeContractor}">
-                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add contractor">
-                  <i class="fas fa-plus">
-                  </i>
+                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить застройщика">
+                  Добавить
                 </button>
               </form>
             </th>
@@ -200,22 +231,21 @@
             <td>
               <div style="display: flex">
                 <form th:action="@{/user_edit/{id}(id=${contractor.getIdUser()})}"  method="get" >
-                  <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit contractor">
+                  <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать застройщика">
                     <i class="fas fa-pencil">
                     </i>
                   </button>
                 </form>
-                <form th:action="@{/delete_user/{id}(id = ${contractor.getIdUser()})}" method="post" >
-                  <input type="hidden" name="id" th:value="${contractor.getIdUser()}" />
-                  <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Delete contractor">
-                    <i class="fas fa-trash">
-                    </i>
-                  </button>
+<!--                <form th:action="@{/delete_user/{id}(id = ${contractor.getIdUser()})}" method="post" >-->
+                <button type="button" class="btn btn-danger btn-sm deleteUser" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteUser" th:data-id="${contractor.getIdUser()}">
+                  <i class="fas fa-trash"></i>
+                </button>
 
-                </form>
+
+<!--                </form>-->
                 <form th:action="@{/add_to_black_list}"  method="post" >
                   <input type="hidden" name="idUser" th:value="${contractor.getIdUser()}" />
-                  <button type="submit" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Add to blacklist" style="margin-left: 10px">
+                  <button type="submit" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Добавить в черный список" style="margin-left: 10px">
                     <i class="nav-icon fas fa-calendar-minus"></i>
                   </button>
 
@@ -268,14 +298,14 @@
       </div>
     </div>
     <div>
-      <div style="text-align: center">
+      <div style="margin-left: 20px">
         <h3>Список нотариусов</h3>
       </div>
       <div style="display: flex; justify-content: right">
         <nav class="navbar bg-body-tertiary" id="notarySearch">
           <div class="container-fluid ">
             <div style="display: flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputNotary" name="search">
+              <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInputNotary" name="search">
               <button class="btn btn-outline-info" type="button" onclick="searchNotary()">Search</button>
             </div>
           </div>
@@ -303,9 +333,8 @@
             </th>
             <th scope="col"><form method="get" th:action="@{/add_user}">
               <input type="hidden" name="type" th:value="${typeNotary}">
-              <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add notary">
-                <i class="fas fa-plus">
-                </i>
+              <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить нотариуса">
+                Добавить
               </button>
             </form></th>
           </tr>
@@ -317,20 +346,18 @@
             <td><p th:text="${notary.getMail()}"></p></td>
             <td>
               <div style="display: flex">
-                <form th:action="@{/user_edit/{id}(id=${notary.getIdUser()})}"  method="get" data-toggle="tooltip" data-placement="top" title="Edit notary">
+                <form th:action="@{/user_edit/{id}(id=${notary.getIdUser()})}"  method="get" data-toggle="tooltip" data-placement="top" title="Редактировать нотариуса">
                   <button type="submit" class="btn btn-info btn-sm">
                     <i class="fas fa-pencil">
                     </i>
                   </button>
                 </form>
-                <form th:action="@{/delete_user/{id}(id = ${notary.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Delete notary">
-                  <input type="hidden" name="id" th:value="${notary.getIdUser()}" />
-                  <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">
-                    <i class="fas fa-trash">
-                    </i>
-                  </button>
+<!--                <form th:action="@{/delete_user/{id}(id = ${notary.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Удалить нотариуса">-->
+                <button type="button" class="btn btn-danger btn-sm deleteUser" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteUser" th:data-id="${notary.getIdUser()}">
+                  <i class="fas fa-trash"></i>
+                </button>
 
-                </form>
+<!--                </form>-->
               </div>
             </td>
           </tr>
@@ -377,15 +404,44 @@
       </nav>
       </div>
     </div>
+      </div>
+    </section>
   </div>
+  <div th:replace="~{/admin.shared/footer}"></div>
 </div>
 
-<div th:replace="~{/admin.shared/footer}"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 <div th:fragment="script"></div>
 <script>
-  let url = '/Swipe-Admin/users';
-  // let url = '/users';
+  // let url = '/Swipe-Admin/delete_user/';
+  let url2 = '/delete_user/';
+  let userId;
+  $(document).on('click', '.deleteUser', function () {
+    userId = $(this).data('id');
+    $('#confirmDeleteUser').modal('show');
+  });
+  function deleteUser() {
+    $.ajax({
+      url: url2+userId,
+      type: 'POST',
+      success: function (data) {
+        $('#confirmDeleteUser').modal('hide');
+        window.location.href = "/users";
+        lcdId = undefined;
+      },
+      error: function (xhr, status, error) {
+        $('#confirmDeleteApartment').modal('hide');
+        alert("-");
+        console.log(error);
+      }
+    });
+  }
+
+</script>
+<script>
+  // let url = '/Swipe-Admin/users';
+  let url = '/users';
   function searchClient () {
     var selectedSize = localStorage.getItem('selectedUserSize');
     // e.preventDefault();
@@ -539,6 +595,7 @@
       e.preventDefault();
 
       var pageNumber = $('#pageNumberClientPr').val();
+      var intPageNumber = parseInt(pageNumber);
 
       // var url = '/Swipe-Admin/users';
 
@@ -564,8 +621,13 @@
           var textClient = $(data).find('#textClient').html();
           $('#textClient').html(textClient);
 
+          var pagination = $(data).find('#userPagination').html();
+          $('#userPagination').html(pagination);
+
           $('#userPagination li').removeClass('active');
-          $('#userPagination li').eq(pageNumber).addClass('active');
+          $('#userPagination li').filter(function() {
+            return $(this).text() === (intPageNumber+1).toString();
+          }).addClass('active');
           localStorage.setItem('pageUser', pageNumber);
 
 
@@ -582,6 +644,7 @@
       var order = localStorage.getItem('orderClient');
       e.preventDefault();
       var pageNumber = $('#pageNumberClientNext').val();
+      var intPageNumber = parseInt(pageNumber);
       // var url = '/Swipe-Admin/users';
 
 
@@ -606,8 +669,13 @@
           var textClient = $(data).find('#textClient').html();
           $('#textClient').html(textClient);
 
+          var pagination = $(data).find('#userPagination').html();
+          $('#userPagination').html(pagination);
+
           $('#userPagination li').removeClass('active');
-          $('#userPagination li').eq(pageNumber).addClass('active');
+          $('#userPagination li').filter(function() {
+            return $(this).text() === (intPageNumber+1).toString();
+          }).addClass('active');
           localStorage.setItem('pageUser', pageNumber);
 
 
@@ -653,6 +721,7 @@
                 $('#previousClient').html(previous);
                 var textClient = $(data).find('#textClient').html();
                 $('#textClient').html(textClient);
+
                 localStorage.setItem('selectedUserSize', selectedSize);
               })
               .fail(function() {
@@ -695,6 +764,14 @@
         $('#previousClient').html(previous);
         var textClient = $(data).find('#textClient').html();
         $('#textClient').html(textClient);
+
+        var pagination = $(data).find('#userPagination').html();
+        $('#userPagination').html(pagination);
+
+        $('#userPagination li').removeClass('active');
+        $('#userPagination li').filter(function() {
+          return $(this).text() === (pageNumber+1).toString();
+        }).addClass('active');
         localStorage.setItem('pageUser', pageNumber);
       })
         .fail( function(xhr, status, error) {

@@ -32,7 +32,6 @@ public class BlackListController {
         System.out.println(sortedBy);
         log.info("Current page:"+pageBlackList+", size:"+sizeBlackList);
         Pageable pageable = PageRequest.of(pageBlackList,sizeBlackList);
-        System.out.println(userService.blackList(pageable,keyWord,sortedBy).getTotalPages());
         model.addAttribute("searchV", keyWord);
         model.addAttribute("blackList", userService.blackList(pageable,keyWord,sortedBy,order));
         model.addAttribute("size", sizeBlackList);

@@ -13,81 +13,103 @@
   <div th:insert="admin.shared/header::header"></div>
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
-  <div class="content-wrapper" style="padding-left: 50px">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_lcd}" th:object="${lcd}">
-      <input type="hidden" name="idLcd" value="0">
-      <div style="display: flex; justify-content: space-between">
-        <h4 class="mb-3">ЖК</h4>
+  <div class="content-wrapper">
+
+    <div class="content">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h4 class="m-0">ЖК</h4>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-md-7 col-lg-8">
+      <div class="card-body">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_lcd}" th:object="${lcd}" id="formAdd">
+      <input type="hidden" name="idLcd" value="0">
+<!--      <div class="col-md-7 col-lg-8">-->
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Название</label>
-            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите название..." th:value="${lcd.getName()}" required="">
+            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите название..." th:value="${lcd.getName()}">
+            <div id="name">
             <div th:if="${#fields.hasErrors('name')}">
               <div class="text-danger">
                 <p th:errors="*{name}"></p>
               </div>
+            </div>
             </div>
           </div>
 
           <div class="col-sm-12">
             <label for="floatingTextarea">Описание</label>
             <textarea class="form-control"  id="floatingTextarea" name="description" placeholder="Введите описание..." th:field="*{description}" th:value="${lcd.getDescription()}"></textarea>
+            <div id="description">
             <div th:if="${#fields.hasErrors('description')}">
               <div class="text-danger">
                 <p th:errors="*{description}"></p>
               </div>
             </div>
-
+            </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Адрес</label>
             <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" data-mask="address" placeholder="Введите адрес... (г.Город, р.Район, ул.Улица,1)" >
+            <div id="address">
             <div th:if="${#fields.hasErrors('address')}">
               <div class="text-danger">
                 <p th:errors="*{address}"></p>
               </div>
             </div>
           </div>
+          </div>
           <div class="col-sm-6">
             <label  class="form-label">Оформление</label>
-            <input type="text" class="form-control" name="formalization"  placeholder="Введите оформление..."  required="" th:value="${lcd.getFormalization()}">
+            <input type="text" class="form-control" name="formalization"  placeholder="Введите оформление..."  th:value="${lcd.getFormalization()}">
+            <div id="formalization">
             <div th:if="${#fields.hasErrors('formalization')}">
               <div class="text-danger">
                 <p th:errors="*{formalization}"></p>
               </div>
             </div>
+            </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Варианты расчета</label>
-            <input type="text" class="form-control" name="typePayment"  placeholder="Введите варианты расчета..."th:value="${lcd.getTypePayment()}"  required="" >
+            <input type="text" class="form-control" name="typePayment"  placeholder="Введите варианты расчета..."th:value="${lcd.getTypePayment()}"  >
+            <div id="typePayment">
             <div th:if="${#fields.hasErrors('typePayment')}">
               <div class="text-danger">
                 <p th:errors="*{typePayment}"></p>
               </div>
             </div>
+            </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Назначение</label>
-            <input type="text" class="form-control" name="appointment"  placeholder="Введите назначение..." th:value="${lcd.getAppointment()}" required="" >
+            <input type="text" class="form-control" name="appointment"  placeholder="Введите назначение..." th:value="${lcd.getAppointment()}"  >
+            <div id="appointment">
             <div th:if="${#fields.hasErrors('appointment')}">
               <div class="text-danger">
                 <p th:errors="*{appointment}"></p>
               </div>
             </div>
+            </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Сумма в договоре</label>
-            <input type="text" class="form-control" name="sumContract"  placeholder="Введите тип суммы в договоре..." th:value="${lcd.getSumContract()}" required="" >
+            <input type="text" class="form-control" name="sumContract"  placeholder="Введите тип суммы в договоре..." th:value="${lcd.getSumContract()}"  >
+            <div id="sumContract">
             <div th:if="${#fields.hasErrors('sumContract')}">
               <div class="text-danger">
                 <p th:errors="*{sumContract}"></p>
               </div>
             </div>
+            </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-floating">
+            <div class="form-floating" style="margin-top: 15px">
               <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="contractor">
                 <option th:each="contractor : ${contractors}" th:value="${contractor.getIdUser()}" th:text="${contractor.getName()+' '+contractor.getSurname()}" th:selected="${lcd.getContractor() == contractor.getIdUser()}"></option>
               </select>
@@ -107,9 +129,11 @@
               <input type="checkbox" id="4" name="advantages" value="Дет. Сад" th:checked="${T(com.example.Swipe.Admin.controller.LCDController).checkTypes(advantages.stream(),'Дет. Сад')}">
               <label for="4">Дет. Сад</label>
             </div>
-            <div th:if="${#fields.hasErrors('advantages')}">
-              <div class="text-danger">
-                <p th:errors="*{advantages}"></p>
+            <div id="advantages">
+              <div th:if="${#fields.hasErrors('advantages')}">
+                <div class="text-danger">
+                  <p th:errors="*{advantages}"></p>
+                </div>
               </div>
             </div>
           </div>
@@ -123,11 +147,6 @@
 <!--            </div>-->
 <!--          </div>-->
           <label for="inputImg">Главная картина</label>
-          <div th:if="${#fields.hasErrors('file')}">
-            <div class="text-danger">
-              <p th:errors="*{file}"></p>
-            </div>
-          </div>
           <div class="form-group" style="display: flex">
 
             <div class="form-group" style="display: flex">
@@ -147,82 +166,130 @@
             </script>
 
           </div>
-<!--          <div>-->
-<!--            <label>Галерея картинок</label>-->
-<!--            <div class="card-body">-->
-<!--              <label>Размер 1000х190</label>-->
-<!--              <div class="row" >-->
+          <div id="file">
+          <div th:if="${#fields.hasErrors('file')}">
+            <div class="text-danger">
+              <p th:errors="*{file}"></p>
+            </div>
+          </div>
+        </div>
+          <div>
+            <label>Галерея картинок</label>
+            <div class="card-body">
+              <div style="display: flex">
+              <label>Размер 1000х190</label>
+                <div style="margin-left: 5px">
+                  <div>
+                    <a id="addDivGallery" type="button">
+                      <img th:src="@{/admin/dist/img/addCinema.png}" width="20px">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="row" id="rowGallery" style="margin-top: 20px">
+                <div class="col-sm-2" id = "galleryDiv1">
+                  <img th:src="@{/admin/dist/img/default.jpg}" id="gallery1" class="img-fluid mb-2" alt="white sample">
+                  <button type="button" id="deleteGallery1" onclick="deleteGallery(1)" style="
+                position: absolute;
+                right: -1px;
+                top: -10px;
+                z-index: 11;
+                border: 2px solid black;
+                height: 30px;
+                width: 30px;
+                box-sizing: border-box;
+                padding: 2px;
+                border-radius: 50%;
+            " >
+                    <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
+                  </button>
+                  <input type="file" id="inputGallery1" name="gallery" class="form-control" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png">
+                  <script>
+                    function handleFileChange(event) {
+                      const input = event.target;
+                      const file = input.files[0];
+                      const id = input.id.slice(12); // Получаем идентификатор после "inputGallery"
+                      const img = document.getElementById(`gallery${id}`);
 
-<!--                <div class="col-sm-3" th:each="photo:${lcd.getPhotosList()}">-->
-<!--                  <img th:src="${photo.getFileName()}" id="" class="img-fluid mb-2" alt="white sample">-->
-<!--                  <button type="submit" style="-->
-<!--                position: absolute;-->
-<!--                right: -1px;-->
-<!--                top: -10px;-->
-<!--                z-index: 11;-->
-<!--                border: 2px solid black;-->
-<!--                height: 30px;-->
-<!--                width: 30px;-->
-<!--                box-sizing: border-box;-->
-<!--                padding: 2px;-->
-<!--                border-radius: 50%;-->
-<!--            " >-->
-<!--                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">-->
-<!--                  </button>-->
-<!--                  <input type="file" id="inputImg2" name="gallery" class="form-control" th:value="${photo.getFileName()}">-->
-<!--                </div>-->
-<!--                <div class="col-sm-3" style="margin-left: 20px">-->
-<!--                  <div style="display: flex; justify-content: center">-->
-<!--                    <a th:href="@{/add_photo/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
-<!--                      <img src="../admin/dist/img/addCinema.png" width="150px">-->
-<!--                    </a>-->
-<!--                  </div>-->
-<!--                </div>-->
+                      if (file) {
+                        img.src = URL.createObjectURL(file);
+                      }
+                    }
+                  </script>
+                </div>
+                </div>
+              </div>
 
-
-
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div>-->
-<!--            <label>Документы</label>-->
-<!--            <div class="card-body">-->
-<!--              <label>Размер 1000х190</label>-->
-<!--              <div class="row" >-->
-
-<!--                <div class="col-sm-3" th:each="document:${lcd.getDocuments()}">-->
-<!--                  <img src="../admin/dist/img/document.png" id="img1" class="img-fluid mb-2" alt="white sample">-->
-<!--                  <button type="submit" style="-->
-<!--                position: absolute;-->
-<!--                right: -1px;-->
-<!--                top: -10px;-->
-<!--                z-index: 11;-->
-<!--                border: 2px solid black;-->
-<!--                height: 30px;-->
-<!--                width: 30px;-->
-<!--                box-sizing: border-box;-->
-<!--                padding: 2px;-->
-<!--                border-radius: 50%;-->
-<!--            " >-->
-<!--                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">-->
-<!--                  </button>-->
-<!--                  <label for="inputDocument" th:text="${document.getName()}" style="text-align: center"></label>-->
-<!--                  <input type="file" id="inputDocument" name="documents" class="form-control" th:value="${document.getFileName()}">-->
-<!--                </div>-->
-<!--                <div class="col-sm-3" style="margin-left: 20px">-->
-<!--                  <div style="display: flex; justify-content: center">-->
-<!--                    <a th:href="@{/add_photo/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
-<!--                      <img src="../admin/dist/img/addCinema.png" width="150px">-->
-<!--                    </a>-->
-<!--                  </div>-->
-<!--                </div>-->
+              </div>
+          <div id="gallery">
+            <div th:if="${#fields.hasErrors('gallery')}">
+              <div class="text-danger">
+                <p th:errors="*{gallery}"></p>
+              </div>
+            </div>
+          </div>
 
 
+          <div>
+            <label>Документы</label>
+            <div class="card-body">
+              <div style="display: flex">
+                <label>Размер 1000х190</label>
+                <div style="margin-left: 5px">
+                  <div>
+                    <a id="addDivDocument" type="button" onclick="deleteDocument(1)">
+                      <img th:src="@{/admin/dist/img/addCinema.png}" width="20px">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="row" id="documentRow">
 
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+                <div class="col-sm-2" id = "documentDiv1">
+                  <img th:src="@{/admin/dist/img/document.png}" id="img1" class="img-fluid mb-2" alt="white sample">
+                  <button type="button" style="
+                position: absolute;
+                right: -1px;
+                top: -10px;
+                z-index: 11;
+                border: 2px solid black;
+                height: 30px;
+                width: 30px;
+                box-sizing: border-box;
+                padding: 2px;
+                border-radius: 50%;
+            ">
+                    <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
+                  </button>
+                  <label id = "filename1" style="text-align: center"></label>
+                  <input type="file" id = "inputDocument1" name="documentsFiles" class="form-control" onclick="handleFileNameChange(1)" accept=".doc,.docx,.xlsx">
+                  <script>
+                    function handleFileNameChange(id) {
+                      var fileInput = document.getElementById(`inputDocument${id}`);
+                      var listFile = document.getElementById(`filename${id}`);
+
+                      fileInput.onchange = function () {
+                        var files = Array.from(this.files);
+                        files = files.map(file => file.name);
+                        listFile.innerHTML = files.join('<br/>');
+                      }
+                    }
+                  </script>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div id="documentsFiles">
+          <div th:if="${#fields.hasErrors('documentsFiles')}">
+            <div class="text-danger">
+              <p th:errors="*{documentsFiles}"></p>
+            </div>
+          </div>
+          </div>
+
+
+
 
           <div class="col-sm-6">
             <div class="form-floating">
@@ -307,118 +374,255 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Высота потолков</label>
-            <input type="text" class="form-control" name="height"  placeholder="Введите высоту потолков..."  required="" th:value="${lcd.getHeight()}">
-            <div th:if="${#fields.hasErrors('height')}">
+            <input type="text" class="form-control" name="height"  placeholder="Введите высоту потолков..." th:value="${lcd.getHeight()}">
+            <div id="height"  class="valid">
+            <div th:if="${#fields.hasErrors('height')}" >
               <div class="text-danger">
                 <p th:errors="*{height}"></p>
               </div>
             </div>
+            </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Расстояние до моря</label>
-            <input type="text" class="form-control" name="distanceSea"  placeholder="Введите расстояние до моря..."  required="" th:value="${lcd.getDistanceSea()}">
+            <input type="text" class="form-control" name="distanceSea"  placeholder="Введите расстояние до моря..."  th:value="${lcd.getDistanceSea()}">
+            <div id="distanceSea" class="valid">
             <div th:if="${#fields.hasErrors('distanceSea')}">
               <div class="text-danger">
                 <p th:errors="*{distanceSea}"></p>
               </div>
             </div>
           </div>
-<!--          <label>Корпуса</label>-->
-<!--          <div>-->
-<!--            <table class="table table-striped" style="margin: 20px">-->
-<!--              <thead>-->
-<!--              <tr>-->
-<!--                <th scope="col">Корпус</th>-->
-<!--                <th scope="col">Колв квартир</th>-->
-<!--                <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">-->
-<!--                  <i class="fas fa-plus">-->
-<!--                  </i>-->
-<!--                </button></th>-->
-<!--              </tr>-->
-<!--              </thead>-->
-<!--              <tbody>-->
-<!--              <tr th:each="frame:${lcd.getFrames()}">-->
-<!--                <th scope="row"><p th:text="${frame.getNum()}"></p></th>-->
-<!--                <td><p th:text="${frame.getApartmentList().size()}"></p></td>-->
-<!--                <td>-->
-<!--                  <div style="display: flex">-->
-<!--                    <form th:action="@{/apartment_edit/{id}(id=${frame.getIdFrame()})}"  method="get" >-->
-<!--                      <button type="submit" class="btn btn-info btn-sm">-->
-<!--                        <i class="fas fa-pencil">-->
-<!--                        </i>-->
-<!--                      </button>-->
-<!--                    </form>-->
-<!--                    <form action="/delete_user"  method="post" >-->
-<!--                      <input type="hidden" name="id" th:value="${frame.getIdFrame()}" />-->
-<!--                      <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">-->
-<!--                        <i class="fas fa-trash">-->
-<!--                        </i>-->
-<!--                      </button>-->
-
-<!--                    </form>-->
-<!--                  </div>-->
-<!--                </td>-->
-<!--              </tr>-->
-<!--              </tbody>-->
-<!--            </table>-->
-<!--          </div>-->
-
-<!--          <label>Новости</label>-->
-<!--          <div>-->
-<!--            <table class="table table-striped" style="margin: 20px">-->
-<!--              <thead>-->
-<!--              <tr>-->
-<!--                <th scope="col">Заголовок</th>-->
-<!--                <th scope="col">Дата</th>-->
-<!--                <th scope="col"><button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px">-->
-<!--                  <i class="fas fa-plus">-->
-<!--                  </i>-->
-<!--                </button></th>-->
-<!--              </tr>-->
-<!--              </thead>-->
-<!--              <tbody>-->
-<!--              <tr th:each="news:${lcd.getNewsList()}">-->
-<!--                <th scope="row"><p th:text="${news.getTitle()}"></p></th>-->
-<!--                <td><p th:text="${news.getDate()}"></p></td>-->
-<!--                <td>-->
-<!--                  <div style="display: flex">-->
-<!--                    <form th:action="@{/apartment_edit/{id}(id=${news.getIdNews()})}"  method="get" >-->
-<!--                      <button type="submit" class="btn btn-info btn-sm">-->
-<!--                        <i class="fas fa-pencil">-->
-<!--                        </i>-->
-<!--                      </button>-->
-<!--                    </form>-->
-<!--                    <form action="/delete_user"  method="post" >-->
-<!--                      <input type="hidden" name="id" th:value="${news.getIdNews()}" />-->
-<!--                      <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px">-->
-<!--                        <i class="fas fa-trash">-->
-<!--                        </i>-->
-<!--                      </button>-->
-
-<!--                    </form>-->
-<!--                  </div>-->
-<!--                </td>-->
-<!--              </tr>-->
-<!--              </tbody>-->
-<!--            </table>-->
-<!--          </div>-->
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
-
-        </div>
+          </div>
       </div>
-<!--      </div>-->
-    </form>
+          <div class="d-flex justify-content-center" style="margin-top: 20px">
+          <button class="w-50 btn btn-primary btn-lg" type="submit" id = "saveButton">Сохранить</button>
+          </div>
 
+    </form>
+  </div>
+  </div>
 
 
 
   </div>
+  <div th:insert="admin.shared/footer::footer"></div>
 </div>
 
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 <script src="https://unpkg.com/imask"></script>
+<script>
+  function deleteGallery(id){
+    $(document).ready(function() {
+      $("#galleryDiv" + id).remove();
+    });
+  }
+
+  function deleteDocument(id){
+    $(document).ready(function() {
+      $("#documentDiv" + id).remove();
+    });
+  }
+</script>
+<!--<script>-->
+<!--  function deleteGallery(event){-->
+<!--      const id = event.target.id.slice(13);-->
+<!--      console.log(id);-->
+<!--    $(document).ready(function() {-->
+<!--      $("#galleryDiv" + id).remove();-->
+<!--    });-->
+
+<!--  }-->
+<!--</script>-->
+<script>
+
+  $(document).ready(function() {
+    $('#formAdd').submit(function(e) {
+      e.preventDefault();
+      // var formData = $(this).serialize();
+      var formData = new FormData(this);
+      console.log(formData);
+      $.ajax({
+        url:"/add_lcd",
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data, status) {
+          console.log(status);
+          console.log(data);
+          var valid1 = $(data).find('#height').html();
+          $('#height').html(valid1);
+          var valid2 = $(data).find('#distanceSea').html();
+          $('#distanceSea').html(valid2);
+          var valid3 = $(data).find('#advantages').html();
+          $('#advantages').html(valid3);
+          var valid4 = $(data).find('#gallery').html();
+          $('#gallery').html(valid4);
+
+          var valid5 = $(data).find('#file').html();
+          $('#file').html(valid5);
+
+          var valid6 = $(data).find('#sumContract').html();
+          $('#sumContract').html(valid6);
+
+          var valid7 = $(data).find('#name').html();
+          $('#name').html(valid7);
+
+          var valid8 = $(data).find('#description').html();
+          $('#description').html(valid8);
+
+          var valid9 = $(data).find('#formalization').html();
+          $('#formalization').html(valid9);
+
+          var valid10 = $(data).find('#appointment').html();
+          $('#appointment').html(valid10);
+
+          var valid11 = $(data).find('#typePayment').html();
+          $('#typePayment').html(valid11);
+
+          var valid12 = $(data).find('#address').html();
+          $('#address').html(valid12);
+
+          var valid13 = $(data).find('#documentsFiles').html();
+          $('#documentsFiles').html(valid13);
+          console.log("success");
+
+        },
+        error: function(xhr, status, error) {
+          console.log(status);
+          console.log("error");
+          window.location.href = "/announcement";
+        }
+      });
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+
+    const addDivButton = document.getElementById("addDivGallery");
+    const container = document.getElementById("rowGallery");
+    let i = 1;
+    // Обработчик события на нажатие кнопки
+    addDivButton.addEventListener("click", function() {
+      i++;
+      // Создаем новый div элемент
+      const newDiv = document.createElement("div");
+      newDiv.classList.add("col-sm-2");
+      newDiv.id = "galleryDiv"+i;
+      newDiv.innerHTML =
+              "                  <img src=\"/admin/dist/img/default.jpg\" id=\"gallery" + i + "\" class=\"img-fluid mb-2\" alt=\"white sample\">\n" +
+              "                  <button type=\"button\" id=\"deleteGallery"+i+"\" onclick=\"deleteGallery("+i+") \" style=\"\n" +
+              "                position: absolute;\n" +
+              "                right: -1px;\n" +
+              "                top: -10px;\n" +
+              "                z-index: 11;\n" +
+              "                border: 2px solid black;\n" +
+              "                height: 30px;\n" +
+              "                width: 30px;\n" +
+              "                box-sizing: border-box;\n" +
+              "                padding: 2px;\n" +
+              "                border-radius: 50%;\n" +
+              "            \" >\n" +
+              "                    <img src=\"/admin/dist/img/cross.png\" width=\"20px\" height=\"20px\">\n" +
+              "                  </button>\n" +
+              "                  <input type=\"file\" id=\"inputGallery"+i+"\" name=\"gallery\" class=\"form-control\" onchange=\"handleFileChange(event)\" accept=\".jpg,.jpeg,.png\">\n"
+
+      const scriptTag = document.createElement("script");
+      scriptTag.textContent = " function handleFileChange(event) {\n" +
+              "                      const input = event.target;\n" +
+              "                      const file = input.files[0];\n" +
+              "                      const id = input.id.slice(12); // Получаем идентификатор после \"inputGallery\"\n" +
+              "                      const img = document.getElementById(`gallery${id}`);\n" +
+              "\n" +
+              "                      if (file) {\n" +
+              "                        img.src = URL.createObjectURL(file);\n" +
+              "                      }\n" +
+              "                    }";
+      // const scriptTag1 = document.createElement("script");
+      // scriptTag1.textContent = " function deleteGallery(event){\n" +
+      //         "                      console.log(\"event.target.id:\"+event.target.id);\n" +
+      //         "                      const id = event.target.id.slice(13);\n" +
+      //         "                      console.log(\"id:\"+id);\n" +
+      //         "                      $(document).ready(function() {\n" +
+      //         "                        $(\"#galleryDiv\" + id).remove();\n" +
+      //         "                      });\n" +
+      //         "                    }";
+
+      newDiv.appendChild(scriptTag);
+      // newDiv.appendChild(scriptTag1);
+      container.appendChild(newDiv);
+      const divContent = newDiv.innerHTML;
+      console.log(divContent);
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+
+    const addDivButton = document.getElementById("addDivDocument");
+    const container = document.getElementById("documentRow");
+    let i = 1;
+    // Обработчик события на нажатие кнопки
+    addDivButton.addEventListener("click", function() {
+      i++;
+      // Создаем новый div элемент
+      const newDiv = document.createElement("div");
+      newDiv.classList.add("col-sm-2");
+      newDiv.id = "documentDiv"+i;
+      newDiv.innerHTML =
+              "<img src=\"/admin/dist/img/document.png\" id=\"img"+i+"\" class=\"img-fluid mb-2\" alt=\"white sample\">\n" +
+              "                  <button type=\"button\" style=\"\n" +
+              "                position: absolute;\n" +
+              "                right: -1px;\n" +
+              "                top: -10px;\n" +
+              "                z-index: 11;\n" +
+              "                border: 2px solid black;\n" +
+              "                height: 30px;\n" +
+              "                width: 30px;\n" +
+              "                box-sizing: border-box;\n" +
+              "                padding: 2px;\n" +
+              "                border-radius: 50%;\n" +
+              "            \"  onclick=\"deleteDocument("+i+")\">\n" +
+              "                    <img src=\"/admin/dist/img/cross.png\" width=\"20px\" height=\"20px\">\n" +
+              "                  </button>\n" +
+              "                  <label id = \"filename"+i+"\" style=\"text-align: center\"></label>\n" +
+              "                  <input type=\"file\" id = \"inputDocument"+i+"\" name=\"documentsFiles\" class=\"form-control\" onclick= \"handleFileNameChange("+i+")\" accept=\".doc,.docx,.xlsx\">\n" +
+              "                  "
+
+      const scriptTag = document.createElement("script");
+      scriptTag.textContent = "function handleFileNameChange(id) {\n" +
+              "                      console.log(id);\n" +
+              "                      var fileInput = document.getElementById(`inputDocument${id}`);\n" +
+              "                      var listFile = document.getElementById(`filename${id}`);\n" +
+              "\n" +
+              "                      fileInput.onchange = function () {\n" +
+              "                        var files = Array.from(this.files);\n" +
+              "                        files = files.map(file => file.name);\n" +
+              "                        listFile.innerHTML = files.join('<br/>');\n" +
+              "                      }\n" +
+              "                    }";
+      // const scriptTag1 = document.createElement("script");
+      // scriptTag1.textContent = " function deleteGallery(event){\n" +
+      //         "                      console.log(\"event.target.id:\"+event.target.id);\n" +
+      //         "                      const id = event.target.id.slice(13);\n" +
+      //         "                      console.log(\"id:\"+id);\n" +
+      //         "                      $(document).ready(function() {\n" +
+      //         "                        $(\"#galleryDiv\" + id).remove();\n" +
+      //         "                      });\n" +
+      //         "                    }";
+
+      newDiv.appendChild(scriptTag);
+      // newDiv.appendChild(scriptTag1);
+      container.appendChild(newDiv);
+      const divContent = newDiv.innerHTML;
+      console.log(divContent);
+    });
+  });
+</script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
 

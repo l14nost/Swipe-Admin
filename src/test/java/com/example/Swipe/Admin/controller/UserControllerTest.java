@@ -28,6 +28,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -45,6 +46,74 @@ class UserControllerTest {
     private SecurityContext securityContext;
 
     @Test
+    void userEditPage() throws Exception {
+        ClientDTO  clientDTO = ClientDTO.builder()
+                .name("Name")
+                .surname("Surname")
+                .number("101123123")
+                .type(TypeUser.CLIENT)
+                .mail("user@gmail.com")
+                .agent(AgentDTO.builder().build())
+                .photo("qwe")
+                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.of(2000,12,1)).callSms(true).typeNotification(TypeNotification.ME).build())
+                .build();
+        when(userService.findByIdDTO(1)).thenReturn(clientDTO);
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/user_edit/1")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/user_edit"));
+    }
+    @Test
+    void userAddPage() throws Exception {
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/add_user")
+                        .param("type","CLIENT")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/user_add"));
+    }
+    @Test
+    void contractorAddPage() throws Exception {
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/add_user")
+                        .param("type","CONTRACTOR")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/contractor_add"));
+    }
+
+    @Test
+    void notaryAddPage() throws Exception {
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/add_user")
+                        .param("type","NOTARY")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/notary_add"));
+    }
+
+    @Test
     void userAdd() throws Exception {
         ClientDTO  clientDTO = ClientDTO.builder()
                 .name("Name")
@@ -52,7 +121,7 @@ class UserControllerTest {
                 .number("101123123")
                 .type(TypeUser.CLIENT)
                 .mail("user@gmail.com")
-                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.now()).callSms(true).typeNotification(TypeNotification.ME).build())
+                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.of(2025,12,21)).callSms(true).typeNotification(TypeNotification.ME).build())
                 .build();
         BindingResult result = new BeanPropertyBindingResult( clientDTO,"user");
         given(userService.uniqueMail(anyString(), any(BindingResult.class), anyInt(), anyString())).willReturn(result);
@@ -73,7 +142,7 @@ class UserControllerTest {
                 .mail("user@gmail.com")
                 .agent(AgentDTO.builder().build())
                 .photo("qwe")
-                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.now()).callSms(true).typeNotification(TypeNotification.ME).build())
+                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.of(2000,12,1)).callSms(true).typeNotification(TypeNotification.ME).build())
                 .build();
         when(userService.findByIdDTO(1)).thenReturn(clientDTO);
         BindingResult result = new BeanPropertyBindingResult( clientDTO,"user");

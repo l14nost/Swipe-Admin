@@ -51,18 +51,18 @@ class LCDServiceImplTest {
                 LCD.builder().build()
         );
         Pageable pageable = PageRequest.of(0,3);
-        LcdSpecification lcdSpecification1 = LcdSpecification.builder().sort("idLcd").build();
+        LcdSpecification lcdSpecification1 = LcdSpecification.builder().sort("idLcd").order(1).build();
         when(lcdRepo.findAll(lcdSpecification1,pageable)).thenReturn(new PageImpl<>(lcds));
-        Page<LcdDTO> lcdDTOs = lcdService.findAllPagination(pageable,"null","idLcd");
+        Page<LcdDTO> lcdDTOs = lcdService.findAllPagination(pageable,"null","idLcd",1);
         assertEquals(3,lcdDTOs.getContent().size());
         List<LCD> lcdSpecificationList = Arrays.asList(
                 LCD.builder().name("LcdName").build(),
                 LCD.builder().name("LcdName").build()
         );
         Pageable pageableSpecification = PageRequest.of(0,3);
-        LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord("LcdName").sort("idLcd").build();
+        LcdSpecification lcdSpecification = LcdSpecification.builder().keyWord("LcdName").sort("idLcd").order(1).build();
         when(lcdRepo.findAll(lcdSpecification,pageable)).thenReturn(new PageImpl<>(lcdSpecificationList));
-        Page<LcdDTO> lcdCheck = lcdService.findAllPagination(pageableSpecification,"LcdName","idLcd");
+        Page<LcdDTO> lcdCheck = lcdService.findAllPagination(pageableSpecification,"LcdName","idLcd",1);
         assertEquals(2,lcdCheck.getContent().size());
     }
 

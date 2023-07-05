@@ -52,15 +52,38 @@ class ApartmentServiceImplTest {
     }
 
     @Test
+    void lcdIdToNull() {
+        apartmentService.lcdIdToNull(Apartment.builder().idApartment(1).lcd(LCD.builder().idLcd(1).build()).build());
+        verify(apartmentRepo).saveAndFlush(Apartment.builder().idApartment(1).lcd(null).build());
+    }
+
+    @Test
+    void count() {
+        when(apartmentRepo.countByFrameIsNull()).thenReturn(10);
+        assertEquals(10,apartmentService.count());
+    }
+
+    @Test
+    void countFrame() {
+        when(apartmentRepo.countByFrame(Frame.builder().idFrame(1).build())).thenReturn(10);
+        assertEquals(10,apartmentService.count(Frame.builder().idFrame(1).build()));
+    }
+    @Test
+    void countNotNull() {
+        when(apartmentRepo.countByFrameIsNotNull()).thenReturn(10);
+        assertEquals(10,apartmentService.countNotNull());
+    }
+
+    @Test
     void findAllByFramePagination() {
         List<Apartment> apartmentsByFrame = new ArrayList<>();
         for (int i = 0;i<4;i++){
             apartmentsByFrame.add(Apartment.builder().build());
         }
         Pageable pageable = PageRequest.of(0,4);
-        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().sort("idApartment").build();
+        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().sort("idApartment").order(1).build();
         when(apartmentRepo.findAll(eq(apartmentForLcdSpecification),eq(pageable))).thenReturn(new PageImpl<>(apartmentsByFrame));
-        Page<ApartmentDTO> apartmentsList = apartmentService.findAllByFramePagination(pageable,0,"idApartment");
+        Page<ApartmentDTO> apartmentsList = apartmentService.findAllByFramePagination(pageable,0,"idApartment",1);
         assertEquals(4,apartmentsList.getContent().size());
     }
     @Test
@@ -70,9 +93,9 @@ class ApartmentServiceImplTest {
             apartmentsByFrame.add(Apartment.builder().number(111).build());
         }
         Pageable pageable = PageRequest.of(0,4);
-        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().keyWord(111).sort("idApartment").build();
+        ApartmentForLcdSpecification apartmentForLcdSpecification = ApartmentForLcdSpecification.builder().keyWord(111).sort("idApartment").order(1).build();
         when(apartmentRepo.findAll(eq(apartmentForLcdSpecification),eq(pageable))).thenReturn(new PageImpl<>(apartmentsByFrame));
-        Page<ApartmentDTO> apartmentsList = apartmentService.findAllByFramePagination(pageable,111,"idApartment");
+        Page<ApartmentDTO> apartmentsList = apartmentService.findAllByFramePagination(pageable,111,"idApartment",1);
         assertEquals(4,apartmentsList.getContent().size());
     }
 
@@ -83,9 +106,9 @@ class ApartmentServiceImplTest {
             apartmentsByFrame.add(Apartment.builder().frame(Frame.builder().idFrame(3).build()).build());
         }
         Pageable pageable = PageRequest.of(0,4);
-        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(0).frame(Frame.builder().idFrame(3).build()).sort("idApartment").build();
+        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(0).frame(Frame.builder().idFrame(3).build()).sort("idApartment").order(1).build();
         when(apartmentRepo.findAll(eq(apartmentForFrameSpecification),eq(pageable))).thenReturn(new PageImpl<>(apartmentsByFrame));
-        Page<ApartmentDTO> apartmentsList = apartmentService.findAllForFramePagination(Frame.builder().idFrame(3).build(),pageable,0,"idApartment");
+        Page<ApartmentDTO> apartmentsList = apartmentService.findAllForFramePagination(Frame.builder().idFrame(3).build(),pageable,0,"idApartment",1);
         assertEquals(4,apartmentsList.getContent().size());
     }
     @Test
@@ -95,9 +118,9 @@ class ApartmentServiceImplTest {
             apartmentsByFrameKey.add(Apartment.builder().frame(Frame.builder().idFrame(3).build()).number(111).build());
         }
         Pageable pageable1 = PageRequest.of(0,2);
-        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(111).frame(Frame.builder().idFrame(3).build()).sort("idApartment").build();
+        ApartmentForFrameSpecification apartmentForFrameSpecification = ApartmentForFrameSpecification.builder().keyWord(111).frame(Frame.builder().idFrame(3).build()).sort("idApartment").order(1).build();
         when(apartmentRepo.findAll(eq(apartmentForFrameSpecification),eq(pageable1))).thenReturn(new PageImpl<>(apartmentsByFrameKey));
-        Page<ApartmentDTO> apartmentsList1 = apartmentService.findAllForFramePagination(Frame.builder().idFrame(3).build(),pageable1,111,"idApartment");
+        Page<ApartmentDTO> apartmentsList1 = apartmentService.findAllForFramePagination(Frame.builder().idFrame(3).build(),pageable1,111,"idApartment",1);
         assertEquals(2,apartmentsList1.getContent().size());
     }
 

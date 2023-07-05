@@ -1,6 +1,7 @@
 package com.example.Swipe.Admin.controller;
 
 
+import com.example.Swipe.Admin.dto.AgentDTO;
 import com.example.Swipe.Admin.dto.ClientDTO;
 import com.example.Swipe.Admin.dto.UserAddInfoDTO;
 import com.example.Swipe.Admin.entity.User;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -60,7 +62,7 @@ public class UserController {
     @GetMapping("/add_user")
     public String addUser(@RequestParam(name = "type") TypeUser type, Model model){
         model.addAttribute("type", type);
-        model.addAttribute("user", ClientDTO.builder().userAddInfoDTO(UserAddInfoDTO.builder().typeNotification(TypeNotification.ME).build()).build());
+        model.addAttribute("user", ClientDTO.builder().userAddInfoDTO(UserAddInfoDTO.builder().typeNotification(TypeNotification.ME).build()).agent(AgentDTO.builder().build()).build());
         if(type.equals(TypeUser.CLIENT)) {
             return "admin/user_add";
         }
@@ -153,6 +155,13 @@ public class UserController {
     @PostMapping("/add_user")
     public String userAdd(@Valid @ModelAttribute(name = "user") ClientDTO clientDTO, BindingResult bindingResult, Model model) throws IOException {
         bindingResult = userServiceImpl.uniqueMail(clientDTO.getMail(),bindingResult,0,"add");
+        if(clientDTO.getUserAddInfoDTO()!=null){
+            if (clientDTO.getUserAddInfoDTO().getDateSub()!=null) {
+                if (clientDTO.getUserAddInfoDTO().getDateSub().isBefore(LocalDate.now())) {
+                    bindingResult.addError(new FieldError("user", "userAddInfoDTO.dateSub", "Некоректная дата"));
+                }
+            }
+        }
         System.out.println(clientDTO);
         if (bindingResult.hasErrors()){
             System.out.println(bindingResult.getAllErrors());
@@ -214,6 +223,11 @@ public class UserController {
     @PostMapping("/user_edit/{id}")
     public String userUpdate(@PathVariable int id, @Valid @ModelAttribute(name = "user") ClientDTO clientDTO,BindingResult result, Model model) {
         result = userServiceImpl.uniqueMail(clientDTO.getMail(),result,id,"update");
+//        if(clientDTO.getUserAddInfoDTO()!=null){
+//            if (clientDTO.getUserAddInfoDTO().getDateSub().isBefore(LocalDate.now())){
+//                result.addError(new FieldError("user", "userAddInfoDTO.dateSub", "Некоректная дата"));
+//            }
+//        }
         if (result.hasErrors()){
             System.out.println(result);
             clientDTO.setAgent(userServiceImpl.findByIdDTO(id).getAgent());

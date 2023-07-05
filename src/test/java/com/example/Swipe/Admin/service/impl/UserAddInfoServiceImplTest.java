@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.service.impl;
 
+import com.example.Swipe.Admin.entity.News;
 import com.example.Swipe.Admin.entity.UserAddInfo;
 import com.example.Swipe.Admin.enums.TypeNotification;
 import com.example.Swipe.Admin.repository.UserAddInfoRepo;
@@ -26,6 +27,26 @@ class UserAddInfoServiceImplTest {
     private UserAddInfoRepo userAddInfoRepo;
     @InjectMocks
     private UserAddInfoServiceImpl userAddInfoService;
+
+    @Test
+    void countSub() {
+        List<UserAddInfo> newsList = Arrays.asList(
+                UserAddInfo.builder().dateSub(LocalDate.of(2023,5,28)).build(),
+                UserAddInfo.builder().dateSub(LocalDate.of(2023,5,20)).build(),
+                UserAddInfo.builder().dateSub(LocalDate.of(2023,10,13)).build(),
+                UserAddInfo.builder().dateSub(LocalDate.of(2023,5,28)).build(),
+                UserAddInfo.builder().dateSub(LocalDate.of(2023,1,19)).build(),
+                UserAddInfo.builder().dateSub(LocalDate.of(2023,1,19)).build()
+
+        );
+        when(userAddInfoRepo.findAll()).thenReturn(newsList);
+        int count5 = userAddInfoService.countSub(5);
+        int count10 = userAddInfoService.countSub(10);
+        int count1 = userAddInfoService.countSub(1);
+        assertEquals(3,count5);
+        assertEquals(1,count10);
+        assertEquals(2,count1);
+    }
     @Test
     void findAll() {
         List<UserAddInfo> userAddInfos = Arrays.asList(

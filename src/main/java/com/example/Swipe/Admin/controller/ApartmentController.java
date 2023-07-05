@@ -56,7 +56,7 @@ public class ApartmentController {
             return "redirect:/edit_frame/"+apartment.getFrame().getIdFrame();
         }
         else {
-            return "redirect:/houses";
+            return "redirect:/announcement";
         }
     }
     @GetMapping("/apartment_edit/{id}")
@@ -86,7 +86,7 @@ public class ApartmentController {
             return "redirect:/edit_frame/"+apartmentDTO.getFrame();
         }
         else {
-            return "redirect:/houses";
+            return "redirect:/announcement";
         }
 
     }
@@ -262,7 +262,7 @@ public class ApartmentController {
             return "admin/apartment_add";
         }
         apartmentServiceImpl.saveDTO(apartmentDTO);
-        return "redirect:/houses";
+        return "redirect:/announcement";
 
     }
     @PostMapping("/add_apartment/{idFrame}")

@@ -58,7 +58,7 @@ public class User implements UserDetails {
 //    @Column(name = "call_sms")
 //    private boolean callSms;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Agent agent;
 
     @OneToOne(cascade = CascadeType.ALL)

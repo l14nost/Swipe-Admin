@@ -13,7 +13,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
         // Выполните необходимую логику здесь, например, установите нужный URL для перенаправления
-        String targetUrl = "/Swipe-Admin/main";
+        String targetUrl = "/Swipe-Admin/statistics";
         response.sendRedirect(targetUrl);
     }
 }

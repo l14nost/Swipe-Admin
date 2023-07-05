@@ -15,23 +15,31 @@
   <div th:insert="admin.shared/header::header"></div>
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
-  <div class="content-wrapper" style="padding-left: 50px">
+  <div class="content-wrapper">
+      <div class="content">
+          <div class="content-header">
+              <div class="container-fluid">
+                  <div class="row mb-2">
+                      <div class="col-sm-6">
+                          <h4 class="m-0"  th:if = "${apartment.getFrame()!=0}">Квартира от застройщика</h4>
+                          <h4 class="m-0"  th:if = "${apartment.getFrame()==0}">Квартира не от застройщика</h4>
+                      </div><!-- /.col -->
+                  </div>
+              </div>
+          </div>
+          <div class="card-body">
     <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}" th:object="${apartment}">
        <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}">
         <input type="hidden" name="frame" th:value="${apartment.getFrame()}">
-    <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()==0}">
-      <h4 class="mb-3">Квартира не от застройщика</h4>
-    </div>
         <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()!=0}">
-            <h4 class="mb-3">Квартира от застройщика</h4>
             <input type="hidden" name="lcd" th:value="${apartment.getLcd()}">
             <input type="hidden" name="user" th:value="${apartment.getUser()}">
         </div>
-    <div class="col-md-7 col-lg-8">
+<!--    <div class="col-md-7 col-lg-8">-->
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
-            <input type="number" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}" required="">
+            <input type="number" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}">
               <div th:if="${#fields.hasErrors('number')}">
                   <div class="text-danger">
                       <p th:errors="*{number}"></p>
@@ -62,7 +70,7 @@
             </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
-            <input type="number" class="form-control" name="price"  placeholder="Введите цену..." th:value="${apartment.getPrice()}" required="">
+            <input type="number" class="form-control" name="price"  placeholder="Введите цену..." th:value="${apartment.getPrice()}">
               <div th:if="${#fields.hasErrors('price')}">
                   <div class="text-danger">
                       <p th:errors="*{price}"></p>
@@ -81,7 +89,7 @@
               </div>
               <div class="col-sm-6">
 
-                <div class="form-floating">
+                <div class="form-floating" >
                   <select class="form-select"  aria-label="Floating label select example" name="user" th:field="*{user}">
                     <option th:each="user : ${users}" th:value="${user.getIdUser()}" th:text="${user.getMail()}" th:selected="${apartment.getUser() == user.getIdUser()}"></option>
                   </select>
@@ -90,11 +98,7 @@
               </div>
           </div>
           <label for="inputImg">Главная картинка</label>
-            <div th:if="${#fields.hasErrors('file')}">
-                <div class="text-danger">
-                    <p th:errors="*{file}"></p>
-                </div>
-            </div>
+
           <div class="form-group" style="display: flex">
 
             <div class="form-group" style="display: flex">
@@ -113,18 +117,18 @@
             </script>
 
           </div>
+            <div th:if="${#fields.hasErrors('file')}">
+                <div class="text-danger">
+                    <p th:errors="*{file}"></p>
+                </div>
+            </div>
           <div id="galleryDiv">
             <label>Галерея картинок</label>
-              <div th:if="${#fields.hasErrors('galleryPhoto')}">
-                  <div class="text-danger">
-                      <p th:errors="*{galleryPhoto}"></p>
-                  </div>
-              </div>
             <div class="card-body">
               <label>Размер 1000х190</label>
               <div class="row" >
 
-                <div class="col-sm-3" th:each="photo:${apartment.getPhotoList()}">
+                <div class="col-sm-2" th:each="photo:${apartment.getPhotoList()}">
                   <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2" alt="white sample" accept=".jpg,.jpeg,.png">
 <!--                  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 <!--                  <script>-->
@@ -188,7 +192,7 @@
                     </script>
                 </div>
 
-                <div class="col-sm-3" style="margin-left: 20px">
+                <div class="col-sm-2" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
 <!--                    <a th:href="@{/add_photo/{idApartment}(idApartment = ${apartment.getIdApartment()})}">-->
                     <button class="btn btn-outline" type="button" th:attr="onclick='addPhoto(' + ${apartment.getIdApartment()} + ')'">
@@ -202,7 +206,13 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
+            <div th:if="${#fields.hasErrors('galleryPhoto')}">
+                <div class="text-danger">
+                    <p th:errors="*{galleryPhoto}"></p>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
             <div class="form-floating">
               <select class="form-select"  aria-label="Floating label select example" name="foundingDocument">
                 <option th:each="type:${foundingDocument}" th:value="${type.name()}" th:text="${type.getValue()}" th:selected="${type.getValue().equals(apartment.getFoundingDocument().getValue())}"></option>
@@ -285,7 +295,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
-            <input type="number" class="form-control" name="totalArea"  placeholder="Введите общую площадь..." th:value="${apartment.getTotalArea()}" required="">
+            <input type="number" class="form-control" name="totalArea"  placeholder="Введите общую площадь..." th:value="${apartment.getTotalArea()}">
               <div th:if="${#fields.hasErrors('totalArea')}">
                   <div class="text-danger">
                       <p th:errors="*{totalArea}"></p>
@@ -294,27 +304,29 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
-            <input type="number" class="form-control" name="kitchenArea"  placeholder="Введите площадь кухни..." th:value="${apartment.getKitchenArea()}" required="">
+            <input type="number" class="form-control" name="kitchenArea"  placeholder="Введите площадь кухни..." th:value="${apartment.getKitchenArea()}">
               <div th:if="${#fields.hasErrors('kitchenArea')}">
                   <div class="text-danger">
                       <p th:errors="*{kitchenArea}"></p>
                   </div>
               </div>
           </div>
-
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
-
+            <div class="d-flex justify-content-center">
+        <button class="w-50 btn btn-primary btn-lg" type="submit">Сохранить</button>
+            </div>
         </div>
-    </div>
+<!--    </div>-->
       </form>
-
+          </div>
+      </div>
 
 
     </div>
+    <div th:insert="admin.shared/footer::footer"></div>
   </div>
 
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 <!--<script>-->
 <!--  function deleteData(idPhoto, idApartment) {-->

@@ -13,21 +13,29 @@
   <div th:insert="admin.shared/header::header"></div>
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
-  <div class="content-wrapper" style="padding-left: 50px">
+  <div class="content-wrapper">
+    <div class="content">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h4 class="m-0">Квартира от застройщика</h4>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <div class="card-body">
     <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_apartment/{idFrame}(idFrame = ${idFrame})}" th:object="${apartment}">
         <input type="hidden" name="idFrame" th:value="${idFrame}">
         <input type="hidden" name="lcd" value="0">
         <input type="hidden" name="idApartment" value="0">
       <input type="hidden" name="user" value="0">
       <input type="hidden" name="frame" th:value="${idFrame}">
-    <div style="display: flex; justify-content: space-between">
-      <h4 class="mb-3">Квартира от застройщика</h4>
-    </div>
-      <div class="col-md-7 col-lg-8">
+<!--      <div class="col-md-7 col-lg-8">-->
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
-            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}" required="">
+            <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}">
             <div th:if="${#fields.hasErrors('number')}">
               <div class="text-danger">
                 <p th:errors="*{number}"></p>
@@ -57,7 +65,7 @@
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
-            <input type="number" class="form-control" name="price"  placeholder="Введите цену..."  th:value="${apartment.getPrice()}" required="">
+            <input type="number" class="form-control" name="price"  placeholder="Введите цену..."  th:value="${apartment.getPrice()}">
             <div th:if="${#fields.hasErrors('price')}">
               <div class="text-danger">
                 <p th:errors="*{price}"></p>
@@ -216,7 +224,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
-            <input type="number" class="form-control" name="totalArea" th:value="${apartment.getTotalArea()}"  placeholder="Введите общую площадь..."  required="">
+            <input type="number" class="form-control" name="totalArea" th:value="${apartment.getTotalArea()}"  placeholder="Введите общую площадь...">
             <div th:if="${#fields.hasErrors('totalArea')}">
               <div class="text-danger">
                 <p th:errors="*{totalArea}"></p>
@@ -225,27 +233,29 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
-            <input type="number" class="form-control" name="kitchenArea"  th:value="${apartment.getKitchenArea()}" placeholder="Введите площадь кухни..."  required="">
+            <input type="number" class="form-control" name="kitchenArea"  th:value="${apartment.getKitchenArea()}" placeholder="Введите площадь кухни...">
             <div th:if="${#fields.hasErrors('kitchenArea')}">
               <div class="text-danger">
                 <p th:errors="*{kitchenArea}"></p>
               </div>
             </div>
           </div>
-
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
-
+<div class="d-flex justify-content-center">
+        <button class="w-50 btn btn-primary btn-lg" type="submit">Сохранить</button>
+</div>
         </div>
-    </div>
+<!--    </div>-->
       </form>
-
+      </div>
+    </div>
 
 
     </div>
+  <div th:insert="admin.shared/footer::footer"></div>
   </div>
 
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 
 

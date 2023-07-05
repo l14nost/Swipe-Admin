@@ -12,9 +12,9 @@
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
-<!--        <li class="nav-item d-none d-sm-inline-block">-->
-<!--            <a href="index3.html" class="nav-link">Home</a>-->
-<!--        </li>-->
+        <li class="nav-item d-none d-sm-inline-block" style="margin-top: 7px">
+            <h5>Панель администрации</h5>
+        </li>
 <!--        <li class="nav-item d-none d-sm-inline-block">-->
 <!--            <a href="#" class="nav-link">Contact</a>-->
 <!--        </li>-->
@@ -32,13 +32,14 @@
                 <a th:href="@{/profile}" class="nav-link" style="
     padding-right: 10px;
 " th:text="${T(com.example.Swipe.Admin.controller.AdminController).adminMail()}"></a>
-                <form  th:action="@{/logout}" method="post">
-                    <button type="submit" class="btn btn-outline-danger" value="Sign out" style="height: 100%" data-toggle="tooltip" data-placement="top" title="Logout">
+                <form th:action="@{/logout}" method="get">
+                    <button type="button" class="btn btn-outline-danger" value="Sign out" style="height: 100%" data-toggle="modal" data-target="#confirmLogOut" data-placement="top" title="Logout">
                         <i class="fa-solid fa-power-off fa-xl d-sm-flex d-j" style="align-items: center;"></i>
                     </button>
                 </form>
                 </li>
         </div>
+
 <!--        <div>-->
 <!--            <li class="nav-item d-none d-sm-flex" style="-->
 <!--    padding-right: 0px;-->

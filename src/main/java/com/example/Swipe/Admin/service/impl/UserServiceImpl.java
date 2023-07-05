@@ -53,14 +53,14 @@ public class UserServiceImpl implements UserService {
         return userRepo.findAllByTypeUserAndBlackListIsFalse(typeUser).stream().map(ClientMapper::apply).collect(Collectors.toList());
     }
 
-    public Page<ClientDTO> findAllByTypePagination(TypeUser typeUser, Pageable pageable,String keyWord,String sort){
-        if (!keyWord.equals("null")) {
-            UserSpecification blackListSpecification = UserSpecification.builder().keyWord(keyWord).typeUser(typeUser).sort(sort).build();
-            return userRepo.findAll(blackListSpecification, pageable).map(ClientMapper::apply);
-        }
-        UserSpecification blackListSpecification = UserSpecification.builder().typeUser(typeUser).sort(sort).build();
-        return userRepo.findAll(blackListSpecification,pageable).map(ClientMapper::apply);
-    }
+//    public Page<ClientDTO> findAllByTypePagination(TypeUser typeUser, Pageable pageable,String keyWord,String sort){
+//        if (!keyWord.equals("null")) {
+//            UserSpecification blackListSpecification = UserSpecification.builder().keyWord(keyWord).typeUser(typeUser).sort(sort).build();
+//            return userRepo.findAll(blackListSpecification, pageable).map(ClientMapper::apply);
+//        }
+//        UserSpecification blackListSpecification = UserSpecification.builder().typeUser(typeUser).sort(sort).build();
+//        return userRepo.findAll(blackListSpecification,pageable).map(ClientMapper::apply);
+//    }
     public Page<ClientDTO> findAllByTypePagination(TypeUser typeUser, Pageable pageable,String keyWord,String sort,int order){
         if (!keyWord.equals("null")) {
             UserSpecification blackListSpecification = UserSpecification.builder().keyWord(keyWord).typeUser(typeUser).sort(sort).order(order).build();
@@ -69,17 +69,17 @@ public class UserServiceImpl implements UserService {
         UserSpecification blackListSpecification = UserSpecification.builder().typeUser(typeUser).sort(sort).order(order).build();
         return userRepo.findAll(blackListSpecification,pageable).map(ClientMapper::apply);
     }
-    public Page<BlackListDTO> blackList(Pageable pageable, String keyWord,String sortedBy){
-        if (!keyWord.equals("null")) {
-            BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).build();
-            return userRepo.findAll(blackListSpecification, pageable).map(BlackLIstMapper::apply);
-        }
-        else {
-            BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).build();
-            return userRepo.findAll(blackListSpecification, pageable).map(BlackLIstMapper::apply);
-
-        }
-    }
+//    public Page<BlackListDTO> blackList(Pageable pageable, String keyWord,String sortedBy){
+//        if (!keyWord.equals("null")) {
+//            BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).build();
+//            return userRepo.findAll(blackListSpecification, pageable).map(BlackLIstMapper::apply);
+//        }
+//        else {
+//            BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).build();
+//            return userRepo.findAll(blackListSpecification, pageable).map(BlackLIstMapper::apply);
+//
+//        }
+//    }
     public Page<BlackListDTO> blackList(Pageable pageable, String keyWord,String sortedBy,int order){
         if (!keyWord.equals("null")) {
             BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord(keyWord).sortedBy(sortedBy).order(order).build();
@@ -158,18 +158,18 @@ public class UserServiceImpl implements UserService {
     public BindingResult uniqueMail(String email,BindingResult result,int id,String method){
         List<User> users = userRepo.findAllByMail(email);
        if (users.size()>=2){
-            result.addError(new FieldError("user", "mail", "Email already exists"));
+            result.addError(new FieldError("user", "mail", "Пользователь с такой почтой уже существует"));
             return result;
         }
         else if (method.equals("update")&&users.size()==1){
             if (users.get(0).getIdUser()==id){
                 return result;
             }
-            result.addError(new FieldError("user", "mail", "Email already exists"));
+            result.addError(new FieldError("user", "mail", "Пользователь с такой почтой уже существует"));
             return result;
         }
         else if (method.equals("add")&&users.size()!=0){
-            result.addError(new FieldError("user", "mail", "Email already exists"));
+            result.addError(new FieldError("user", "mail", "Пользователь с такой почтой уже существует"));
             return result;
         }
         else return result;

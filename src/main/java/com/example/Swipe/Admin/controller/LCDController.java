@@ -11,17 +11,21 @@ import com.example.Swipe.Admin.service.impl.DocumentsServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
 import com.example.Swipe.Admin.service.impl.PhotosServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +45,7 @@ public class LCDController {
     private final UserServiceImpl userService;
     @GetMapping("/lcd_edit/{id}")
     public String lcdEdit(@PathVariable int id, Model model){
-        List<String> advantages = List.of(lcdServiceImpl.findById(id).getAdvantages().split(","));
+        List<String> advantages = List.of(lcdServiceImpl.findByIdDTO(id).getAdvantages().split(","));
         model.addAttribute("advantages", advantages);
         model.addAttribute("lcd", lcdServiceImpl.findByIdDTO(id));
         model.addAttribute("contractors", userService.findAllByTypeDTO(TypeUser.CONTRACTOR));
@@ -164,7 +168,7 @@ public class LCDController {
        lcdServiceImpl.updateDTO(lcdDTO, id);
 
 
-        return "redirect:/houses";
+        return "redirect:/announcement";
 
     }
 
@@ -178,10 +182,11 @@ public class LCDController {
         return "admin/lcd_add";
     }
     @PostMapping("/add_lcd")
-    public String addLcd(
-                            @ModelAttribute(name = "lcd") @Valid LcdDTO lcdDTO,
-                            BindingResult bindingResult,
-                            Model model) throws IOException {
+    public ModelAndView addLcd(
+            @ModelAttribute(name = "lcd") @Valid LcdDTO lcdDTO,
+            BindingResult bindingResult,
+            Model model,
+            HttpServletResponse response) throws IOException {
 
         if (bindingResult.hasErrors()){
             if (lcdDTO.getAdvantages()!=null) {
@@ -193,14 +198,35 @@ public class LCDController {
                 model.addAttribute("advantages", advantages);
             }
             model.addAttribute("contractors", userService.findAllByTypeDTO(TypeUser.CONTRACTOR));
-            return "admin/lcd_add";
+            return new ModelAndView("admin/lcd_add");
         }
         lcdServiceImpl.saveDTO(lcdDTO);
-
-        return "redirect:/houses";
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return new ModelAndView("admin/houses_main");
 
     }
+//@PostMapping("/add_lcd")
+//public ResponseEntity addLcd(
+//        @ModelAttribute(name = "lcd") @Valid LcdDTO lcdDTO,
+//        BindingResult bindingResult,
+//        Model model) throws IOException {
+//
+//    if (bindingResult.hasErrors()){
+//        if (lcdDTO.getAdvantages()!=null) {
+//            List<String> advantages = List.of(lcdDTO.getAdvantages().split(","));
+//            model.addAttribute("advantages", advantages);
+//        }  else {
+//            List<String> advantages = new ArrayList<>();
+//            advantages.add("");
+//            model.addAttribute("advantages", advantages);
+//        }
+//        model.addAttribute("contractors", userService.findAllByTypeDTO(TypeUser.CONTRACTOR));
+//        return ResponseEntity.ok(new ModelAndView("admin/lcd_add"));
+//    }
+//    lcdServiceImpl.saveDTO(lcdDTO);
+//    return ResponseEntity.ok("redirect:/announcement");
 
+//}
 //    @PostMapping("/lcd_add")
 //    public String lcdAdd(
 //                            @RequestParam String name,
@@ -342,7 +368,7 @@ public class LCDController {
 
         lcdServiceImpl.deleteById(idLcd);
         log.info("Lcd id:"+idLcd+", was delete");
-        return "redirect:/houses";
+        return "redirect:/announcement";
 
     }
     public static final boolean checkTypes(Stream stream, String typeVal){

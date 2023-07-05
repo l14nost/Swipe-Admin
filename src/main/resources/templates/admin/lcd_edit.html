@@ -13,17 +13,25 @@
   <div th:insert="admin.shared/header::header"></div>
   <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
-  <div class="content-wrapper" style="padding-left: 50px">
+  <div class="content-wrapper">
+      <div class="content">
+          <div class="content-header">
+              <div class="container-fluid">
+                  <div class="row mb-2">
+                      <div class="col-sm-6">
+                          <h4 class="m-0">ЖК</h4>
+                      </div><!-- /.col -->
+                  </div><!-- /.row -->
+              </div><!-- /.container-fluid -->
+          </div>
+          <div class="card-body">
     <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}" th:object="${lcd}">
      <input type="hidden" name="idLcd" th:value="${lcd.getIdLcd()}">
-      <div style="display: flex; justify-content: space-between">
-        <h4 class="mb-3">ЖК</h4>
-      </div>
-      <div class="col-md-7 col-lg-8">
+<!--      <div class="col-md-7 col-lg-8">-->
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Название</label>
-            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите название..." th:value="${lcd.getName()}" required="">
+            <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите название..." th:value="${lcd.getName()}">
               <div th:if="${#fields.hasErrors('name')}">
                   <div class="text-danger">
                       <p th:errors="*{name}"></p>
@@ -52,7 +60,7 @@
             </div>
           <div class="col-sm-6">
             <label  class="form-label">Оформление</label>
-            <input type="text" class="form-control" name="formalization"  placeholder="Введите оформление..."  required="" th:value="${lcd.getFormalization()}">
+            <input type="text" class="form-control" name="formalization"  placeholder="Введите оформление..."  th:value="${lcd.getFormalization()}">
               <div th:if="${#fields.hasErrors('formalization')}">
                   <div class="text-danger">
                       <p th:errors="*{formalization}"></p>
@@ -61,7 +69,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Варианты расчета</label>
-            <input type="text" class="form-control" name="typePayment"  placeholder="Введите варинаты расчета..."  required="" th:value="${lcd.getTypePayment()}">
+            <input type="text" class="form-control" name="typePayment"  placeholder="Введите варинаты расчета..."  th:value="${lcd.getTypePayment()}">
               <div th:if="${#fields.hasErrors('typePayment')}">
                   <div class="text-danger">
                       <p th:errors="*{typePayment}"></p>
@@ -70,7 +78,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Назначение</label>
-            <input type="text" class="form-control" name="appointment"  placeholder="Введите назначение..."  required="" th:value="${lcd.getAppointment()}">
+            <input type="text" class="form-control" name="appointment"  placeholder="Введите назначение..." th:value="${lcd.getAppointment()}">
               <div th:if="${#fields.hasErrors('appointment')}">
                   <div class="text-danger">
                       <p th:errors="*{appointment}"></p>
@@ -79,7 +87,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Сумма в договоре</label>
-            <input type="text" class="form-control" name="sumContract"  placeholder="Введите тип суммы в договоре..."  required="" th:value="${lcd.getSumContract()}">
+            <input type="text" class="form-control" name="sumContract"  placeholder="Введите тип суммы в договоре..." th:value="${lcd.getSumContract()}">
               <div th:if="${#fields.hasErrors('sumContract')}">
                   <div class="text-danger">
                       <p th:errors="*{sumContract}"></p>
@@ -87,7 +95,7 @@
               </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-floating">
+            <div class="form-floating" style="margin-top: 15px">
               <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="contractor">
                 <option th:each="contractor : ${contractors}" th:value="${contractor.getIdUser()}" th:text="${contractor.getName()+' '+contractor.getSurname()}" th:selected="${contractor.getIdUser() == lcd.getContractor()}"></option>
               </select>
@@ -122,11 +130,6 @@
 <!--            </div>-->
 <!--          </div>-->
           <label for="inputImg">Главная картина</label>
-            <div th:if="${#fields.hasErrors('file')}">
-                <div class="text-danger">
-                    <p th:errors="*{file}"></p>
-                </div>
-            </div>
           <div class="form-group" style="display: flex">
 
             <div class="form-group" style="display: flex">
@@ -146,18 +149,18 @@
             </script>
 
           </div>
+            <div th:if="${#fields.hasErrors('file')}">
+                <div class="text-danger">
+                    <p th:errors="*{file}"></p>
+                </div>
+            </div>
           <div id="galleryDiv">
             <label>Галерея картинок</label>
-              <div th:if="${#fields.hasErrors('gallery')}">
-                  <div class="text-danger">
-                      <p th:errors="*{gallery}"></p>
-                  </div>
-              </div>
             <div class="card-body" >
               <label>Размер 1000х190</label>
               <div class="row" >
 
-                <div class="col-sm-3" th:each="photo:${lcd.getPhotoList()}">
+                <div class="col-sm-2" th:each="photo:${lcd.getPhotoList()}">
                   <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2" alt="white sample">
                   <button type="button" style="
                 position: absolute;
@@ -187,7 +190,7 @@
                     }
                   </script>
                 </div>
-                <div class="col-sm-3" style="margin-left: 20px">
+                <div class="col-sm-2" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
 <!--                    <a th:href="@{/add_photo_lcd/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
 
@@ -202,19 +205,18 @@
               </div>
             </div>
           </div>
+            <div th:if="${#fields.hasErrors('gallery')}">
+                <div class="text-danger">
+                    <p th:errors="*{gallery}"></p>
+                </div>
+            </div>
 
           <div>
             <label>Документы</label>
-              <div th:if="${#fields.hasErrors('documentsFiles')}">
-                  <div class="text-danger">
-                      <p th:errors="*{documentsFiles}"></p>
-                  </div>
-              </div>
             <div class="card-body">
-              <label>Размер 1000х190</label>
               <div class="row" id="documentDiv">
 
-                <div class="col-sm-3" th:each="document:${lcd.getDocuments()}">
+                <div class="col-sm-2" th:each="document:${lcd.getDocuments()}">
                   <img th:src="@{/admin/dist/img/document.png}" id="img1" class="img-fluid mb-2" alt="white sample">
                   <button type="button" style="
                 position: absolute;
@@ -230,21 +232,25 @@
             " th:attr="onclick='deleteDocument(' + ${document.getIdDocuments()} + ', ' + ${lcd.getIdLcd()} + ')'">
                     <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
                   </button>
-                  <label for="inputDocument" id = "filename" th:text="${document.getName()}" style="text-align: center"></label>
-                  <input type="file" id="inputDocument" name="documentsFiles" class="form-control" th:value="${document.getFileName()}" accept=".doc,.docx,.xlsx">
+                  <label th:id = "${'filename'+document.getIdDocuments()}" th:text="${document.getName()}" style="text-align: center"></label>
+                  <input type="file" th:id = "${'inputDocument'+document.getIdDocuments()}" name="documentsFiles" class="form-control" th:value="${document.getFileName()}" th:onchange="'handleFileNameChange('+${document.getIdDocuments()}+')'" accept=".doc,.docx,.xlsx">
+                    <script>
+                        function handleFileNameChange(id) {
+                            console.log(id);
+                            var fileInput = document.getElementById(`inputDocument${id}`);
+                            var listFile = document.getElementById(`filename${id}`);
+
+                            fileInput.onchange = function () {
+                                var files = Array.from(this.files);
+                                files = files.map(file => file.name);
+                                listFile.innerHTML = files.join('<br/>');
+                            }
+                        }
+                    </script>
                 </div>
-                <script>
-                  var fileInput = document.getElementById('inputDocument');
-                  var listFile = document.getElementById('filename');
 
-                  fileInput.onchange = function () {
-                    var files = Array.from(this.files);
-                    files = files.map(file => file.name);
-                    listFile.innerHTML = files.join('<br/>');
-                  }
-                </script>
 
-                <div class="col-sm-3" style="margin-left: 20px">
+                <div class="col-sm-2" style="margin-left: 20px">
                   <div style="display: flex; justify-content: center">
 <!--                    <a th:href="@{/add_document/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
                     <button class="btn btn-outline" type="button" onclick="addDocument()">
@@ -259,7 +265,11 @@
               </div>
             </div>
           </div>
-
+            <div th:if="${#fields.hasErrors('documentsFiles')}">
+                <div class="text-danger">
+                    <p th:errors="*{documentsFiles}"></p>
+                </div>
+            </div>
           <div class="col-sm-6">
             <div class="form-floating">
               <select class="form-select"  aria-label="Floating label select example" name="status">
@@ -343,7 +353,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Высота потолков</label>
-            <input type="number" class="form-control" name="height"  placeholder="Введите высоту потолков..." th:value="${lcd.getHeight()}" required="">
+            <input type="number" class="form-control" name="height"  placeholder="Введите высоту потолков..." th:value="${lcd.getHeight()}" >
               <div th:if="${#fields.hasErrors('height')}">
                   <div class="text-danger">
                       <p th:errors="*{height}"></p>
@@ -352,7 +362,7 @@
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Расстояние до моря</label>
-            <input type="number" class="form-control" name="distanceSea"  placeholder="Введите расстояние до моря..." th:value="${lcd.getDistanceSea()}" required="">
+            <input type="number" class="form-control" name="distanceSea"  placeholder="Введите расстояние до моря..." th:value="${lcd.getDistanceSea()}" >
               <div th:if="${#fields.hasErrors('distanceSea')}">
                   <div class="text-danger">
                       <p th:errors="*{distanceSea}"></p>
@@ -369,9 +379,8 @@
                 <th scope="col">
 <!--                  <a th:href="@{/add_frame/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary">-->
 
-                  <button type="button" onclick="addFrame()" class="btn btn-secondary">
-                    <i class="fas fa-plus">
-                    </i>
+                  <button type="button" onclick="addFrame()" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Добавить корпус">
+                      Добавить
                   </button></th>
               </tr>
               </thead>
@@ -381,13 +390,13 @@
                 <td><p th:text="${frame.getApartmentList().size()}"></p></td>
                 <td>
                   <div style="display: flex">
-                      <button type="button" class="btn btn-info btn-sm" th:attr="onclick='editFrame('+${frame.getIdFrame()}+')'" data-toggle="tooltip" data-placement="top" title="Edit frame">
+                      <button type="button" class="btn btn-info btn-sm" th:attr="onclick='editFrame('+${frame.getIdFrame()}+')'" data-toggle="tooltip" data-placement="top" title="Редактировать корпус">
                         <i class="fas fa-pencil">
                         </i>
                       </button>
 
                       <input type="hidden" name="id" th:value="${frame.getIdFrame()}" />
-                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px" th:attr="onclick='deleteFrame('+${frame.getIdFrame()}+','+${lcd.getIdLcd()}+')'" data-toggle="tooltip" data-placement="top" title="Delete frame">
+                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px" th:attr="onclick='deleteFrame('+${frame.getIdFrame()}+','+${lcd.getIdLcd()}+')'" data-toggle="tooltip" data-placement="top" title="Удалить корпус">
                         <i class="fas fa-trash">
                         </i>
                       </button>
@@ -408,9 +417,8 @@
                 <th scope="col">Заголовок</th>
                 <th scope="col">Дата</th>
                 <th scope="col">
-                  <a th:href="@{/add_news/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary btn-sm" style="margin-left: 10px">
-                  <i class="fas fa-plus">
-                  </i>
+                  <a th:href="@{/add_news/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить новость">
+                      Добавить
                 </a></th>
               </tr>
               </thead>
@@ -420,12 +428,12 @@
                 <td><p th:text="${news.getDate()}"></p></td>
                 <td>
                   <div style="display: flex">
-                      <a th:href="@{/edit_news/{idNews}(idNews = ${news.getIdNews()})}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit news">
+                      <a th:href="@{/edit_news/{idNews}(idNews = ${news.getIdNews()})}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать новость">
                         <i class="fas fa-pencil">
                         </i>
                       </a>
 
-                      <button type="button" th:attr="onclick='deleteNews('+${news.getIdNews()}+', '+${lcd.getIdLcd()}+')'" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Delete news">
+                      <button type="button" th:attr="onclick='deleteNews('+${news.getIdNews()}+', '+${lcd.getIdLcd()}+')'" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Удалить новость">
                         <i class="fas fa-trash">
                         </i>
                       </button>
@@ -436,19 +444,22 @@
               </tbody>
             </table>
           </div>
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
-
+            <div class="d-flex justify-content-center">
+          <button class="w-50 btn btn-primary btn-lg" type="submit">Сохранить</button>
+            </div>
         </div>
-      </div>
+<!--      </div>-->
     </form>
-
+          </div>
+      </div>
 
 
   </div>
+    <div th:insert="admin.shared/footer::footer"></div>
 </div>
 
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 <script src="https://unpkg.com/imask"></script>
 <script>

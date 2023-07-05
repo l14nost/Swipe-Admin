@@ -94,9 +94,9 @@ class UserServiceImplTest {
                 User.builder().typeUser(TypeUser.CLIENT).build()
         );
         Pageable pageable = PageRequest.of(0,3);
-        UserSpecification blackListSpecification1 = UserSpecification.builder().typeUser(TypeUser.CLIENT).sort("idUser").build();
+        UserSpecification blackListSpecification1 = UserSpecification.builder().typeUser(TypeUser.CLIENT).sort("idUser").order(1).build();
         when(userRepo.findAll(blackListSpecification1,pageable)).thenReturn(new PageImpl<>(client));
-        Page<ClientDTO> users = userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"null","idUser");
+        Page<ClientDTO> users = userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"null","idUser",1);
         assertEquals(5,users.getContent().size());
         for (ClientDTO user : users) {
             assertEquals(TypeUser.CLIENT, user.getType());
@@ -104,9 +104,9 @@ class UserServiceImplTest {
         List<User> client1 = Arrays.asList(
                 User.builder().name("Amir").typeUser(TypeUser.CLIENT).build()
         );
-        UserSpecification blackListSpecification = UserSpecification.builder().keyWord("Amir").typeUser(TypeUser.CLIENT).sort("idUser").build();
+        UserSpecification blackListSpecification = UserSpecification.builder().keyWord("Amir").typeUser(TypeUser.CLIENT).sort("idUser").order(1).build();
         when(userRepo.findAll(blackListSpecification,pageable)).thenReturn(new PageImpl<>(client1));
-        Page<ClientDTO> users1 = userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"Amir","idUser");
+        Page<ClientDTO> users1 = userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"Amir","idUser",1);
         assertEquals(1,users1.getContent().size());
     }
 
@@ -120,9 +120,9 @@ class UserServiceImplTest {
                 User.builder().typeUser(TypeUser.CLIENT).build()
         );
         Pageable pageable = PageRequest.of(0,3);
-        BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord("null").sortedBy("surname").build();
+        BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord("null").sortedBy("surname").order(1).build();
         when(userRepo.findAll(blackListSpecification,pageable)).thenReturn(new PageImpl<>(client));
-        Page<BlackListDTO> users = userService.blackList(pageable,"null", "surname");
+        Page<BlackListDTO> users = userService.blackList(pageable,"null", "surname",1);
         assertEquals(5,users.getContent().size());
     }
 
@@ -136,9 +136,9 @@ class UserServiceImplTest {
                 User.builder().typeUser(TypeUser.CLIENT).build()
         );
         Pageable pageable = PageRequest.of(0,3);
-        BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord("1").sortedBy("surname").build();
+        BlackListSpecification blackListSpecification = BlackListSpecification.builder().keyWord("1").sortedBy("surname").order(1).build();
         when(userRepo.findAll(blackListSpecification,pageable)).thenReturn(new PageImpl<>(client));
-        Page<BlackListDTO> users = userService.blackList(pageable,"1", "surname");
+        Page<BlackListDTO> users = userService.blackList(pageable,"1", "surname",1);
         assertEquals(5,users.getContent().size());
     }
 

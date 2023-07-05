@@ -23,6 +23,7 @@ import java.time.LocalDate;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -71,7 +72,7 @@ class NewsControllerTest {
                 .idNews(1)
                 .idLcd(1)
                 .description("1")
-                .date(LocalDate.now())
+                .date(LocalDate.of(2025,12,1))
                 .title("111111")
                 .build();
 
@@ -120,7 +121,7 @@ class NewsControllerTest {
                 .idNews(1)
                 .idLcd(1)
                 .description("1")
-                .date(LocalDate.now())
+                .date(LocalDate.of(2025,11,5))
                 .title("111111")
                 .build();
 
@@ -147,5 +148,43 @@ class NewsControllerTest {
                         .param("idLcd","1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/lcd_edit/1"));
+    }
+
+
+
+    @Test
+    void addNewsPage() throws Exception {
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/add_news/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/news_add"));
+
+    }
+
+
+
+    @Test
+    void editNewsPage() throws Exception {
+        NewsDTO newsDTO = NewsDTO.builder()
+                .idNews(1)
+                .idLcd(1)
+                .description("1")
+                .date(LocalDate.of(2025,11,5))
+                .title("111111")
+                .build();
+        when(newsService.findByIdDTO(1)).thenReturn(newsDTO);
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/edit_news/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/news_edit"));
+
     }
 }

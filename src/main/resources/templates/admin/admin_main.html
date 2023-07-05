@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Main</title>
+    <title>Statistics</title>
     <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,66 +13,85 @@
     <div th:insert="admin.shared/header::header"></div>
     <div th:insert="admin.shared/left_sidebar::left_sidebar"></div>
 
-    <div class="content-wrapper" style="padding-left: 50px">
-        <h5 style="text-align: center">Пользователи не в черном списке</h5>
-        <div style="display: flex; justify-content: center">
+    <div class="content-wrapper" style="padding-left: 20px; ">
+        <section class="content">
+        <div class="row" style="margin-top: 10px">
             <div class="col-lg-3 col-6">
+
                 <!-- small box -->
                 <div class="small-box bg-gradient-info">
+                    <div class="ribbon-wrapper ribbon-lg">
+                        <div class="ribbon bg-primary">
+                            Активные
+                        </div>
+                    </div>
                     <div class="inner">
                         <h3 th:text="${client.size()}"></h3>
-
                         <p>Клиент</p>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <a th:href="@{/users}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a th:href="@{/users}" class="small-box-footer">Детально <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-gradient-warning">
+                    <div class="ribbon-wrapper ribbon-lg">
+
+                    <div class="ribbon bg-primary">
+                            Активные
+                        </div>
+                    </div>
                     <div class="inner">
                         <h3 th:text="${contractor.size()}"></h3>
 
                         <p>Застройщик</p>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <a th:href="@{/users}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a th:href="@{/users}" class="small-box-footer">Детально <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-gradient-success">
+                    <div class="ribbon-wrapper ribbon-lg">
+
+                    <div class="ribbon bg-primary">
+                            Активные
+                        </div>
+                    </div>
                     <div class="inner">
                         <h3 th:text="${notary.size()}"></h3>
 
                         <p>Нотариус</p>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
+                    <a th:href="@{/users}" class="small-box-footer">Детально <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-gradient-gray">
+                    <div class="inner">
+                        <h3 th:text="${houses}"></h3>
+                        <div class="ribbon-wrapper ribbon-lg">
+                            <div class="ribbon bg-primary">
+                                Активные
+                            </div>
+                        </div>
+                        <p>
+                            Объявления
+                        </p>
                     </div>
-                    <a th:href="@{/users}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a th:href="@{/announcement}" class="small-box-footer">Детально <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
-
+        <div style="display: flex">
+        <section class="col-lg-6 connectedSortable ui-sortable">
         <div class="card" style="max-width: 750px; margin: 0 auto">
             <div class="card-header ui-sortable-handle" style="cursor: move;">
                 <h3 class="card-title">
                     <i class="fas fa-chart-pie mr-1"></i>
-                    Users
+                    Пользователи
                 </h3>
-                <div class="card-tools">
-                    <ul class="nav nav-pills ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#sales-chart" data-toggle="tab">Donut</a>
-                        </li>
-                    </ul>
-                </div>
             </div><!-- /.card-header -->
             <div class="card-body">
                 <div class="tab-content p-0">
@@ -83,23 +102,38 @@
                 </div>
             </div><!-- /.card-body -->
         </div>
+        </section>
+
+            <section class="col-lg-6 connectedSortable ui-sortable">
+                <div class="card" style="max-width: 750px; margin: 0 auto">
+                    <div class="card-header ui-sortable-handle" style="cursor: move;">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Квартиры
+                        </h3>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content p-0">
+                            <!-- Morris chart - Sales -->
+                            <div class="chart tab-pane active" id="sales-chart-houses" style="position: relative; height: 300px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                <canvas id="sales-chart-canvas-houses" height="300" style="height: 450px; display: block; width: 684px;" width="1197" class="chartjs-render-monitor"></canvas>
+                            </div>
+                        </div>
+                    </div><!-- /.card-body -->
+                </div>
+            </section>
+    </div>
 
 
-        <div class="card bg-gradient-info" style="max-height: 500px; max-width: 750px; margin: 0 auto; margin-top: 20px">
+        <div style="display: flex">
+        <section class="col-lg-6 connectedSortable ui-sortable">
+        <div class="card bg-gradient-info" style="max-height: 100%; max-width: 100%; margin: 0 auto; margin-top: 20px">
             <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
                 <h3 class="card-title">
                     <i class="fas fa-th mr-1"></i>
-                    News
+                    Новости
                 </h3>
 
-                <div class="card-tools">
-                    <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-<!--                    <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">-->
-<!--                        <i class="fas fa-times"></i>-->
-<!--                    </button>-->
-                </div>
             </div>
             <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
                 <canvas class="chart chartjs-render-monitor" id="line-chart" style="min-height: 250px; height: 250px; max-height: 500px; max-width: 750px; display: block; width: 286px;" width="750" height="437"></canvas>
@@ -107,34 +141,30 @@
             <!-- /.card-body -->
 
         </div>
-        <div class="card" style="max-height: 500px; max-width: 750px; margin: 0 auto; margin-top: 20px">
-            <div class="card-header ui-sortable-handle" style="cursor: move;">
-                <h3 class="card-title">
-                    <i class="fas fa-chart-pie mr-1"></i>
-                    Subs
-                </h3>
-                <div class="card-tools">
-                    <ul class="nav nav-pills ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
-                        </li>
-                    </ul>
+        </section>
+        <section class="col-lg-6 connectedSortable ui-sortable">
+            <div class="card bg-gradient-info" style="max-height: 100%; max-width: 100%; margin: 0 auto; margin-top: 20px">
+                <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                    <h3 class="card-title">
+                        <i class="fas fa-th mr-1"></i>
+                        Подписки
+                    </h3>
+
                 </div>
-            </div><!-- /.card-header -->
-            <div class="card-body">
-                <div class="tab-content p-0">
-                    <!-- Morris chart - Sales -->
-                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                        <canvas id="revenue-chart-canvas" height="525" style="height: 300px; display: block; width: 664px;" width="1162" class="chartjs-render-monitor"></canvas>
-                    </div>
+                <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                    <canvas class="chart chartjs-render-monitor" id="revenue-chart-canvas" style="min-height: 250px; height: 250px; max-height: 500px; max-width: 750px; display: block; width: 286px;" width="750" height="437"></canvas>
                 </div>
-            </div><!-- /.card-body -->
+                <!-- /.card-body -->
+
+            </div>
+        </section>
         </div>
+        </section>
     </div>
 
-
+    <div th:insert="admin.shared/footer::footer"></div>
 </div>
-<div th:insert="admin.shared/footer::footer"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 <script>
     var clientCount = [[${client.size()}]];
@@ -161,9 +191,9 @@
     var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
     var pieData = {
         labels: [
-            'Client',
-            'Contractor',
-            'Notary'
+            'Клиент',
+            'Застройщик',
+            'Нотариус'
         ],
         datasets: [
             {
@@ -190,6 +220,60 @@
     })
 
 </script>
+
+<script>
+    var apartment = [[${apartment}]];
+    var apartmentLcd = [[${apartmentFrame}]];
+    // var ctx = document.getElementById('sales-chart-canvas').getContext('2d');
+    // var genderChart = new Chart(ctx, {
+    //     type: 'pie',
+    //     data: {
+    //         datasets: [{
+    //             data: [clientCount, contractorCount,notaryCount],
+    //             backgroundColor: ['#17a2b8', '#ffc107',"#28a745"]
+    //         }],
+    //         labels: ['Client', 'Contractor', 'Notary']
+    //     },
+    //     options: {
+    //         responsive: true,
+    //         legend: {
+    //             position: 'bottom'
+    //         }
+    //     }
+    // });
+
+    var pieChartCanvas = $('#sales-chart-canvas-houses').get(0).getContext('2d')
+    var pieData = {
+        labels: [
+            'Частные',
+            'От застройщика'
+        ],
+        datasets: [
+            {
+                data: [apartment, apartmentLcd],
+                backgroundColor: ['#17a2b8', '#ffc107']
+            }
+        ]
+    }
+    var pieOptions = {
+        legend: {
+            display: true,
+            position: 'bottom'
+        },
+        maintainAspectRatio: false,
+        responsive: true
+    }
+    // Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    // eslint-disable-next-line no-unused-vars
+    var pieChart = new Chart(pieChartCanvas, { // lgtm[js/unused-local-variable]
+        type: 'doughnut',
+        data: pieData,
+        options: pieOptions
+    })
+
+</script>
+
 <script th:inline="javascript">
     $(function () {
         'use strict'
@@ -265,16 +349,19 @@
         labels:months,
         datasets: [
             {
-                label: 'Digital Goods',
-                backgroundColor: 'rgba(60,141,188,0.9)',
-                borderColor: 'rgba(60,141,188,0.8)',
-                pointRadius: false,
-                pointColor: '#3b8bba',
-                pointStrokeColor: 'rgba(60,141,188,1)',
-                pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: [[${subData}]]
-            },
+                label: 'News',
+                fill: false,
+                borderWidth: 2,
+                lineTension: 0,
+                spanGaps: true,
+                borderColor: '#efefef',
+                pointRadius: 3,
+                pointHoverRadius: 7,
+                pointColor: '#efefef',
+                pointBackgroundColor: '#efefef',
+                data: [[${subData}]],
+
+            }
         ]
     }
 
@@ -286,13 +373,24 @@
         },
         scales: {
             xAxes: [{
-                gridLines: {
-                    display: false
+                ticks: {
+                    fontColor: '#efefef'
+                },
+                grid: {
+                    display: false,
+                    color: '#efefef',
+                    drawBorder: false
                 }
             }],
             yAxes: [{
-                gridLines: {
-                    display: false
+                ticks: {
+                    stepSize: 1,
+                    fontColor: '#efefef'
+                },
+                grid: {
+                    display: true,
+                    color: '#efefef',
+                    drawBorder: false
                 }
             }]
         }

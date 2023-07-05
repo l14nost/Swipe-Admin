@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 public class UserAddInfoDTO {
     boolean callSms;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Не должно быть пустым")
     LocalDate dateSub;
     TypeNotification typeNotification;
 }

@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -100,6 +101,38 @@ class AdminControllerTest {
         when(authentication.getName()).thenReturn("mail@gmail.com");
         mockMvc.perform(post("/profile")
                         .flashAttr("user", adminDto))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/admin_profile"));
+    }
+
+    @Test
+    public void testValidUpdateProfileRedirectToStatistics() throws Exception {
+        AdminDto adminDto = AdminDto.builder()
+                .mail("admin@gmail.com")
+                .password("")
+                .confirmPassword("")
+                .idUser(1)
+                .build();
+        BindingResult result = new BeanPropertyBindingResult(adminDto,"user");
+        given(userService.uniqueMail(anyString(), any(BindingResult.class), anyInt(), anyString())).willReturn(result);
+        when(userService.getCurrentUser()).thenReturn(AdminDto.builder().idUser(1).password(new BCryptPasswordEncoder().encode("pass")).mail("admin@gmail.com").build());
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("admin@gmail.com");
+        mockMvc.perform(post("/profile")
+                        .flashAttr("user", adminDto))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/statistics"));
+    }
+    @Test
+    public void profileMain() throws Exception {
+        when(userService.getCurrentUser()).thenReturn(AdminDto.builder().idUser(1).password(new BCryptPasswordEncoder().encode("pass")).mail("admin@gmail.com").build());
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("admin@gmail.com");
+        mockMvc.perform(get("/profile"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/admin_profile"));
     }

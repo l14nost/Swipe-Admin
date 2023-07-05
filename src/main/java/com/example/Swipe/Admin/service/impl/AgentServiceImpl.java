@@ -34,18 +34,18 @@ public class AgentServiceImpl implements AgentService {
     public BindingResult uniqueEmail(String mail, BindingResult result, int id, String method){
         List<Agent> agents = agentRepo.findAllByMail(mail);
         if (agents.size()>=2){
-            result.addError(new FieldError("agent", "mail", "Email already exists"));
+            result.addError(new FieldError("agent", "mail", "Пользователь с такой почтой уже существует"));
             return result;
         }
         else if (method.equals("update")&&agents.size()==1){
             if (agents.get(0).getIdAgent()==id){
                 return result;
             }
-            result.addError(new FieldError("agent", "mail", "Email already exists"));
+            result.addError(new FieldError("agent", "mail", "Пользователь с такой почтой уже существует"));
             return result;
         }
         else if (method.equals("add")&&agents.size()!=0){
-            result.addError(new FieldError("agent", "mail", "Email already exists"));
+            result.addError(new FieldError("agent", "mail", "Пользователь с такой почтой уже существует"));
             return result;
         }
         else return result;

@@ -15,16 +15,25 @@
   <div th:replace="~{/admin.shared/header}"></div>
   <div th:replace="~{/admin.shared/left_sidebar}"></div>
   <div class="content-wrapper" id="tableContent">
+      <div class="content">
+          <div class="content-header">
+              <div class="container-fluid">
+                  <div class="row mb-2">
+                      <div class="col-sm-6">
+                          <h4 class="m-0">Список клиентов в черном списке</h4>
+                      </div><!-- /.col -->
+                  </div><!-- /.row -->
+              </div><!-- /.container-fluid -->
+          </div>
+          <div class="card-body">
     <div>
-    <div style="text-align: center">
-      <h3>Список клиентов в черном списке</h3>
-    </div>
       <div style="display: flex; justify-content: right">
+
       <nav class="navbar bg-body-tertiary" id="searchBlackList">
         <div class="container-fluid ">
 <!--          <form class="d-flex" role="search">-->
           <div style="display: flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInput" name="search">
+            <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInput" name="search">
             <button class="btn btn-outline-info" type="button" onclick="searchBlackList()">Search</button>
           </div>
 <!--          </form>-->
@@ -36,7 +45,7 @@
             <i th:text="'Результат поиска по значению:'+${searchV}"></i>
             <a onclick="searchToNull()"><i class="fas fa-times"></i></a>
         </div>
-        <table class="table table-striped" style="margin: 20px">
+        <table class="table table-striped" >
         <thead>
         <tr>
           <th scope="col">
@@ -47,7 +56,7 @@
               <button class="btn btn-outline-info clickBtn" type="button" value="surname" onclick="sortedBlackList('surname')">ФИО</button></th>
           <th scope="col"><input type="hidden"  id="sortedInput2" name="sorted2" value="mail">
               <button class="btn btn-outline-info clickBtn" type="button" value="mail" onclick="sortedBlackList('mail')">Почта</button></th>
-          <th scope="col">#</th>
+
         </tr>
         </thead>
         <tbody>
@@ -59,9 +68,9 @@
 
               <form th:action="@{/delete_from_black_list}"  method="post" >
                 <input type="hidden" name="idUser" th:value="${user.getIdUser()}" />
-                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Delete from blacklist">
+                  <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Удалить из черного списка">
 <!--                <button type="button" class="btn btn-dark btn-sm" style="margin-left: 10px" th:onclick="'deleteFromBlackList('+${user.getIdUser()}+')'">-->
-                  <i class="nav-icon fas fa-calendar-minus"></i>
+                  <i class="nav-icon fas fa-trash"></i>
                 </button>
 
               </form>
@@ -71,9 +80,12 @@
       </table>
     </div>
         <div style="display: flex; justify-content: space-between">
-        <div id="textPagination" style="margin-left: 10px" th:if="${blackList.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${blackList.getContent().size()} + ' из '+${allSize}+' записей'" ></h6></div>
+            <div id="textPagination">
+        <div  style="margin-left: 10px" th:if="${blackList.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${blackList.getContent().size()} + ' из '+${allSize}+' записей'" ></h6></div>
         <div style="margin-left: 10px" th:if="${blackList.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: right; margin-right: 10px">
+        </div>
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: right; margin-right: 10px" id="allPagination">
+          <div th:if="${blackList.getTotalPages()>1}" style="display: flex; justify-content: right; margin-right: 10px">
           <ul class="pagination" id="previous">
               <li class="page-item" th:hidden="${blackList.getNumber()==0}">
                   <input type="hidden" id="pageNumberPr" th:value="${blackList.getNumber()-1}">
@@ -116,11 +128,15 @@
           </select>
         </li>
         </ul>
+          </div>
       </nav>
+
         </div>
 
 
     </div>
+          </div>
+      </div>
   </div>
   <div th:replace="~{/admin.shared/footer}"></div>
 </div>
@@ -130,8 +146,8 @@
 
 <!--<div th:fragment="script"></div>-->
 <script>
-    let url = '/Swipe-Admin/black_list';
-    // let url = '/black_list';
+    // let url = '/Swipe-Admin/black_list';
+    let url = '/black_list';
     // var searchBlack = localStorage.getItem('search');
 
 
@@ -172,6 +188,8 @@
                 sortedBy:sortVal
             },
             success: function (data) {
+                var allPag = $(data).find('#allPagination').html();
+                $('#allPagination').html(allPag);
                 var tableHtml = $(data).find('#blackListTable').html();
                 $('#blackListTable').html(tableHtml);
                 var pagination = $(data).find('#paginationList').html();
@@ -571,8 +589,8 @@
             var textPag = $(data).find('#textPagination').html();
             $('#textPagination').html(textPag);
 
-            // var pagination = $(data).find('#paginationList').html();
-            // $('#paginationList').html(pagination);
+            var pagination = $(data).find('#paginationList').html();
+            $('#paginationList').html(pagination);
 
             $('#paginationList li').removeClass('active');
             $('#paginationList li').filter(function() {

@@ -4,6 +4,8 @@ import com.example.Swipe.Admin.dto.ApartmentDTO;
 import com.example.Swipe.Admin.dto.PhotoDTO;
 import com.example.Swipe.Admin.entity.Apartment;
 import com.example.Swipe.Admin.entity.Frame;
+import com.example.Swipe.Admin.entity.LCD;
+import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.service.impl.ApartmentServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
@@ -27,6 +29,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -54,7 +57,7 @@ class ApartmentControllerTest {
         mockMvc.perform(post("/delete_apartment")
                 .param("idApartment","1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/houses"));
+                .andExpect(view().name("redirect:/announcement"));
     }
     @Test
     void deleteApartmentFrame() throws Exception {
@@ -122,7 +125,7 @@ class ApartmentControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("result",result))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/houses"));
+                .andExpect(view().name("redirect:/announcement"));
 
     }
     @Test
@@ -275,7 +278,7 @@ class ApartmentControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("result",result))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/houses"));
+                .andExpect(view().name("redirect:/announcement"));
     }
 
     @Test
@@ -382,6 +385,73 @@ class ApartmentControllerTest {
                         .flashAttr("apartment",apartmentDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("result",result))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/apartment_frame"));
+    }
+
+
+
+    @Test
+    void editPage() throws Exception {
+        ApartmentDTO apartmentDTO = ApartmentDTO.builder()
+                .idApartment(1)
+                .number(101)
+                .description("111")
+                .totalArea(100)
+                .type(TypeApartment.APARTMENT)
+                .layout(LayoutType.STUDIO)
+                .state(State.REPAIR)
+                .price(200020)
+                .kitchenArea(15)
+                .calculation(Calculation.CAPITAL)
+                .foundingDocument(FoundingDocument.TREATY)
+                .countRoom(CountRoom.K1)
+                .communicationType(CommunicationType.SMS)
+                .commission(Commission.K10)
+                .address("г.Город, р.Район, ул.Улица,1")
+                .balconyType(BalconyType.NO)
+                .heatingType(HeatingType.INDIVIDUAL)
+                .mainPhoto("123123")
+                .build();
+        when(apartmentService.findByIdDTO(1)).thenReturn(apartmentDTO);
+        when(lcdService.findAll()).thenReturn(List.of(LCD.builder().build()));
+        when(userService.findAllByType(TypeUser.CLIENT)).thenReturn(List.of(User.builder().build()));
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/apartment_edit/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/apartment_edit"));
+    }
+
+
+
+    @Test
+    void addPage() throws Exception {
+
+        when(lcdService.findAll()).thenReturn(List.of(LCD.builder().build()));
+        when(userService.findAllByType(TypeUser.CLIENT)).thenReturn(List.of(User.builder().build()));
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/add_apartment"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/apartment_add"));
+    }
+
+    @Test
+    void addToFramePage() throws Exception {
+
+         Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("mail@gmail.com");
+
+        mockMvc.perform(get("/add_apartment/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/apartment_frame"));
     }

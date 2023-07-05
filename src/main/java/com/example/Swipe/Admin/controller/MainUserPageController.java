@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainUserPageController {
     private Logger log = LoggerFactory.getLogger(MainUserPageController.class);
     private final UserServiceImpl userServiceImpl;
-    private TypeUser typeUser;
 
 
     @GetMapping("/users")

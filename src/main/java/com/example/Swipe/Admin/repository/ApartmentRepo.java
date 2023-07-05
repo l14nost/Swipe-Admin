@@ -19,6 +19,7 @@ public interface ApartmentRepo extends JpaRepository<Apartment, Integer>, JpaSpe
     Page<Apartment> findAllByFrame(Frame frame,Pageable pageable);
 
     int countByFrameIsNull();
+    int countByFrameIsNotNull();
 
     int countByFrame(Frame frame);
 }

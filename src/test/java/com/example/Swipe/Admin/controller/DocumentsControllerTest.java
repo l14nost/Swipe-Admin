@@ -1,5 +1,6 @@
 package com.example.Swipe.Admin.controller;
 
+import com.example.Swipe.Admin.dto.LcdDTO;
 import com.example.Swipe.Admin.service.impl.DocumentsServiceImpl;
 import com.example.Swipe.Admin.service.impl.FrameServiceImpl;
 import com.example.Swipe.Admin.service.impl.LCDServiceImpl;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -36,6 +39,14 @@ class DocumentsControllerTest {
         mockMvc.perform(post("/delete_document")
                 .param("idDocument","1")
                 .param("idLcd","1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/lcd_edit/1"));
+    }
+
+    @Test
+    void addDocument() throws Exception {
+        when(lcdService.findByIdDTO(1)).thenReturn(LcdDTO.builder().build());
+        mockMvc.perform(get("/add_document/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/lcd_edit/1"));
     }

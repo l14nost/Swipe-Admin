@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Houses</title>
+  <title>Announcement</title>
   <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,15 +28,24 @@
   <div th:replace="~{/admin.shared/left_sidebar}"></div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+
+    <div class="content">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h4 class="m-0">Список ЖК</h4>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <div class="card-body">
     <div>
-    <div style="text-align: center">
-      <h3>Список ЖК</h3>
-    </div>
       <div style="display: flex; justify-content: right">
         <nav class="navbar bg-body-tertiary" id="lcdSearch">
           <div class="container-fluid ">
             <div style="display: flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputLcd" name="search">
+              <input class="form-control me-2" type="search" placeholder="Поиск по названию" aria-label="Search" id="searchInputLcd" name="search">
               <button class="btn btn-outline-info" type="button" onclick="searchLcd()">Search</button>
             </div>
           </div>
@@ -47,7 +56,7 @@
         <i th:text="'Результат поиска по значению:'+${searchLcd}"></i>
         <a onclick="closeLcd()"><i class="fas fa-times"></i></a>
       </div>
-      <table class="table table-striped" style="margin: 20px" id="lcdTable">
+      <table class="table table-striped" id="lcdTable">
         <thead>
         <tr>
           <th scope="col">
@@ -64,9 +73,8 @@
           </th>
           <th scope="col">
             <form method="get" th:action="@{/add_lcd}">
-                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add LCD">
-                <i class="fas fa-plus">
-                </i>
+                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить ЖК">
+                  Добавить
               </button>
             </form></th>
         </tr>
@@ -79,17 +87,40 @@
             <td>
               <div style="display: flex">
               <form th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}"  method="get" >
-                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit LCD">
+                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать ЖК">
                   <i class="fas fa-pencil">
                   </i>
                 </button>
               </form>
-              <form th:action="@{/delete_lcd}"  method="post" >
-                <input type="hidden" name="idLcd" th:value="${lcd.getIdLcd()}" />
-                <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Delete LCD">
-                  <i class="fas fa-trash">
-                  </i>
+<!--              <form th:action="@{/delete_lcd}"  method="post" >-->
+<!--                <input type="hidden" name="idLcd" th:value="${lcd.getIdLcd()}" />-->
+                <button type="button" class="btn btn-danger btn-sm deleteLCD" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteLCD" th:data-id="${lcd.getIdLcd()}">
+                  <i class="fas fa-trash"></i>
                 </button>
+                <!--                </form>-->
+
+                <!-- Модальное окно -->
+                <div class="modal fade" id="confirmDeleteLCD" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteLCDLabel">Удаление ЖК</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Вы уверены, что хотите удалить этот ЖК?
+                      </div>
+                      <div class="modal-footer">
+                        <!-- Закрываем модальное окно, если пользователь передумал -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
+                        <button type="submit" class="btn btn-danger" onclick="deleteLCD()">Удалить</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
               </form>
               </div>
@@ -97,6 +128,7 @@
           </tr>
         </tbody>
       </table>
+
 
     </div>
       <div style="display: flex; justify-content: space-between">
@@ -115,8 +147,17 @@
         </ul>
         <ul class="pagination" id="lcdPagination">
           <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, lcds.getTotalPages()-1)}" th:value="${p}" th:if="${lcds.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-        </ul>
+          <li style="margin-left: 5px; margin-right: 5px" th:if="${lcds.getNumber()>1 && lcds.getTotalPages()>5}"><p >...</p></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li class="page-item"  th:each="p: ${#numbers.sequence(lcds.getNumber()-1, lcds.getNumber()+1)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()>1 && lcds.getNumber()<lcds.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+          <!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+          <li class="page-item"  th:each="p: ${#numbers.sequence(lcds.getTotalPages()-3, lcds.getTotalPages()-2)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()>lcds.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li style="margin-left: 5px; margin-right: 5px" th:if="${lcds.getNumber()<lcds.getTotalPages()-2 && lcds.getTotalPages()>5}"><p>...</p></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, lcds.getTotalPages()-2)}" th:if="${lcds.getTotalPages()>2 && lcds.getTotalPages()<=5 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li class="page-item"><a class="page-link" href="#" th:text="${lcds.getTotalPages()}" th:if="${lcds.getTotalPages()>1}"></a></li></ul>
         <ul class="pagination" id="nextLcd">
           <li class="page-item" th:hidden="${lcds.getNumber()==lcds.getTotalPages()-1}" th:if="${lcds.getTotalPages()>1}">
             <input type="hidden" id="pageNumberLcdNext" th:value="${lcds.getNumber()+1}">
@@ -138,15 +179,24 @@
       </div>
 
   </div>
-    <div>
-      <div style="text-align: center">
-        <h3>Список квартир не от застройщика</h3>
       </div>
+    </div>
+    <div class="content">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h4 class="m-0">Список квартир не от застройщика</h4>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <div class="card-body">
       <div style="display: flex; justify-content: right">
         <nav class="navbar bg-body-tertiary" id="apartmentSearch">
           <div class="container-fluid ">
             <div style="display: flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInputApartment" name="search">
+              <input class="form-control me-2" type="search" placeholder="Поиск по номеру" aria-label="Search" id="searchInputApartment" name="search">
               <button class="btn btn-outline-info" type="button" onclick="searchApartment()">Search</button>
             </div>
           </div>
@@ -157,7 +207,7 @@
           <i th:text="'Результат поиска по значению:'+${searchApartment}"></i>
           <a onclick="closeApartment()"><i class="fas fa-times"></i></a>
         </div>
-        <table class="table table-striped" style="margin: 20px" id="apartmentTable">
+        <table class="table table-striped" id="apartmentTable">
           <thead>
           <tr>
             <th scope="col">
@@ -173,9 +223,8 @@
               <button class="btn btn-outline-info" type="button" onclick="sortedApartment('number')">Номер</button>
             </th>
             <th scope="col"><form method="get" th:action="@{/add_apartment}">
-              <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add apartment">
-                <i class="fas fa-plus">
-                </i>
+              <button type="submit" class="btn btn-secondary" style="margin-left: 10px; display: flex" data-toggle="tooltip" data-placement="top" title="Добавить квартиру">
+                Добавить
               </button>
             </form></th>
           </tr>
@@ -188,19 +237,38 @@
             <td>
               <div style="display: flex">
                 <form th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}"  method="get" >
-                  <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit apartment">
+                  <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать квартиру">
                     <i class="fas fa-pencil">
                     </i>
                   </button>
                 </form>
-                <form th:action="@{/delete_apartment}"  method="post" >
-                  <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}" />
-                  <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Delete apartment">
-                    <i class="fas fa-trash">
-                    </i>
+<!--                <form th:action="@{/delete_apartment}" method="post" class="delete-form" id="deleteForm">-->
+<!--                  <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}" />-->
+                  <button type="button" class="btn btn-danger btn-sm deleteApartment" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteApartment" th:data-id="${apartment.getIdApartment()}">
+                    <i class="fas fa-trash"></i>
                   </button>
 
-                </form>
+                <div class="modal fade" id="confirmDeleteApartment" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Удаление квартиры</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Вы уверены, что хотите удалить эту квартиру?
+                      </div>
+                      <div class="modal-footer">
+                        <!-- Закрываем модальное окно, если пользователь передумал -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
+                        <button type="submit" class="btn btn-danger" onclick="deleteApartment()">Удалить</button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
               </div>
             </td>
           </tr>
@@ -250,14 +318,76 @@
 
 
     </div>
+      </div>
+    </div>
+  <div th:replace="~{/admin.shared/footer}"></div>
   </div>
+
 </div>
-<div th:replace="~{/admin.shared/footer}"></div>
+
 <div th:replace="~{/admin.shared/script}"></div>
 <div th:fragment="script"></div>
 <script>
-  let url = '/Swipe-Admin/houses';
-  // let url = '/houses';
+  // let url = '/Swipe-Admin/delete_lcd';
+  let url2 = '/delete_lcd';
+  let lcdId;
+  $(document).on('click', '.deleteLCD', function () {
+    lcdId = $(this).data('id');
+    $('#confirmDeleteLCD').modal('show');
+  });
+  function deleteLCD() {
+    $.ajax({
+      url: url2,
+      type: 'POST',
+      data: {
+        idLcd: lcdId,
+      },
+      success: function (data) {
+        $('#confirmDeleteLCD').modal('hide');
+        window.location.href = "/announcement";
+        lcdId = undefined;
+      },
+      error: function (xhr, status, error) {
+        $('#confirmDeleteApartment').modal('hide');
+        alert("-");
+        console.log(error);
+      }
+    });
+  }
+
+</script>
+<script>
+  // let url = '/Swipe-Admin/delete_apartment';
+  let url1 = '/delete_apartment';
+  let apartmentId;
+  $(document).on('click', '.deleteApartment', function () {
+    apartmentId = $(this).data('id');
+    $('#confirmDeleteApartment').modal('show');
+  });
+  function deleteApartment() {
+    $.ajax({
+      url: url1,
+      type: 'POST',
+      data: {
+        idApartment: apartmentId,
+      },
+      success: function (data) {
+        $('#confirmDeleteApartment').modal('hide');
+        window.location.href = "/announcement";
+        apartmentId = undefined;
+      },
+      error: function (xhr, status, error) {
+        $('#confirmDeleteApartment').modal('hide');
+        alert("-");
+        console.log(error);
+      }
+    });
+  }
+
+</script>
+<script>
+  // let url = '/Swipe-Admin/announcement';
+  let url = '/announcement';
   function searchLcd () {
     var selectedSize = localStorage.getItem('selectedLcdSize');
     // e.preventDefault();
@@ -431,8 +561,13 @@
           $('#previousLcd').html(previous);
           var textHouses = $(data).find('#textLcd').html();
           $('#textLcd').html(textHouses);
+          var pagination = $(data).find('#lcdPagination').html();
+          $('#lcdPagination').html(pagination);
+
           $('#lcdPagination li').removeClass('active');
-          $('#lcdPagination li').eq(pageNumber).addClass('active');
+          $('#lcdPagination li').filter(function() {
+            return $(this).text() === (intPageNumber+1).toString();
+          }).addClass('active');
           localStorage.setItem('pageLcd', pageNumber);
 
 
@@ -450,6 +585,9 @@
 
       e.preventDefault();
       var pageNumber = $('#pageNumberLcdNext').val();
+
+      var intPageNumber = parseInt(pageNumber);
+
       // var url = '/Swipe-Admin/houses';
 
 
@@ -473,9 +611,15 @@
           $('#previousLcd').html(previous);
           var textHouses = $(data).find('#textLcd').html();
           $('#textLcd').html(textHouses);
+
+          var pagination = $(data).find('#lcdPagination').html();
+          $('#lcdPagination').html(pagination);
+
           $('#lcdPagination li').removeClass('active');
-          $('#lcdPagination li').eq(pageNumber).addClass('active');
-          localStorage.setItem('pageContractor', pageNumber);
+          $('#lcdPagination li').filter(function() {
+            return $(this).text() === (intPageNumber+1).toString();
+          }).addClass('active');
+          localStorage.setItem('pageLcd', pageNumber);
 
 
         },
@@ -560,6 +704,15 @@
                 $('#previousLcd').html(previous);
                 var textHouses = $(data).find('#textLcd').html();
                 $('#textLcd').html(textHouses);
+
+
+                var pagination = $(data).find('#lcdPagination').html();
+                $('#lcdPagination').html(pagination);
+
+                $('#lcdPagination li').removeClass('active');
+                $('#lcdPagination li').filter(function() {
+                  return $(this).text() === (pageNumber+1).toString();
+                }).addClass('active');
                 localStorage.setItem('pageLcd', pageNumber);
               })
               .fail( function(xhr, status, error) {

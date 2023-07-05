@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -22,7 +23,19 @@ class PhotosControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private PhotosServiceImpl photosService;
+    @Test
+    void addPhoto() throws Exception {
+        mockMvc.perform(get("/add_photo/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/apartment_edit/1"));
+    }
 
+    @Test
+    void addPhotoLcd() throws Exception {
+        mockMvc.perform(get("/add_photo_lcd/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/lcd_edit/1"));
+    }
     @Test
     void deletePhoto() throws Exception {
         mockMvc.perform(post("/delete_photo_apartment")
