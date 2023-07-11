@@ -28,7 +28,7 @@
               </div>
           </div>
           <div class="card-body">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}" th:object="${apartment}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}" th:object="${apartment}" id="formAdd">
        <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}">
         <input type="hidden" name="frame" th:value="${apartment.getFrame()}">
         <div style="display: flex; justify-content: space-between" th:if = "${apartment.getFrame()!=0}">
@@ -40,20 +40,24 @@
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
             <input type="number" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}">
+              <div id="number">
               <div th:if="${#fields.hasErrors('number')}">
                   <div class="text-danger">
                       <p th:errors="*{number}"></p>
                   </div>
+              </div>
               </div>
           </div>
 
           <div class="col-sm-12">
             <label for="floatingTextarea">Описание</label>
             <textarea class="form-control" th:placeholder="${apartment.getDescription()}" id="floatingTextarea" placeholder="Введите описание..." name="description" th:field="*{description}" th:value="${apartment.getDescription()}"></textarea>
+              <div id="description">
               <div th:if="${#fields.hasErrors('description')}">
                   <div class="text-danger">
                       <p th:errors="*{description}"></p>
                   </div>
+              </div>
               </div>
 
           </div>
@@ -62,19 +66,23 @@
             <div class="col-sm-12">
                 <label  class="form-label">Адрес</label>
                 <input type="text" class="form-control" name="address"  th:value="${apartment.getAddress()}" data-mask="address" placeholder="Введите адрес... (г.Город, р.Район, ул.Улица,1)" >
+                <div id="address">
                 <div th:if="${#fields.hasErrors('address')}">
                     <div class="text-danger">
                         <p th:errors="*{address}"></p>
                     </div>
                 </div>
+                </div>
             </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
             <input type="number" class="form-control" name="price"  placeholder="Введите цену..." th:value="${apartment.getPrice()}">
+              <div id="price">
               <div th:if="${#fields.hasErrors('price')}">
                   <div class="text-danger">
                       <p th:errors="*{price}"></p>
                   </div>
+              </div>
               </div>
           </div>
           <div th:if = "${apartment.getFrame()==0}") style="display: flex">
@@ -117,43 +125,33 @@
             </script>
 
           </div>
+            <div id="file">
             <div th:if="${#fields.hasErrors('file')}">
                 <div class="text-danger">
                     <p th:errors="*{file}"></p>
                 </div>
             </div>
+            </div>
           <div id="galleryDiv">
             <label>Галерея картинок</label>
             <div class="card-body">
-              <label>Размер 1000х190</label>
-              <div class="row" >
+                <div style="display: flex">
+                    <label>Размер 1000х190</label>
+                    <div style="margin-left: 5px">
+                        <div>
+                            <a id="addDivGallery" type="button">
+                                <img th:src="@{/admin/dist/img/addCinema.png}" width="20px">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              <div class="row" id="rowGallery">
 
-                <div class="col-sm-2" th:each="photo:${apartment.getPhotoList()}">
-                  <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2" alt="white sample" accept=".jpg,.jpeg,.png">
-<!--                  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
-<!--                  <script>-->
-<!--                      function deleteData(idPhoto, idApartment) {-->
+                <div class="col-sm-2" th:each="photo:${apartment.getPhotoList()}" th:id="'galleryDiv'+${photo.getIdPhotos()}">
+                  <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2 photo" alt="white sample" accept=".jpg,.jpeg,.png">
 
-<!--                        $.ajax({-->
-<!--                          url: "/delete_photo",-->
-<!--                          method: "POST",-->
-<!--                          data: {-->
-<!--                            idPhoto: idPhoto,-->
-<!--                            idApartment: idApartment-->
-<!--                          } ,-->
-
-<!--                          success: function(response) {-->
-<!--                            window.location.href = "/apartment_edit/" + idApartment;-->
-<!--                          },-->
-<!--                          error: function(xhr, status, error) {-->
-<!--                            console.log('Произошла ошибка:', error);-->
-<!--                            alert('Произошла ошибка при выполнении запроса');-->
-<!--                          }-->
-<!--                      });-->
-<!--                    }-->
-<!--                  </script>-->
-
-                  <button type="button" th:attr="onclick='deleteData(' + ${photo.getIdPhotos()} + ', ' + ${apartment.getIdApartment()} + ')'" style="
+                  <button type="button" th:attr="onclick='deleteGallery(' + ${photo.getIdPhotos()} + ')'" th:onclick="'deleteGallery1('+${photo.getIdPhotos()}+')'" style="
                 position: absolute;
                 right: -1px;
                 top: -10px;
@@ -167,7 +165,7 @@
             " >
                     <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
                   </button>
-                  <input type="file" th:id="inputGallery+${photo.getIdPhotos()}" name="galleryPhoto" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png" >
+                  <input type="file" th:id="'inputGallery'+${photo.getIdPhotos()}" name="galleryPhoto" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png" >
 <!--                  <script>-->
 <!--                      var idImg = `gallery[[${photo.getIdPhotos}]]`;-->
 <!--                      var idInput = `inputGallery[[${photo.getIdPhotos()}]]`;-->
@@ -192,24 +190,25 @@
                     </script>
                 </div>
 
-                <div class="col-sm-2" style="margin-left: 20px">
-                  <div style="display: flex; justify-content: center">
-<!--                    <a th:href="@{/add_photo/{idApartment}(idApartment = ${apartment.getIdApartment()})}">-->
-                    <button class="btn btn-outline" type="button" th:attr="onclick='addPhoto(' + ${apartment.getIdApartment()} + ')'">
-                        <img th:src="@{/admin/dist/img/addCinema.png}" width="150px">
-                    </button>
-                  </div>
-                </div>
+<!--                <div class="col-sm-2" style="margin-left: 20px">-->
+<!--                  <div style="display: flex; justify-content: center">-->
+<!--&lt;!&ndash;                    <a th:href="@{/add_photo/{idApartment}(idApartment = ${apartment.getIdApartment()})}">&ndash;&gt;-->
+<!--                    <button class="btn btn-outline" type="button" th:attr="onclick='addPhoto(' + ${apartment.getIdApartment()} + ')'">-->
+<!--                        <img th:src="@{/admin/dist/img/addCinema.png}" width="150px">-->
+<!--                    </button>-->
+<!--                  </div>-->
+<!--                </div>-->
 
 
 
               </div>
             </div>
-          </div>
+            <div id="galleryPhoto">
             <div th:if="${#fields.hasErrors('galleryPhoto')}">
                 <div class="text-danger">
                     <p th:errors="*{galleryPhoto}"></p>
                 </div>
+            </div>
             </div>
 
             <div class="col-sm-6">
@@ -296,19 +295,23 @@
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
             <input type="number" class="form-control" name="totalArea"  placeholder="Введите общую площадь..." th:value="${apartment.getTotalArea()}">
+              <div id="totalArea">
               <div th:if="${#fields.hasErrors('totalArea')}">
                   <div class="text-danger">
                       <p th:errors="*{totalArea}"></p>
                   </div>
               </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
             <input type="number" class="form-control" name="kitchenArea"  placeholder="Введите площадь кухни..." th:value="${apartment.getKitchenArea()}">
+              <div id="kitchenArea">
               <div th:if="${#fields.hasErrors('kitchenArea')}">
                   <div class="text-danger">
                       <p th:errors="*{kitchenArea}"></p>
                   </div>
+              </div>
               </div>
           </div>
             <div class="d-flex justify-content-center">
@@ -328,6 +331,235 @@
 </div>
 
 <div th:replace="~{/admin.shared/script}"></div>
+
+
+<script>
+    function deleteGallery(id){
+        $(document).ready(function() {
+            $("#galleryDiv" + id).remove();
+        });
+    }
+
+    function deleteDocument1(id){
+        $(document).ready(function() {
+            $("#documentDiv" + id).remove();
+        });
+    }
+</script>
+<script>
+    // let preUrl = '';
+    let preUrl = '/Swipe-Admin';
+    var deleteIdsGallery = [];
+
+    function deleteGallery1(id){
+        $(document).ready(function() {
+            $("#galleryDiv" + id).remove();
+            deleteIdsGallery.push(id);
+            console.log(deleteIdsGallery);
+        });
+
+    }
+
+    $(document).ready(function() {
+        $('#formAdd').submit(function(e) {
+            e.preventDefault();
+            // var formData = $(this).serialize();
+            var formData = new FormData(this);
+            formData.append("galleryListId",deleteIdsGallery);
+            console.log(formData);
+            $.ajax({
+                url:preUrl+"/apartment_edit/"+[[${apartment.getIdApartment()}]],
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data, status,jqXHR) {
+                    console.log(status);
+                    console.log(data);
+                    if (jqXHR.status === 202) {
+                        var valid1 = $(data).find('#number').html();
+                        $('#number').html(valid1);
+                        var valid2 = $(data).find('#description').html();
+                        $('#description').html(valid2);
+                        var valid3 = $(data).find('#address').html();
+                        $('#address').html(valid3);
+                        var valid4 = $(data).find('#price').html();
+                        $('#price').html(valid4);
+
+                        var valid5 = $(data).find('#file').html();
+                        $('#file').html(valid5);
+
+                        var valid6 = $(data).find('#galleryPhoto').html();
+                        $('#galleryPhoto').html(valid6);
+
+                        var valid7 = $(data).find('#totalArea').html();
+                        $('#totalArea').html(valid7);
+
+                        var valid8 = $(data).find('#kitchenArea').html();
+                        $('#kitchenArea').html(valid8);
+                    }
+                    if (jqXHR.status === 200){
+                        window.location.href = preUrl+"/apartments";
+                    }
+                    if (jqXHR.status === 201){
+                        window.location.href = preUrl+"/edit_frame/"+[[${idFrame}]];
+                    }
+                    console.log("success");
+
+                },
+                error: function(xhr, status, error) {
+                    console.log(status);
+                    console.log("error");
+
+                }
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const addDivButton = document.getElementById("addDivGallery");
+        const container = document.getElementById("rowGallery");
+
+        // Обработчик события на нажатие кнопки
+        addDivButton.addEventListener("click", function() {
+            var images = document.querySelectorAll('img[class="img-fluid mb-2 photo"]');
+            let i;
+            if (images.length>0){
+                var lastImage = images[images.length - 1];
+                var idAttribute = lastImage.getAttribute("id");
+                var number = idAttribute.replace("gallery", "");
+                i = number;
+            }
+            else {
+                i = 1;
+            }
+            i++;
+            // Создаем новый div элемент
+            const newDiv = document.createElement("div");
+            newDiv.classList.add("col-sm-2");
+            newDiv.id = "galleryDiv"+i;
+            newDiv.innerHTML =
+                "                  <img src=\"/admin/dist/img/default.jpg\" id=\"gallery" + i + "\" class=\"img-fluid mb-2 photo\" alt=\"white sample\">\n" +
+                "                  <button type=\"button\" id=\"deleteGallery"+i+"\" onclick=\"deleteGallery("+i+") \" style=\"\n" +
+                "                position: absolute;\n" +
+                "                right: -1px;\n" +
+                "                top: -10px;\n" +
+                "                z-index: 11;\n" +
+                "                border: 2px solid black;\n" +
+                "                height: 30px;\n" +
+                "                width: 30px;\n" +
+                "                box-sizing: border-box;\n" +
+                "                padding: 2px;\n" +
+                "                border-radius: 50%;\n" +
+                "            \" >\n" +
+                "                    <img src=\"/admin/dist/img/cross.png\" width=\"20px\" height=\"20px\">\n" +
+                "                  </button>\n" +
+                "                  <input type=\"file\" id=\"inputGallery"+i+"\" name=\"galleryPhoto\" class=\"form-control\" onchange=\"handleFileChange(event)\" accept=\".jpg,.jpeg,.png\">\n"
+
+            const scriptTag = document.createElement("script");
+            scriptTag.textContent = " function handleFileChange(event) {\n" +
+                "                      const input = event.target;\n" +
+                "                      const file = input.files[0];\n" +
+                "                      const id = input.id.slice(12); // Получаем идентификатор после \"inputGallery\"\n" +
+                "                      const img = document.getElementById(`gallery${id}`);\n" +
+                "\n" +
+                "                      if (file) {\n" +
+                "                        img.src = URL.createObjectURL(file);\n" +
+                "                      }\n" +
+                "                    }";
+            // const scriptTag1 = document.createElement("script");
+            // scriptTag1.textContent = " function deleteGallery(event){\n" +
+            //         "                      console.log(\"event.target.id:\"+event.target.id);\n" +
+            //         "                      const id = event.target.id.slice(13);\n" +
+            //         "                      console.log(\"id:\"+id);\n" +
+            //         "                      $(document).ready(function() {\n" +
+            //         "                        $(\"#galleryDiv\" + id).remove();\n" +
+            //         "                      });\n" +
+            //         "                    }";
+
+            newDiv.appendChild(scriptTag);
+            // newDiv.appendChild(scriptTag1);
+            container.appendChild(newDiv);
+            const divContent = newDiv.innerHTML;
+            console.log(divContent);
+        });
+    });
+</script>
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function() {-->
+
+<!--        const addDivButton = document.getElementById("addDivDocument");-->
+<!--        const container = document.getElementById("documentRow");-->
+<!--        // Обработчик события на нажатие кнопки-->
+<!--        addDivButton.addEventListener("click", function() {-->
+<!--            var images = document.querySelectorAll('img[class="img-fluid mb-2 document"]');-->
+<!--            let i;-->
+<!--            if (images.length>0) {-->
+<!--                var lastImage = images[images.length - 1];-->
+<!--                var idAttribute = lastImage.getAttribute("id");-->
+<!--                var number = idAttribute.replace("img", "");-->
+<!--                i = number;-->
+<!--            }-->
+<!--            else {i = 1;}-->
+<!--            i++;-->
+<!--            // Создаем новый div элемент-->
+<!--            const newDiv = document.createElement("div");-->
+<!--            newDiv.classList.add("col-sm-2");-->
+<!--            newDiv.id = "documentDiv"+i;-->
+<!--            newDiv.innerHTML =-->
+<!--                "<img src=\"/admin/dist/img/document.png\" id=\"img"+i+"\" class=\"img-fluid mb-2 document\" alt=\"white sample\">\n" +-->
+<!--                "                  <button type=\"button\" style=\"\n" +-->
+<!--                "                position: absolute;\n" +-->
+<!--                "                right: -1px;\n" +-->
+<!--                "                top: -10px;\n" +-->
+<!--                "                z-index: 11;\n" +-->
+<!--                "                border: 2px solid black;\n" +-->
+<!--                "                height: 30px;\n" +-->
+<!--                "                width: 30px;\n" +-->
+<!--                "                box-sizing: border-box;\n" +-->
+<!--                "                padding: 2px;\n" +-->
+<!--                "                border-radius: 50%;\n" +-->
+<!--                "            \"  onclick=\"deleteDocument1("+i+")\">\n" +-->
+<!--                "                    <img src=\"/admin/dist/img/cross.png\" width=\"20px\" height=\"20px\">\n" +-->
+<!--                "                  </button>\n" +-->
+<!--                "                  <label id = \"filename"+i+"\" style=\"text-align: center; max-width: 100%; word-wrap: break-word\"></label>\n" +-->
+<!--                "                  <input type=\"file\" id = \"inputDocument"+i+"\" name=\"documentsFiles\" class=\"form-control\" onclick= \"handleFileNameChange("+i+")\" accept=\".doc,.docx,.xlsx\">\n" +-->
+<!--                "                  "-->
+
+<!--            const scriptTag = document.createElement("script");-->
+<!--            scriptTag.textContent = "function handleFileNameChange(id) {\n" +-->
+<!--                "                      console.log(id);\n" +-->
+<!--                "                      var fileInput = document.getElementById(`inputDocument${id}`);\n" +-->
+<!--                "                      var listFile = document.getElementById(`filename${id}`);\n" +-->
+<!--                "\n" +-->
+<!--                "                      fileInput.onchange = function () {\n" +-->
+<!--                "                        var files = Array.from(this.files);\n" +-->
+<!--                "                        files = files.map(file => file.name);\n" +-->
+<!--                "                        listFile.innerHTML = files.join('<br/>');\n" +-->
+<!--                "                      }\n" +-->
+<!--                "                    }";-->
+<!--            // const scriptTag1 = document.createElement("script");-->
+<!--            // scriptTag1.textContent = " function deleteGallery(event){\n" +-->
+<!--            //         "                      console.log(\"event.target.id:\"+event.target.id);\n" +-->
+<!--            //         "                      const id = event.target.id.slice(13);\n" +-->
+<!--            //         "                      console.log(\"id:\"+id);\n" +-->
+<!--            //         "                      $(document).ready(function() {\n" +-->
+<!--            //         "                        $(\"#galleryDiv\" + id).remove();\n" +-->
+<!--            //         "                      });\n" +-->
+<!--            //         "                    }";-->
+
+<!--            newDiv.appendChild(scriptTag);-->
+<!--            // newDiv.appendChild(scriptTag1);-->
+<!--            container.appendChild(newDiv);-->
+<!--            const divContent = newDiv.innerHTML;-->
+<!--            console.log(divContent);-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+
 <!--<script>-->
 <!--  function deleteData(idPhoto, idApartment) {-->
 <!--    fetch('/delete_photo', {-->

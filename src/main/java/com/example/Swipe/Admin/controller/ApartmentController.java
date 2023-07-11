@@ -6,6 +6,8 @@ import com.example.Swipe.Admin.entity.Frame;
 import com.example.Swipe.Admin.enums.*;
 import com.example.Swipe.Admin.mapper.RequestToDtoApartment;
 import com.example.Swipe.Admin.service.impl.*;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -56,7 +58,7 @@ public class ApartmentController {
             return "redirect:/edit_frame/"+apartment.getFrame().getIdFrame();
         }
         else {
-            return "redirect:/announcement";
+            return "redirect:/apartments";
         }
     }
     @GetMapping("/apartment_edit/{id}")
@@ -71,22 +73,27 @@ public class ApartmentController {
     public String apartmentUpdate(@PathVariable int id,
                                  @ModelAttribute(name = "apartment") @Valid ApartmentDTO apartmentDTO,
                                   BindingResult result
-            , Model model) throws IOException {
+            , Model model,HttpServletResponse response) throws IOException {
         if (result.hasErrors()){
             System.out.println(result.getAllErrors());
             model.addAttribute("apartment", RequestToDtoApartment.toDto(apartmentDTO,apartmentServiceImpl.findByIdDTO(id)));
             model.addAttribute("lcds", lcdService.findAll());
             model.addAttribute("foundingDocument", FoundingDocument.values());
             model.addAttribute("users",userService.findAllByType(TypeUser.CLIENT));
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
             return "admin/apartment_edit";
         }
         apartmentServiceImpl.updateDTO(apartmentDTO,id);
         log.info("Apartment id:" + id+", was update");
+
         if (apartmentDTO.getFrame()!=0){
+            response.setStatus(HttpServletResponse.SC_OK);
             return "redirect:/edit_frame/"+apartmentDTO.getFrame();
         }
         else {
-            return "redirect:/announcement";
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            model.addAttribute("idFrame",apartmentDTO.getFrame());
+            return "redirect:/apartments";
         }
 
     }
@@ -253,26 +260,31 @@ public class ApartmentController {
 //
 //    }
     @PostMapping("/add_apartment")
-    public String apartmentAdd(@ModelAttribute("apartment") @Valid ApartmentDTO apartmentDTO,BindingResult result, Model model) throws IOException {
+    public String apartmentAdd(@ModelAttribute("apartment") @Valid ApartmentDTO apartmentDTO, BindingResult result, Model model, HttpServletResponse response) throws IOException {
         if (result.hasErrors()){
+            System.out.println(result.getFieldError("galleryPhoto"));
             System.out.println(result.getAllErrors());
             model.addAttribute("lcds", lcdService.findAll());
             model.addAttribute("users", userService.findAllByType(TypeUser.CLIENT));
             model.addAttribute("apartment", apartmentDTO);
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
             return "admin/apartment_add";
         }
+        response.setStatus(HttpServletResponse.SC_OK);
         apartmentServiceImpl.saveDTO(apartmentDTO);
-        return "redirect:/announcement";
+        return "redirect:/apartments";
 
     }
     @PostMapping("/add_apartment/{idFrame}")
-    public String apartmentAddForFrame(@PathVariable int idFrame, @ModelAttribute("apartment") @Valid ApartmentDTO apartmentDTO,BindingResult result, Model model) throws IOException {
+    public String apartmentAddForFrame(@PathVariable int idFrame, @ModelAttribute("apartment") @Valid ApartmentDTO apartmentDTO,BindingResult result, Model model,HttpServletResponse response) throws IOException {
         if (result.hasErrors()){
             System.out.println("\n"+result.getAllErrors()+"\n");
             model.addAttribute("idFrame",idFrame);
             model.addAttribute("apartment", apartmentDTO);
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
             return "admin/apartment_frame";
         }
+        response.setStatus(HttpServletResponse.SC_OK);
         apartmentServiceImpl.saveDTO(apartmentDTO);
         return "redirect:/edit_frame/"+idFrame;
 

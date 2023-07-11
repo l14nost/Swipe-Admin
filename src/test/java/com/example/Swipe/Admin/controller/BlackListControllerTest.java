@@ -65,7 +65,7 @@ class BlackListControllerTest {
                 BlackListDTO.builder().build(),
                 BlackListDTO.builder().build()
         );
-        Pageable pageable = PageRequest.of(0,3);
+        Pageable pageable = PageRequest.of(0,10);
         when(userService.blackList(pageable,"null","idUser",1)).thenReturn(new PageImpl<BlackListDTO>(clientDTOS));
 
         when(userService.countBlackList()).thenReturn(10);

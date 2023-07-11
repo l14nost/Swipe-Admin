@@ -45,7 +45,7 @@ class MainHousesPageControllerTest {
     void housesMain() throws Exception {
         List<ApartmentDTO> apartmentDTOS = List.of(ApartmentDTO.builder().build());
         List<LcdDTO> lcdDTOs = List.of(LcdDTO.builder().build());
-        Pageable pageable = PageRequest.of(0,3);
+        Pageable pageable = PageRequest.of(0,10);
         when(lcdService.findAllPagination(pageable,"null","idLcd",1)).thenReturn(new PageImpl<>(lcdDTOs));
         when(apartmentService.findAllByFramePagination(pageable,0,"idApartment",1)).thenReturn(new PageImpl<>(apartmentDTOS));
 
@@ -57,8 +57,29 @@ class MainHousesPageControllerTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
 
-        mockMvc.perform(get("/announcement"))
+        mockMvc.perform(get("/lcds"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/houses_main"));
+    }
+
+    @Test
+    void apartmentMain() throws Exception {
+        List<ApartmentDTO> apartmentDTOS = List.of(ApartmentDTO.builder().build());
+        List<LcdDTO> lcdDTOs = List.of(LcdDTO.builder().build());
+        Pageable pageable = PageRequest.of(0,10);
+        when(lcdService.findAllPagination(pageable,"null","idLcd",1)).thenReturn(new PageImpl<>(lcdDTOs));
+        when(apartmentService.findAllByFramePagination(pageable,0,"idApartment",1)).thenReturn(new PageImpl<>(apartmentDTOS));
+
+        when(lcdService.count()).thenReturn(10);
+        when(apartmentService.count()).thenReturn(10);
+
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        mockMvc.perform(get("/apartments"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/apartment_main"));
     }
 }

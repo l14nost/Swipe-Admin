@@ -32,12 +32,41 @@
 <script th:src="@{/admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
 <!-- AdminLTE App -->
 <script th:src="@{/admin/dist/js/adminlte.js}"></script>
-<!-- AdminLTE for demo purposes -->
+<!--&lt;!&ndash; AdminLTE for demo purposes &ndash;&gt;-->
 <script th:src="@{/admin/dist/js/demo.js}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <!--<script th:src="@{/admin/dist/js/pages/dashboard.js}"></script>-->
 <!--<script th:src="@{/admin/dist/js/pages/dashboard2.js}"></script>-->
 <!--<script th:src="@{/admin/dist/js/pages/dashboard3.js}"></script>-->
 <script src="https://kit.fontawesome.com/7686347559.js" crossorigin="anonymous"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+<script>
+    var currentUrl = window.location.href;
+    var sidebarLinks = document.querySelectorAll('.nav-sidebar a.nav-link');
+    for (var i = 0; i < sidebarLinks.length; i++) {
+        var link = sidebarLinks[i];
+        var linkUrl = link.getAttribute('href');
+
+        if (currentUrl.indexOf(linkUrl) !== -1) {
+            link.classList.add('active');
+
+            var parentMenu = link.closest('.nav-treeview');
+            if (parentMenu) {
+                var parentLink = parentMenu.parentNode.querySelector('.nav-link');
+                if (parentLink) {
+                    parentLink.classList.add('active');
+                }
+                parentMenu.style.display = 'block';
+            }
+
+            var submenu = link.closest('.has-treeview');
+            if (submenu) {
+                submenu.classList.add('menu-open');
+            }
+
+            break;
+        }
+    }
+</script>
+
 

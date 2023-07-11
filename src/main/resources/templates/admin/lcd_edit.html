@@ -25,73 +25,87 @@
               </div><!-- /.container-fluid -->
           </div>
           <div class="card-body">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}" th:object="${lcd}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}" th:object="${lcd}" id="formAdd">
      <input type="hidden" name="idLcd" th:value="${lcd.getIdLcd()}">
 <!--      <div class="col-md-7 col-lg-8">-->
         <div class="row g-3">
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Название</label>
             <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите название..." th:value="${lcd.getName()}">
+              <div id="name">
               <div th:if="${#fields.hasErrors('name')}">
                   <div class="text-danger">
                       <p th:errors="*{name}"></p>
                   </div>
+              </div>
               </div>
           </div>
 
           <div class="col-sm-12">
             <label for="floatingTextarea">Описание</label>
             <textarea class="form-control" th:placeholder="${lcd.getDescription()}" id="floatingTextarea" placeholder="Введите описание..." name="description" th:value="${lcd.getDescription()}" th:field="*{description}"></textarea>
+              <div id="description">
               <div th:if="${#fields.hasErrors('description')}">
                   <div class="text-danger">
                       <p th:errors="*{description}"></p>
                   </div>
+              </div>
               </div>
 
           </div>
             <div class="col-sm-6">
                 <label  class="form-label">Адрес</label>
                 <input type="text" class="form-control" name="address"  th:value="${lcd.getAddress()}" data-mask="address" placeholder="Введите адрес... (г.Город, р.Район, ул.Улица,1)" >
+                <div id="address">
                 <div th:if="${#fields.hasErrors('address')}">
                     <div class="text-danger">
                         <p th:errors="*{address}"></p>
                     </div>
                 </div>
+                </div>
             </div>
           <div class="col-sm-6">
             <label  class="form-label">Оформление</label>
             <input type="text" class="form-control" name="formalization"  placeholder="Введите оформление..."  th:value="${lcd.getFormalization()}">
+              <div id="formalization">
               <div th:if="${#fields.hasErrors('formalization')}">
                   <div class="text-danger">
                       <p th:errors="*{formalization}"></p>
                   </div>
               </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Варианты расчета</label>
             <input type="text" class="form-control" name="typePayment"  placeholder="Введите варинаты расчета..."  th:value="${lcd.getTypePayment()}">
+              <div id="typePayment">
               <div th:if="${#fields.hasErrors('typePayment')}">
                   <div class="text-danger">
                       <p th:errors="*{typePayment}"></p>
                   </div>
               </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Назначение</label>
             <input type="text" class="form-control" name="appointment"  placeholder="Введите назначение..." th:value="${lcd.getAppointment()}">
+              <div id="appointment">
               <div th:if="${#fields.hasErrors('appointment')}">
                   <div class="text-danger">
                       <p th:errors="*{appointment}"></p>
                   </div>
               </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Сумма в договоре</label>
             <input type="text" class="form-control" name="sumContract"  placeholder="Введите тип суммы в договоре..." th:value="${lcd.getSumContract()}">
+              <div id="sumContract">
               <div th:if="${#fields.hasErrors('sumContract')}">
                   <div class="text-danger">
                       <p th:errors="*{sumContract}"></p>
                   </div>
+              </div>
               </div>
           </div>
           <div class="col-sm-6">
@@ -149,20 +163,31 @@
             </script>
 
           </div>
+            <div id="file">
             <div th:if="${#fields.hasErrors('file')}">
                 <div class="text-danger">
                     <p th:errors="*{file}"></p>
                 </div>
             </div>
+            </div>
           <div id="galleryDiv">
             <label>Галерея картинок</label>
             <div class="card-body" >
-              <label>Размер 1000х190</label>
-              <div class="row" >
+                <div style="display: flex">
+                    <label>Размер 1000х190</label>
+                    <div style="margin-left: 5px">
+                        <div>
+                            <a id="addDivGallery" type="button">
+                                <img th:src="@{/admin/dist/img/addCinema.png}" width="20px">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+              <div class="row" id="rowGallery" style="margin-top: 20px">
 
-                <div class="col-sm-2" th:each="photo:${lcd.getPhotoList()}">
-                  <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2" alt="white sample">
-                  <button type="button" style="
+                <div class="col-sm-2" th:each="photo:${lcd.getPhotoList()}" th:id="'galleryDiv'+${photo.getIdPhotos()}" >
+                  <img th:src="${photo.getFileName()}" th:id="'gallery'+${photo.getIdPhotos()}" class="img-fluid mb-2 photo" alt="white sample">
+                    <button type="button" th:id="'deleteGallery'+${photo.getIdPhotos()}" th:onclick="'deleteGallery1('+${photo.getIdPhotos()}+')'" style="
                 position: absolute;
                 right: -1px;
                 top: -10px;
@@ -173,10 +198,11 @@
                 box-sizing: border-box;
                 padding: 2px;
                 border-radius: 50%;
-            " th:attr="onclick='deleteData(' + ${photo.getIdPhotos()} + ', ' + ${lcd.getIdLcd()} + ')'">
-                    <img src="../admin/dist/img/cross.png" width="20px" height="20px">
-                  </button>
+            " >
+                        <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
+                    </button>
                   <input type="file" id="inputImg2" th:id="inputGallery+${photo.getIdPhotos()}" name="gallery" class="form-control" th:value="${photo.getFileName()}" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png">
+<!--                  <input type="hidden" name="photoListId" class="form-control" th:value="${photo.getIdPhotos()}">-->
                   <script>
                     function handleFileChange(event) {
                       const input = event.target;
@@ -190,35 +216,52 @@
                     }
                   </script>
                 </div>
-                <div class="col-sm-2" style="margin-left: 20px">
-                  <div style="display: flex; justify-content: center">
-<!--                    <a th:href="@{/add_photo_lcd/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
+<!--                <div class="col-sm-2" style="margin-left: 20px">-->
+<!--                  <div style="display: flex; justify-content: center">-->
+<!--&lt;!&ndash;                    <a th:href="@{/add_photo_lcd/{idLcd}(idLcd = ${lcd.getIdLcd()})}">&ndash;&gt;-->
 
-                    <button class="btn btn-outline" type="button" onclick="addPhoto()">
-                      <img src="../admin/dist/img/addCinema.png" width="150px">
-                    </button>
-                  </div>
-                </div>
+<!--                    <button class="btn btn-outline" type="button" onclick="addPhoto()">-->
+<!--                      <img src="../admin/dist/img/addCinema.png" width="150px">-->
+<!--                    </button>-->
+<!--                  </div>-->
+<!--                </div>-->
 
 
 
               </div>
             </div>
           </div>
+            <div id="gallery">
             <div th:if="${#fields.hasErrors('gallery')}">
                 <div class="text-danger">
                     <p th:errors="*{gallery}"></p>
                 </div>
             </div>
+            </div>
 
           <div>
             <label>Документы</label>
             <div class="card-body">
-              <div class="row" id="documentDiv">
+                <div style="display: flex">
+                    <label>Размер 1000х190</label>
+                    <div style="margin-left: 5px">
+                        <div>
+                            <!--                    <a th:href="@{/add_document/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
+<!--                            <button class="btn btn-outline" type="button" onclick="addDocument()">-->
+                                <a id="addDivDocument" type="button">
 
-                <div class="col-sm-2" th:each="document:${lcd.getDocuments()}">
-                  <img th:src="@{/admin/dist/img/document.png}" id="img1" class="img-fluid mb-2" alt="white sample">
-                  <button type="button" style="
+                                <img th:src="@{/admin/dist/img/addCinema.png}" width="20px">
+                                </a>
+<!--                            </button>-->
+                            <!--                    </a>-->
+                        </div>
+                    </div>
+                </div>
+              <div class="row" id="documentRow">
+
+                <div class="col-sm-2" th:each="document:${lcd.getDocuments()}" th:id = "${'documentDiv'+document.getIdDocuments()}">
+                  <img th:src="@{/admin/dist/img/document.png}" th:id = "${'img'+document.getIdDocuments()}" class="img-fluid mb-2 document" alt="white sample">
+                    <button type="button" style="
                 position: absolute;
                 right: -1px;
                 top: -10px;
@@ -229,11 +272,13 @@
                 box-sizing: border-box;
                 padding: 2px;
                 border-radius: 50%;
-            " th:attr="onclick='deleteDocument(' + ${document.getIdDocuments()} + ', ' + ${lcd.getIdLcd()} + ')'">
-                    <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
-                  </button>
-                  <label th:id = "${'filename'+document.getIdDocuments()}" th:text="${document.getName()}" style="text-align: center"></label>
-                  <input type="file" th:id = "${'inputDocument'+document.getIdDocuments()}" name="documentsFiles" class="form-control" th:value="${document.getFileName()}" th:onchange="'handleFileNameChange('+${document.getIdDocuments()}+')'" accept=".doc,.docx,.xlsx">
+            " th:onclick="'deleteDocument2('+${document.getIdDocuments()}+')'">
+                        <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
+                    </button>
+                  <label th:id = "${'filename'+document.getIdDocuments()}" th:text="${document.getName()}" style="text-align: center;max-width: 100%; word-wrap: break-word"></label>
+                  <input type="file" th:id = "${'inputDocument'+document.getIdDocuments()}" name="documentsFiles" class="form-control" th:value="${document.getFileName()}" th:onclick="'handleFileNameChange('+${document.getIdDocuments()}+')'" accept=".doc,.docx,.xlsx">
+<!--                    <input type="hidden" name="documentListId" class="form-control" th:value="${document.getIdDocuments()}">-->
+
                     <script>
                         function handleFileNameChange(id) {
                             console.log(id);
@@ -250,25 +295,16 @@
                 </div>
 
 
-                <div class="col-sm-2" style="margin-left: 20px">
-                  <div style="display: flex; justify-content: center">
-<!--                    <a th:href="@{/add_document/{idLcd}(idLcd = ${lcd.getIdLcd()})}">-->
-                    <button class="btn btn-outline" type="button" onclick="addDocument()">
-                      <img th:src="@{/admin/dist/img/addCinema.png}" width="150px">
-                    </button>
-<!--                    </a>-->
-                  </div>
-                </div>
-
-
 
               </div>
             </div>
           </div>
+            <div id="documentsFiles">
             <div th:if="${#fields.hasErrors('documentsFiles')}">
                 <div class="text-danger">
                     <p th:errors="*{documentsFiles}"></p>
                 </div>
+            </div>
             </div>
           <div class="col-sm-6">
             <div class="form-floating">
@@ -354,19 +390,23 @@
           <div class="col-sm-6">
             <label  class="form-label">Высота потолков</label>
             <input type="number" class="form-control" name="height"  placeholder="Введите высоту потолков..." th:value="${lcd.getHeight()}" >
+              <div id="height"  class="valid">
               <div th:if="${#fields.hasErrors('height')}">
                   <div class="text-danger">
                       <p th:errors="*{height}"></p>
                   </div>
               </div>
+              </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Расстояние до моря</label>
             <input type="number" class="form-control" name="distanceSea"  placeholder="Введите расстояние до моря..." th:value="${lcd.getDistanceSea()}" >
+              <div id="distanceSea" class="valid">
               <div th:if="${#fields.hasErrors('distanceSea')}">
                   <div class="text-danger">
                       <p th:errors="*{distanceSea}"></p>
                   </div>
+              </div>
               </div>
           </div>
           <label>Корпуса</label>
@@ -409,43 +449,43 @@
             </table>
           </div>
 
-          <label>Новости</label>
-          <div id="newsDiv">
-            <table class="table table-striped" style="margin: 20px">
-              <thead>
-              <tr>
-                <th scope="col">Заголовок</th>
-                <th scope="col">Дата</th>
-                <th scope="col">
-                  <a th:href="@{/add_news/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить новость">
-                      Добавить
-                </a></th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="news:${lcd.getNewsList()}">
-                <th scope="row"><p th:text="${news.getTitle()}"></p></th>
-                <td><p th:text="${news.getDate()}"></p></td>
-                <td>
-                  <div style="display: flex">
-                      <a th:href="@{/edit_news/{idNews}(idNews = ${news.getIdNews()})}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать новость">
-                        <i class="fas fa-pencil">
-                        </i>
-                      </a>
+<!--          <label>Новости</label>-->
+<!--          <div id="newsDiv">-->
+<!--            <table class="table table-striped" style="margin: 20px">-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th scope="col">Заголовок</th>-->
+<!--                <th scope="col">Дата</th>-->
+<!--                <th scope="col">-->
+<!--                  <a th:href="@{/add_news/{idLcd}(idLcd = ${lcd.getIdLcd()})}" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить новость">-->
+<!--                      Добавить-->
+<!--                </a></th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <tr th:each="news:${lcd.getNewsList()}">-->
+<!--                <th scope="row"><p th:text="${news.getTitle()}"></p></th>-->
+<!--                <td><p th:text="${news.getDate()}"></p></td>-->
+<!--                <td>-->
+<!--                  <div style="display: flex">-->
+<!--                      <a th:href="@{/edit_news/{idNews}(idNews = ${news.getIdNews()})}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать новость">-->
+<!--                        <i class="fas fa-pencil">-->
+<!--                        </i>-->
+<!--                      </a>-->
 
-                      <button type="button" th:attr="onclick='deleteNews('+${news.getIdNews()}+', '+${lcd.getIdLcd()}+')'" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Удалить новость">
-                        <i class="fas fa-trash">
-                        </i>
-                      </button>
+<!--                      <button type="button" th:attr="onclick='deleteNews('+${news.getIdNews()}+', '+${lcd.getIdLcd()}+')'" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Удалить новость">-->
+<!--                        <i class="fas fa-trash">-->
+<!--                        </i>-->
+<!--                      </button>-->
 
-                  </div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+<!--                  </div>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--              </tbody>-->
+<!--            </table>-->
+<!--          </div>-->
             <div class="d-flex justify-content-center">
-          <button class="w-50 btn btn-primary btn-lg" type="submit">Сохранить</button>
+          <button class="w-50 btn btn-primary btn-lg" type="submit" >Сохранить</button>
             </div>
         </div>
 <!--      </div>-->
@@ -462,6 +502,260 @@
 
 <div th:replace="~{/admin.shared/script}"></div>
 <script src="https://unpkg.com/imask"></script>
+
+<script>
+    function deleteGallery(id){
+        $(document).ready(function() {
+            $("#galleryDiv" + id).remove();
+        });
+    }
+
+    function deleteDocument1(id){
+        $(document).ready(function() {
+            $("#documentDiv" + id).remove();
+        });
+    }
+</script>
+<script>
+    // let preUrl = '';
+    let preUrl = '/Swipe-Admin';
+    var deleteIdsGallery = [];
+
+    function deleteGallery1(id){
+        $(document).ready(function() {
+            $("#galleryDiv" + id).remove();
+            deleteIdsGallery.push(id);
+            console.log(deleteIdsGallery);
+        });
+
+    }
+    var deleteIds = [];
+
+    function deleteDocument2(id){
+        $(document).ready(function() {
+            $("#documentDiv" + id).remove();
+            deleteIds.push(id);
+            console.log(deleteIds);
+        });
+    }
+
+    $(document).ready(function() {
+        $('#formAdd').submit(function(e) {
+            e.preventDefault();
+            // var formData = $(this).serialize();
+            var formData = new FormData(this);
+            formData.append("documentListId",deleteIds);
+            formData.append("photoListId",deleteIdsGallery);
+            console.log(formData);
+            $.ajax({
+                url:preUrl+"/lcd_edit/"+[[${lcd.getIdLcd()}]],
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data, status,jqXHR) {
+                    console.log(status);
+                    console.log(data);
+                    if (jqXHR.status === 202) {
+                        var valid1 = $(data).find('#height').html();
+                        $('#height').html(valid1);
+                        var valid2 = $(data).find('#distanceSea').html();
+                        $('#distanceSea').html(valid2);
+                        var valid3 = $(data).find('#advantages').html();
+                        $('#advantages').html(valid3);
+                        var valid4 = $(data).find('#gallery').html();
+                        $('#gallery').html(valid4);
+
+                        var valid5 = $(data).find('#file').html();
+                        $('#file').html(valid5);
+
+                        var valid6 = $(data).find('#sumContract').html();
+                        $('#sumContract').html(valid6);
+
+                        var valid7 = $(data).find('#name').html();
+                        $('#name').html(valid7);
+
+                        var valid8 = $(data).find('#description').html();
+                        $('#description').html(valid8);
+
+                        var valid9 = $(data).find('#formalization').html();
+                        $('#formalization').html(valid9);
+
+                        var valid10 = $(data).find('#appointment').html();
+                        $('#appointment').html(valid10);
+
+                        var valid11 = $(data).find('#typePayment').html();
+                        $('#typePayment').html(valid11);
+
+                        var valid12 = $(data).find('#address').html();
+                        $('#address').html(valid12);
+
+                        var valid13 = $(data).find('#documentsFiles').html();
+                        $('#documentsFiles').html(valid13);
+                        console.log("success");
+                    }
+                    else if (jqXHR.status === 200){
+                        window.location.href = preUrl+"/lcds";
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.log(status);
+                    console.log("error");
+
+                }
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const addDivButton = document.getElementById("addDivGallery");
+        const container = document.getElementById("rowGallery");
+
+        // Обработчик события на нажатие кнопки
+        addDivButton.addEventListener("click", function() {
+            var images = document.querySelectorAll('img[class="img-fluid mb-2 photo"]');
+            let i;
+            if (images.length>0){
+                var lastImage = images[images.length - 1];
+                var idAttribute = lastImage.getAttribute("id");
+                var number = idAttribute.replace("gallery", "");
+                i = number;
+            }
+            else {
+                i = 1;
+            }
+            i++;
+            // Создаем новый div элемент
+            const newDiv = document.createElement("div");
+            newDiv.classList.add("col-sm-2");
+            newDiv.id = "galleryDiv"+i;
+            newDiv.innerHTML =
+                "                  <img src=\"/admin/dist/img/default.jpg\" id=\"gallery" + i + "\" class=\"img-fluid mb-2 photo\" alt=\"white sample\">\n" +
+                "                  <button type=\"button\" id=\"deleteGallery"+i+"\" onclick=\"deleteGallery("+i+") \" style=\"\n" +
+                "                position: absolute;\n" +
+                "                right: -1px;\n" +
+                "                top: -10px;\n" +
+                "                z-index: 11;\n" +
+                "                border: 2px solid black;\n" +
+                "                height: 30px;\n" +
+                "                width: 30px;\n" +
+                "                box-sizing: border-box;\n" +
+                "                padding: 2px;\n" +
+                "                border-radius: 50%;\n" +
+                "            \" >\n" +
+                "                    <img src=\"/admin/dist/img/cross.png\" width=\"20px\" height=\"20px\">\n" +
+                "                  </button>\n" +
+                "                  <input type=\"file\" id=\"inputGallery"+i+"\" name=\"gallery\" class=\"form-control\" onchange=\"handleFileChange(event)\" accept=\".jpg,.jpeg,.png\">\n"
+
+            const scriptTag = document.createElement("script");
+            scriptTag.textContent = " function handleFileChange(event) {\n" +
+                "                      const input = event.target;\n" +
+                "                      const file = input.files[0];\n" +
+                "                      const id = input.id.slice(12); // Получаем идентификатор после \"inputGallery\"\n" +
+                "                      const img = document.getElementById(`gallery${id}`);\n" +
+                "\n" +
+                "                      if (file) {\n" +
+                "                        img.src = URL.createObjectURL(file);\n" +
+                "                      }\n" +
+                "                    }";
+            // const scriptTag1 = document.createElement("script");
+            // scriptTag1.textContent = " function deleteGallery(event){\n" +
+            //         "                      console.log(\"event.target.id:\"+event.target.id);\n" +
+            //         "                      const id = event.target.id.slice(13);\n" +
+            //         "                      console.log(\"id:\"+id);\n" +
+            //         "                      $(document).ready(function() {\n" +
+            //         "                        $(\"#galleryDiv\" + id).remove();\n" +
+            //         "                      });\n" +
+            //         "                    }";
+
+            newDiv.appendChild(scriptTag);
+            // newDiv.appendChild(scriptTag1);
+            container.appendChild(newDiv);
+            const divContent = newDiv.innerHTML;
+            console.log(divContent);
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const addDivButton = document.getElementById("addDivDocument");
+        const container = document.getElementById("documentRow");
+        // Обработчик события на нажатие кнопки
+        addDivButton.addEventListener("click", function() {
+            var images = document.querySelectorAll('img[class="img-fluid mb-2 document"]');
+            let i;
+            if (images.length>0) {
+                var lastImage = images[images.length - 1];
+                var idAttribute = lastImage.getAttribute("id");
+                var number = idAttribute.replace("img", "");
+                i = number;
+            }
+            else {i = 1;}
+            i++;
+            // Создаем новый div элемент
+            const newDiv = document.createElement("div");
+            newDiv.classList.add("col-sm-2");
+            newDiv.id = "documentDiv"+i;
+            newDiv.innerHTML =
+                "<img src=\"/admin/dist/img/document.png\" id=\"img"+i+"\" class=\"img-fluid mb-2 document\" alt=\"white sample\">\n" +
+                "                  <button type=\"button\" style=\"\n" +
+                "                position: absolute;\n" +
+                "                right: -1px;\n" +
+                "                top: -10px;\n" +
+                "                z-index: 11;\n" +
+                "                border: 2px solid black;\n" +
+                "                height: 30px;\n" +
+                "                width: 30px;\n" +
+                "                box-sizing: border-box;\n" +
+                "                padding: 2px;\n" +
+                "                border-radius: 50%;\n" +
+                "            \"  onclick=\"deleteDocument1("+i+")\">\n" +
+                "                    <img src=\"/admin/dist/img/cross.png\" width=\"20px\" height=\"20px\">\n" +
+                "                  </button>\n" +
+                "                  <label id = \"filename"+i+"\" style=\"text-align: center; max-width: 100%; word-wrap: break-word\"></label>\n" +
+                "                  <input type=\"file\" id = \"inputDocument"+i+"\" name=\"documentsFiles\" class=\"form-control\" onclick= \"handleFileNameChange("+i+")\" accept=\".doc,.docx,.xlsx\">\n" +
+                "                  "
+
+            const scriptTag = document.createElement("script");
+            scriptTag.textContent = "function handleFileNameChange(id) {\n" +
+                "                      console.log(id);\n" +
+                "                      var fileInput = document.getElementById(`inputDocument${id}`);\n" +
+                "                      var listFile = document.getElementById(`filename${id}`);\n" +
+                "\n" +
+                "                      fileInput.onchange = function () {\n" +
+                "                        var files = Array.from(this.files);\n" +
+                "                        files = files.map(file => file.name);\n" +
+                "                        listFile.innerHTML = files.join('<br/>');\n" +
+                "                      }\n" +
+                "                    }";
+            // const scriptTag1 = document.createElement("script");
+            // scriptTag1.textContent = " function deleteGallery(event){\n" +
+            //         "                      console.log(\"event.target.id:\"+event.target.id);\n" +
+            //         "                      const id = event.target.id.slice(13);\n" +
+            //         "                      console.log(\"id:\"+id);\n" +
+            //         "                      $(document).ready(function() {\n" +
+            //         "                        $(\"#galleryDiv\" + id).remove();\n" +
+            //         "                      });\n" +
+            //         "                    }";
+
+            newDiv.appendChild(scriptTag);
+            // newDiv.appendChild(scriptTag1);
+            container.appendChild(newDiv);
+            const divContent = newDiv.innerHTML;
+            console.log(divContent);
+        });
+    });
+</script>
+
+
+
+
+
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
 

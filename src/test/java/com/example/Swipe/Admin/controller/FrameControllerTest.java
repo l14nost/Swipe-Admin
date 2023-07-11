@@ -69,7 +69,7 @@ class FrameControllerTest {
                 ApartmentDTO.builder().build(),
                 ApartmentDTO.builder().build()
         );
-        Pageable pageable = PageRequest.of(0,3);
+        Pageable pageable = PageRequest.of(0,10);
         when(apartmentService.findAllForFramePagination(frame, pageable,0,"idApartment",1)).thenReturn(new PageImpl<>(apartmentDTOS));
         when(apartmentService.count(frame)).thenReturn(10);
         Authentication authentication = mock(Authentication.class);

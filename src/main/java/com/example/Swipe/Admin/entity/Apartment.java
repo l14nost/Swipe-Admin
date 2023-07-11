@@ -67,7 +67,7 @@ public class Apartment {
     private LCD lcd;
 
 
-    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.REMOVE)
     private List<Photo> photoList = new ArrayList<>();
 
     @ManyToOne

@@ -150,7 +150,9 @@ public class LCDController {
     public String lcdUpdate(@PathVariable int id,
                             @ModelAttribute(name = "lcd") @Valid LcdDTO lcdDTO,
                             BindingResult bindingResult,
-                            Model model) {
+                            Model model,HttpServletResponse response) {
+//        System.out.println("+++++++"+lcdDTO.getDocumentListId());
+//        System.out.println("+++++++"+lcdDTO.getPhotoListId());
        if (bindingResult.hasErrors()){
            if (lcdDTO.getAdvantages()!=null) {
                List<String> advantages = List.of(lcdDTO.getAdvantages().split(","));
@@ -163,12 +165,14 @@ public class LCDController {
 
            model.addAttribute("lcd", RequestToDtoLcd.toDtoResult(lcdDTO, lcdServiceImpl.findByIdDTO(id)));
            model.addAttribute("contractors", userService.findAllByType(TypeUser.CONTRACTOR));
+           response.setStatus(HttpServletResponse.SC_ACCEPTED);
            return "admin/lcd_edit";
        }
+
        lcdServiceImpl.updateDTO(lcdDTO, id);
 
-
-        return "redirect:/announcement";
+        response.setStatus(HttpServletResponse.SC_OK);
+        return "redirect:/lcds";
 
     }
 
@@ -182,13 +186,14 @@ public class LCDController {
         return "admin/lcd_add";
     }
     @PostMapping("/add_lcd")
-    public ModelAndView addLcd(
+    public String addLcd(
             @ModelAttribute(name = "lcd") @Valid LcdDTO lcdDTO,
             BindingResult bindingResult,
             Model model,
             HttpServletResponse response) throws IOException {
 
         if (bindingResult.hasErrors()){
+            System.out.println(bindingResult.getAllErrors());
             if (lcdDTO.getAdvantages()!=null) {
                 List<String> advantages = List.of(lcdDTO.getAdvantages().split(","));
                 model.addAttribute("advantages", advantages);
@@ -198,11 +203,12 @@ public class LCDController {
                 model.addAttribute("advantages", advantages);
             }
             model.addAttribute("contractors", userService.findAllByTypeDTO(TypeUser.CONTRACTOR));
-            return new ModelAndView("admin/lcd_add");
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
+            return "admin/lcd_add";
         }
         lcdServiceImpl.saveDTO(lcdDTO);
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        return new ModelAndView("admin/houses_main");
+        response.setStatus(HttpServletResponse.SC_OK);
+        return "redirect:/lcds";
 
     }
 //@PostMapping("/add_lcd")
@@ -368,7 +374,7 @@ public class LCDController {
 
         lcdServiceImpl.deleteById(idLcd);
         log.info("Lcd id:"+idLcd+", was delete");
-        return "redirect:/announcement";
+        return "redirect:/lcds";
 
     }
     public static final boolean checkTypes(Stream stream, String typeVal){

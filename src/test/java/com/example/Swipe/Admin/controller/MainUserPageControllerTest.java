@@ -47,7 +47,7 @@ class MainUserPageControllerTest {
                 ClientDTO.builder().build(),
                 ClientDTO.builder().build()
         );
-        Pageable pageable = PageRequest.of(0,3);
+        Pageable pageable = PageRequest.of(0,10);
         when(userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"null","idUser",1)).thenReturn(new PageImpl<ClientDTO>(clientDTOS));
 
         when(userService.findAllByTypePagination(TypeUser.CONTRACTOR,pageable,"null","idUser",1)).thenReturn(new PageImpl<ClientDTO>(clientDTOS));
@@ -66,5 +66,63 @@ class MainUserPageControllerTest {
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/user_main"));
+    }
+
+    @Test
+    void contractorsMain() throws Exception {
+        List<ClientDTO> clientDTOS = List.of(
+                ClientDTO.builder().build(),
+                ClientDTO.builder().build(),
+                ClientDTO.builder().build(),
+                ClientDTO.builder().build()
+        );
+        Pageable pageable = PageRequest.of(0,10);
+        when(userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"null","idUser",1)).thenReturn(new PageImpl<ClientDTO>(clientDTOS));
+
+        when(userService.findAllByTypePagination(TypeUser.CONTRACTOR,pageable,"null","idUser",1)).thenReturn(new PageImpl<ClientDTO>(clientDTOS));
+
+        when(userService.findAllByTypePagination(TypeUser.NOTARY,pageable,"null","idUser",1)).thenReturn(new PageImpl<ClientDTO>(clientDTOS));
+
+
+        when(userService.countByTypeUser(TypeUser.CLIENT)).thenReturn(10);
+        when(userService.countByTypeUser(TypeUser.CONTRACTOR)).thenReturn(10);
+        when(userService.countByTypeUser(TypeUser.NOTARY)).thenReturn(10);
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        mockMvc.perform(get("/contractors"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/contractor_main"));
+    }
+
+    @Test
+    void notaryMain() throws Exception {
+        List<ClientDTO> clientDTOS = List.of(
+                ClientDTO.builder().build(),
+                ClientDTO.builder().build(),
+                ClientDTO.builder().build(),
+                ClientDTO.builder().build()
+        );
+        Pageable pageable = PageRequest.of(0,10);
+        when(userService.findAllByTypePagination(TypeUser.CLIENT,pageable,"null","idUser",1)).thenReturn(new PageImpl<ClientDTO>(clientDTOS));
+
+        when(userService.findAllByTypePagination(TypeUser.CONTRACTOR,pageable,"null","idUser",1)).thenReturn(new PageImpl<ClientDTO>(clientDTOS));
+
+        when(userService.findAllByTypePagination(TypeUser.NOTARY,pageable,"null","idUser",1)).thenReturn(new PageImpl<ClientDTO>(clientDTOS));
+
+
+        when(userService.countByTypeUser(TypeUser.CLIENT)).thenReturn(10);
+        when(userService.countByTypeUser(TypeUser.CONTRACTOR)).thenReturn(10);
+        when(userService.countByTypeUser(TypeUser.NOTARY)).thenReturn(10);
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        mockMvc.perform(get("/notaries"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/notary_main"));
     }
 }

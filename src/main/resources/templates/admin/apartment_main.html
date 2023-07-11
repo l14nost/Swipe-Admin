@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Lcds</title>
+  <title>Apartments</title>
   <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,185 +29,143 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
 
-    <div class="content">
-      <div class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h4 class="m-0">Список ЖК</h4>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-      </div>
-      <div class="card-body">
-    <div>
-      <div style="display: flex; justify-content: right">
-        <nav class="navbar bg-body-tertiary" id="lcdSearch">
-          <div class="container-fluid ">
-            <div style="display: flex">
-              <input class="form-control me-2" type="search" placeholder="Поиск по названию" aria-label="Search" id="searchInputLcd" name="search">
-              <button class="btn btn-outline-info" type="button" onclick="searchLcd()">Search</button>
-            </div>
-          </div>
-        </nav>
-      </div>
-    <div id="tableLcd">
-      <div id="closeLcd" th:if="${#strings.length(searchLcd) >= 1 && (searchLcd != null && !searchLcd.equals('null'))}" style="margin-left: 20px">
-        <i th:text="'Результат поиска по значению:'+${searchLcd}"></i>
-        <a onclick="closeLcd()"><i class="fas fa-times"></i></a>
-      </div>
-      <table class="table table-striped" id="lcdTable">
-        <thead>
-        <tr>
-          <th scope="col">
-            <input  type="hidden" name="sorted" value="idUser">
-            <button class="btn btn-outline-secondary" type="button" onclick="sortedLcd('idLcd')">
-              <div style="display: flex">
-                ID
-                <div th:if="${sort == 'idLcd'}" style="margin-left: 3px">
-                  <div th:if="${order == 1}">
-                    ↓
-                  </div>
-                  <div th:if="${order == 2}">
-                    ↑
-                  </div>
-                </div>
-              </div>
-            </button>
-          </th>
-          <th scope="col">
-            <input  type="hidden" name="sorted" value="idUser">
-            <button class="btn btn-outline-secondary" type="button" onclick="sortedLcd('name')">
+<!--    <div class="content">-->
+<!--      <div class="content-header">-->
+<!--        <div class="container-fluid">-->
+<!--          <div class="row mb-2">-->
+<!--            <div class="col-sm-6">-->
+<!--              <h4 class="m-0">Список ЖК</h4>-->
+<!--            </div>&lt;!&ndash; /.col &ndash;&gt;-->
+<!--          </div>&lt;!&ndash; /.row &ndash;&gt;-->
+<!--        </div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
+<!--      </div>-->
+<!--      <div class="card-body">-->
+<!--    <div>-->
+<!--      <div style="display: flex; justify-content: right">-->
+<!--        <nav class="navbar bg-body-tertiary" id="lcdSearch">-->
+<!--          <div class="container-fluid ">-->
+<!--            <div style="display: flex">-->
+<!--              <input class="form-control me-2" type="search" placeholder="Поиск по названию" aria-label="Search" id="searchInputLcd" name="search">-->
+<!--              <button class="btn btn-outline-info" type="button" onclick="searchLcd()">Search</button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </nav>-->
+<!--      </div>-->
+<!--    <div id="tableLcd">-->
+<!--      <div id="closeLcd" th:if="${#strings.length(searchLcd) >= 1 && (searchLcd != null && !searchLcd.equals('null'))}" style="margin-left: 20px">-->
+<!--        <i th:text="'Результат поиска по значению:'+${searchLcd}"></i>-->
+<!--        <a onclick="closeLcd()"><i class="fas fa-times"></i></a>-->
+<!--      </div>-->
+<!--      <table class="table table-striped" id="lcdTable">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--          <th scope="col">-->
+<!--            <input  type="hidden" name="sorted" value="idUser">-->
+<!--            <button class="btn btn-outline-info" type="button" onclick="sortedLcd('idLcd')">ID</button>-->
+<!--          </th>-->
+<!--          <th scope="col">-->
+<!--            <input  type="hidden" name="sorted" value="idUser">-->
+<!--            <button class="btn btn-outline-info" type="button" onclick="sortedLcd('name')">Название</button>-->
+<!--          </th>-->
+<!--          <th scope="col">-->
+<!--            <input  type="hidden" name="sorted" value="idUser">-->
+<!--            <button class="btn btn-outline-info" type="button" onclick="sortedLcd('address')">Адрес</button>-->
+<!--          </th>-->
+<!--          <th scope="col">-->
+<!--            <form method="get" th:action="@{/add_lcd}">-->
+<!--                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить ЖК">-->
+<!--                  Добавить-->
+<!--              </button>-->
+<!--            </form></th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--          <tr th:each="lcd:${lcds.getContent()}">-->
+<!--            <th scope="row"><p th:text="${lcd.getIdLcd()}"></p></th>-->
+<!--            <td><p th:text="${lcd.getName()}"></p></td>-->
+<!--            <td><p th:text="${lcd.getAddress()}"></p></td>-->
+<!--            <td>-->
+<!--              <div style="display: flex">-->
+<!--              <form th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}"  method="get" >-->
+<!--                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать ЖК">-->
+<!--                  <i class="fas fa-pencil">-->
+<!--                  </i>-->
+<!--                </button>-->
+<!--              </form>-->
+<!--&lt;!&ndash;              <form th:action="@{/delete_lcd}"  method="post" >&ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="hidden" name="idLcd" th:value="${lcd.getIdLcd()}" />&ndash;&gt;-->
+<!--                <button type="button" class="btn btn-danger btn-sm deleteLCD" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteLCD" th:data-id="${lcd.getIdLcd()}">-->
+<!--                  <i class="fas fa-trash"></i>-->
+<!--                </button>-->
+<!--                &lt;!&ndash;                </form>&ndash;&gt;-->
 
-              <div style="display: flex">
-                Название
-                <div th:if="${sort == 'name'}" style="margin-left: 3px">
-                  <div th:if="${order == 1}">
-                    ↓
-                  </div>
-                  <div th:if="${order == 2}">
-                    ↑
-                  </div>
-                </div>
-              </div>
-            </button>
-          </th>
-          <th scope="col">
-            <input  type="hidden" name="sorted" value="idUser">
-            <button class="btn btn-outline-secondary" type="button" onclick="sortedLcd('address')">
+<!--                &lt;!&ndash; Модальное окно &ndash;&gt;-->
+<!--                <div class="modal fade" id="confirmDeleteLCD" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">-->
+<!--                  <div class="modal-dialog" role="document">-->
+<!--                    <div class="modal-content">-->
+<!--                      <div class="modal-header">-->
+<!--                        <h5 class="modal-title" id="confirmDeleteLCDLabel">Удаление ЖК</h5>-->
+<!--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                          <span aria-hidden="true">&times;</span>-->
+<!--                        </button>-->
+<!--                      </div>-->
+<!--                      <div class="modal-body">-->
+<!--                        Вы уверены, что хотите удалить этот ЖК?-->
+<!--                      </div>-->
+<!--                      <div class="modal-footer">-->
+<!--                        &lt;!&ndash; Закрываем модальное окно, если пользователь передумал &ndash;&gt;-->
+<!--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>-->
+<!--                        &lt;!&ndash; При нажатии на кнопку "Удалить", отправляем форму для удаления &ndash;&gt;-->
+<!--                        <button type="submit" class="btn btn-danger" onclick="deleteLCD()">Удалить</button>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-              <div style="display: flex">
-                Адрес
-                <div th:if="${sort == 'address'}" style="margin-left: 3px">
-                  <div th:if="${order == 1}">
-                    ↓
-                  </div>
-                  <div th:if="${order == 2}">
-                    ↑
-                  </div>
-                </div>
-              </div>
-            </button>
-          </th>
-          <th scope="col">
-            <form method="get" th:action="@{/add_lcd}">
-                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить ЖК">
-                  Добавить
-              </button>
-            </form></th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr th:each="lcd:${lcds.getContent()}">
-            <th scope="row"><p th:text="${lcd.getIdLcd()}"></p></th>
-            <td><p th:text="${lcd.getName()}"></p></td>
-            <td><p th:text="${lcd.getAddress()}"></p></td>
-            <td>
-              <div style="display: flex">
-              <form th:action="@{/lcd_edit/{id}(id=${lcd.getIdLcd()})}"  method="get" >
-                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать ЖК">
-                  <i class="fas fa-pencil">
-                  </i>
-                </button>
-              </form>
-<!--              <form th:action="@{/delete_lcd}"  method="post" >-->
-<!--                <input type="hidden" name="idLcd" th:value="${lcd.getIdLcd()}" />-->
-                <button type="button" class="btn btn-danger btn-sm deleteLCD" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteLCD" th:data-id="${lcd.getIdLcd()}">
-                  <i class="fas fa-trash"></i>
-                </button>
-                <!--                </form>-->
-
-                <!-- Модальное окно -->
-                <div class="modal fade" id="confirmDeleteLCD" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteLCDLabel">Удаление ЖК</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        Вы уверены, что хотите удалить этот ЖК?
-                      </div>
-                      <div class="modal-footer">
-                        <!-- Закрываем модальное окно, если пользователь передумал -->
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                        <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
-                        <button type="submit" class="btn btn-danger" onclick="deleteLCD()">Удалить</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<!--              </form>-->
+<!--              </div>-->
+<!--            </td>-->
+<!--          </tr>-->
+<!--        </tbody>-->
+<!--      </table>-->
 
 
-    </div>
-      <div style="display: flex; justify-content: space-between">
-        <div id="textLcd">
-        <div  style="margin-left: 10px" th:if="${lcds.getContent().size()>0}"><h6 th:text="'Показано '+${lcds.getNumber()*10+1}+' – '+${lcds.getContent().size() + lcds.getNumber()*10} + ' из '+${sizeLcd}+' записей'" ></h6></div>
-        <div style="margin-left: 10px" th:if="${lcds.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
-        </div>
-        <nav aria-label="Page navigation example" style="display: flex; justify-content: center " >
-        <ul class="pagination" id="previousLcd">
-          <li class="page-item" th:hidden="${lcds.getNumber()==0}">
-            <input type="hidden" id="pageNumberLcdPr" th:value="${lcds.getNumber()-1}">
-            <a class="page-link" href="#" aria-label="Previous" th:value="${lcds.getTotalPages()}">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-        </ul>
-        <ul class="pagination" id="lcdPagination">
-          <ul class="pagination" th:if="${lcds.getTotalPages()>1}">
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li style="margin-left: 5px; margin-right: 5px" th:if="${lcds.getNumber()>1 && lcds.getTotalPages()>5}"><p >...</p></li>
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--    </div>-->
+<!--      <div style="display: flex; justify-content: space-between">-->
+<!--        <div id="textLcd">-->
+<!--        <div  style="margin-left: 10px" th:if="${lcds.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${lcds.getContent().size()} + ' из '+${sizeLcd}+' записей'" ></h6></div>-->
+<!--        <div style="margin-left: 10px" th:if="${lcds.getContent().size()==0}"><h6>Ничего не найдено</h6></div>-->
+<!--        </div>-->
+<!--        <nav aria-label="Page navigation example" style="display: flex; justify-content: center " >-->
+<!--        <ul class="pagination" id="previousLcd">-->
+<!--          <li class="page-item" th:hidden="${lcds.getNumber()==0}">-->
+<!--            <input type="hidden" id="pageNumberLcdPr" th:value="${lcds.getNumber()-1}">-->
+<!--            <a class="page-link" href="#" aria-label="Previous" th:value="${lcds.getTotalPages()}">-->
+<!--              <span aria-hidden="true">&laquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--        <ul class="pagination" id="lcdPagination">-->
+<!--          <li class="page-item active"><a class="page-link" href="#">1</a></li>-->
+<!--          <li style="margin-left: 5px; margin-right: 5px" th:if="${lcds.getNumber()>1 && lcds.getTotalPages()>5}"><p >...</p></li>-->
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
 
-          <li class="page-item"  th:each="p: ${#numbers.sequence(lcds.getNumber()-1, lcds.getNumber()+1)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()>1 && lcds.getNumber()<lcds.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-          <!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
-          <li class="page-item"  th:each="p: ${#numbers.sequence(lcds.getTotalPages()-3, lcds.getTotalPages()-2)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()>lcds.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(lcds.getNumber()-1, lcds.getNumber()+1)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()>1 && lcds.getNumber()<lcds.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+<!--          &lt;!&ndash;          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>&ndash;&gt;-->
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(lcds.getTotalPages()-3, lcds.getTotalPages()-2)}" th:if="${lcds.getTotalPages()>5 && lcds.getNumber()>lcds.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
 
-          <li style="margin-left: 5px; margin-right: 5px" th:if="${lcds.getNumber()<lcds.getTotalPages()-2 && lcds.getTotalPages()>5}"><p>...</p></li>
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, lcds.getTotalPages()-2)}" th:if="${lcds.getTotalPages()>2 && lcds.getTotalPages()<=5 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li style="margin-left: 5px; margin-right: 5px" th:if="${lcds.getNumber()<lcds.getTotalPages()-2 && lcds.getTotalPages()>5}"><p>...</p></li>-->
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(1, lcds.getTotalPages()-2)}" th:if="${lcds.getTotalPages()>2 && lcds.getTotalPages()<=5 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
 
-          <li class="page-item"><a class="page-link" href="#" th:text="${lcds.getTotalPages()}" th:if="${lcds.getTotalPages()>1}"></a></li>
-
-          </ul>
-          </ul>
-        <ul class="pagination" id="nextLcd">
-          <li class="page-item" th:hidden="${lcds.getNumber()==lcds.getTotalPages()-1}" th:if="${lcds.getTotalPages()>1}">
-            <input type="hidden" id="pageNumberLcdNext" th:value="${lcds.getNumber()+1}">
-            <a class="page-link" href="#" aria-label="Next" th:value="${lcds.getTotalPages()}">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
+<!--          <li class="page-item"><a class="page-link" href="#" th:text="${lcds.getTotalPages()}" th:if="${lcds.getTotalPages()>1}"></a></li></ul>-->
+<!--        <ul class="pagination" id="nextLcd">-->
+<!--          <li class="page-item" th:hidden="${lcds.getNumber()==lcds.getTotalPages()-1}" th:if="${lcds.getTotalPages()>1}">-->
+<!--            <input type="hidden" id="pageNumberLcdNext" th:value="${lcds.getNumber()+1}">-->
+<!--            <a class="page-link" href="#" aria-label="Next" th:value="${lcds.getTotalPages()}">-->
+<!--              <span aria-hidden="true">&raquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
 <!--        <ul class="pagination" style="margin-left: 5px">-->
 <!--          <li class="page-item">-->
 <!--            <select class="form-select"  aria-label="Floating label select example" id="sizeLcd" onchange="">-->
@@ -217,135 +175,185 @@
 <!--            </select>-->
 <!--          </li>-->
 <!--        </ul>-->
-      </nav>
-      </div>
+<!--      </nav>-->
+<!--      </div>-->
 
-  </div>
+<!--  </div>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div class="content">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h4 class="m-0">Список квартир не от застройщика</h4>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
       </div>
-    </div>
-<!--    <div class="content">-->
-<!--      <div class="content-header">-->
-<!--        <div class="container-fluid">-->
-<!--          <div class="row mb-2">-->
-<!--            <div class="col-sm-6">-->
-<!--              <h4 class="m-0">Список квартир не от застройщика</h4>-->
-<!--            </div>&lt;!&ndash; /.col &ndash;&gt;-->
-<!--          </div>&lt;!&ndash; /.row &ndash;&gt;-->
-<!--        </div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
-<!--      </div>-->
-<!--      <div class="card-body">-->
-<!--      <div style="display: flex; justify-content: right">-->
-<!--        <nav class="navbar bg-body-tertiary" id="apartmentSearch">-->
-<!--          <div class="container-fluid ">-->
-<!--            <div style="display: flex">-->
-<!--              <input class="form-control me-2" type="search" placeholder="Поиск по номеру" aria-label="Search" id="searchInputApartment" name="search">-->
-<!--              <button class="btn btn-outline-info" type="button" onclick="searchApartment()">Search</button>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </nav>-->
-<!--      </div>-->
-<!--      <div id="tableApartment">-->
-<!--        <div id="closeApartment" th:if="${searchApartment!=0}" style="margin-left: 20px">-->
-<!--          <i th:text="'Результат поиска по значению:'+${searchApartment}"></i>-->
-<!--          <a onclick="closeApartment()"><i class="fas fa-times"></i></a>-->
-<!--        </div>-->
-<!--        <table class="table table-striped" id="apartmentTable">-->
-<!--          <thead>-->
-<!--          <tr>-->
-<!--            <th scope="col">-->
-<!--              <input  type="hidden" name="sorted" value="idUser">-->
-<!--              <button class="btn btn-outline-info" type="button" onclick="sortedApartment('idApartment')">ID</button>-->
-<!--            </th>-->
-<!--            <th scope="col">-->
-<!--              <input  type="hidden" name="sorted" value="idUser">-->
-<!--              <button class="btn btn-outline-info" type="button" onclick="sortedApartment('lcd')">ЖК</button>-->
-<!--            </th>-->
-<!--            <th scope="col">-->
-<!--              <input  type="hidden" name="sorted" value="idUser">-->
-<!--              <button class="btn btn-outline-info" type="button" onclick="sortedApartment('number')">Номер</button>-->
-<!--            </th>-->
-<!--            <th scope="col"><form method="get" th:action="@{/add_apartment}">-->
-<!--              <button type="submit" class="btn btn-secondary" style="margin-left: 10px; display: flex" data-toggle="tooltip" data-placement="top" title="Добавить квартиру">-->
-<!--                Добавить-->
-<!--              </button>-->
-<!--            </form></th>-->
-<!--          </tr>-->
-<!--          </thead>-->
-<!--          <tbody>-->
-<!--          <tr th:each="apartment:${apartments.getContent()}">-->
-<!--            <th scope="row"><p th:text="${apartment.getIdApartment()}"></p></th>-->
-<!--            <td><p th:text="${apartment.getNameLcd()}"></p></td>-->
-<!--            <td><p th:text="${apartment.getNumber()}"></p></td>-->
-<!--            <td>-->
-<!--              <div style="display: flex">-->
-<!--                <form th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}"  method="get" >-->
-<!--                  <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать квартиру">-->
-<!--                    <i class="fas fa-pencil">-->
-<!--                    </i>-->
-<!--                  </button>-->
-<!--                </form>-->
-<!--&lt;!&ndash;                <form th:action="@{/delete_apartment}" method="post" class="delete-form" id="deleteForm">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}" />&ndash;&gt;-->
-<!--                  <button type="button" class="btn btn-danger btn-sm deleteApartment" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteApartment" th:data-id="${apartment.getIdApartment()}">-->
-<!--                    <i class="fas fa-trash"></i>-->
-<!--                  </button>-->
+      <div class="card-body">
+      <div style="display: flex; justify-content: right">
+        <nav class="navbar bg-body-tertiary" id="apartmentSearch">
+          <div class="container-fluid ">
+            <div style="display: flex">
+              <input class="form-control me-2" type="search" placeholder="Поиск по номеру" aria-label="Search" id="searchInputApartment" name="search">
+              <button class="btn btn-outline-info" type="button" onclick="searchApartment()">Search</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div id="tableApartment">
+        <div id="closeApartment" th:if="${searchApartment!=0}" style="margin-left: 20px">
+          <i th:text="'Результат поиска по значению:'+${searchApartment}"></i>
+          <a onclick="closeApartment()"><i class="fas fa-times"></i></a>
+        </div>
+        <table class="table table-striped" id="apartmentTable">
+          <thead>
+          <tr>
+            <th scope="col">
+              <input  type="hidden" name="sorted" value="idUser">
+              <button class="btn btn-outline-secondary" type="button" onclick="sortedApartment('idApartment')">
+                <div style="display: flex">
+                  ID
+                  <div th:if="${sort == 'idApartment'}" style="margin-left: 3px">
+                    <div th:if="${order == 1}">
+                      ↓
+                    </div>
+                    <div th:if="${order == 2}">
+                      ↑
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </th>
+            <th scope="col">
+              <input  type="hidden" name="sorted" value="idUser">
+              <button class="btn btn-outline-secondary" type="button" onclick="sortedApartment('lcd')">
 
-<!--                <div class="modal fade" id="confirmDeleteApartment" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">-->
-<!--                  <div class="modal-dialog" role="document">-->
-<!--                    <div class="modal-content">-->
-<!--                      <div class="modal-header">-->
-<!--                        <h5 class="modal-title" id="confirmDeleteModalLabel">Удаление квартиры</h5>-->
-<!--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                          <span aria-hidden="true">&times;</span>-->
-<!--                        </button>-->
-<!--                      </div>-->
-<!--                      <div class="modal-body">-->
-<!--                        Вы уверены, что хотите удалить эту квартиру?-->
-<!--                      </div>-->
-<!--                      <div class="modal-footer">-->
-<!--                        &lt;!&ndash; Закрываем модальное окно, если пользователь передумал &ndash;&gt;-->
-<!--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>-->
-<!--                        &lt;!&ndash; При нажатии на кнопку "Удалить", отправляем форму для удаления &ndash;&gt;-->
-<!--                        <button type="submit" class="btn btn-danger" onclick="deleteApartment()">Удалить</button>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--              </div>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--          </tbody>-->
-<!--        </table>-->
-<!--&lt;!&ndash;        <div style="display: flex; justify-content: center">&ndash;&gt;-->
-<!--&lt;!&ndash;          <button type="button" class="btn btn-secondary">Добавить</button>&ndash;&gt;-->
-<!--&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--      </div>-->
-<!--      <div style="display: flex; justify-content: space-between">-->
-<!--        <div id="textApartment">-->
-<!--        <div style="margin-left: 10px" th:if="${apartments.getContent().size()==0}"><h6>Ничего не найдено</h6></div>-->
-<!--        <div  style="margin-left: 10px" th:if="${apartments.getContent().size()}"><h6 th:text="'Показано 1 – '+${apartments.getContent().size()} + ' из '+${sizeApartment}+' записей'" ></h6></div>-->
+                <div style="display: flex">
+                  ЖК
+                  <div th:if="${sort == 'lcd'}" style="margin-left: 3px">
+                    <div th:if="${order == 1}">
+                      ↓
+                    </div>
+                    <div th:if="${order == 2}">
+                      ↑
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </th>
+            <th scope="col">
+              <input  type="hidden" name="sorted" value="idUser">
+              <button class="btn btn-outline-secondary" type="button" onclick="sortedApartment('number')">
+                <div style="display: flex">
+                  Номер
+                  <div th:if="${sort == 'number'}" style="margin-left: 3px">
+                    <div th:if="${order == 1}">
+                      ↓
+                    </div>
+                    <div th:if="${order == 2}">
+                      ↑
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </th>
+            <th scope="col"><form method="get" th:action="@{/add_apartment}">
+              <button type="submit" class="btn btn-secondary" style="margin-left: 10px; display: flex" data-toggle="tooltip" data-placement="top" title="Добавить квартиру">
+                Добавить
+              </button>
+            </form>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="apartment:${apartments.getContent()}">
+            <th scope="row"><p th:text="${apartment.getIdApartment()}"></p></th>
+            <td><p th:text="${apartment.getNameLcd()}"></p></td>
+            <td><p th:text="${apartment.getNumber()}"></p></td>
+            <td>
+              <div style="display: flex">
+                <form th:action="@{/apartment_edit/{id}(id=${apartment.getIdApartment()})}"  method="get" >
+                  <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать квартиру">
+                    <i class="fas fa-pencil">
+                    </i>
+                  </button>
+                </form>
+<!--                <form th:action="@{/delete_apartment}" method="post" class="delete-form" id="deleteForm">-->
+<!--                  <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}" />-->
+                  <button type="button" class="btn btn-danger btn-sm deleteApartment" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteApartment" th:data-id="${apartment.getIdApartment()}">
+                    <i class="fas fa-trash"></i>
+                  </button>
+
+                <div class="modal fade" id="confirmDeleteApartment" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Удаление квартиры</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Вы уверены, что хотите удалить эту квартиру?
+                      </div>
+                      <div class="modal-footer">
+                        <!-- Закрываем модальное окно, если пользователь передумал -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
+                        <button type="submit" class="btn btn-danger" onclick="deleteApartment()">Удалить</button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+<!--        <div style="display: flex; justify-content: center">-->
+<!--          <button type="button" class="btn btn-secondary">Добавить</button>-->
 <!--        </div>-->
-<!--          <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">-->
-<!--        <ul class="pagination" id="previousApartment">-->
-<!--          <li class="page-item" th:hidden="${apartments.getNumber()==0}">-->
-<!--            <input type="hidden" id="pageNumberApartmentPr" th:value="${apartments.getNumber()-1}">-->
-<!--            <a class="page-link" href="#" aria-label="Previous" th:value="${apartments.getTotalPages()}">-->
-<!--              <span aria-hidden="true">&laquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--        <ul class="pagination" id="apartmentPagination">-->
-<!--          <li class="page-item active"><a class="page-link" href="#">1</a></li>-->
-<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
-<!--        </ul>-->
-<!--        <ul class="pagination" id="nextApartment">-->
-<!--          <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}" th:if="${apartments.getTotalPages()>1}">-->
-<!--            <input type="hidden" id="pageNumberApartmentNext" th:value="${apartments.getNumber()+1}">-->
-<!--            <a class="page-link" href="#" aria-label="Next" th:value="${apartments.getTotalPages()}">-->
-<!--              <span aria-hidden="true">&raquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
-<!--        </ul>-->
+      </div>
+      <div style="display: flex; justify-content: space-between">
+        <div id="textApartment">
+        <div style="margin-left: 10px" th:if="${apartments.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
+        <div  style="margin-left: 10px" th:if="${apartments.getContent().size()}"><h6 th:text="'Показано '+${apartments.getNumber()*10+1}+' – '+${apartments.getContent().size() + (apartments.getNumber()*10)} + ' из '+${sizeApartment}+' записей'" ></h6></div>
+        </div>
+          <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
+        <ul class="pagination" id="previousApartment">
+          <li class="page-item" th:hidden="${apartments.getNumber()==0}">
+            <input type="hidden" id="pageNumberApartmentPr" th:value="${apartments.getNumber()-1}">
+            <a class="page-link" href="#" aria-label="Previous" th:value="${apartments.getTotalPages()}">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        </ul>
+        <ul class="pagination" id="apartmentPagination">
+          <ul class="pagination" th:if="${apartments.getTotalPages()>1}">
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li style="margin-left: 5px; margin-right: 5px" th:if="${apartments.getNumber()>1 && apartments.getTotalPages()>5}"><p >...</p></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${apartments.getTotalPages()>5 && apartments.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li class="page-item"  th:each="p: ${#numbers.sequence(apartments.getNumber()-1, apartments.getNumber()+1)}" th:if="${apartments.getTotalPages()>5 && apartments.getNumber()>1 && apartments.getNumber()<apartments.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+          <!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+          <li class="page-item"  th:each="p: ${#numbers.sequence(apartments.getTotalPages()-3, apartments.getTotalPages()-2)}" th:if="${apartments.getTotalPages()>5 && apartments.getNumber()>apartments.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li style="margin-left: 5px; margin-right: 5px" th:if="${apartments.getNumber()<apartments.getTotalPages()-2 && apartments.getTotalPages()>5}"><p>...</p></li>
+          <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-2)}" th:if="${apartments.getTotalPages()>2 && apartments.getTotalPages()<=5 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+          <li class="page-item"><a class="page-link" href="#" th:text="${apartments.getTotalPages()}" th:if="${apartments.getTotalPages()>1}"></a></li></ul>
+            </ul>
+            </ul>
+        <ul class="pagination" id="nextApartment">
+          <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}" th:if="${apartments.getTotalPages()>1}">
+            <input type="hidden" id="pageNumberApartmentNext" th:value="${apartments.getNumber()+1}">
+            <a class="page-link" href="#" aria-label="Next" th:value="${apartments.getTotalPages()}">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
 <!--        <ul class="pagination" style="margin-left: 5px">-->
 <!--          <li class="page-item">-->
 <!--            <select class="form-select"  aria-label="Floating label select example" id="sizeApartment" onchange="">-->
@@ -355,8 +363,8 @@
 <!--            </select>-->
 <!--          </li>-->
 <!--        </ul>-->
-<!--      </nav>-->
-<!--      </div>-->
+      </nav>
+      </div>
 
 
     </div>
@@ -428,8 +436,8 @@
 
 </script>
 <script>
-  let url = '/Swipe-Admin/lcds';
-  // let url = '/lcds';
+  let url = '/Swipe-Admin/apartments';
+  // let url = '/apartments';
   function searchLcd () {
     var selectedSize = localStorage.getItem('selectedLcdSize');
     // e.preventDefault();
@@ -442,7 +450,7 @@
       url: url + '?searchLcd=' + searchVal,
       type: 'GET',
       data: {
-        // lcdSize: selectedSize,
+        lcdSize: selectedSize,
         // search: searchVal
       },
       success: function (data) {
@@ -494,7 +502,7 @@
       url: url + '?sortedLcd=' + field,
       type: 'GET',
       data: {
-        // lcdSize: selectedSize,
+        lcdSize: selectedSize,
         searchLcd: searchVal,
         orderLcd: clickLcd
         // search: searchVal
@@ -535,7 +543,7 @@
       url: url + '?searchLcd=' + searchVal,
       type: 'GET',
       data: {
-        // lcdSize: selectedSize,
+        lcdSize: selectedSize,
         // search: searchVal
       },
       success: function (data) {
@@ -579,7 +587,6 @@
       e.preventDefault();
 
       var pageNumber = $('#pageNumberLcdPr').val();
-      var intPageNumber = parseInt(pageNumber);
 
       // var url = '/Swipe-Admin/houses';
 
@@ -588,7 +595,7 @@
         url:url+'?lcdPage='+pageNumber,
         type: 'GET',
         data:{
-          // lcdSize: selectedSize,
+          lcdSize: selectedSize,
           searchLcd: searchBlack,
           sortedLcd: sortVal,
           orderLcd: order
@@ -638,7 +645,7 @@
         url:url+'?lcdPage='+pageNumber,
         type: 'GET',
         data:{
-          // lcdSize: selectedSize,
+          lcdSize: selectedSize,
           searchLcd: searchBlack,
           sortedLcd:sortVal,
           orderLcd: order
@@ -686,7 +693,7 @@
         url: url + '?lcdSize=' + selectedSize,
         type: 'GET',
         data: {
-          // lcdSize: selectedSize,
+          lcdSize: selectedSize,
           lcdPage: page,
           searchLcd:search,
           sortedLcd:sortVal,
@@ -731,7 +738,7 @@
         url: url + '?lcdPage=' + pageNumber,
         type: 'GET',
         data: {
-          // lcdSize: selectedSize,
+          lcdSize: selectedSize,
           lcdPage: pageNumber,
           searchLcd:search,
           sortedLcd: sortVal,
@@ -788,7 +795,7 @@
       url: url + '?searchApartment=' + searchVal,
       type: 'GET',
       data: {
-        apartmentSize: selectedSize,
+        // apartmentSize: selectedSize,
         // search: searchVal
       },
       success: function (data) {
@@ -840,7 +847,7 @@
       url: url + '?sortedApartment=' + field,
       type: 'GET',
       data: {
-        apartmentSize: selectedSize,
+        // apartmentSize: selectedSize,
         searchApartment: searchVal,
         orderApartment: clickApartment
         // search: searchVal
@@ -881,7 +888,7 @@
       url: url + '?searchApartment=' + searchVal,
       type: 'GET',
       data: {
-        apartmentSize: selectedSize,
+        // apartmentSize: selectedSize,
         // search: searchVal
       },
       success: function (data) {
@@ -928,6 +935,7 @@
       e.preventDefault();
 
       var pageNumber = $('#pageNumberApartmentPr').val();
+      var intPageNumber = parseInt(pageNumber);
 
       // var url = '/Swipe-Admin/houses';
 
@@ -936,7 +944,7 @@
         url:url+'?apartmentPage='+pageNumber,
         type: 'GET',
         data:{
-          apartmentSize: selectedSize,
+          // apartmentSize: selectedSize,
           searchApartment: searchBlack,
           sortedApartment: sortedApartment,
           orderApartment: order
@@ -952,8 +960,13 @@
           $('#previousApartment').html(previous);
           var textHouses = $(data).find('#textApartment').html();
           $('#textApartment').html(textHouses);
+          var pagination = $(data).find('#apartmentPagination').html();
+          $('#apartmentPagination').html(pagination);
+
           $('#apartmentPagination li').removeClass('active');
-          $('#apartmentPagination li').eq(pageNumber).addClass('active');
+          $('#apartmentPagination li').filter(function() {
+            return $(this).text() === (intPageNumber+1).toString();
+          }).addClass('active');
           localStorage.setItem('pageApartment', pageNumber);
 
 
@@ -970,6 +983,7 @@
       var searchBlack = localStorage.getItem('searchApartment');
       e.preventDefault();
       var pageNumber = $('#pageNumberApartmentNext').val();
+      var intPageNumber = parseInt(pageNumber);
       // var url = '/Swipe-Admin/houses';
 
 
@@ -977,7 +991,7 @@
         url:url+'?apartmentPage='+pageNumber,
         type: 'GET',
         data:{
-          apartmentSize: selectedSize,
+          // apartmentSize: selectedSize,
           searchApartment: searchBlack,
           sortedApartment: sortedApartment,
           orderApartment: order
@@ -993,8 +1007,13 @@
           $('#previousApartment').html(previous);
           var textHouses = $(data).find('#textApartment').html();
           $('#textApartment').html(textHouses);
+          var pagination = $(data).find('#apartmentPagination').html();
+          $('#apartmentPagination').html(pagination);
+
           $('#apartmentPagination li').removeClass('active');
-          $('#apartmentPagination li').eq(pageNumber).addClass('active');
+          $('#apartmentPagination li').filter(function() {
+            return $(this).text() === (intPageNumber+1).toString();
+          }).addClass('active');
           localStorage.setItem('pageApartment', pageNumber);
 
 
@@ -1021,7 +1040,7 @@
         url: url + '?apartmentSize=' + selectedSize,
         type: 'GET',
         data: {
-          apartmentSize: selectedSize,
+          // apartmentSize: selectedSize,
           apartmentPage: page,
           searchApartment:search,
           sortedApartment: sortedApartment,
@@ -1066,7 +1085,7 @@
         url: url + '?apartmentPage=' + pageNumber,
         type: 'GET',
         data: {
-          apartmentSize: selectedSize,
+          // apartmentSize: selectedSize,
           apartmentPage: pageNumber,
           searchApartment:search,
           sortedApartment: sortedApartment,
@@ -1082,6 +1101,15 @@
                 $('#previousApartment').html(previous);
                 var textHouses = $(data).find('#textApartment').html();
                 $('#textApartment').html(textHouses);
+
+                var pagination = $(data).find('#apartmentPagination').html();
+                $('#apartmentPagination').html(pagination);
+
+                $('#apartmentPagination li').removeClass('active');
+                $('#apartmentPagination li').filter(function() {
+                  return $(this).text() === (pageNumber+1).toString();
+                }).addClass('active');
+
                 localStorage.setItem('pageApartment', pageNumber);
               })
               .fail( function(xhr, status, error) {

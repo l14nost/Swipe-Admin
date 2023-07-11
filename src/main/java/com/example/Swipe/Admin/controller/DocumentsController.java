@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class DocumentsController {
@@ -32,4 +34,13 @@ public class DocumentsController {
         log.info("Document id:"+idDocument+", was delete");
         return "redirect:/lcd_edit/"+idLcd;
     }
+
+
+//    @PostMapping("/delete_document_list")
+//    public String deleteDocument1(@RequestParam List<Integer> idDocuments, @RequestParam int idLcd, Model model){
+////        documentsServiceImpl.deleteById(idDocument);
+//        System.out.println("+++++"+idDocuments);
+//        log.info("Document id:"+idDocuments+", was delete");
+//        return "redirect:/lcd_edit/"+idLcd;
+//    }
 }

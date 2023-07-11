@@ -132,7 +132,7 @@ class LCDControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("bindingResult",bindingResult))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/announcement"));
+                .andExpect(view().name("redirect:/lcds"));
 
     }
 
@@ -178,7 +178,7 @@ class LCDControllerTest {
                         .flashAttr("lcd",lcdDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("bindingResult",bindingResult))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/lcd_edit"));
 
     }
@@ -223,7 +223,7 @@ class LCDControllerTest {
                         .flashAttr("lcd",lcdDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("bindingResult",bindingResult))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/lcd_edit"));
 
     }
@@ -257,15 +257,13 @@ class LCDControllerTest {
 
         BindingResult bindingResult = new BeanPropertyBindingResult(lcdDTO,"lcd");
 
-        when(userService.findAllByType(TypeUser.CONTRACTOR)).thenReturn(List.of(User.builder().build()));
-
 
         mockMvc.perform(post("/add_lcd")
                         .flashAttr("lcd",lcdDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("bindingResult",bindingResult))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/announcement"));
+                .andExpect(view().name("redirect:/lcds"));
     }
 
     @Test
@@ -308,7 +306,7 @@ class LCDControllerTest {
                         .flashAttr("lcd",lcdDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("bindingResult",bindingResult))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/lcd_add"));
     }
     @Test
@@ -351,7 +349,7 @@ class LCDControllerTest {
                         .flashAttr("lcd",lcdDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("bindingResult",bindingResult))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/lcd_add"));
     }
 
@@ -360,6 +358,6 @@ class LCDControllerTest {
         mockMvc.perform(post("/delete_lcd")
                 .param("idLcd","1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/announcement"));
+                .andExpect(view().name("redirect:/lcds"));
     }
 }

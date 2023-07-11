@@ -3,6 +3,7 @@ package com.example.Swipe.Admin.controller;
 import com.example.Swipe.Admin.dto.AgentDTO;
 import com.example.Swipe.Admin.dto.ClientDTO;
 import com.example.Swipe.Admin.dto.UserAddInfoDTO;
+import com.example.Swipe.Admin.entity.User;
 import com.example.Swipe.Admin.enums.TypeNotification;
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
@@ -133,6 +134,44 @@ class UserControllerTest {
     }
 
     @Test
+    void contractorAdd() throws Exception {
+        ClientDTO  clientDTO = ClientDTO.builder()
+                .name("Name")
+                .surname("Surname")
+                .number("101123123")
+                .type(TypeUser.CONTRACTOR)
+                .mail("user@gmail.com")
+                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.of(2025,12,21)).callSms(true).typeNotification(TypeNotification.ME).build())
+                .build();
+        BindingResult result = new BeanPropertyBindingResult( clientDTO,"user");
+        given(userService.uniqueMail(anyString(), any(BindingResult.class), anyInt(), anyString())).willReturn(result);
+        mockMvc.perform(post("/add_user")
+                        .flashAttr("user",clientDTO)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/contractors"));
+    }
+
+    @Test
+    void notaryAdd() throws Exception {
+        ClientDTO  clientDTO = ClientDTO.builder()
+                .name("Name")
+                .surname("Surname")
+                .number("101123123")
+                .type(TypeUser.NOTARY)
+                .mail("user@gmail.com")
+                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.of(2025,12,21)).callSms(true).typeNotification(TypeNotification.ME).build())
+                .build();
+        BindingResult result = new BeanPropertyBindingResult( clientDTO,"user");
+        given(userService.uniqueMail(anyString(), any(BindingResult.class), anyInt(), anyString())).willReturn(result);
+        mockMvc.perform(post("/add_user")
+                        .flashAttr("user",clientDTO)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/notaries"));
+    }
+
+    @Test
     void userAddValidClient() throws Exception {
         ClientDTO  clientDTO = ClientDTO.builder()
                 .name("Name")
@@ -157,7 +196,7 @@ class UserControllerTest {
         mockMvc.perform(post("/add_user")
                         .flashAttr("user",clientDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/user_add"));
     }
     @Test
@@ -185,7 +224,7 @@ class UserControllerTest {
         mockMvc.perform(post("/add_user")
                         .flashAttr("user",clientDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/contractor_add"));
     }
     @Test
@@ -213,7 +252,7 @@ class UserControllerTest {
         mockMvc.perform(post("/add_user")
                         .flashAttr("user",clientDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/notary_add"));
     }
 
@@ -234,6 +273,45 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/users"));
+    }
+
+
+    @Test
+    void contractorUpdate() throws Exception {
+        ClientDTO  clientDTO = ClientDTO.builder()
+                .name("Name")
+                .surname("Surname")
+                .number("101123123")
+                .type(TypeUser.CONTRACTOR)
+                .mail("user@gmail.com")
+                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.now()).callSms(true).typeNotification(TypeNotification.ME).build())
+                .build();
+        BindingResult result = new BeanPropertyBindingResult( clientDTO,"user");
+        given(userService.uniqueMail(anyString(), any(BindingResult.class), anyInt(), anyString())).willReturn(result);
+        mockMvc.perform(post("/user_edit/1")
+                        .flashAttr("user",clientDTO)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/contractors"));
+    }
+
+    @Test
+    void notaryUpdate() throws Exception {
+        ClientDTO  clientDTO = ClientDTO.builder()
+                .name("Name")
+                .surname("Surname")
+                .number("101123123")
+                .type(TypeUser.NOTARY)
+                .mail("user@gmail.com")
+                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.now()).callSms(true).typeNotification(TypeNotification.ME).build())
+                .build();
+        BindingResult result = new BeanPropertyBindingResult( clientDTO,"user");
+        given(userService.uniqueMail(anyString(), any(BindingResult.class), anyInt(), anyString())).willReturn(result);
+        mockMvc.perform(post("/user_edit/1")
+                        .flashAttr("user",clientDTO)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/notaries"));
     }
 
     @Test
@@ -261,14 +339,30 @@ class UserControllerTest {
         mockMvc.perform(post("/user_edit/1")
                         .flashAttr("user",clientDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/user_edit"));
     }
 
     @Test
     void deleteUser() throws Exception {
+        when(userService.findById(1)).thenReturn(User.builder().typeUser(TypeUser.CLIENT).build());
         mockMvc.perform(post("/delete_user/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/users"));
+    }
+
+    @Test
+    void deleteContractor() throws Exception {
+        when(userService.findById(1)).thenReturn(User.builder().typeUser(TypeUser.CONTRACTOR).build());
+        mockMvc.perform(post("/delete_user/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/contractors"));
+    }
+    @Test
+    void deleteNotary() throws Exception {
+        when(userService.findById(1)).thenReturn(User.builder().typeUser(TypeUser.NOTARY).build());
+        mockMvc.perform(post("/delete_user/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/notaries"));
     }
 }

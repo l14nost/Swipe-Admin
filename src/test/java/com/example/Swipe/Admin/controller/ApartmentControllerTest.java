@@ -57,7 +57,7 @@ class ApartmentControllerTest {
         mockMvc.perform(post("/delete_apartment")
                 .param("idApartment","1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/announcement"));
+                .andExpect(view().name("redirect:/apartments"));
     }
     @Test
     void deleteApartmentFrame() throws Exception {
@@ -125,7 +125,7 @@ class ApartmentControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("result",result))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/announcement"));
+                .andExpect(view().name("redirect:/apartments"));
 
     }
     @Test
@@ -244,7 +244,7 @@ class ApartmentControllerTest {
                         .flashAttr("apartment",apartmentDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("result",result))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/apartment_edit"));
 
     }
@@ -278,7 +278,7 @@ class ApartmentControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("result",result))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/announcement"));
+                .andExpect(view().name("redirect:/apartments"));
     }
 
     @Test
@@ -286,7 +286,7 @@ class ApartmentControllerTest {
         ApartmentDTO apartmentDTO = ApartmentDTO.builder()
                 .idApartment(1)
                 .number(101)
-                .description("111")
+                .description("11")
                 .totalArea(100)
                 .type(TypeApartment.APARTMENT)
                 .layout(LayoutType.STUDIO)
@@ -314,7 +314,7 @@ class ApartmentControllerTest {
                         .flashAttr("apartment",apartmentDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("result",result))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/apartment_add"));
     }
 
@@ -385,7 +385,7 @@ class ApartmentControllerTest {
                         .flashAttr("apartment",apartmentDTO)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .flashAttr("result",result))
-                .andExpect(status().isOk())
+                .andExpect(status().isAccepted())
                 .andExpect(view().name("admin/apartment_frame"));
     }
 

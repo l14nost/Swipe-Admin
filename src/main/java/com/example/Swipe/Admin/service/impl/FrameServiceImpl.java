@@ -1,13 +1,21 @@
 package com.example.Swipe.Admin.service.impl;
 
+import com.example.Swipe.Admin.dto.ApartmentDTO;
+import com.example.Swipe.Admin.dto.FrameDTO;
 import com.example.Swipe.Admin.entity.Frame;
+import com.example.Swipe.Admin.mapper.ApartmentMapper;
+import com.example.Swipe.Admin.mapper.FrameMapper;
 import com.example.Swipe.Admin.repository.FrameRepo;
 import com.example.Swipe.Admin.service.FrameService;
+import com.example.Swipe.Admin.specification.ApartmentForLcdSpecification;
+import com.example.Swipe.Admin.specification.FrameSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -87,4 +95,17 @@ public class FrameServiceImpl implements FrameService {
             frameRepo.saveAndFlush(frameUpdate);
         }
     }
+
+//    public Page<FrameDTO> pagination(Pageable pageable, int keyWord, String field, int order){
+//        if(keyWord != 0){
+//            FrameSpecification apartmentForLcdSpecification = FrameSpecification.builder().keyWord(keyWord).order(order).sort(field).build();
+//            return frameRepo.findAll(apartmentForLcdSpecification,pageable).map(FrameMapper::apply);
+//        }
+//        FrameSpecification apartmentForLcdSpecification = FrameSpecification.builder().order(order).sort(field).build();
+//        return frameRepo.findAll(apartmentForLcdSpecification,pageable).map(FrameMapper::apply);
+//    }
+//
+//    public int count() {
+//        return (int) frameRepo.count();
+//    }
 }

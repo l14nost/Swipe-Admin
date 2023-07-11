@@ -281,12 +281,12 @@ class LCDServiceImplTest {
     }
 
     @Test
-    void updateDTO() {
+    void updateDTO() throws IOException {
         LCD lcd =LCD.builder()
                 .idLcd(1)
                 .name("Name")
-                .photoList(List.of(Photo.builder().idPhotos(1).fileName("../uploads/1d9c952a-152e-4678-8bfe-1030efe3a953-example.txt").build()))
-                .documents(List.of(Documents.builder().idDocuments(1).fileName("../uploads/2c8c50b0-6e0f-4d3c-a3db-69e64a41d167-example.txt").build()))
+//                .photoList(List.of(Photo.builder().idPhotos(1).fileName("../uploads/1d9c952a-152e-4678-8bfe-1030efe3a953-example.txt").build()))
+//                .documents(List.of(Documents.builder().idDocuments(1).fileName("../uploads/2c8c50b0-6e0f-4d3c-a3db-69e64a41d167-example.txt").build()))
                 .mainPhoto("../uploads/4d4c3700-6f63-4730-b88c-4ae57241c326-example.txt")
                 .description("Description")
                 .sumContract("Sum")
@@ -328,8 +328,8 @@ class LCDServiceImplTest {
                 .name("Name1")
                 .description("Description1")
                 .sumContract("Sum1")
-                .photoList(List.of(Photo.builder().idPhotos(1).build()))
-                .documents(List.of(Documents.builder().idDocuments(1).build()))
+//                .photoList(List.of(Photo.builder().idPhotos(1).build()))
+//                .documents(List.of(Documents.builder().idDocuments(1).build()))
                 .advantages("")
                 .appointment("")
                 .communal(CommunalType.HALF)

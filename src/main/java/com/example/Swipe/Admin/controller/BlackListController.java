@@ -23,7 +23,7 @@ public class BlackListController {
     @GetMapping("/black_list")
     public String blackListPage(
             @RequestParam(name = "pageBlackList", defaultValue = "0", required = false)int pageBlackList,
-            @RequestParam(name = "sizeBlackList", defaultValue = "3", required = false)int sizeBlackList,
+            @RequestParam(name = "sizeBlackList", defaultValue = "10", required = false)int sizeBlackList,
             @RequestParam(name = "search", required = false, defaultValue = "null") String keyWord,
             @RequestParam(name = "sortedBy", required = false, defaultValue = "idUser") String sortedBy,
             @RequestParam(name = "order", required = false, defaultValue = "1") int order,
@@ -38,6 +38,7 @@ public class BlackListController {
         model.addAttribute("allSize",userService.countBlackList());
         model.addAttribute("currentPage",pageBlackList);
         model.addAttribute("sort",sortedBy);
+        model.addAttribute("order",order);
         return "admin/black_list";
     }
 //    @GetMapping("/black_list/search/{name}")

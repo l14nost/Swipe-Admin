@@ -15,6 +15,8 @@ public class FrameDTO {
 
      int num;
 
+     int idLcd;
+
      LcdDTO lcd;
 
      List<ApartmentDTO> apartmentList;

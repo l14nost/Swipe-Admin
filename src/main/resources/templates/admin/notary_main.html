@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Clients</title>
+  <title>Notaries</title>
   <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,103 +30,66 @@
   <div class="content-wrapper">
     <section class="content">
       <div class="card-body">
-    <div id="allUserContent">
-    <div style="margin-left: 20px">
-      <h3>Список клиентов</h3>
-    </div>
-      <div style="display: flex; justify-content: right">
-        <nav class="navbar bg-body-tertiary" id="clientSearch">
-          <div class="container-fluid ">
-            <div style="display: flex">
-              <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInput" name="search">
-              <button class="btn btn-outline-info" type="button" onclick="searchClient()">Search</button>
-            </div>
-          </div>
-        </nav>
-      </div>
-    <div id="tableClient">
-      <div id="closeSearch" th:if="${#strings.length(searchClient) >= 1 && (searchClient != null && !searchClient.equals('null'))}" style="margin-left: 20px">
-        <i th:text="'Результат поиска по значению:'+${searchClient}"></i>
-        <a onclick="closeClient()"><i class="fas fa-times"></i></a>
-      </div>
-      <table class="table table-striped"  style="margin: 20px" id="userTable">
-        <thead>
-        <tr>
-          <th scope="col">
-            <input  type="hidden" name="sorted" value="idUser">
-            <button class="btn btn-outline-secondary" type="button" onclick="sortedClient('idUser')">
-              <div style="display: flex">
-                ID
-                <div th:if="${sort == 'idUser'}" style="margin-left: 3px">
-                  <div th:if="${order == 1}">
-                    ↓
-                  </div>
-                  <div th:if="${order == 2}">
-                    ↑
-                  </div>
-                </div>
-              </div>
-            </button>
-          </th>
-          <th scope="col">
-            <input  type="hidden" name="sorted" value="idUser">
-            <button class="btn btn-outline-secondary" type="button" onclick="sortedClient('surname')">
-              <div style="display: flex">
-                ФИО
-                <div th:if="${sort == 'surname'}" style="margin-left: 3px">
-                  <div th:if="${order == 1}">
-                    ↓
-                  </div>
-                  <div th:if="${order == 2}">
-                    ↑
-                  </div>
-                </div>
-              </div>
-            </button>
-          </th>
-          <th scope="col">
-            <input  type="hidden" name="sorted" value="idUser">
-            <button class="btn btn-outline-secondary" type="button" onclick="sortedClient('mail')">
-
-              <div style="display: flex">
-                Почта
-                <div th:if="${sort == 'mail'}" style="margin-left: 3px">
-                  <div th:if="${order == 1}">
-                    ↓
-                  </div>
-                  <div th:if="${order == 2}">
-                    ↑
-                  </div>
-                </div>
-              </div>
-            </button>
-          </th>
-          <th scope="col">
-            <form method="get" th:action="@{/add_user}">
-              <input type="hidden" name="type" th:value="${typeClient}">
-                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить клиента">
-                  Добавить
-              </button>
-            </form></th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr th:each="user:${users}">
-            <th scope="row"><p th:text="${user.getIdUser()}"></p></th>
-            <td><p th:text="${user.getSurname()+' '+user.getName()}"></p></td>
-            <td><p th:text="${user.getMail()}"></p></td>
-            <td>
-              <div style="display: flex">
-              <form th:action="@{/user_edit/{id}(id=${user.getIdUser()})}"  method="get" >
-                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать клиента">
-                  <i class="fas fa-pencil">
-                  </i>
-                </button>
-              </form>
-<!--              <form th:action="@{/delete_user/{id}(id = ${user.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Удалить клиента">-->
-                <button type="button" class="btn btn-danger btn-sm deleteUser" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteUser" th:data-id="${user.getIdUser()}">
-                  <i class="fas fa-trash"></i>
-                </button>
+<!--    <div id="allUserContent">-->
+<!--    <div style="margin-left: 20px">-->
+<!--      <h3>Список клиентов</h3>-->
+<!--    </div>-->
+<!--      <div style="display: flex; justify-content: right">-->
+<!--        <nav class="navbar bg-body-tertiary" id="clientSearch">-->
+<!--          <div class="container-fluid ">-->
+<!--            <div style="display: flex">-->
+<!--              <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInput" name="search">-->
+<!--              <button class="btn btn-outline-info" type="button" onclick="searchClient()">Search</button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </nav>-->
+<!--      </div>-->
+<!--    <div id="tableClient">-->
+<!--      <div id="closeSearch" th:if="${#strings.length(searchClient) >= 1 && (searchClient != null && !searchClient.equals('null'))}" style="margin-left: 20px">-->
+<!--        <i th:text="'Результат поиска по значению:'+${searchClient}"></i>-->
+<!--        <a onclick="closeClient()"><i class="fas fa-times"></i></a>-->
+<!--      </div>-->
+<!--      <table class="table table-striped"  style="margin: 20px" id="userTable">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--          <th scope="col">-->
+<!--            <input  type="hidden" name="sorted" value="idUser">-->
+<!--            <button class="btn btn-outline-info" type="button" onclick="sortedClient('idUser')">ID</button>-->
+<!--          </th>-->
+<!--          <th scope="col">-->
+<!--            <input  type="hidden" name="sorted" value="idUser">-->
+<!--            <button class="btn btn-outline-info" type="button" onclick="sortedClient('surname')">ФИО</button>-->
+<!--          </th>-->
+<!--          <th scope="col">-->
+<!--            <input  type="hidden" name="sorted" value="idUser">-->
+<!--            <button class="btn btn-outline-info" type="button" onclick="sortedClient('mail')">Почта</button>-->
+<!--          </th>-->
+<!--          <th scope="col">-->
+<!--            <form method="get" th:action="@{/add_user}">-->
+<!--              <input type="hidden" name="type" th:value="${typeClient}">-->
+<!--                <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить клиента">-->
+<!--                  Добавить-->
+<!--              </button>-->
+<!--            </form></th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--          <tr th:each="user:${users}">-->
+<!--            <th scope="row"><p th:text="${user.getIdUser()}"></p></th>-->
+<!--            <td><p th:text="${user.getSurname()+' '+user.getName()}"></p></td>-->
+<!--            <td><p th:text="${user.getMail()}"></p></td>-->
+<!--            <td>-->
+<!--              <div style="display: flex">-->
+<!--              <form th:action="@{/user_edit/{id}(id=${user.getIdUser()})}"  method="get" >-->
+<!--                <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать клиента">-->
+<!--                  <i class="fas fa-pencil">-->
+<!--                  </i>-->
+<!--                </button>-->
+<!--              </form>-->
+<!--&lt;!&ndash;              <form th:action="@{/delete_user/{id}(id = ${user.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Удалить клиента">&ndash;&gt;-->
+<!--                <button type="button" class="btn btn-danger btn-sm deleteUser" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteUser" th:data-id="${user.getIdUser()}">-->
+<!--                  <i class="fas fa-trash"></i>-->
+<!--                </button>-->
 
                 <div class="modal fade" id="confirmDeleteUser" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
@@ -150,7 +113,7 @@
                   </div>
                 </div>
 
-<!--              </form>-->
+<!--&lt;!&ndash;              </form>&ndash;&gt;-->
 <!--                <form th:action="@{/add_to_black_list}"  method="post" >-->
 <!--                  <input type="hidden" name="idUser" th:value="${user.getIdUser()}" />-->
 <!--                  <button type="submit" class="btn btn-dark btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить в черный список">-->
@@ -158,81 +121,52 @@
 <!--                  </button>-->
 
 <!--                </form>-->
-
-
-                <button type="button" class="btn btn-dark btn-sm addToBlacklist" style="margin-left: 10px" data-toggle="modal" data-target="#confirmAddToBlacklist" th:data-id="${user.getIdUser()}">
-                  <i class="nav-icon fas fa-calendar-minus"></i>
-                </button>
-
-                <div class="modal fade" id="confirmAddToBlacklist" tabindex="-1" role="dialog" aria-labelledby="confirmAddToBlacklistModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="confirmAddToBlacklistModalLabel">Добавление пользователя в черный список</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        Вы уверены, что хотите добавить этого пользователя в черный список?
-                      </div>
-                      <div class="modal-footer">
-                        <!-- Закрываем модальное окно, если пользователь передумал -->
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                        <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
-                        <button type="submit" class="btn btn-danger" onclick="addToBlacklist()">Да</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-<!--      <div style="display: flex; justify-content: center">-->
-<!--        <button type="button" class="btn btn-secondary">Добавить</button>-->
+<!--              </div>-->
+<!--            </td>-->
+<!--          </tr>-->
+<!--        </tbody>-->
+<!--      </table>-->
+<!--&lt;!&ndash;      <div style="display: flex; justify-content: center">&ndash;&gt;-->
+<!--&lt;!&ndash;        <button type="button" class="btn btn-secondary">Добавить</button>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--    </div>-->
+<!--      <div style="display: flex; justify-content: space-between">-->
+<!--        <div id="textClient">-->
+<!--        <div style="margin-left: 10px" th:if="${pageUser.getContent().size()==0}"><h6>Ничего не найдено</h6></div>-->
+<!--      <div  style="margin-left: 10px" th:if="${pageUser.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${pageUser.getContent().size()} + ' из '+${sizeClient}+' записей'" ></h6></div>-->
 <!--      </div>-->
-    </div>
-      <div style="display: flex; justify-content: space-between">
-        <div id="textClient">
-        <div style="margin-left: 10px" th:if="${pageUser.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
-      <div  style="margin-left: 10px" th:if="${pageUser.getContent().size()>0}"><h6 th:text="'Показано '+${pageUser.getNumber()*10+1}+' – '+${pageUser.getContent().size() + pageUser.getNumber()*10} + ' из '+${sizeClient}+' записей'" ></h6></div>
-      </div>
-      <nav aria-label="Page navigation example" style="display: flex; justify-content: right ">
-        <ul class="pagination" id="previousClient">
-          <li class="page-item" th:hidden="${pageUser.getNumber()==0}">
-            <input type="hidden" id="pageNumberClientPr" th:value="${pageUser.getNumber()-1}">
-            <a class="page-link" href="#" aria-label="Previous" th:value="${pageUser.getTotalPages()}">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-        </ul>
-        <ul class="pagination" id="userPagination">
-          <ul class="pagination" th:if="${pageUser.getTotalPages()>1}">
+<!--      <nav aria-label="Page navigation example" style="display: flex; justify-content: right ">-->
+<!--        <ul class="pagination" id="previousClient">-->
+<!--          <li class="page-item" th:hidden="${pageUser.getNumber()==0}">-->
+<!--            <input type="hidden" id="pageNumberClientPr" th:value="${pageUser.getNumber()-1}">-->
+<!--            <a class="page-link" href="#" aria-label="Previous" th:value="${pageUser.getTotalPages()}">-->
+<!--              <span aria-hidden="true">&laquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--        <ul class="pagination" id="userPagination">-->
 
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li style="margin-left: 5px; margin-right: 5px" th:if="${pageUser.getNumber()>1 && pageUser.getTotalPages()>6}"><p >...</p></li>
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li class="page-item active"><a class="page-link" href="#">1</a></li>-->
+<!--          <li style="margin-left: 5px; margin-right: 5px" th:if="${pageUser.getNumber()>1 && pageUser.getTotalPages()>6}"><p >...</p></li>-->
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
 
-          <li class="page-item"  th:each="p: ${#numbers.sequence(pageUser.getNumber()-1, pageUser.getNumber()+1)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()>1 && pageUser.getNumber()<pageUser.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-          <!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
-          <li class="page-item"  th:each="p: ${#numbers.sequence(pageUser.getTotalPages()-3, pageUser.getTotalPages()-2)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()>pageUser.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(pageUser.getNumber()-1, pageUser.getNumber()+1)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()>1 && pageUser.getNumber()<pageUser.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+<!--          &lt;!&ndash;          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>&ndash;&gt;-->
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(pageUser.getTotalPages()-3, pageUser.getTotalPages()-2)}" th:if="${pageUser.getTotalPages()>6 && pageUser.getNumber()>pageUser.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
 
-          <li style="margin-left: 5px; margin-right: 5px" th:if="${pageUser.getNumber()<pageUser.getTotalPages()-2 && pageUser.getTotalPages()>6}"><p>...</p></li>
-          <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageUser.getTotalPages()-2)}" th:if="${pageUser.getTotalPages()>2 && pageUser.getTotalPages()<=6 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+<!--          <li style="margin-left: 5px; margin-right: 5px" th:if="${pageUser.getNumber()<pageUser.getTotalPages()-2 && pageUser.getTotalPages()>6}"><p>...</p></li>-->
+<!--          <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageUser.getTotalPages()-2)}" th:if="${pageUser.getTotalPages()>2 && pageUser.getTotalPages()<=6 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
 
-          <li class="page-item"><a class="page-link" href="#" th:text="${pageUser.getTotalPages()}" th:if="${pageUser.getTotalPages()>1}"></a></li>
-        </ul>
-        </ul>
-        <ul class="pagination" id="nextClient">
-          <li class="page-item" th:hidden="${pageUser.getNumber()==pageUser.getTotalPages()-1}" th:if="${pageUser.getTotalPages()>1}">
-            <input type="hidden" id="pageNumberClientNext" th:value="${pageUser.getNumber()+1}">
-            <a class="page-link" href="#" aria-label="Next" th:value="${pageUser.getTotalPages()}">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
+<!--          <li class="page-item"><a class="page-link" href="#" th:text="${pageUser.getTotalPages()}" th:if="${pageUser.getTotalPages()>1}"></a></li>-->
+<!--        </ul>-->
+<!--        <ul class="pagination" id="nextClient">-->
+<!--          <li class="page-item" th:hidden="${pageUser.getNumber()==pageUser.getTotalPages()-1}" th:if="${pageUser.getTotalPages()>1}">-->
+<!--            <input type="hidden" id="pageNumberClientNext" th:value="${pageUser.getNumber()+1}">-->
+<!--            <a class="page-link" href="#" aria-label="Next" th:value="${pageUser.getTotalPages()}">-->
+<!--              <span aria-hidden="true">&raquo;</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
 <!--        <ul class="pagination" style="margin-left: 5px">-->
 <!--          <li class="page-item">-->
 <!--            <select class="form-select"  aria-label="Floating label select example" id="sizeUserPage" onchange="">-->
@@ -242,9 +176,9 @@
 <!--            </select>-->
 <!--          </li>-->
 <!--        </ul>-->
-      </nav>
-      </div>
-  </div>
+<!--      </nav>-->
+<!--      </div>-->
+<!--  </div>-->
 <!--    <div>-->
 <!--      <div style="margin-left: 20px">-->
 <!--        <h3>Список застройщик</h3>-->
@@ -363,101 +297,149 @@
 <!--      </nav>-->
 <!--      </div>-->
 <!--    </div>-->
-<!--    <div>-->
-<!--      <div style="margin-left: 20px">-->
-<!--        <h3>Список нотариусов</h3>-->
-<!--      </div>-->
-<!--      <div style="display: flex; justify-content: right">-->
-<!--        <nav class="navbar bg-body-tertiary" id="notarySearch">-->
-<!--          <div class="container-fluid ">-->
-<!--            <div style="display: flex">-->
-<!--              <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInputNotary" name="search">-->
-<!--              <button class="btn btn-outline-info" type="button" onclick="searchNotary()">Search</button>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </nav>-->
-<!--      </div>-->
-<!--      <div id = "tableNotary">-->
-<!--        <div id="closeNotary" th:if="${#strings.length(searchNotary) >= 1 && (searchNotary != null && !searchNotary.equals('null'))}" style="margin-left: 20px">-->
-<!--          <i th:text="'Результат поиска по значению:'+${searchNotary}"></i>-->
-<!--          <a onclick="closeNotary()"><i class="fas fa-times"></i></a>-->
-<!--        </div>-->
-<!--        <table class="table table-striped" style="margin: 20px" id="notaryTable">-->
-<!--          <thead>-->
-<!--          <tr>-->
-<!--            <th scope="col">-->
-<!--              <input  type="hidden" name="sorted" value="idUser">-->
-<!--              <button class="btn btn-outline-info" type="button" onclick="sortedNotary('idUser')">ID</button>-->
-<!--            </th>-->
-<!--            <th scope="col">-->
-<!--              <input  type="hidden" name="sorted" value="idUser">-->
-<!--              <button class="btn btn-outline-info" type="button" onclick="sortedNotary('surname')">ФИО</button>-->
-<!--            </th>-->
-<!--            <th scope="col">-->
-<!--              <input  type="hidden" name="sorted" value="idUser">-->
-<!--              <button class="btn btn-outline-info" type="button" onclick="sortedNotary('mail')">Почта</button>-->
-<!--            </th>-->
-<!--            <th scope="col"><form method="get" th:action="@{/add_user}">-->
-<!--              <input type="hidden" name="type" th:value="${typeNotary}">-->
-<!--              <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить нотариуса">-->
-<!--                Добавить-->
-<!--              </button>-->
-<!--            </form></th>-->
-<!--          </tr>-->
-<!--          </thead>-->
-<!--          <tbody>-->
-<!--          <tr th:each="notary:${notaries}">-->
-<!--            <th scope="row"><p th:text="${notary.getIdUser()}"></p></th>-->
-<!--            <td><p th:text="${notary.getSurname()+' '+notary.getName()}"></p></td>-->
-<!--            <td><p th:text="${notary.getMail()}"></p></td>-->
-<!--            <td>-->
-<!--              <div style="display: flex">-->
-<!--                <form th:action="@{/user_edit/{id}(id=${notary.getIdUser()})}"  method="get" data-toggle="tooltip" data-placement="top" title="Редактировать нотариуса">-->
-<!--                  <button type="submit" class="btn btn-info btn-sm">-->
-<!--                    <i class="fas fa-pencil">-->
-<!--                    </i>-->
-<!--                  </button>-->
+    <div>
+      <div style="margin-left: 20px">
+        <h3>Список нотариусов</h3>
+      </div>
+      <div style="display: flex; justify-content: right">
+        <nav class="navbar bg-body-tertiary" id="notarySearch">
+          <div class="container-fluid ">
+            <div style="display: flex">
+              <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInputNotary" name="search">
+              <button class="btn btn-outline-info" type="button" onclick="searchNotary()">Search</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div id = "tableNotary">
+        <div id="closeNotary" th:if="${#strings.length(searchNotary) >= 1 && (searchNotary != null && !searchNotary.equals('null'))}" style="margin-left: 20px">
+          <i th:text="'Результат поиска по значению:'+${searchNotary}"></i>
+          <a onclick="closeNotary()"><i class="fas fa-times"></i></a>
+        </div>
+        <table class="table table-striped" style="margin: 20px" id="notaryTable">
+          <thead>
+          <tr>
+            <th scope="col">
+              <input  type="hidden" name="sorted" value="idUser">
+              <button class="btn btn-outline-secondary" type="button" onclick="sortedNotary('idUser')">
+                <div style="display: flex">
+                ID
+                  <div th:if="${sort == 'idUser'}" style="margin-left: 3px">
+                    <div th:if="${order == 1}">
+                      ↓
+                    </div>
+                    <div th:if="${order == 2}">
+                      ↑
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </th>
+            <th scope="col">
+              <input  type="hidden" name="sorted" value="idUser">
+              <button class="btn btn-outline-secondary" type="button" onclick="sortedNotary('surname')">
+
+                <div style="display: flex">
+                  ФИО
+                  <div th:if="${sort == 'surname'}" style="margin-left: 3px">
+                    <div th:if="${order == 1}">
+                      ↓
+                    </div>
+                    <div th:if="${order == 2}">
+                      ↑
+                    </div>
+                  </div>
+                </div></button>
+            </th>
+            <th scope="col">
+              <input  type="hidden" name="sorted" value="idUser">
+              <button class="btn btn-outline-secondary" type="button" onclick="sortedNotary('mail')">
+
+                <div style="display: flex">
+                  Почта
+                  <div th:if="${sort == 'mail'}" style="margin-left: 3px">
+                    <div th:if="${order == 1}">
+                      ↓
+                    </div>
+                    <div th:if="${order == 2}">
+                      ↑
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </th>
+            <th scope="col"><form method="get" th:action="@{/add_user}">
+              <input type="hidden" name="type" th:value="${typeNotary}">
+              <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Добавить нотариуса">
+                Добавить
+              </button>
+            </form></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="notary:${notaries}">
+            <th scope="row"><p th:text="${notary.getIdUser()}"></p></th>
+            <td><p th:text="${notary.getSurname()+' '+notary.getName()}"></p></td>
+            <td><p th:text="${notary.getMail()}"></p></td>
+            <td>
+              <div style="display: flex">
+                <form th:action="@{/user_edit/{id}(id=${notary.getIdUser()})}"  method="get" data-toggle="tooltip" data-placement="top" title="Редактировать нотариуса">
+                  <button type="submit" class="btn btn-info btn-sm">
+                    <i class="fas fa-pencil">
+                    </i>
+                  </button>
+                </form>
+<!--                <form th:action="@{/delete_user/{id}(id = ${notary.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Удалить нотариуса">-->
+                <button type="button" class="btn btn-danger btn-sm deleteUser" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteUser" th:data-id="${notary.getIdUser()}">
+                  <i class="fas fa-trash"></i>
+                </button>
+
 <!--                </form>-->
-<!--&lt;!&ndash;                <form th:action="@{/delete_user/{id}(id = ${notary.getIdUser()})}"  method="post" data-toggle="tooltip" data-placement="top" title="Удалить нотариуса">&ndash;&gt;-->
-<!--                <button type="button" class="btn btn-danger btn-sm deleteUser" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteUser" th:data-id="${notary.getIdUser()}">-->
-<!--                  <i class="fas fa-trash"></i>-->
-<!--                </button>-->
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex; justify-content: space-between">
+        <div id="textNotary">
+        <div style="margin-left: 10px" th:if="${pageNotary.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
+      <div  style="margin-left: 10px" th:if="${pageNotary.getContent().size()>0}"><h6 th:text="'Показано '+${pageNotary.getNumber()*10+1}+' – '+${pageNotary.getContent().size() + pageNotary.getNumber()*10} + ' из '+${sizeNotary}+' записей'" ></h6></div>
+      </div>
+      <nav aria-label="Page navigation example" style="display: flex; justify-content: right " >
+        <ul class="pagination" id="previousNotary">
+          <li class="page-item" th:hidden="${pageNotary.getNumber()==0}">
+            <input type="hidden" id="pageNumberNotaryPr" th:value="${pageNotary.getNumber()-1}">
+            <a class="page-link" href="#" aria-label="Previous" th:value="${pageNotary.getTotalPages()}">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        </ul>
+        <ul class="pagination" id="notaryPagination">
+          <ul class="pagination" th:if="${pageNotary.getTotalPages()>1}">
 
-<!--&lt;!&ndash;                </form>&ndash;&gt;-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--          </tbody>-->
-<!--        </table>-->
-<!--      </div>-->
-<!--      <div style="display: flex; justify-content: space-between">-->
-<!--        <div id="textNotary">-->
-<!--        <div style="margin-left: 10px" th:if="${pageNotary.getContent().size()==0}"><h6>Ничего не найдено</h6></div>-->
-<!--      <div  style="margin-left: 10px" th:if="${pageNotary.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${pageNotary.getContent().size()} + ' из '+${sizeNotary}+' записей'" ></h6></div>-->
-<!--      </div>-->
-<!--      <nav aria-label="Page navigation example" style="display: flex; justify-content: right " >-->
-<!--        <ul class="pagination" id="previousNotary">-->
-<!--          <li class="page-item" th:hidden="${pageNotary.getNumber()==0}">-->
-<!--            <input type="hidden" id="pageNumberNotaryPr" th:value="${pageNotary.getNumber()-1}">-->
-<!--            <a class="page-link" href="#" aria-label="Previous" th:value="${pageNotary.getTotalPages()}">-->
-<!--              <span aria-hidden="true">&laquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--        <ul class="pagination" id="notaryPagination">-->
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li style="margin-left: 5px; margin-right: 5px" th:if="${pageNotary.getNumber()>1 && pageNotary.getTotalPages()>6}"><p >...</p></li>
+            <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${pageNotary.getTotalPages()>6 && pageNotary.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
 
-<!--          <li class="page-item active"><a class="page-link" href="#">1</a></li>-->
-<!--          <li class="page-item" th:each="p: ${#numbers.sequence(1, pageNotary.getTotalPages()-1)}" th:if="${pageNotary.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+            <li class="page-item"  th:each="p: ${#numbers.sequence(pageNotary.getNumber()-1, pageNotary.getNumber()+1)}" th:if="${pageNotary.getTotalPages()>6 && pageNotary.getNumber()>1 && pageNotary.getNumber()<pageNotary.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+            <!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+            <li class="page-item"  th:each="p: ${#numbers.sequence(pageNotary.getTotalPages()-3, pageNotary.getTotalPages()-2)}" th:if="${pageNotary.getTotalPages()>6 && pageNotary.getNumber()>pageNotary.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
 
-<!--        </ul>-->
-<!--        <ul class="pagination" id="nextNotary" >-->
-<!--          <li class="page-item" th:hidden="${pageNotary.getNumber()==pageNotary.getTotalPages()-1}" th:if="${pageNotary.getTotalPages()>1}">-->
-<!--            <input type="hidden" id="pageNumberNotaryNext" th:value="${pageNotary.getNumber()+1}">-->
-<!--            <a class="page-link" href="#" aria-label="Next" th:value="${pageNotary.getTotalPages()}">-->
-<!--              <span aria-hidden="true">&raquo;</span>-->
-<!--            </a>-->
-<!--          </li>-->
-<!--        </ul>-->
+            <li style="margin-left: 5px; margin-right: 5px" th:if="${pageNotary.getNumber()<pageNotary.getTotalPages()-2 && pageNotary.getTotalPages()>6}"><p>...</p></li>
+            <li class="page-item"  th:each="p: ${#numbers.sequence(1, pageNotary.getTotalPages()-2)}" th:if="${pageNotary.getTotalPages()>2 && pageNotary.getTotalPages()<=6 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+            <li class="page-item"><a class="page-link" href="#" th:text="${pageNotary.getTotalPages()}" th:if="${pageNotary.getTotalPages()>1}"></a></li>
+          </ul>
+        </ul>
+        <ul class="pagination" id="nextNotary" >
+          <li class="page-item" th:hidden="${pageNotary.getNumber()==pageNotary.getTotalPages()-1}" th:if="${pageNotary.getTotalPages()>1}">
+            <input type="hidden" id="pageNumberNotaryNext" th:value="${pageNotary.getNumber()+1}">
+            <a class="page-link" href="#" aria-label="Next" th:value="${pageNotary.getTotalPages()}">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
 <!--        <ul class="pagination" style="margin-left: 5px">-->
 <!--          <li class="page-item">-->
 <!--            <select class="form-select"  aria-label="Floating label select example" id="sizeNotaryPage" onchange="">-->
@@ -467,9 +449,9 @@
 <!--            </select>-->
 <!--          </li>-->
 <!--        </ul>-->
-<!--      </nav>-->
-<!--      </div>-->
-<!--    </div>-->
+      </nav>
+      </div>
+    </div>
       </div>
     </section>
   </div>
@@ -479,35 +461,6 @@
 
 <div th:replace="~{/admin.shared/script}"></div>
 <div th:fragment="script"></div>
-<script>
-  // let url = '/Swipe-Admin/add_to_black_list/';
-  let url3 = '/add_to_black_list/';
-  let blackListId;
-  $(document).on('click', '.addToBlacklist', function () {
-    blackListId = $(this).data('id');
-    $('#confirmAddToBlacklist').modal('show');
-  });
-  function addToBlacklist() {
-    $.ajax({
-      url: url3,
-      type: 'POST',
-      data: {
-        idUser:blackListId
-      },
-      success: function (data) {
-        $('#confirmAddToBlacklist').modal('hide');
-        window.location.href = "/users";
-        lcdId = undefined;
-      },
-      error: function (xhr, status, error) {
-        $('#confirmAddToBlacklist').modal('hide');
-        alert("-");
-        console.log(error);
-      }
-    });
-  }
-
-</script>
 <script>
   let url2 = '/Swipe-Admin/delete_user/';
   // let url2 = '/delete_user/';
@@ -522,7 +475,7 @@
       type: 'POST',
       success: function (data) {
         $('#confirmDeleteUser').modal('hide');
-        window.location.href = "/Swipe-Admin/users";
+        window.location.href = "/Swipe-Admin/notaries";
         lcdId = undefined;
       },
       error: function (xhr, status, error) {
@@ -535,8 +488,8 @@
 
 </script>
 <script>
-  let url = '/Swipe-Admin/users';
-  // let url = '/users';
+  let url = '/Swipe-Admin/notaries';
+  // let url = '/notaries';
   function searchClient () {
     var selectedSize = localStorage.getItem('selectedUserSize');
     // e.preventDefault();
@@ -638,7 +591,7 @@
     var searchVal = 'null';
     // var url = '/Swipe-Admin/users';
     if(selectedSize == null){
-      selectedSize = '10';
+      selectedSize = '3';
     }
     $.ajax({
       url: url + '?searchClient=' + searchVal,
@@ -835,7 +788,7 @@
       // var url = '/Swipe-Admin/users';
 
       if (selectedSize == null) {
-        selectedSize = '10';
+        selectedSize = '3';
       }
 
       pageNumber -= 1;
@@ -1172,7 +1125,7 @@
       // var url = '/Swipe-Admin/users';
 
       if (selectedSize == null) {
-        selectedSize = '10';
+        selectedSize = '3';
       }
 
       pageNumber -= 1;
@@ -1231,7 +1184,6 @@
       url: url + '?searchNotary=' + searchVal,
       type: 'GET',
       data: {
-        sizeNotaryPage: selectedSize,
         // search: searchVal
       },
       success: function (data) {
@@ -1284,8 +1236,8 @@
       url: url + '?sortedNotary=' + field,
       type: 'GET',
       data: {
-        sizeNotaryPage: selectedSize,
-        searchNotary: searchVal
+        searchNotary: searchVal,
+        orderNotary: clickNotary
         // search: searchVal
       },
       success: function (data) {
@@ -1320,13 +1272,12 @@
     var searchVal = 'null';
     // var url = '/Swipe-Admin/users';
     if(selectedSize == null){
-      selectedSize = '10';
+      selectedSize = '3';
     }
     $.ajax({
       url: url + '?searchNotary=' + searchVal,
       type: 'GET',
       data: {
-        sizeNotaryPage: selectedSize,
         sortedNotary:sortedVal,
         orderNotary: order
         // search: searchVal
@@ -1370,6 +1321,7 @@
       e.preventDefault();
 
       var pageNumber = $('#pageNumberNotaryPr').val();
+      var intPageNumber = parseInt(pageNumber);
 
       // var url = '/Swipe-Admin/users';
 
@@ -1378,7 +1330,6 @@
         url:url+'?pageNotary='+pageNumber,
         type: 'GET',
         data:{
-          sizeNotaryPage: selectedSize,
           searchNotary: searchBlack,
           sortedNotary:sortedVal,
           orderNotary: order
@@ -1395,8 +1346,13 @@
           var textNotary = $(data).find('#textNotary').html();
           $('#textNotary').html(textNotary);
 
+          var pagination = $(data).find('#notaryPagination').html();
+          $('#notaryPagination').html(pagination);
+
           $('#notaryPagination li').removeClass('active');
-          $('#notaryPagination li').eq(pageNumber).addClass('active');
+          $('#notaryPagination li').filter(function() {
+            return $(this).text() === (intPageNumber+1).toString();
+          }).addClass('active');
           localStorage.setItem('pageNotary', pageNumber);
 
 
@@ -1413,6 +1369,7 @@
       var searchBlack = localStorage.getItem('searchNotary');
       e.preventDefault();
       var pageNumber = $('#pageNumberNotaryNext').val();
+      var intPageNumber = parseInt(pageNumber);
       // var url = '/Swipe-Admin/users';
 
 
@@ -1420,7 +1377,6 @@
         url:url+'?pageNotary='+pageNumber,
         type: 'GET',
         data:{
-          sizeNotaryPage: selectedSize,
           searchNotary: searchBlack,
           sortedNotary: sortedVal,
           orderNotary: order
@@ -1437,8 +1393,13 @@
           var textNotary = $(data).find('#textNotary').html();
           $('#textNotary').html(textNotary);
 
+          var pagination = $(data).find('#notaryPagination').html();
+          $('#notaryPagination').html(pagination);
+
           $('#notaryPagination li').removeClass('active');
-          $('#notaryPagination li').eq(pageNumber).addClass('active');
+          $('#notaryPagination li').filter(function() {
+            return $(this).text() === (intPageNumber+1).toString();
+          }).addClass('active');
           localStorage.setItem('pageNotary', pageNumber);
 
 
@@ -1463,7 +1424,6 @@
         url: url + '?sizeNotaryPage=' + selectedSize,
         type: 'GET',
         data: {
-          sizeNotaryPage: selectedSize,
           pageNotary: page,
           searchNotary:search,
           sortedNotary: sortedVal,
@@ -1508,7 +1468,6 @@
         url: url + '?pageNotary=' + pageNumber,
         type: 'GET',
         data: {
-          sizeNotaryPage: selectedSize,
           pageNotary: pageNumber,
           searchNotary:search,
           sortedNotary: sortedVal,
@@ -1524,6 +1483,16 @@
                 $('#previousNotary').html(previous);
                 var textNotary = $(data).find('#textNotary').html();
                 $('#textNotary').html(textNotary);
+
+
+                var pagination = $(data).find('#notaryPagination').html();
+                $('#notaryPagination').html(pagination);
+
+                $('#notaryPagination li').removeClass('active');
+                $('#notaryPagination li').filter(function() {
+                  return $(this).text() === (pageNumber+1).toString();
+                }).addClass('active');
+
                 localStorage.setItem('pageNotary', pageNumber);
               })
               .fail( function(xhr, status, error) {

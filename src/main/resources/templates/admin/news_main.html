@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>BlackList</title>
+  <title>News</title>
     <link rel="icon" type="image/png" th:href="@{/admin/dist/img/favicon.png}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,7 +20,7 @@
               <div class="container-fluid">
                   <div class="row mb-2">
                       <div class="col-sm-6">
-                          <h4 class="m-0">Список клиентов в черном списке</h4>
+                          <h4 class="m-0">Список новостей</h4>
                       </div><!-- /.col -->
                   </div><!-- /.row -->
               </div><!-- /.container-fluid -->
@@ -33,7 +33,7 @@
         <div class="container-fluid ">
 <!--          <form class="d-flex" role="search">-->
           <div style="display: flex">
-            <input class="form-control me-2" type="search" placeholder="Поиск по имени или фамилии" aria-label="Search" id="searchInput" name="search">
+            <input class="form-control me-2" type="search" placeholder="Поиск по заголовку" aria-label="Search" id="searchInput" name="search">
             <button class="btn btn-outline-info" type="button" onclick="searchBlackList()">Search</button>
           </div>
 <!--          </form>-->
@@ -50,26 +50,27 @@
         <tr>
           <th scope="col">
               <input  type="hidden"  id="sortedInput" name="sorted" value="idUser">
-              <button class="btn btn-outline-secondary clickBtn" id="buttonId" type="button" value="idUser" onclick="sortedBlackList('idUser')">
+              <button class="btn btn-outline-secondary clickBtn" id="buttonId" type="button" value="idUser" onclick="sortedBlackList('idNews')">
+
                   <div style="display: flex">
-                  ID
-                  <div th:if="${sort == 'idUser'}" style="margin-left: 3px">
-                      <div th:if="${order == 1}">
-                          ↓
+                      ID
+                      <div th:if="${sort == 'idNews'}" style="margin-left: 3px">
+                          <div th:if="${order == 1}">
+                              ↓
+                          </div>
+                          <div th:if="${order == 2}">
+                              ↑
+                          </div>
                       </div>
-                      <div th:if="${order == 2}">
-                          ↑
-                      </div>
-                  </div>
                   </div>
               </button>
-
           </th>
           <th scope="col"><input  type="hidden"   id="sortedInput1" name="sorted1" value="surname">
-              <button class="btn btn-outline-secondary clickBtn" type="button" value="surname" onclick="sortedBlackList('surname')">
+              <button class="btn btn-outline-secondary clickBtn" type="button" value="surname" onclick="sortedBlackList('title')">
+
                   <div style="display: flex">
-                      ФИО
-                      <div th:if="${sort == 'surname'}" style="margin-left: 3px">
+                      Заголовок
+                      <div th:if="${sort == 'title'}" style="margin-left: 3px">
                           <div th:if="${order == 1}">
                               ↓
                           </div>
@@ -80,70 +81,76 @@
                   </div>
               </button></th>
           <th scope="col"><input type="hidden"  id="sortedInput2" name="sorted2" value="mail">
-              <button class="btn btn-outline-secondary clickBtn" type="button" value="mail" onclick="sortedBlackList('mail')">
+              <button class="btn btn-outline-secondary clickBtn" type="button" value="mail" onclick="sortedBlackList('lcd')">
+
                   <div style="display: flex">
-                  Почта
-                  <div th:if="${sort == 'mail'}" style="margin-left: 3px">
-                      <div th:if="${order == 1}">
-                          ↓
+                      ЖК
+                      <div th:if="${sort == 'lcd'}" style="margin-left: 3px">
+                          <div th:if="${order == 1}">
+                              ↓
+                          </div>
+                          <div th:if="${order == 2}">
+                              ↑
+                          </div>
                       </div>
-                      <div th:if="${order == 2}">
-                          ↑
-                      </div>
-                  </div>
                   </div>
               </button></th>
-
+            <th scope="col"><form method="get" th:action="@{/add_news}">
+                <button type="submit" class="btn btn-secondary" style="margin-left: 10px; display: flex" data-toggle="tooltip" data-placement="top" title="Добавить новости">
+                    Добавить
+                </button>
+            </form></th>
         </tr>
         </thead>
         <tbody>
           <tr th:each="user:${blackList.getContent()}">
-            <th scope="row"><p th:text="${user.getIdUser()}"></p></th>
-            <td><p th:text="${user.getSurname()+' '+user.getName()}"></p></td>
-            <td><p th:text="${user.getMail()}"></p></td>
-            <td>
+            <th scope="row"><p th:text="${user.getIdNews()}"></p></th>
+            <td><p th:text="${user.getTitle()}"></p></td>
+            <td><p th:text="${user.getIdLcd()}"></p></td>
+              <td>
+                  <div style="display: flex">
+                      <form th:action="@{/edit_news/{id}(id=${user.getIdNews()})}"  method="get" >
+                          <button type="submit" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Редактировать новость">
+                              <i class="fas fa-pencil">
+                              </i>
+                          </button>
+                      </form>
+                      <!--                <form th:action="@{/delete_apartment}" method="post" class="delete-form" id="deleteForm">-->
+                      <!--                  <input type="hidden" name="idApartment" th:value="${apartment.getIdApartment()}" />-->
+                      <button type="button" class="btn btn-danger btn-sm deleteNews" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteNews" th:data-id="${user.getIdNews()}">
+                          <i class="fas fa-trash"></i>
+                      </button>
 
-<!--              <form th:action="@{/delete_from_black_list}"  method="post" >-->
-<!--                <input type="hidden" name="idUser" th:value="${user.getIdUser()}" />-->
-<!--                  <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Удалить из черного списка">-->
-<!--                  <i class="nav-icon fas fa-trash"></i>-->
-<!--                </button>-->
-
-<!--              </form>-->
-
-                <button type="button" class="btn btn-danger btn-sm deleteFromBlacklist" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteFromBlacklist" th:data-id="${user.getIdUser()}">
-                    <i class="fas fa-trash"></i>
-                </button>
-
-                <div class="modal fade" id="confirmDeleteFromBlacklist" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="confirmDeleteModalLabel">Удаление пользователя из черного списка</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                Вы уверены, что хотите удалить этого пользователя из черного списка?
-                            </div>
-                            <div class="modal-footer">
-                                <!-- Закрываем модальное окно, если пользователь передумал -->
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                                <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
-                                <button type="submit" class="btn btn-danger" onclick="deleteApartment()">Да</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </td>
+                      <div class="modal fade" id="confirmDeleteNews" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="confirmDeleteModalLabel">Удаление новость</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      Вы уверены, что хотите удалить эту новость?
+                                  </div>
+                                  <div class="modal-footer">
+                                      <!-- Закрываем модальное окно, если пользователь передумал -->
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                      <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
+                                      <button type="submit" class="btn btn-danger" onclick="deleteApartment()">Удалить</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </td>
           </tr>
         </tbody>
       </table>
     </div>
         <div style="display: flex; justify-content: space-between">
             <div id="textPagination">
-        <div  style="margin-left: 10px" th:if="${blackList.getContent().size()>0}"><h6 th:text="'Показано '+${blackList.getNumber()*10+1}+' – '+${blackList.getContent().size() + (blackList.getNumber()*10)} + ' из '+${allSize}+' записей'" ></h6></div>
+        <div  style="margin-left: 10px" th:if="${blackList.getContent().size()>0}"><h6 th:text="'Показано '+${blackList.getNumber()*10+1}+' – '+${blackList.getContent().size() + blackList.getNumber()*10} + ' из '+${allSize}+' записей'" ></h6></div>
         <div style="margin-left: 10px" th:if="${blackList.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
         </div>
       <nav aria-label="Page navigation example" style="display: flex; justify-content: right; margin-right: 10px" id="allPagination">
@@ -207,27 +214,27 @@
 
 <div th:replace="~{/admin.shared/script}"></div>
 <script>
-    let url1 = '/Swipe-Admin/delete_from_black_list';
-    // let url1 = '/delete_from_black_list';
+    // let url = '/Swipe-Admin/delete_news';
+    let url1 = '/delete_news';
     let apartmentId;
-    $(document).on('click', '.deleteFromBlacklist', function () {
+    $(document).on('click', '.deleteNews', function () {
         apartmentId = $(this).data('id');
-        $('#confirmDeleteFromBlacklist').modal('show');
+        $('#confirmDeleteNews').modal('show');
     });
     function deleteApartment() {
         $.ajax({
             url: url1,
             type: 'POST',
             data: {
-                idUser: apartmentId,
+                idNews: apartmentId,
             },
             success: function (data) {
-                $('#confirmDeleteFromBlacklist').modal('hide');
-                window.location.href = "/Swipe-Admin/black_list";
+                $('#confirmDeleteNews').modal('hide');
+                window.location.href = "/news_page";
                 apartmentId = undefined;
             },
             error: function (xhr, status, error) {
-                $('#confirmDeleteFromBlacklist').modal('hide');
+                $('#confirmDeleteNews').modal('hide');
                 console.log(error);
             }
         });
@@ -237,8 +244,8 @@
 
 <!--<div th:fragment="script"></div>-->
 <script>
-    let url = '/Swipe-Admin/black_list';
-    // let url = '/black_list';
+    let url = '/Swipe-Admin/news_page';
+    // let url = '/news_page';
     // var searchBlack = localStorage.getItem('search');
 
 
@@ -305,17 +312,13 @@
 
     var clickCount = 1;
     function sortedBlackList (field) {
-
-
-
-
         if (field === localStorage.getItem("sortVal")){
             clickCount++;
             if (clickCount>2){
                 clickCount = 1;
             }
         }
-        else if (localStorage.getItem("sortVal") === null && field === 'idUser' && clickCount===1){
+        else if (localStorage.getItem("sortVal") === null && field === 'idNews' && clickCount===1){
             clickCount = 2;
         }
         else {

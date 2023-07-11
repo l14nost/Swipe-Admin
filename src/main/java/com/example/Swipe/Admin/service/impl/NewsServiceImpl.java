@@ -1,14 +1,20 @@
 package com.example.Swipe.Admin.service.impl;
 
 import com.example.Swipe.Admin.dto.NewsDTO;
+import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.entity.News;
+import com.example.Swipe.Admin.mapper.FrameMapper;
 import com.example.Swipe.Admin.mapper.NewsMapper;
 import com.example.Swipe.Admin.repository.NewsRepo;
 import com.example.Swipe.Admin.service.NewsService;
+import com.example.Swipe.Admin.specification.FrameSpecification;
+import com.example.Swipe.Admin.specification.NewsSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -111,8 +117,23 @@ public class NewsServiceImpl implements NewsService {
             if(news.getTitle()!=null){
                 updateNews.setTitle(news.getTitle());
             }
+            updateNews.setLcd(LCD.builder().idLcd(newsDto.getIdLcd()).build());
+
             newsRepo.saveAndFlush(updateNews);
         }
 
+    }
+
+    public int count() {
+        return (int) newsRepo.count();
+    }
+
+    public Page<NewsDTO> pagination(Pageable pageable, String keyWord, String sortedBy, int order) {
+        if(!keyWord.equals( "null")){
+            NewsSpecification newsSpecification = NewsSpecification.builder().keyWord(keyWord).order(order).sortedBy(sortedBy).build();
+            return newsRepo.findAll(newsSpecification,pageable).map(NewsMapper::apply);
+        }
+        NewsSpecification newsSpecification = NewsSpecification.builder().order(order).sortedBy(sortedBy).build();
+        return newsRepo.findAll(newsSpecification,pageable).map(NewsMapper::apply);
     }
 }

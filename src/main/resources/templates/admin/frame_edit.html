@@ -65,11 +65,36 @@
               <tr>
                   <th scope="col">
                       <input  type="hidden" name="sorted" value="idUser">
-                      <button class="btn btn-outline-info" type="button" onclick="sortedApartment('idApartment')">ID</button>
+                      <button class="btn btn-outline-secondary" type="button" onclick="sortedApartment('idApartment')">
+                          <div style="display: flex">
+                              ID
+                              <div th:if="${sort == 'idApartment'}" style="margin-left: 3px">
+                                  <div th:if="${order == 1}">
+                                      ↓
+                                  </div>
+                                  <div th:if="${order == 2}">
+                                      ↑
+                                  </div>
+                              </div>
+                          </div>
+                      </button>
                   </th>
                   <th scope="col">
                       <input  type="hidden" name="sorted" value="idUser">
-                      <button class="btn btn-outline-info" type="button" onclick="sortedApartment('number')">Номер</button>
+                      <button class="btn btn-outline-secondary" type="button" onclick="sortedApartment('number')">
+
+                          <div style="display: flex">
+                              Номер
+                              <div th:if="${sort == 'number'}" style="margin-left: 3px">
+                                  <div th:if="${order == 1}">
+                                      ↓
+                                  </div>
+                                  <div th:if="${order == 2}">
+                                      ↑
+                                  </div>
+                              </div>
+                          </div>
+                      </button>
                   </th>
                 <th scope="col">
                   <button type="button" th:onclick="'addApartment('+${frame.getIdFrame()}+')'" class="btn btn-secondary btn-sm" style="margin-left: 10px" data-toggle="tooltip" data-placement="top" title="Add apartment">
@@ -91,11 +116,31 @@
                         </i>
                       </button>
 
-                      <button type="button" class="btn btn-danger btn-sm" style="margin-left: 10px"  th:onclick="'deleteApartment('+${apartment.getIdApartment()}+', ' +${frame.getIdFrame()}+ ')'" data-toggle="tooltip" data-placement="top" title="Delete apartment">
-                        <i class="fas fa-trash">
-                        </i>
+                      <button type="button" class="btn btn-danger btn-sm deleteApartment" style="margin-left: 10px" data-toggle="modal" data-target="#confirmDeleteApartment" th:data-id="${apartment.getIdApartment()}">
+                          <i class="fas fa-trash"></i>
                       </button>
 
+                      <div class="modal fade" id="confirmDeleteApartment" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="confirmDeleteModalLabel">Удаление квартиры</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      Вы уверены, что хотите удалить эту квартиру?
+                                  </div>
+                                  <div class="modal-footer">
+                                      <!-- Закрываем модальное окно, если пользователь передумал -->
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                      <!-- При нажатии на кнопку "Удалить", отправляем форму для удаления -->
+                                      <button type="submit" class="btn btn-danger" onclick="deleteApartment()">Удалить</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                   </div>
                 </td>
               </tr>
@@ -108,7 +153,7 @@
             <div style="display: flex; justify-content: space-between" >
                 <div id="textApartment">
                 <div style="margin-left: 10px" th:if="${apartments.getContent().size()==0}"><h6>Ничего не найдено</h6></div>
-                <div  style="margin-left: 10px" th:if="${apartments.getContent().size()>0}"><h6 th:text="'Показано 1 – '+${apartments.getContent().size()} + ' из '+${sizeApartment}+' записей'" ></h6></div>
+                <div  style="margin-left: 10px" th:if="${apartments.getContent().size()>0}"><h6 th:text="'Показано '+${apartments.getNumber()*10+1}+' – '+${apartments.getContent().size() + apartments.getNumber()*10} + ' из '+${sizeApartment}+' записей'" ></h6></div>
                 </div>
                     <nav aria-label="Page navigation example" style="display: flex; justify-content: center ">
                 <ul class="pagination" id="previousApartment">
@@ -119,10 +164,22 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="pagination" id="apartmentPagination">
-                   <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-1)}" th:value="${p}" th:if="${apartments.getTotalPages()>=2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
-                </ul>
+                        <ul class="pagination" id="apartmentPagination">
+                            <ul class="pagination" th:if="${apartments.getTotalPages()>1}">
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li style="margin-left: 5px; margin-right: 5px" th:if="${apartments.getNumber()>1 && apartments.getTotalPages()>5}"><p >...</p></li>
+                                <li class="page-item"  th:each="p: ${#numbers.sequence(1, 2)}" th:if="${apartments.getTotalPages()>5 && apartments.getNumber()<2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+                                <li class="page-item"  th:each="p: ${#numbers.sequence(apartments.getNumber()-1, apartments.getNumber()+1)}" th:if="${apartments.getTotalPages()>5 && apartments.getNumber()>1 && apartments.getNumber()<apartments.getTotalPages()-2}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+                                <!--          <li class="page-item"  th:each="p: ${#numbers.sequence(currentPage - 1, currentPage+1)}" th:if="${ currentPage != 0 && currentPage+1!=blackList.getTotalPages()}"><a class="page-link" href="#" th:text="${p+1}"></a></li>-->
+                                <li class="page-item"  th:each="p: ${#numbers.sequence(apartments.getTotalPages()-3, apartments.getTotalPages()-2)}" th:if="${apartments.getTotalPages()>5 && apartments.getNumber()>apartments.getTotalPages()-3}"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+                                <li style="margin-left: 5px; margin-right: 5px" th:if="${apartments.getNumber()<apartments.getTotalPages()-2 && apartments.getTotalPages()>5}"><p>...</p></li>
+                                <li class="page-item"  th:each="p: ${#numbers.sequence(1, apartments.getTotalPages()-2)}" th:if="${apartments.getTotalPages()>2 && apartments.getTotalPages()<=5 }"><a class="page-link" href="#" th:text="${p+1}"></a></li>
+
+                                <li class="page-item"><a class="page-link" href="#" th:text="${apartments.getTotalPages()}" th:if="${apartments.getTotalPages()>1}"></a></li></ul>
+                        </ul>
+                        </ul>
                 <ul class="pagination" id="nextApartment">
                     <li class="page-item" th:hidden="${apartments.getNumber()==apartments.getTotalPages()-1}" th:if="${apartments.getTotalPages()>1}">
                         <input type="hidden" id="pageNumberApartmentNext" th:value="${apartments.getNumber()+1}">
@@ -131,15 +188,15 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="pagination" style="margin-left: 5px">
-                    <li class="page-item">
-                        <select class="form-select"  aria-label="Floating label select example" id="sizeApartment" onchange="">
-                            <option value="3" th:selected="${apartments.getSize()}==3">3</option>
-                            <option value="5" th:selected="${apartments.getSize()}==5">5</option>
-                            <option value="10" th:selected="${apartments.getSize()}==10">10</option>
-                        </select>
-                    </li>
-                </ul>
+<!--                <ul class="pagination" style="margin-left: 5px">-->
+<!--                    <li class="page-item">-->
+<!--                        <select class="form-select"  aria-label="Floating label select example" id="sizeApartment" onchange="">-->
+<!--                            <option value="3" th:selected="${apartments.getSize()}==3">3</option>-->
+<!--                            <option value="5" th:selected="${apartments.getSize()}==5">5</option>-->
+<!--                            <option value="10" th:selected="${apartments.getSize()}==10">10</option>-->
+<!--                        </select>-->
+<!--                    </li>-->
+<!--                </ul>-->
             </nav>
             </div>
 
@@ -161,13 +218,44 @@
 
 <div th:replace="~{/admin.shared/script}"></div>
 <script>
+    let url1 = '/Swipe-Admin/delete_apartment';
+    // let url1 = '/delete_apartment';
+    let apartmentId;
+    $(document).on('click', '.deleteApartment', function () {
+        apartmentId = $(this).data('id');
+        $('#confirmDeleteApartment').modal('show');
+    });
+    function deleteApartment() {
+        $.ajax({
+            url: url1,
+            type: 'POST',
+            data: {
+                idApartment: apartmentId,
+            },
+            success: function (data) {
+                $('#confirmDeleteApartment').modal('hide');
+                window.location.href = "/Swipe-Admin/edit_frame/"+[[${frame.getIdFrame()}]];
+                apartmentId = undefined;
+            },
+            error: function (xhr, status, error) {
+                $('#confirmDeleteApartment').modal('hide');
+                alert("-");
+                console.log(error);
+            }
+        });
+    }
+
+</script>
+<script>
+    // var url = '/';
+    var url = '/Swipe-Admin/';
   function addApartment(idFrame){
     $.ajax({
-      url: "/Swipe-Admin/add_apartment/"+idFrame,
+      url: url+"add_apartment/"+idFrame,
       method: "GET",
 
       success: function(response) {
-        window.location.href = "/Swipe-Admin/add_apartment/" + idFrame;
+        window.location.href = url+"add_apartment/" + idFrame;
       },
       error: function(xhr, status, error) {
         console.log('Произошла ошибка:', error);
@@ -179,10 +267,10 @@
   function editApartment(idApartment) {
 
       $.ajax({
-          url: "/Swipe-Admin/apartment_edit/"+idApartment,
+          url: url+"apartment_edit/"+idApartment,
           method: "GET",
           success: function(response) {
-              window.location.href = "/Swipe-Admin/apartment_edit/" + idApartment;
+              window.location.href = url+"apartment_edit/" + idApartment;
           },
           error: function(xhr, status, error) {
               console.log('Произошла ошибка:', error);
@@ -191,23 +279,23 @@
       });
   }
 
-  function deleteApartment(idApartment, idFrame) {
-
-      $.ajax({
-          url: "/Swipe-Admin/delete_apartment",
-          method: "POST",
-          data:{
-              idApartment: idApartment
-          },
-          success: function(response) {
-              window.location.href = "/Swipe-Admin/edit_frame/" + idFrame;
-          },
-          error: function(xhr, status, error) {
-              console.log('Произошла ошибка:', error);
-              alert('Произошла ошибка при выполнении запроса');
-          }
-      });
-  }
+  // function deleteApartment(idApartment, idFrame) {
+  //
+  //     $.ajax({
+  //         url: url+"delete_apartment",
+  //         method: "POST",
+  //         data:{
+  //             idApartment: idApartment
+  //         },
+  //         success: function(response) {
+  //             window.location.href = url+"edit_frame/" + idFrame;
+  //         },
+  //         error: function(xhr, status, error) {
+  //             console.log('Произошла ошибка:', error);
+  //             alert('Произошла ошибка при выполнении запроса');
+  //         }
+  //     });
+  // }
 
 
 
@@ -215,15 +303,14 @@
       var selectedSize = localStorage.getItem('selectedApartmentSize');
       // e.preventDefault();
       var searchVal = document.getElementById('searchInputApartment').value;
-      var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
+      var url1 = url+'edit_frame/'+[[${frame.getIdFrame()}]];
       // if(selectedSize == null){
       //   selectedSize = '3';
       // }
       $.ajax({
-          url: url + '?searchApartment=' + searchVal,
+          url: url1 + '?searchApartment=' + searchVal,
           type: 'GET',
           data: {
-              apartmentSize: selectedSize,
               // search: searchVal
           },
           success: function (data) {
@@ -267,15 +354,14 @@
       }
       var selectedSize = localStorage.getItem('selectedApartmentSize');
       var searchVal = localStorage.getItem('searchApartment');
-      var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
+      var url1 = url+'edit_frame/'+[[${frame.getIdFrame()}]];
       // if(selectedSize == null){
       //   selectedSize = '3';
       // }
       $.ajax({
-          url: url + '?sortedApartment=' + field,
+          url: url1 + '?sortedApartment=' + field,
           type: 'GET',
           data: {
-              apartmentSize: selectedSize,
               searchApartment: searchVal,
               orderApartment: clickApartment
               // search: searchVal
@@ -308,15 +394,15 @@
       var selectedSize = localStorage.getItem('selectedApartmentSize');
       // e.preventDefault();
       var searchVal = '0';
-      var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
+      var url1 = url+'edit_frame/'+[[${frame.getIdFrame()}]];
       if(selectedSize == null){
-          selectedSize = '3';
+          selectedSize = '10';
       }
       $.ajax({
-          url: url + '?searchApartment=' + searchVal,
+          url: url1 + '?searchApartment=' + searchVal,
           type: 'GET',
           data: {
-              apartmentSize: selectedSize,
+
 
               // search: searchVal
           },
@@ -349,27 +435,28 @@
   $(document).ready(function() {
       var selectedSize = localStorage.getItem('selectedApartmentSize');
       var page = localStorage.getItem('pageApartment');
-      var sortedVal = localStorage.getItem('sortedApartment');
-      var order = localStorage.getItem('orderApartment');
 
 
       if (selectedSize) {
           $('#sizeApartment').val(selectedSize);
       }
       $('#previousApartment').on('click','li',function(e) {
+          var sortedVal = localStorage.getItem('sortedApartment');
+          var order = localStorage.getItem('orderApartment');
           var searchBlack = localStorage.getItem('searchApartment');
           e.preventDefault();
 
           var pageNumber = $('#pageNumberApartmentPr').val();
+          var intPageNumber = parseInt(pageNumber);
 
-          var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
+
+          var url1 = url+'edit_frame/'+[[${frame.getIdFrame()}]];
 
           // pageNumber -= 1;
           $.ajax({
-              url:url+'?apartmentPage='+pageNumber,
+              url:url1+'?apartmentPage='+pageNumber,
               type: 'GET',
               data:{
-                  apartmentSize: selectedSize,
                   searchApartment: searchBlack,
                   sortedApartment:sortedVal,
                   orderApartment: order
@@ -386,8 +473,13 @@
                   var textHouses = $(data).find('#textApartment').html();
                   $('#textApartment').html(textHouses);
 
+                  var pagination = $(data).find('#apartmentPagination').html();
+                  $('#apartmentPagination').html(pagination);
+
                   $('#apartmentPagination li').removeClass('active');
-                  $('#apartmentPagination li').eq(pageNumber).addClass('active');
+                  $('#apartmentPagination li').filter(function() {
+                      return $(this).text() === (intPageNumber+1).toString();
+                  }).addClass('active');
                   localStorage.setItem('pageApartment', pageNumber);
 
 
@@ -404,14 +496,14 @@
           var order = localStorage.getItem('orderApartment');
           e.preventDefault();
           var pageNumber = $('#pageNumberApartmentNext').val();
-          var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
+          var intPageNumber = parseInt(pageNumber);
+          var url1 = url+'edit_frame/'+[[${frame.getIdFrame()}]];
 
 
           $.ajax({
-              url:url+'?apartmentPage='+pageNumber,
+              url:url1+'?apartmentPage='+pageNumber,
               type: 'GET',
               data:{
-                  apartmentSize: selectedSize,
                   searchApartment: searchBlack,
                   sortedApartment:sortedVal,
                   orderApartment: order
@@ -428,8 +520,13 @@
                   var textHouses = $(data).find('#textApartment').html();
                   $('#textApartment').html(textHouses);
 
+                  var pagination = $(data).find('#apartmentPagination').html();
+                  $('#apartmentPagination').html(pagination);
+
                   $('#apartmentPagination li').removeClass('active');
-                  $('#apartmentPagination li').eq(pageNumber).addClass('active');
+                  $('#apartmentPagination li').filter(function() {
+                      return $(this).text() === (intPageNumber+1).toString();
+                  }).addClass('active');
                   localStorage.setItem('pageApartment', pageNumber);
 
 
@@ -445,17 +542,16 @@
 
           var search = localStorage.getItem('searchApartment');
           selectedSize = $(this).val();
-          var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
+          var url1 = url+'edit_frame/'+[[${frame.getIdFrame()}]];
 
           if (page == null) {
               page = '0';
           }
 
           $.ajax({
-              url: url + '?apartmentSize=' + selectedSize,
+              url: url1 + '?apartmentSize=' + selectedSize,
               type: 'GET',
               data: {
-                  apartmentSize: selectedSize,
                   apartmentPage: page,
                   searchApartment:search,
                   sortedApartment:sortedVal,
@@ -489,18 +585,17 @@
           var pageNumber = $(this).text();
           $('#apartmentPagination li').removeClass('active');
           $(this).addClass('active');
-          var url = '/Swipe-Admin/edit_frame/'+[[${frame.getIdFrame()}]];
+          var url1 = url+'edit_frame/'+[[${frame.getIdFrame()}]];
 
           if (selectedSize == null) {
-              selectedSize = '3';
+              selectedSize = '10';
           }
 
           pageNumber -= 1;
           $.ajax({
-              url: url + '?apartmentPage=' + pageNumber,
+              url: url1 + '?apartmentPage=' + pageNumber,
               type: 'GET',
               data: {
-                  apartmentSize: selectedSize,
                   apartmentPage: pageNumber,
                   searchApartment:search,
                   sortedApartment:sortedVal,
@@ -516,6 +611,15 @@
                   $('#previousApartment').html(previous);
                   var textHouses = $(data).find('#textApartment').html();
                   $('#textApartment').html(textHouses);
+
+                  var pagination = $(data).find('#apartmentPagination').html();
+                  $('#apartmentPagination').html(pagination);
+
+                  $('#apartmentPagination li').removeClass('active');
+                  $('#apartmentPagination li').filter(function() {
+                      return $(this).text() === (pageNumber+1).toString();
+                  }).addClass('active');
+
                   localStorage.setItem('pageApartment', pageNumber);
               })
               .fail( function(xhr, status, error) {

@@ -2,8 +2,9 @@ package com.example.Swipe.Admin.repository;
 
 import com.example.Swipe.Admin.entity.News;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NewsRepo extends JpaRepository<News, Integer> {
+public interface NewsRepo extends JpaRepository<News, Integer>, JpaSpecificationExecutor<News> {
 }

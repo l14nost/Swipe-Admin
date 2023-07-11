@@ -32,6 +32,7 @@ public class ApartmentDTO {
     MultipartFile file;
     @FileExtension(value = {"jpg", "png"}, message = "Формат некорректный (.jpg,.png)")
     List<MultipartFile> galleryPhoto;
+    List<Integer> galleryListId;
     FoundingDocument foundingDocument;
     State state;
     TypeApartment type;

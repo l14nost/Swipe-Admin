@@ -25,7 +25,7 @@
         </div><!-- /.container-fluid -->
       </div>
       <div class="card-body">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_apartment/{idFrame}(idFrame = ${idFrame})}" th:object="${apartment}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_apartment/{idFrame}(idFrame = ${idFrame})}" th:object="${apartment}" id="formAdd">
         <input type="hidden" name="idFrame" th:value="${idFrame}">
         <input type="hidden" name="lcd" value="0">
         <input type="hidden" name="idApartment" value="0">
@@ -36,10 +36,13 @@
           <div class="col-sm-12">
             <label for="firstName" class="form-label">Номер</label>
             <input type="text" class="form-control" name="number" id="firstName" placeholder="Введите номер..." th:value="${apartment.getNumber()}">
+            <div id="number">
+
             <div th:if="${#fields.hasErrors('number')}">
               <div class="text-danger">
                 <p th:errors="*{number}"></p>
               </div>
+            </div>
             </div>
           </div>
 
@@ -47,37 +50,38 @@
           <div class="col-sm-12">
             <label for="floatingTextarea">Описание</label>
             <textarea class="form-control"  id="floatingTextarea" name="description" placeholder="Введите описание..." th:value="${apartment.getDescription()}" th:field="*{description}"></textarea>
+            <div id="description">
             <div th:if="${#fields.hasErrors('description')}">
               <div class="text-danger">
                 <p th:errors="*{description}"></p>
               </div>
             </div>
-
+            </div>
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Адрес</label>
-            <input type="text" class="form-control" name="address"  th:value="${apartment.getAddress()}" placeholder="Введите адрес... (г.Город, р.Район, ул.Улица,1)" >
-            <div th:if="${#fields.hasErrors('address')}">
-              <div class="text-danger">
-                <p th:errors="*{address}"></p>
+            <input type="text" class="form-control"  name="address"  th:value="${apartment.getAddress()}"  data-mask="address" placeholder="Введите адрес...(г.Город, р.Район, ул.Улица,1)" >
+            <div id="address">
+              <div th:if="${#fields.hasErrors('address')}">
+                <div class="text-danger">
+                  <p th:errors="*{address}"></p>
+                </div>
               </div>
             </div>
           </div>
           <div class="col-sm-12">
             <label  class="form-label">Цена</label>
             <input type="number" class="form-control" name="price"  placeholder="Введите цену..."  th:value="${apartment.getPrice()}">
+            <div id="price">
             <div th:if="${#fields.hasErrors('price')}">
               <div class="text-danger">
                 <p th:errors="*{price}"></p>
               </div>
             </div>
-          </div>
-          <label for="inputImg">Главная картина</label>
-          <div th:if="${#fields.hasErrors('file')}">
-            <div class="text-danger">
-              <p th:errors="*{file}"></p>
             </div>
           </div>
+          <label for="inputImg">Главная картина</label>
+
           <div class="form-group" style="display: flex">
 
             <div class="form-group" style="display: flex">
@@ -96,51 +100,68 @@
             </script>
 
           </div>
-<!--          <div>-->
-<!--            <label>Галерея картинок</label>-->
-<!--            <div class="card-body">-->
-<!--              <label>Размер 1000х190</label>-->
-<!--              <div class="row" >-->
+          <div id="file">
+          <div th:if="${#fields.hasErrors('file')}">
+            <div class="text-danger">
+              <p th:errors="*{file}"></p>
+            </div>
+          </div>
+          </div>
+          <div>
+            <label>Галерея картинок</label>
+            <div class="card-body">
+              <div style="display: flex">
+                <label>Размер 1000х190</label>
+                <div style="margin-left: 5px">
+                  <div>
+                    <a id="addDivGallery" type="button">
+                      <img th:src="@{/admin/dist/img/addCinema.png}" width="20px">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="row" id="rowGallery" style="margin-top: 20px">
+                <div class="col-sm-2" id = "galleryDiv1">
+                  <img th:src="@{/admin/dist/img/default.jpg}" id="gallery1" class="img-fluid mb-2" alt="white sample">
+                  <button type="button" id="deleteGallery1" onclick="deleteGallery(1)" style="
+                position: absolute;
+                right: -1px;
+                top: -10px;
+                z-index: 11;
+                border: 2px solid black;
+                height: 30px;
+                width: 30px;
+                box-sizing: border-box;
+                padding: 2px;
+                border-radius: 50%;
+            " >
+                    <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
+                  </button>
+                  <input type="file" id="inputGallery1" name="galleryPhoto" class="form-control" onchange="handleFileChange(event)" accept=".jpg,.jpeg,.png">
+                  <script>
+                    function handleFileChange(event) {
+                      const input = event.target;
+                      const file = input.files[0];
+                      const id = input.id.slice(12); // Получаем идентификатор после "inputGallery"
+                      const img = document.getElementById(`gallery${id}`);
 
-<!--&lt;!&ndash;                <div class="col-sm-3">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <img id="img1" class="img-fluid mb-2" alt="white sample">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <button type="submit" style="&ndash;&gt;-->
-<!--&lt;!&ndash;                position: absolute;&ndash;&gt;-->
-<!--&lt;!&ndash;                right: -1px;&ndash;&gt;-->
-<!--&lt;!&ndash;                top: -10px;&ndash;&gt;-->
-<!--&lt;!&ndash;                z-index: 11;&ndash;&gt;-->
-<!--&lt;!&ndash;                border: 2px solid black;&ndash;&gt;-->
-<!--&lt;!&ndash;                height: 30px;&ndash;&gt;-->
-<!--&lt;!&ndash;                width: 30px;&ndash;&gt;-->
-<!--&lt;!&ndash;                box-sizing: border-box;&ndash;&gt;-->
-<!--&lt;!&ndash;                padding: 2px;&ndash;&gt;-->
-<!--&lt;!&ndash;                border-radius: 50%;&ndash;&gt;-->
-<!--&lt;!&ndash;            " >&ndash;&gt;-->
-<!--&lt;!&ndash;                    <img src="/admin/dist/img/cross.png" width="20px" height="20px">&ndash;&gt;-->
-<!--&lt;!&ndash;                  </button>&ndash;&gt;-->
-<!--&lt;!&ndash;                  <input type="file" id="inputImg1" name="galleryPhoto" class="form-control">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <script>&ndash;&gt;-->
-<!--&lt;!&ndash;                    inputImg1.onchange = evt => {&ndash;&gt;-->
-<!--&lt;!&ndash;                      const [file] = inputImg1.files&ndash;&gt;-->
-<!--&lt;!&ndash;                      if (file) {&ndash;&gt;-->
-<!--&lt;!&ndash;                        img1.src = URL.createObjectURL(file)&ndash;&gt;-->
-<!--&lt;!&ndash;                      }&ndash;&gt;-->
-<!--&lt;!&ndash;                    }&ndash;&gt;-->
-<!--&lt;!&ndash;                  </script>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--                <div class="col-sm-3" style="margin-left: 20px">-->
-<!--                  <div style="display: flex; justify-content: center">-->
-<!--                    <a>-->
-<!--                        <img src="../admin/dist/img/addCinema.png" width="150px">-->
-<!--                    </a>-->
-<!--                  </div>-->
-<!--                </div>-->
+                      if (file) {
+                        img.src = URL.createObjectURL(file);
+                      }
+                    }
+                  </script>
+                </div>
+              </div>
+            </div>
 
-
-
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+          </div>
+          <div id="galleryPhoto">
+            <div th:if="${#fields.hasErrors('galleryPhoto')}">
+              <div class="text-danger">
+                <p th:errors="*{galleryPhoto}"></p>
+              </div>
+            </div>
+          </div>
           <div class="col-sm-6">
             <div class="form-floating">
               <select class="form-select"  aria-label="Floating label select example" name="foundingDocument">
@@ -225,19 +246,23 @@
           <div class="col-sm-6">
             <label  class="form-label">Общая площадь</label>
             <input type="number" class="form-control" name="totalArea" th:value="${apartment.getTotalArea()}"  placeholder="Введите общую площадь...">
+            <div id="totalArea">
             <div th:if="${#fields.hasErrors('totalArea')}">
               <div class="text-danger">
                 <p th:errors="*{totalArea}"></p>
               </div>
             </div>
+            </div>
           </div>
           <div class="col-sm-6">
             <label  class="form-label">Площадь кухни</label>
             <input type="number" class="form-control" name="kitchenArea"  th:value="${apartment.getKitchenArea()}" placeholder="Введите площадь кухни...">
+            <div id="kitchenArea">
             <div th:if="${#fields.hasErrors('kitchenArea')}">
               <div class="text-danger">
                 <p th:errors="*{kitchenArea}"></p>
               </div>
+            </div>
             </div>
           </div>
 <div class="d-flex justify-content-center">
@@ -257,8 +282,297 @@
 </div>
 
 <div th:replace="~{/admin.shared/script}"></div>
+<script src="https://unpkg.com/imask"></script>
+<script>
+  function deleteGallery(id){
+    $(document).ready(function() {
+      $("#galleryDiv" + id).remove();
+    });
+  }
+
+  function deleteDocument(id){
+    $(document).ready(function() {
+      $("#documentDiv" + id).remove();
+    });
+  }
+</script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.6/jquery.inputmask.min.js"></script>-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+
+    const addDivButton = document.getElementById("addDivGallery");
+    const container = document.getElementById("rowGallery");
+    let i = 1;
+    // Обработчик события на нажатие кнопки
+    addDivButton.addEventListener("click", function() {
+      i++;
+      // Создаем новый div элемент
+      const newDiv = document.createElement("div");
+      newDiv.classList.add("col-sm-2");
+      newDiv.id = "galleryDiv"+i;
+      newDiv.innerHTML =
+              "                  <img src=\"/admin/dist/img/default.jpg\" id=\"gallery" + i + "\" class=\"img-fluid mb-2\" alt=\"white sample\">\n" +
+              "                  <button type=\"button\" id=\"deleteGallery"+i+"\" onclick=\"deleteGallery("+i+") \" style=\"\n" +
+              "                position: absolute;\n" +
+              "                right: -1px;\n" +
+              "                top: -10px;\n" +
+              "                z-index: 11;\n" +
+              "                border: 2px solid black;\n" +
+              "                height: 30px;\n" +
+              "                width: 30px;\n" +
+              "                box-sizing: border-box;\n" +
+              "                padding: 2px;\n" +
+              "                border-radius: 50%;\n" +
+              "            \" >\n" +
+              "                    <img src=\"/admin/dist/img/cross.png\" width=\"20px\" height=\"20px\">\n" +
+              "                  </button>\n" +
+              "                  <input type=\"file\" id=\"inputGallery"+i+"\" name=\"galleryPhoto\" class=\"form-control\" onchange=\"handleFileChange(event)\" accept=\".jpg,.jpeg,.png\">\n"
+
+      const scriptTag = document.createElement("script");
+      scriptTag.textContent = " function handleFileChange(event) {\n" +
+              "                      const input = event.target;\n" +
+              "                      const file = input.files[0];\n" +
+              "                      const id = input.id.slice(12); // Получаем идентификатор после \"inputGallery\"\n" +
+              "                      const img = document.getElementById(`gallery${id}`);\n" +
+              "\n" +
+              "                      if (file) {\n" +
+              "                        img.src = URL.createObjectURL(file);\n" +
+              "                      }\n" +
+              "                    }";
+      newDiv.appendChild(scriptTag);
+      // newDiv.appendChild(scriptTag1);
+      container.appendChild(newDiv);
+      const divContent = newDiv.innerHTML;
+      console.log(divContent);
+    });
+  });
+</script>
+
+<script>
+  // let preUrl = '';
+  let preUrl = '/Swipe-Admin'
+  $(document).ready(function() {
+    $('#formAdd').submit(function(e) {
+      e.preventDefault();
+      // var formData = $(this).serialize();
+      var formData = new FormData(this);
+      console.log(formData);
+      $.ajax({
+        url:preUrl+"/add_apartment/"+[[${idFrame}]],
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data, status,jqXHR) {
+          console.log(status);
+          console.log(data);
+          if (jqXHR.status === 202) {
+            var valid1 = $(data).find('#number').html();
+            $('#number').html(valid1);
+            var valid2 = $(data).find('#description').html();
+            $('#description').html(valid2);
+            var valid3 = $(data).find('#address').html();
+            $('#address').html(valid3);
+            var valid4 = $(data).find('#price').html();
+            $('#price').html(valid4);
+
+            var valid5 = $(data).find('#file').html();
+            $('#file').html(valid5);
+
+            var valid6 = $(data).find('#galleryPhoto').html();
+            $('#galleryPhoto').html(valid6);
+
+            var valid7 = $(data).find('#totalArea').html();
+            $('#totalArea').html(valid7);
+
+            var valid8 = $(data).find('#kitchenArea').html();
+            $('#kitchenArea').html(valid8);
+          }
+          if (jqXHR.status === 200){
+            window.location.href = preUrl+"/edit_frame/"+[[${idFrame}]];
+          }
+          console.log("success");
+
+        },
+        error: function(xhr, status, error) {
+          console.log(status);
+          console.log("error");
+
+        }
+      });
+    });
+  });
+</script>
+<script>
 
 
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    const mask = (dataValue, options) => {
+      const elements = document.querySelectorAll(`[data-mask="${dataValue}"]`)
+      if (!elements) return
+
+      elements.forEach(el => {
+        const maskOptions = { ...options } // создаем копию объекта options
+
+        if (dataValue === 'address') {
+          const delimiter = ', ' // разделитель после запятой
+          const delimiter1 = ',' // разделитель после запятой
+          const area = ' р.' // текст, который добавляется после запятой
+          const street = ' ул.'
+          var count = 0;
+
+          // Добавляем обработчик события ввода для поля адреса
+          el.addEventListener('input', e => {
+            const value = e.target.value // получаем текущее значение поля
+
+            if (value.includes(',')) {
+              const parts = value.split(',')
+              console.log(parts.length)
+              if (count === 0) {
+                // разделяем значение на части
+                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                const updatedValue = `${city}${delimiter}${area}` // формируем обновленное значение
+                count++;
+
+                el.value = updatedValue // обновляем значение поля
+
+                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                if (nextInput) {
+                  nextInput.focus() // устанавливаем фокус на следующее поле
+                }
+              }
+              else if (count === 1 && parts.length===3) {
+                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                const area1 = parts[1].trim() // извлекаем город и удаляем пробелы
+                const updatedValue = `${city}${delimiter}${area1}${delimiter}${street}` // формируем обновленное значение
+                count++;
+
+                el.value = updatedValue // обновляем значение поля
+
+                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                if (nextInput) {
+                  nextInput.focus() // устанавливаем фокус на следующее поле
+                }
+              }
+              else if (count === 2 && parts.length===4) {
+                const city = parts[0].trim() // извлекаем город и удаляем пробелы
+                const area1 = parts[1].trim() // извлекаем город и удаляем пробелы
+                const street1 = parts[2].trim() // извлекаем город и удаляем пробелы
+                const updatedValue = `${city}${delimiter}${area1}${delimiter}${street1}${delimiter1}` // формируем обновленное значение
+                count++;
+
+                el.value = updatedValue // обновляем значение поля
+
+                const nextInput = el.nextElementSibling // получаем следующее поле ввода
+                if (nextInput) {
+                  nextInput.focus() // устанавливаем фокус на следующее поле
+                }
+              }
+            }
+          })
+        }
+
+        IMask(el, maskOptions)
+      })
+    };
+
+
+    mask('address', {
+      mask: [
+        {
+          mask: 'г.**********************************************************************************************************************************************************************************************************************************************************', // префикс для города
+          lazy: true // включаем отложенную инициализацию маски
+        },
+        {
+          mask: ' р.*********', // префикс для района
+          lazy: true // включаем отложенную инициализацию маски
+        },
+        {
+          mask: ' ул.*********', // префикс для улицы
+          lazy: true // включаем отложенную инициализацию маски
+        },
+        '000' // номер дома
+      ],
+      lazy: true // включаем отложенную инициализацию маски
+    })
+  })
+
+
+
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const mask = (dataValue, options) => {
+  //     const elements = document.querySelectorAll(`[data-mask="${dataValue}"]`)
+  //     if (!elements) return
+  //
+  //     elements.forEach(el => {
+  //       const maskOptions = { ...options }
+  //
+  //       if (dataValue === 'address') {
+  //         const delimiter = ', '
+  //         const suffix = ' р.'
+  //
+  //         el.addEventListener('input', e => {
+  //           const value = e.target.value
+  //
+  //           if (value.includes(',')) {
+  //             const parts = value.split(',')
+  //             const city = parts[0].trim()
+  //             const updatedValue = `${city}${delimiter}${suffix}`
+  //
+  //             el.value = updatedValue
+  //
+  //             const nextInput = el.nextElementSibling
+  //             if (nextInput) {
+  //               const nextMask = nextInput.dataset.mask
+  //               const nextMaskOptions = options[nextMask]
+  //               const nextMaskLength = nextMaskOptions.mask.length
+  //
+  //               // Проверяем, если следующий блок маски существует и не достигнут конец массива масок
+  //               if (nextMask && nextMaskLength > 0) {
+  //                 const nextMaskPrefix = nextMaskOptions.mask[nextMaskLength - 1]
+  //                 const prefixLength = nextMaskPrefix.length
+  //
+  //                 nextInput.setSelectionRange(prefixLength, prefixLength)
+  //                 nextInput.focus()
+  //               }
+  //             }
+  //           }
+  //         })
+  //       }
+  //
+  //       IMask(el, maskOptions)
+  //     })
+  //   };
+  //
+  //   mask('address', {
+  //     mask: [
+  //       {
+  //         mask: 'г.*********',
+  //         lazy: true
+  //       },
+  //       {
+  //         mask: ' р.*********',
+  //         lazy: true
+  //       },
+  //       {
+  //         mask: ' ул.*********',
+  //         lazy: true
+  //       },
+  //       '000'
+  //     ],
+  //     lazy: true
+  //   })
+  // })
+
+
+
+
+
+
+
+</script>
 </body>
 
 </html>

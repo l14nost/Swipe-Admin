@@ -237,7 +237,7 @@
                 <label>Размер 1000х190</label>
                 <div style="margin-left: 5px">
                   <div>
-                    <a id="addDivDocument" type="button" onclick="deleteDocument(1)">
+                    <a id="addDivDocument" type="button">
                       <img th:src="@{/admin/dist/img/addCinema.png}" width="20px">
                     </a>
                   </div>
@@ -258,10 +258,10 @@
                 box-sizing: border-box;
                 padding: 2px;
                 border-radius: 50%;
-            ">
+            " id="deleteDocument1" onclick="deleteDocument(1)">
                     <img th:src="@{/admin/dist/img/cross.png}" width="20px" height="20px">
                   </button>
-                  <label id = "filename1" style="text-align: center"></label>
+                  <label id = "filename1" style="text-align: center;max-width: 100%; word-wrap: break-word"></label>
                   <input type="file" id = "inputDocument1" name="documentsFiles" class="form-control" onclick="handleFileNameChange(1)" accept=".doc,.docx,.xlsx">
                   <script>
                     function handleFileNameChange(id) {
@@ -426,17 +426,9 @@
     });
   }
 </script>
-<!--<script>-->
-<!--  function deleteGallery(event){-->
-<!--      const id = event.target.id.slice(13);-->
-<!--      console.log(id);-->
-<!--    $(document).ready(function() {-->
-<!--      $("#galleryDiv" + id).remove();-->
-<!--    });-->
-
-<!--  }-->
-<!--</script>-->
 <script>
+  // let preUrl = '';
+  let preUrl = '/Swipe-Admin';
 
   $(document).ready(function() {
     $('#formAdd').submit(function(e) {
@@ -445,56 +437,61 @@
       var formData = new FormData(this);
       console.log(formData);
       $.ajax({
-        url:"/add_lcd",
+        url:preUrl+"/add_lcd",
         type: 'POST',
         data: formData,
         processData: false,
         contentType: false,
-        success: function(data, status) {
+        success: function(data, status,jqXHR) {
           console.log(status);
           console.log(data);
-          var valid1 = $(data).find('#height').html();
-          $('#height').html(valid1);
-          var valid2 = $(data).find('#distanceSea').html();
-          $('#distanceSea').html(valid2);
-          var valid3 = $(data).find('#advantages').html();
-          $('#advantages').html(valid3);
-          var valid4 = $(data).find('#gallery').html();
-          $('#gallery').html(valid4);
+          if (jqXHR.status === 202) {
+            var valid1 = $(data).find('#height').html();
+            $('#height').html(valid1);
+            var valid2 = $(data).find('#distanceSea').html();
+            $('#distanceSea').html(valid2);
+            var valid3 = $(data).find('#advantages').html();
+            $('#advantages').html(valid3);
+            var valid4 = $(data).find('#gallery').html();
+            $('#gallery').html(valid4);
 
-          var valid5 = $(data).find('#file').html();
-          $('#file').html(valid5);
+            var valid5 = $(data).find('#file').html();
+            $('#file').html(valid5);
 
-          var valid6 = $(data).find('#sumContract').html();
-          $('#sumContract').html(valid6);
+            var valid6 = $(data).find('#sumContract').html();
+            $('#sumContract').html(valid6);
 
-          var valid7 = $(data).find('#name').html();
-          $('#name').html(valid7);
+            var valid7 = $(data).find('#name').html();
+            $('#name').html(valid7);
 
-          var valid8 = $(data).find('#description').html();
-          $('#description').html(valid8);
+            var valid8 = $(data).find('#description').html();
+            $('#description').html(valid8);
 
-          var valid9 = $(data).find('#formalization').html();
-          $('#formalization').html(valid9);
+            var valid9 = $(data).find('#formalization').html();
+            $('#formalization').html(valid9);
 
-          var valid10 = $(data).find('#appointment').html();
-          $('#appointment').html(valid10);
+            var valid10 = $(data).find('#appointment').html();
+            $('#appointment').html(valid10);
 
-          var valid11 = $(data).find('#typePayment').html();
-          $('#typePayment').html(valid11);
+            var valid11 = $(data).find('#typePayment').html();
+            $('#typePayment').html(valid11);
 
-          var valid12 = $(data).find('#address').html();
-          $('#address').html(valid12);
+            var valid12 = $(data).find('#address').html();
+            $('#address').html(valid12);
 
-          var valid13 = $(data).find('#documentsFiles').html();
-          $('#documentsFiles').html(valid13);
+            var valid13 = $(data).find('#documentsFiles').html();
+            $('#documentsFiles').html(valid13);
+          }
+          if (jqXHR.status === 200){
+            window.location.href = preUrl+"/lcds";
+          }
           console.log("success");
 
         },
         error: function(xhr, status, error) {
           console.log(status);
           console.log("error");
-          window.location.href = "/announcement";
+
         }
       });
     });
@@ -589,7 +586,7 @@
               "            \"  onclick=\"deleteDocument("+i+")\">\n" +
               "                    <img src=\"/admin/dist/img/cross.png\" width=\"20px\" height=\"20px\">\n" +
               "                  </button>\n" +
-              "                  <label id = \"filename"+i+"\" style=\"text-align: center\"></label>\n" +
+              "                  <label id = \"filename"+i+"\" style=\"text-align: center;max-width: 100%; word-wrap: break-word\"></label>\n" +
               "                  <input type=\"file\" id = \"inputDocument"+i+"\" name=\"documentsFiles\" class=\"form-control\" onclick= \"handleFileNameChange("+i+")\" accept=\".doc,.docx,.xlsx\">\n" +
               "                  "
 

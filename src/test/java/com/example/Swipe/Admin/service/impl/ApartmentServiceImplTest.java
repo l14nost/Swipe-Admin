@@ -305,7 +305,7 @@ class ApartmentServiceImplTest {
                 .lcd(LCD.builder().idLcd(1).build())
                 .user(User.builder().idUser(1).build())
                 .mainPhoto("../uploads/5ac8d732-7acc-41be-ae38-656058499aa2-example.txt")
-                .photoList(List.of(Photo.builder().fileName("../uploads/02bcb7e3-0688-48f9-a510-796833e0e0e2-example.txt").build()))
+//                .photoList(List.of(Photo.builder().fileName("../uploads/02bcb7e3-0688-48f9-a510-796833e0e0e2-example.txt").build()))
                 .build();
         when(apartmentRepo.findById(1)).thenReturn(Optional.of(apartment));
         ApartmentDTO apartmentUpdate = ApartmentDTO.builder()

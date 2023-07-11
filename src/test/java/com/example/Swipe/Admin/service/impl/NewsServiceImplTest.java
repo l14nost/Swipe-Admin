@@ -1,10 +1,15 @@
 package com.example.Swipe.Admin.service.impl;
 
+import com.example.Swipe.Admin.dto.BlackListDTO;
 import com.example.Swipe.Admin.dto.NewsDTO;
 import com.example.Swipe.Admin.entity.LCD;
 import com.example.Swipe.Admin.entity.News;
+import com.example.Swipe.Admin.entity.User;
+import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.mapper.NewsMapper;
 import com.example.Swipe.Admin.repository.NewsRepo;
+import com.example.Swipe.Admin.specification.BlackListSpecification;
+import com.example.Swipe.Admin.specification.NewsSpecification;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -12,6 +17,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -201,5 +210,29 @@ class NewsServiceImplTest {
                 .lcd(LCD.builder().idLcd(1).build())
                 .build();
         verify(newsRepo).saveAndFlush(newsSave);
+    }
+
+
+    @Test
+    void count(){
+        when(newsRepo.count()).thenReturn(10L);
+        assertEquals(10,newsService.count());
+    }
+
+
+    @Test
+    void pagination() {
+        List<News> client = Arrays.asList(
+                News.builder().lcd(LCD.builder().idLcd(1).build()).build(),
+                News.builder().lcd(LCD.builder().idLcd(1).build()).build(),
+                News.builder().lcd(LCD.builder().idLcd(1).build()).build(),
+                News.builder().lcd(LCD.builder().idLcd(1).build()).build(),
+                News.builder().lcd(LCD.builder().idLcd(1).build()).build()
+        );
+        Pageable pageable = PageRequest.of(0,3);
+        NewsSpecification blackListSpecification = NewsSpecification.builder().sortedBy("idNews").order(1).build();
+        when(newsRepo.findAll(blackListSpecification,pageable)).thenReturn(new PageImpl<>(client));
+        Page<NewsDTO> users = newsService.pagination(pageable,"null", "idNews",1);
+        assertEquals(5,users.getContent().size());
     }
 }

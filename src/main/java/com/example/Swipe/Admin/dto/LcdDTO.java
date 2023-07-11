@@ -39,7 +39,7 @@ public class LcdDTO {
     int distanceSea;
     CommunalType communal;
     @Min(value = 3, message = "Высота потолка не должна быть меньше 3")
-    @Max(value = 5, message = "Высота потолка не должна быть меньше 5")
+    @Max(value = 5, message = "Высота потолка не должна быть превышать 5")
     int height;
     GasType gas;
     HeatingType heating;
@@ -66,9 +66,11 @@ public class LcdDTO {
     int contractor;
     List<NewsDTO> newsList;
     List<PhotoDTO> photoList;
+    List<Integer> photoListId;
     @FileExtension(value = {"jpg", "png"}, message = "Формат некорректный (.jpg,.png)")
     List<MultipartFile> gallery;
     List<DocumentDTO> documents;
+    List<Integer> documentListId;
     @FileExtension(value = {"pdf", "doc", "docx", "xlsx"}, message = "Формат некорректный (.pdf,.doc,.docx,.xlsx)")
     List<MultipartFile> documentsFiles;
     List<FrameDTO> frames;

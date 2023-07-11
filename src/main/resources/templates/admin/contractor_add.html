@@ -25,7 +25,7 @@
         </div><!-- /.container-fluid -->
       </div>
       <div class="card-body">
-    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_user}" th:object="${user}">
+    <form class="needs-validation" method="post" enctype="multipart/form-data" th:action="@{/add_user}" th:object="${user}" id="formAdd">
     <input type="hidden" name="type" th:value="${type}">
 <!--      <div style="display: flex; justify-content: space-between">-->
 <!--      <h4 class="mb-3"></h4>-->
@@ -38,29 +38,35 @@
           <div class="col-sm-6">
             <label for="firstName" class="form-label">Имя</label>
             <input type="text" class="form-control" name="name" id="firstName" placeholder="Введите имя..."  th:value="${user.getName()}">
+            <div id="name">
             <div th:if="${#fields.hasErrors('name')}">
               <div class="text-danger">
                 <p th:errors="*{name}"></p>
               </div>
+            </div>
             </div>
           </div>
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Фамилия</label>
             <input type="text" class="form-control" name="surname" id="lastName" placeholder="Введите фамилию..."  th:value="${user.getSurname()}">
+            <div id="surname">
             <div th:if="${#fields.hasErrors('surname')}">
               <div class="text-danger">
                 <p th:errors="*{surname}"></p>
               </div>
             </div>
+            </div>
           </div>
           <div class="col-sm-6">
             <label for="mail" class="form-label">Почта</label>
-            <input type="text" class="form-control" name = "mail" id="mail" placeholder="you@example.com"  th:value="${user.getMail()}">
+            <input type="text" class="form-control" name = "mail"  placeholder="you@example.com"  th:value="${user.getMail()}">
+            <div id="mail">
             <div th:if="${#fields.hasErrors('mail')}">
               <div class="text-danger">
                 <p th:errors="*{mail}"></p>
               </div>
+            </div>
             </div>
           </div>
           <div class="col-sm-6">
@@ -70,10 +76,12 @@
               <input type="number" class="form-control" name ="number" id="username" placeholder="Введите номер..." th:value="${user.getNumber()}">
 
             </div>
+            <div id="number">
             <div th:if="${#fields.hasErrors('number')}">
               <div class="text-danger">
                 <p th:errors="*{number}"></p>
               </div>
+            </div>
             </div>
           </div>
           <div class="form-group">
@@ -83,12 +91,7 @@
               <!--          ${stock.getFileName}-->
               <img th:src="@{/admin/dist/img/default.jpg}" id="img" style="width: 75px; height: 75px" alt="null">
 
-            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px" th:value="${user.getFilename()}">
-              <div th:if="${#fields.hasErrors('filename')}">
-                <div class="text-danger">
-                  <p th:errors="*{filename}"></p>
-                </div>
-              </div>
+            <input aria-label="file example" type="file" name="filename" id="inputImg" class="form-control" style="margin-left: 30px; margin-top: 30px" th:value="${user.getFilename()}" accept=".jpg, .jpeg, .png">
             </div>
             <script>
               inputImg.onchange = evt => {
@@ -99,36 +102,49 @@
               }
             </script>
           </div>
+          <div id="filename">
+            <div th:if="${#fields.hasErrors('filename')}">
+              <div class="text-danger">
+                <p th:errors="*{filename}"></p>
+              </div>
+            </div>
+          </div>
           <div> <h4>Отдел продаж</h4> </div>
           <div>
             <div class="row g-3">
               <div class="col-sm-6">
                 <label for="firstName" class="form-label">Имя</label>
                 <input type="text" class="form-control" name="agent.name" id="firstNameAgent" placeholder="Введите имя..."  th:value="${user.getAgent().getName()}">
+                <div id="agentName">
                 <div th:if="${#fields.hasErrors('agent.name')}">
                   <div class="text-danger">
                     <p th:errors="*{agent.name}"></p>
                   </div>
+                </div>
                 </div>
               </div>
 
               <div class="col-sm-6">
                 <label for="lastName" class="form-label">Фамилия</label>
                 <input type="text" class="form-control" name="agent.surname" id="lastNameAgent"  placeholder="Введите фамилию..." th:value="${user.getAgent().getSurname()}">
+                <div id="agentSurname">
                 <div th:if="${#fields.hasErrors('agent.surname')}">
                   <div class="text-danger">
                     <p th:errors="*{agent.surname}"></p>
                   </div>
+                </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <label for="mail" class="form-label">Почта</label>
                 <input type="text" class="form-control" name = "agent.mail" id="mailAgent" placeholder="you@example.com"  th:value="${user.getAgent().getMail()}">
                 <!--            <p class="text-danger" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>-->
+                <div id="agentMail">
                 <div th:if="${#fields.hasErrors('agent.mail')}">
                   <div class="text-danger">
                     <p th:errors="*{agent.mail}"></p>
                   </div>
+                </div>
                 </div>
 
               </div>
@@ -139,10 +155,12 @@
                   <input type="number" class="form-control" name ="agent.number" id="usernameAgent" placeholder="Введите номер..." th:value="${user.getAgent().getNumber()}">
 
                 </div>
+                <div id="agentNumber">
                 <div th:if="${#fields.hasErrors('agent.number')}">
                   <div class="text-danger">
                     <p th:errors="*{agent.number}"></p>
                   </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -162,7 +180,78 @@
 </div>
 
 <div th:replace="~{/admin.shared/script}"></div>
+<script>
+  // let preUrl = '';
+  let preUrl = '/Swipe-Admin';
 
+  $(document).ready(function() {
+    $('#formAdd').submit(function(e) {
+      e.preventDefault();
+      // var formData = $(this).serialize();
+      var formData = new FormData(this);
+      console.log(formData);
+      $.ajax({
+        url:preUrl+"/add_user",
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data, status,jqXHR) {
+          console.log(status);
+          console.log(data);
+          console.log(jqXHR.status);
+          if (jqXHR.status === 202) {
+            var valid1 = $(data).find('#name').html();
+            $('#name').html(valid1);
+            var valid2 = $(data).find('#surname').html();
+            $('#surname').html(valid2);
+            var valid3 = $(data).find('#mail').html();
+            $('#mail').html(valid3);
+            var valid4 = $(data).find('#number').html();
+            $('#number').html(valid4);
+
+            var valid5 = $(data).find('#filename').html();
+            $('#filename').html(valid5);
+
+            var valid6 = $(data).find('#agentName').html();
+            $('#agentName').html(valid6);
+
+            var valid7 = $(data).find('#agentSurname').html();
+            $('#agentSurname').html(valid7);
+
+            var valid8 = $(data).find('#agentMail').html();
+            $('#agentMail').html(valid8);
+
+            var valid9 = $(data).find('#agentNumber').html();
+            $('#agentNumber').html(valid9);
+
+            var valid10 = $(data).find('#userAddInfoDTODateSub').html();
+            $('#userAddInfoDTODateSub').html(valid10);
+          }
+          if (jqXHR.status === 200){
+            window.location.href = preUrl+"/contractors";
+          }
+          //
+          // var valid11 = $(data).find('#typePayment').html();
+          // $('#typePayment').html(valid11);
+          //
+          // var valid12 = $(data).find('#address').html();
+          // $('#address').html(valid12);
+          //
+          // var valid13 = $(data).find('#documentsFiles').html();
+          // $('#documentsFiles').html(valid13);
+          // console.log("success");
+
+        },
+        error: function(xhr, status, error) {
+          console.log(status);
+          console.log("error");
+          // window.location.href = "/announcement";
+        }
+      });
+    });
+  });
+</script>
 
 </body>
 

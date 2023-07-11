@@ -13,6 +13,8 @@ import com.example.Swipe.Admin.mapper.ClientMapper;
 import com.example.Swipe.Admin.service.impl.UserAddInfoServiceImpl;
 import com.example.Swipe.Admin.service.impl.UserServiceImpl;
 import com.example.Swipe.Admin.validation.UniqueEmailValidator;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -153,7 +155,7 @@ public class UserController {
 //        return "redirect:/users";
 //    }
     @PostMapping("/add_user")
-    public String userAdd(@Valid @ModelAttribute(name = "user") ClientDTO clientDTO, BindingResult bindingResult, Model model) throws IOException {
+    public String userAdd(@Valid @ModelAttribute(name = "user") ClientDTO clientDTO, BindingResult bindingResult, Model model, HttpServletResponse response) throws IOException {
         bindingResult = userServiceImpl.uniqueMail(clientDTO.getMail(),bindingResult,0,"add");
         if(clientDTO.getUserAddInfoDTO()!=null){
             if (clientDTO.getUserAddInfoDTO().getDateSub()!=null) {
@@ -168,6 +170,7 @@ public class UserController {
 
             model.addAttribute("type", clientDTO.getType());
             model.addAttribute("user", clientDTO);
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
             if(clientDTO.getType().equals(TypeUser.CLIENT)) {
                 return "admin/user_add";
             }
@@ -180,8 +183,15 @@ public class UserController {
         }
         userServiceImpl.saveEntityDTO(clientDTO);
         log.info("Create new "+clientDTO.getType());
-
-        return "redirect:/users";
+        if (clientDTO.getType().equals(TypeUser.CLIENT)) {
+            return "redirect:/users";
+        }
+        else if (clientDTO.getType().equals(TypeUser.CONTRACTOR)) {
+            return "redirect:/contractors";
+        }
+        else{
+            return "redirect:/notaries";
+        }
     }
 
     @GetMapping("/user_edit/{id}")
@@ -221,7 +231,7 @@ public class UserController {
 //        return "redirect:/users";
 //    }
     @PostMapping("/user_edit/{id}")
-    public String userUpdate(@PathVariable int id, @Valid @ModelAttribute(name = "user") ClientDTO clientDTO,BindingResult result, Model model) {
+    public String userUpdate(@PathVariable int id, @Valid @ModelAttribute(name = "user") ClientDTO clientDTO,BindingResult result, Model model,HttpServletResponse response) {
         result = userServiceImpl.uniqueMail(clientDTO.getMail(),result,id,"update");
 //        if(clientDTO.getUserAddInfoDTO()!=null){
 //            if (clientDTO.getUserAddInfoDTO().getDateSub().isBefore(LocalDate.now())){
@@ -234,20 +244,42 @@ public class UserController {
             clientDTO.setPhoto(userServiceImpl.findByIdDTO(id).getPhoto());
             model.addAttribute("user",clientDTO);
             model.addAttribute("type",typeNotification);
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);//202
             return "admin/user_edit";
         }
+        System.out.println(clientDTO);
 
         clientDTO.setIdUser(id);
         userServiceImpl.updateDTO(clientDTO,id);
         log.info("User id "+id+", was update");
-        return "redirect:/users";
+
+        if (clientDTO.getType().equals(TypeUser.CLIENT)) {
+            response.setStatus(HttpServletResponse.SC_OK);//200
+            return "redirect:/users";
+        }
+        else if (clientDTO.getType().equals(TypeUser.CONTRACTOR)) {
+            response.setStatus(HttpServletResponse.SC_CREATED);//201
+            return "redirect:/contractors";
+        }
+        else{
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);//204
+            return "redirect:/notaries";
+        }
     }
 
     @PostMapping("/delete_user/{id}")
     public String deleteUser(@PathVariable int id, Model model){
-
+        User user = userServiceImpl.findById(id);
         userServiceImpl.deleteById(id);
         log.info("User id "+id+", was delete");
-        return "redirect:/users";
+        if (user.getTypeUser().equals(TypeUser.CLIENT)) {
+            return "redirect:/users";
+        }
+        else if (user.getTypeUser().equals(TypeUser.CONTRACTOR)){
+            return "redirect:/contractors";
+        }
+        else {
+            return "redirect:/notaries";
+        }
     }
 }

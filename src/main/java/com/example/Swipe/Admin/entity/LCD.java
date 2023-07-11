@@ -75,13 +75,13 @@ public class LCD {
     @OneToMany(mappedBy = "lcd", cascade = CascadeType.ALL)
     private List<News> newsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "lcd", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lcd", cascade = CascadeType.REMOVE)
     private List<Photo> photoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "lcd")
     private List<Apartment> apartmentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "lcd", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lcd", cascade = CascadeType.REMOVE)
     private List<Documents> documents = new ArrayList<>();
 
     @OneToMany(mappedBy = "lcd", cascade = CascadeType.ALL)

@@ -1,6 +1,6 @@
 <!-- Main Sidebar Container -->
 <div th:fragment = "left_sidebar">
-<aside class="main-sidebar sidebar-dark-primary elevation-4" >
+<aside class="main-sidebar sidebar-dark-white elevation-4" >
   <!-- Brand Logo -->
 
   <div class="sidebar">
@@ -11,18 +11,6 @@
   </div>
   <!-- Sidebar -->
   <div class="sidebar">
-    <!-- Sidebar user panel (optional) -->
-<!--    <div class="user-panel mt-3 pb-3 mb-3 d-flex">-->
-<!--      <div class="image">-->
-<!--        <img src="/admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">-->
-<!--      </div>-->
-<!--      <div class="info">-->
-<!--        <a href="#" class="d-block">Alexander Pierce</a>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!-- Sidebar Menu -->
-<nav class="mt-2">
   <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" id="sidebar" role="menu" data-accordion="false">
     <!-- Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library -->
@@ -35,20 +23,64 @@
       </a>
     </li>
     <li class="nav-item">
-      <a th:href="@{/announcement}" class="nav-link">
-      <i class="nav-icon fas fa-home"></i>
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-home"></i>
         <p>
           Объявления
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a th:href="@{/lcds}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>ЖК</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/apartments}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Квартиры</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="nav-item">
+      <a th:href="@{/news_page}" class="nav-link">
+        <i class="nav-icon fas fa-newspaper"></i>
+        <p>
+          Новости
         </p>
       </a>
     </li>
     <li class="nav-item">
-      <a th:href="@{/users}" class="nav-link">
+      <a href="#" class="nav-link">
         <i class="nav-icon fas fa-user-alt"></i>
         <p>
           Пользователи
+          <i class="right fas fa-angle-left"></i>
         </p>
       </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a th:href="@{/users}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Клиенты</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/contractors}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Застройщики</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/notaries}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Нотариусы</p>
+          </a>
+        </li>
+      </ul>
     </li>
     <li class="nav-item">
       <a th:href="@{/black_list}" class="nav-link">
@@ -66,15 +98,3 @@
 </aside>
 </div>
 
-<!--<script>-->
-<!--  $('#sidebar').on('click', 'li', function(e) {-->
-<!--    $('#sidebar li').removeClass('active');-->
-<!--    $(this).addClass('active');-->
-<!--    const navLink = document.querySelector(".nav-link");-->
-<!--    const hrefValue = navLink.getAttribute("th:href");-->
-<!--    $.ajax({-->
-<!--      url: hrefValue,-->
-<!--      type: 'GET',-->
-<!--    })-->
-<!--  });-->
-<!--</script>-->

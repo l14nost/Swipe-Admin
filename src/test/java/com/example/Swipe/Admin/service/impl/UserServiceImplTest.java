@@ -3,8 +3,11 @@ package com.example.Swipe.Admin.service.impl;
 import com.example.Swipe.Admin.dto.AdminDto;
 import com.example.Swipe.Admin.dto.BlackListDTO;
 import com.example.Swipe.Admin.dto.ClientDTO;
+import com.example.Swipe.Admin.dto.UserAddInfoDTO;
 import com.example.Swipe.Admin.entity.User;
+import com.example.Swipe.Admin.entity.UserAddInfo;
 import com.example.Swipe.Admin.enums.Role;
+import com.example.Swipe.Admin.enums.TypeNotification;
 import com.example.Swipe.Admin.enums.TypeUser;
 import com.example.Swipe.Admin.repository.UserRepo;
 import com.example.Swipe.Admin.specification.BlackListSpecification;
@@ -32,6 +35,7 @@ import org.springframework.validation.MapBindingResult;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -335,6 +339,7 @@ class UserServiceImplTest {
                 .name("User")
                 .surname("Surname")
                 .filename("../uploads/804059ae-eba1-49a0-8e06-ccf3f6b545fa-stock2.jpg")
+                .userAddInfo(UserAddInfo.builder().dateSub(LocalDate.now()).callSms(true).typeNotification(TypeNotification.ME).build())
                 .build();
         when(userRepo.findById(1)).thenReturn(Optional.of(user));
         ClientDTO userUpdate = ClientDTO.builder()
@@ -342,6 +347,7 @@ class UserServiceImplTest {
                 .mail("124@gmail.com")
                 .name("User1")
                 .surname("Surname1")
+                .userAddInfoDTO(UserAddInfoDTO.builder().dateSub(LocalDate.now()).callSms(false).typeNotification(TypeNotification.MEANDAGENT).build())
 //                .filename(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
                 .build();
         userService.setUpload("/C:/Users/Amir Banov/IdeaProjects/Swipe-Admin/uploads/");
@@ -352,6 +358,7 @@ class UserServiceImplTest {
                 .mail("124@gmail.com")
                 .name("User1")
                 .surname("Surname1")
+                .userAddInfo(UserAddInfo.builder().dateSub(LocalDate.now()).callSms(false).typeNotification(TypeNotification.MEANDAGENT).build())
                 .filename("../uploads/example.txt")
                 .build();
 

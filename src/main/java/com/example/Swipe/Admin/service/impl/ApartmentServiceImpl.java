@@ -1,10 +1,7 @@
 package com.example.Swipe.Admin.service.impl;
 
 import com.example.Swipe.Admin.dto.ApartmentDTO;
-import com.example.Swipe.Admin.entity.Apartment;
-import com.example.Swipe.Admin.entity.Frame;
-import com.example.Swipe.Admin.entity.LCD;
-import com.example.Swipe.Admin.entity.User;
+import com.example.Swipe.Admin.entity.*;
 import com.example.Swipe.Admin.mapper.ApartmentMapper;
 import com.example.Swipe.Admin.repository.ApartmentRepo;
 import com.example.Swipe.Admin.service.ApartmentService;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -133,7 +131,35 @@ public class ApartmentServiceImpl implements ApartmentService {
                 apartment.setMainPhoto("../admin/dist/img/default.jpg");
             }
         }
+        if (apartmentDTO.getGalleryPhoto()!=null){
+            List<Photo> photoList = new ArrayList<>();
+            for (int i =0; i< apartmentDTO.getGalleryPhoto().size();i++){
+                if (!apartmentDTO.getGalleryPhoto().get(i).isEmpty()) {
+                    File uploadDirGallery = new File(upload);
+                    if (!uploadDirGallery.exists()) {
+                        uploadDirGallery.mkdir();
+                    }
+                    String uuid = UUID.randomUUID().toString();
+                    String fileNameGallery = uuid + "-" + apartmentDTO.getGalleryPhoto().get(i).getOriginalFilename();
+                    String resultNameGallery = upload + "" + fileNameGallery;
+                    try {
+                        apartmentDTO.getGalleryPhoto().get(i).transferTo(new File((resultNameGallery)));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Photo photo = Photo.builder().fileName("../uploads/" + fileNameGallery).apartment(apartment).build();
+                    photoList.add(photo);
+
+                }
+            }
+            apartment.setPhotoList(photoList);
+        }
         apartmentRepo.save(apartment);
+        if (apartment.getPhotoList()!=null) {
+            for (int i = 0; i < apartment.getPhotoList().size(); i++) {
+                photosService.saveEntity(apartment.getPhotoList().get(i));
+            }
+        }
     }
     @Override
     public void saveEntity(Apartment apartment) {
@@ -251,9 +277,22 @@ public class ApartmentServiceImpl implements ApartmentService {
         Optional<Apartment> apartmentOptional = apartmentRepo.findById(id);
         if(apartmentOptional.isPresent()){
             Apartment apartmentUpdate = apartmentOptional.get();
-            if(apartmentUpdate.getPhotoList()!=null){
+            System.out.println(apartmentUpdate.getPhotoList());
+            if(apartmentUpdate.getPhotoList()!=null && !apartmentUpdate.getPhotoList().isEmpty()){
                 if (apartmentDTO.getGalleryPhoto()!=null) {
-                    for (int i = 0; i < apartmentUpdate.getPhotoList().size(); i++) {
+                    System.out.println("+++++++");
+
+                    if (apartmentDTO.getGalleryListId()!=null && !apartmentDTO.getGalleryListId().isEmpty()){
+                        for (int i = 0; i < apartmentDTO.getGalleryListId().size(); i++) {
+                            photosService.deleteById(apartmentDTO.getGalleryListId().get(i));
+                            for (int j = 0; j < apartmentUpdate.getPhotoList().size(); j++) {
+                                if (apartmentUpdate.getPhotoList().get(j).getIdPhotos() == apartmentDTO.getGalleryListId().get(i)) {
+                                    apartmentUpdate.getPhotoList().remove(j);
+                                }
+                            }
+                        }
+                    }
+                    for (int i = 0; i < apartmentDTO.getGalleryPhoto().size(); i++) {
                         if (!apartmentDTO.getGalleryPhoto().get(i).isEmpty()) {
                             File uploadDirGallery = new File(upload);
                             if (!uploadDirGallery.exists()) {
@@ -263,13 +302,46 @@ public class ApartmentServiceImpl implements ApartmentService {
                             String fileNameGallery = uuid + "-" + apartmentDTO.getGalleryPhoto().get(i).getOriginalFilename();
                             String resultNameGallery = upload + "" + fileNameGallery;
                             apartmentDTO.getGalleryPhoto().get(i).transferTo(new File((resultNameGallery)));
-                            if (!apartmentUpdate.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
-                                String fileNameDelete = apartmentUpdate.getPhotoList().get(i).getFileName().substring(11, apartmentUpdate.getPhotoList().get(i).getFileName().length());
-                                File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
-                                fileDelete.delete();
+                            if (apartmentUpdate.getPhotoList().size() - 1 >= i) {
+                                if (!apartmentUpdate.getPhotoList().get(i).getFileName().equals("../admin/dist/img/default.jpg")) {
+                                    String fileNameDelete = apartmentUpdate.getPhotoList().get(i).getFileName().substring(11, apartmentUpdate.getPhotoList().get(i).getFileName().length());
+                                    File fileDelete = new File(upload.substring(1, upload.length()) + fileNameDelete);
+                                    fileDelete.delete();
+                                }
+                                apartmentUpdate.getPhotoList().get(i).setFileName("../uploads/" + fileNameGallery);
+                                photosService.updateEntity(apartmentUpdate.getPhotoList().get(i), apartmentUpdate.getPhotoList().get(i).getIdPhotos());
+
                             }
-                            apartmentUpdate.getPhotoList().get(i).setFileName("../uploads/" + fileNameGallery);
-                            photosService.updateEntity(apartmentUpdate.getPhotoList().get(i), apartmentUpdate.getPhotoList().get(i).getIdPhotos());
+                            else {
+                                photosService.saveEntity(Photo.builder().fileName("../uploads/" + fileNameGallery).apartment(apartmentUpdate).build());
+                            }
+                        }
+                    }
+                }
+                else {
+                    for (int j = 0; j < apartmentUpdate.getPhotoList().size(); j++) {
+                        photosService.deleteById(apartmentUpdate.getPhotoList().get(j).getIdPhotos());
+                    }
+                    apartmentUpdate.getPhotoList().removeAll(apartmentUpdate.getPhotoList());
+                }
+            }
+            else {
+                if (apartmentDTO.getGalleryPhoto() != null) {
+                    for (int i = 0; i < apartmentDTO.getGalleryPhoto().size(); i++) {
+                        if (!apartmentDTO.getGalleryPhoto().get(i).isEmpty()) {
+                            File uploadDirGallery = new File(upload);
+                            if (!uploadDirGallery.exists()) {
+                                uploadDirGallery.mkdir();
+                            }
+                            String uuid = UUID.randomUUID().toString();
+                            String fileNameGallery = uuid + "-" + apartmentDTO.getGalleryPhoto().get(i).getOriginalFilename();
+                            String resultNameGallery = upload + "" + fileNameGallery;
+                            try {
+                                apartmentDTO.getGalleryPhoto().get(i).transferTo(new File((resultNameGallery)));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            photosService.saveEntity(Photo.builder().fileName("../uploads/" + fileNameGallery).apartment(apartmentUpdate).build());
                         }
                     }
                 }

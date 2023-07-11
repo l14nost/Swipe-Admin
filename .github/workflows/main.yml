@@ -1,33 +1,33 @@
-#name: Build & Deploy app
-#
-#on:
-#  push:
-#    branches:
-#      - master
-#jobs:
-#  build-deploy:
-#    name: Build and Deploy
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v3
-#
-#      - name: Setup JDK
-#        uses: actions/setup-java@v3
-#        with:
-#          distribution: 'corretto'
-#          java-version: 11
-#
-#      - name: Unit Tests
-#        run: mvn -B test --file pom.xml
-#
-#      - name: Package and Build
-#        run: |
-#          mvn clean
-#          mvn -B package --file pom.xml
-#
-#      - name: Deploy to Tomcat
-#        run: |
-#          curl -v --user "tomcat:OUlIg40qOZ" \
-#          --upload-file target/Swipe-Admin.war \
-#          "http://slj.avada-media-dev1.od.ua/manager/text/deploy?path=/Swipe-Admin&update=true"
+name: Build & Deploy app
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: 11
+
+      - name: Unit Tests
+        run: mvn -B test --file pom.xml
+
+      - name: Package and Build
+        run: |
+          mvn clean
+          mvn -B package --file pom.xml
+
+      - name: Deploy to Tomcat
+        run: |
+          curl -v --user "tomcat:OUlIg40qOZ" \
+          --upload-file target/Swipe-Admin.war \
+          "http://slj.avada-media-dev1.od.ua/manager/text/deploy?path=/Swipe-Admin&update=true"

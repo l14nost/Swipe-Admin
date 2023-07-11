@@ -29,6 +29,27 @@ public class FrameController {
     private final FrameServiceImpl frameService;
     private final LCDServiceImpl lcdService;
     private final ApartmentServiceImpl apartmentService;
+
+
+//    @GetMapping("/frames")
+//    public String blackListPage(
+//            @RequestParam(name = "pageBlackList", defaultValue = "0", required = false)int pageBlackList,
+//            @RequestParam(name = "sizeBlackList", defaultValue = "1", required = false)int sizeBlackList,
+//            @RequestParam(name = "search", required = false, defaultValue = "0") int keyWord,
+//            @RequestParam(name = "sortedBy", required = false, defaultValue = "idFrame") String sortedBy,
+//            @RequestParam(name = "order", required = false, defaultValue = "1") int order,
+//            Model model){
+////        log.info("Current page:"+pageBlackList+", size:"+sizeBlackList);
+//        Pageable pageable = PageRequest.of(pageBlackList,sizeBlackList);
+//        model.addAttribute("searchV", keyWord);
+//        model.addAttribute("blackList", frameService.pagination(pageable,keyWord,sortedBy,order));
+//        model.addAttribute("size", sizeBlackList);
+//        model.addAttribute("allSize",frameService.count());
+//        model.addAttribute("currentPage",pageBlackList);
+//        model.addAttribute("sort",sortedBy);
+//        return "admin/frame_main";
+//    }
+
     @GetMapping("/add_frame/{idLcd}")
     public String addFrame(@PathVariable int idLcd, Model model){
         LCD lcd = lcdService.findById(idLcd);
@@ -42,11 +63,16 @@ public class FrameController {
         frameService.saveEntity(frame);
         return "redirect:/lcd_edit/"+idLcd;
     }
+//    @GetMapping("/add_frame")
+//    public String addFrame(Model model){
+//        model.addAttribute("lcds", lcdService.findAll());
+//        return "admin/frame_add";
+//    }
     @GetMapping("/edit_frame/{idFrame}")
     public String editFrame(
             @PathVariable int idFrame,
             @RequestParam(name = "apartmentPage", required = false, defaultValue = "0") int apartmentPage,
-            @RequestParam(name = "apartmentSize", required = false, defaultValue = "3") int apartmentSize,
+            @RequestParam(name = "apartmentSize", required = false, defaultValue = "10") int apartmentSize,
             @RequestParam(name = "searchApartment", required = false, defaultValue = "0")int keyWord,
             @RequestParam(name = "sortedApartment", required = false, defaultValue = "idApartment")String field,
             @RequestParam(name = "orderApartment", required = false, defaultValue = "1")int order,
@@ -58,6 +84,9 @@ public class FrameController {
         model.addAttribute("apartments", apartmentService.findAllForFramePagination(frame,pageable,keyWord,field,order ));
 
         model.addAttribute("sizeApartment", apartmentService.count(frame));
+
+        model.addAttribute("order",order);
+        model.addAttribute("sort", field);
         return "admin/frame_edit";
     }
 

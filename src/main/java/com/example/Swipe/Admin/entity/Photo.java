@@ -22,11 +22,11 @@ public class Photo {
     @Column(name = "filename")
     private String fileName;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "id_lcd")
     private LCD lcd;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "id_apartment")
     private Apartment apartment;
 
